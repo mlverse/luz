@@ -1,0 +1,111 @@
+
+light_module <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
+
+  if (!is.null(loss))
+    loss_fn <- function(input, target) {
+      loss(input, target)
+    }
+
+  if (!is.null(optimizer))
+    opt_fn <- function(...) {
+      optimizer(self$parameters, ...)
+    }
+
+  torch::nn_module(
+    "light_module",
+    inherit = module,
+    loss = loss_fn,
+    optimizer = opt_fn
+  )
+}
+
+set_hparams <- function(module, ...) {
+  hparams <- rlang::list2(...)
+  attr(module, "hparams") <- hparams
+  module
+}
+
+get_hparams <- function(module) {
+  attr(module, "hparams")
+}
+
+fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL) {
+
+  # Initialize context:
+  ctx <- rlang::new_environment()
+
+  ctx$model <- do.call(module, get_hparams(module) %||% list())
+  ctx$opt <- do.call(ctx$model$optimizer, get_hparams(module)$opt_hparams %||% list())
+  ctx$data <- data
+  ctx$valid_data <- valid_data
+  ctx$epochs <- epochs
+  callbacks <- append(default_callbacks(), callbacks)
+  ctx$callbacks <- lapply(callbacks, function(cb) {
+    cb$new(ctx = ctx)
+  })
+
+  call_callbacks <- function(name) {
+    call_all_callbacks(ctx$callbacks, name)
+  }
+
+  # on_fit_begin
+  for (epoch in seq_len(ctx$epochs)) {
+    ctx$epoch <- epoch
+    call_callbacks("on_epoch_begin")
+
+    call_callbacks("on_train_begin")
+
+    ctx$model$train()
+    coro::loop(for (batch in ctx$data) {
+      ctx$batch <- batch
+
+      call_callbacks("on_train_batch_begin")
+
+      ctx$pred <- do.call(ctx$model, list(ctx$batch[[1]]))
+
+      call_callbacks("on_train_batch_after_pred")
+
+      ctx$loss_grad <- ctx$model$loss(ctx$pred, batch[[2]])
+      ctx$loss <- ctx$loss_grad$detach()
+
+      call_callbacks("on_train_batch_after_loss")
+
+      call_callbacks("on_train_batch_before_backward")
+
+      ctx$loss_grad$backward()
+
+      call_callbacks("on_train_batch_before_step")
+      ctx$opt$step()
+      ctx$opt$zero_grad()
+
+      call_callbacks("on_train_batch_after_step")
+
+      call_callbacks("on_train_batch_end")
+    })
+
+    # on_train_end
+
+    # on_valid_begin
+    model$eval()
+    with_no_grad({
+      coro::loop(for (batch in ctx$valid_data) {
+        ctx$batch <- batch
+        call_callbacks("on_valid_batch_begin")
+
+        ctx$pred <- do.call(ctx$model, list(batch[[1]]))
+        call_callbacks("on_valid_batch_after_pred")
+
+        ctx$loss <- ctx$model$loss(ctx$pred, batch[[2]])
+        call_callbacks("on_valid_batch_after_loss")
+
+        call_callbacks("on_valid_batch_end")
+      })
+    })
+
+    call_callbacks("on_valid_end")
+    call_callbacks("on_epoch_end")
+  }
+
+  # on_fit_end
+  ctx$model
+}
