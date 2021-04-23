@@ -106,6 +106,6 @@ fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL) 
     call_callbacks("on_epoch_end")
   }
 
-  # on_fit_end
+  call_callbacks("on_fit_end")
   ctx$model
 }
