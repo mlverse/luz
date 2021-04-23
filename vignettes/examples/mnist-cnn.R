@@ -26,7 +26,7 @@ test_dl <- dataloader(test_ds, batch_size = 32)
 
 net <- nn_module(
   "Net",
-  initialize = function(number = tune()) {
+  initialize = function() {
     self$conv1 <- nn_conv2d(1, 32, 3, 1)
     self$conv2 <- nn_conv2d(32, 64, 3, 1)
     self$dropout1 <- nn_dropout2d(0.25)
@@ -59,6 +59,4 @@ m <- light_module(
 )
 
 m %>%
-  set_hparam(number = 10) %>%
-  #fit_grid(grid, train_dl, test_dl)
   fit(train_dl, epochs = 10, valid_data = test_dl)

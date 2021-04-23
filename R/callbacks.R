@@ -59,7 +59,17 @@ light_callback <- function(name, ..., private, active, parent_env = parent.frame
 light_callback_progress <- light_callback(
   "progress_callback",
   on_train_begin = function() {
-    self$pb <- progress::progress_bar$new(total = length(self$ctx$data))
+    self$pb <- progress::progress_bar$new(
+      format = ":current/:total [:bar] - ETA: :eta",
+      total = length(self$ctx$data)
+    )
+  },
+  on_epoch_begin = function() {
+    rlang::inform(sprintf(
+      "Epoch %d/%d",
+      as.integer(self$ctx$epoch),
+      as.integer(self$ctx$epochs)
+    ))
   },
   on_train_batch_end = function() {
     self$pb$tick()
