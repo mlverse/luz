@@ -1,0 +1,64 @@
+# Packages ----------------------------------------------------------------
+library(torch)
+library(torchvision)
+
+# Datasets and loaders ----------------------------------------------------
+
+dir <- "~/Downloads/mnist" #caching directory
+
+train_ds <- mnist_dataset(
+  dir,
+  download = TRUE,
+  transform = transform_to_tensor
+)
+
+test_ds <- mnist_dataset(
+  dir,
+  train = FALSE,
+  transform = transform_to_tensor
+)
+
+train_dl <- dataloader(train_ds, batch_size = 32, shuffle = TRUE)
+test_dl <- dataloader(test_ds, batch_size = 32)
+
+
+# Buildifng the network ---------------------------------------------------
+
+net <- nn_module(
+  "Net",
+  initialize = function(number = tune()) {
+    self$conv1 <- nn_conv2d(1, 32, 3, 1)
+    self$conv2 <- nn_conv2d(32, 64, 3, 1)
+    self$dropout1 <- nn_dropout2d(0.25)
+    self$dropout2 <- nn_dropout2d(0.5)
+    self$fc1 <- nn_linear(9216, 128)
+    self$fc2 <- nn_linear(128, 10)
+  },
+  forward = function(x) {
+    x <- self$conv1(x)
+    x <- nnf_relu(x)
+    x <- self$conv2(x)
+    x <- nnf_relu(x)
+    x <- nnf_max_pool2d(x, 2)
+    x <- self$dropout1(x)
+    x <- torch_flatten(x, start_dim = 2)
+    x <- self$fc1(x)
+    x <- nnf_relu(x)
+    x <- self$dropout2(x)
+    x <- self$fc2(x)
+    x
+  }
+)
+
+# Train -------------------------------------------------------------------
+
+m <- light_module(
+  net,
+  loss = torch::nn_cross_entropy_loss(),
+  optimizer = torch::optim_adam
+)
+
+m %>%
+  set_hparam(number = 10) %>%
+  #fit_grid(grid, train_dl, test_dl)
+  fit(train_dl, epochs = 10, valid_data = test_dl)
