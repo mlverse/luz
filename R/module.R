@@ -15,7 +15,8 @@ light_module <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) 
     "light_module",
     inherit = module,
     loss = loss_fn,
-    optimizer = opt_fn
+    optimizer = opt_fn,
+    metrics = metrics
   )
 }
 
@@ -48,7 +49,8 @@ fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL) 
     call_all_callbacks(ctx$callbacks, name)
   }
 
-  # on_fit_begin
+  call_callbacks("on_fit_begin")
+
   for (epoch in seq_len(ctx$epochs)) {
     ctx$epoch <- epoch
     call_callbacks("on_epoch_begin")
@@ -58,14 +60,16 @@ fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL) 
     ctx$model$train()
     coro::loop(for (batch in ctx$data) {
       ctx$batch <- batch
+      ctx$input <- ctx$batch[[1]]
+      ctx$target <- ctx$batch[[2]]
 
       call_callbacks("on_train_batch_begin")
 
-      ctx$pred <- do.call(ctx$model, list(ctx$batch[[1]]))
+      ctx$pred <- do.call(ctx$model, list(ctx$input))
 
       call_callbacks("on_train_batch_after_pred")
 
-      ctx$loss_grad <- ctx$model$loss(ctx$pred, batch[[2]])
+      ctx$loss_grad <- ctx$model$loss(ctx$pred, ctx$target)
       ctx$loss <- ctx$loss_grad$detach()
 
       call_callbacks("on_train_batch_after_loss")
@@ -83,13 +87,16 @@ fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL) 
       call_callbacks("on_train_batch_end")
     })
 
-    # on_train_end
+    call_callbacks("on_train_end")
+    call_callbacks("on_valid_begin")
 
-    # on_valid_begin
-    model$eval()
+    ctx$model$eval()
     with_no_grad({
       coro::loop(for (batch in ctx$valid_data) {
         ctx$batch <- batch
+        ctx$input <- ctx$batch[[1]]
+        ctx$target <- ctx$batch[[2]]
+
         call_callbacks("on_valid_batch_begin")
 
         ctx$pred <- do.call(ctx$model, list(batch[[1]]))

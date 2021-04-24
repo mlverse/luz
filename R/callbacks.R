@@ -6,9 +6,9 @@ LightCallback <- R6::R6Class(
       self$ctx <- ctx
     },
     call = function(callback_nm) {
-      if (is.null(private[[callback_nm]]))
+      if (is.null(self[[callback_nm]]))
         return(invisible())
-      private[[callback_nm]]()
+      self[[callback_nm]]()
       invisible()
     }
     # on_fit_begin = NULL,
@@ -41,16 +41,17 @@ call_all_callbacks <- function(callbacks, name) {
 
 default_callbacks <- function() {
   list(
+    light_callback_metrics,
     light_callback_progress
   )
 }
 
-light_callback <- function(name, ..., private, active, parent_env = parent.frame()) {
-  private <- rlang::list2(...)
+light_callback <- function(name, ..., public, active, parent_env = parent.frame()) {
+  public <- rlang::list2(...)
   R6::R6Class(
     classname = name,
     inherit = LightCallback,
-    private = private,
+    public = public,
     parent_env = parent_env,
     lock_objects = FALSE
   )
@@ -59,8 +60,13 @@ light_callback <- function(name, ..., private, active, parent_env = parent.frame
 light_callback_progress <- light_callback(
   "progress_callback",
   on_train_begin = function() {
+    format <- ":current/:total [:bar] - ETA: :eta"
+    metrics <- self$ctx$metrics[["train"]][[self$ctx$epoch]]
+    abbrevs <- self$get_abbrevs(metrics)
+    abbrevs <- paste0(glue::glue("{abbrevs}: :{tolower(abbrevs)} "), collapse = " - ")
+    format <- paste0(c(format, abbrevs), collapse = " - ")
     self$pb <- progress::progress_bar$new(
-      format = ":current/:total [:bar] - ETA: :eta",
+      format = format,
       total = length(self$ctx$data)
     )
   },
@@ -72,7 +78,63 @@ light_callback_progress <- light_callback(
     ))
   },
   on_train_batch_end = function() {
-    self$pb$tick()
+    tokens <- self$get_metrics("train")
+    names(tokens) <- tolower(names(tokens))
+    self$pb$tick(tokens = tokens)
+  },
+  on_epoch_end = function() {
+    self$inform_metrics("train", "Train")
+    self$inform_metrics("valid", "Valid")
+  },
+  get_abbrevs = function(metrics) {
+    sapply(metrics, function(x) x$abbrev %||% class(x))
+  },
+  get_metrics = function(split) {
+    metrics <- self$ctx$metrics[[split]][[self$ctx$epoch]]
+    l <- list(
+      values = sapply(metrics, function(x) x$format(x$compute()))
+    )
+    names(l) <- self$get_abbrevs(metrics)
+    l
+  },
+  inform_metrics = function(split, name) {
+    metrics <- self$get_metrics(split)
+    res <- paste0(glue::glue("{names(metrics)}: {metrics}"), collapse = " - ")
+    rlang::inform(glue::glue("{name} metrics: {res}"))
+  }
+)
+
+light_callback_metrics <- light_callback(
+  "metrics_callback",
+  on_fit_begin = function() {
+   self$ctx$metrics <- list(
+     train = list(),
+     valid = list()
+   )
+  },
+  on_train_begin = function() {
+    self$ctx$metrics$train[[self$ctx$epoch]] <- lapply(
+      self$ctx$model$metrics %||% list(),
+      function(x) x$new()
+    )
+  },
+  on_train_batch_end = function() {
+    lapply(
+      self$ctx$metrics$train[[self$ctx$epoch]],
+      function(x) x$update(self$ctx$pred, self$ctx$target)
+    )
+  },
+  on_valid_begin = function() {
+    self$ctx$metrics$valid[[self$ctx$epoch]] <- lapply(
+      self$ctx$model$metrics %||% list(),
+      function(x) x$new()
+    )
+  },
+  on_valid_batch_end = function() {
+    lapply(
+      self$ctx$metrics$valid[[self$ctx$epoch]],
+      function(x) x$update(self$ctx$pred, self$ctx$target)
+    )
   }
 )
 
