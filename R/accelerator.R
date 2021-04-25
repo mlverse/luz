@@ -1,3 +1,7 @@
+accelerator <- function(device_placement = TRUE, cpu = FALSE) {
+  LightAccelerator$new(device_placement = device_placement, cpu = cpu)
+}
+
 LightAccelerator <- R6::R6Class(
   classname = "LightAccelerator",
   lock_objects = FALSE,
@@ -9,7 +13,7 @@ LightAccelerator <- R6::R6Class(
     prepare = function(...) {
 
       objs <- rlang::list2(...)
-      old_parameter_ids <- names(get_parameter_ids(!!objs))
+      old_parameter_ids <- names(get_parameter_ids(!!!objs))
 
       results <- lapply(objs, self$prepare_one)
       new_parameter_ids <- get_parameter_ids(!!!results)
@@ -22,6 +26,7 @@ LightAccelerator <- R6::R6Class(
 
       switch_parameters(!!!results, .mapping = mapping)
 
+      results
     },
     prepare_one = function(obj) {
 
@@ -31,6 +36,13 @@ LightAccelerator <- R6::R6Class(
       if (torch::is_optimizer(obj))
         return(self$prepare_optimizer(obj))
 
+      if (torch::is_dataloader(obj))
+        return(self$prepare_dataloader(obj))
+
+      rlang::abort(glue::glue(c(
+        "Unhandled object with class {class(obj)}",
+        "Only nn_modules, optimizers and dataloaders are supported."))
+      )
     },
     prepare_model = function(model) {
       if (self$device_placement) {
@@ -38,8 +50,11 @@ LightAccelerator <- R6::R6Class(
       }
       model
     },
-    prepare_optimizer = function(optmizer) {
-      # currently we have nothing to do here
+    prepare_optimizer = function(optimizer) {
+      optimizer
+    },
+    prepare_dataloader = function(dataloader) {
+      as_device_dataloader(dataloader, self$device)
     }
   ),
   active = list(
@@ -77,8 +92,8 @@ switch_parameters <- function(..., .mapping) {
   objs <- rlang::list2(...)
   for (obj in objs) {
     if (torch::is_optimizer(obj)) {
-      obj$param_groups <- lapply(
-        obj$param_groups,
+      obj$param_groups$params <- lapply(
+        obj$param_groups$params,
         function(x) {
           .mapping[[get_param_id(x)]]
         })
@@ -90,3 +105,33 @@ switch_parameters <- function(..., .mapping) {
 get_param_id <- function(p) {
   p$storage()$data_ptr()
 }
+
+as_device_dataloader <- function(x, device) {
+  x$.device <- device
+  class(x) <- c("device_dataloader", class(x))
+  x
+}
+
+#' @importFrom coro as_iterator
+#' @export
+as_iterator.device_dataloader <- function(x) {
+  class(x) <- class(x)[class(x) != "device_dataloader"]
+  gen <- coro::generator(function() {
+    for(batch in x) {
+      coro::yield(to_device(batch, device = x$.device))
+    }
+  })
+  gen()
+}
+
+to_device <- function(batch, device) {
+  lapply(batch, function(x) {
+    if (inherits(x, "torch_tensor"))
+      x$to(device = device)
+    else if (is.list(x))
+      to_device(x, device)
+    else
+      x
+  })
+}
+

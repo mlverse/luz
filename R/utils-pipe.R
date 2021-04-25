@@ -7,6 +7,8 @@
 #' @keywords internal
 #' @export
 #' @importFrom magrittr %>%
+#' @importFrom zeallot %<-%
+#'
 #' @usage lhs \%>\% rhs
 NULL
 

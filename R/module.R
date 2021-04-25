@@ -30,15 +30,28 @@ get_hparams <- function(module) {
   attr(module, "hparams")
 }
 
-fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL) {
+fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL,
+                accelerator = NULL) {
 
   # Initialize context:
   ctx <- rlang::new_environment()
 
-  ctx$model <- do.call(module, get_hparams(module) %||% list())
-  ctx$opt <- do.call(ctx$model$optimizer, get_hparams(module)$opt_hparams %||% list())
+  if (is.null(accelerator))
+    accelerator <- accelerator()
+
+  ctx$accelerator <- accelerator
+
+  model <- do.call(module, get_hparams(module) %||% list())
+  opt <- do.call(model$optimizer, get_hparams(module)$opt_hparams %||% list())
+
+  c(model, opt, data, valid_data) %<-%
+    ctx$accelerator$prepare(model, opt, data, valid_data)
+
+  ctx$model <- model
+  ctx$opt <- opt
   ctx$data <- data
   ctx$valid_data <- valid_data
+
   ctx$epochs <- epochs
   callbacks <- append(default_callbacks(), callbacks)
   ctx$callbacks <- lapply(callbacks, function(cb) {
