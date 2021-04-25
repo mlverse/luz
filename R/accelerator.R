@@ -92,11 +92,16 @@ switch_parameters <- function(..., .mapping) {
   objs <- rlang::list2(...)
   for (obj in objs) {
     if (torch::is_optimizer(obj)) {
-      obj$param_groups$params <- lapply(
-        obj$param_groups$params,
-        function(x) {
-          .mapping[[get_param_id(x)]]
-        })
+      obj$param_groups <- lapply(
+        obj$param_groups,
+        function(param_group) {
+          param_group$params <- lapply(
+            param_group$params,
+            function(p) .mapping[[get_param_id(p)]]
+          )
+          param_group
+        }
+      )
     }
   }
   invisible(NULL)
@@ -115,9 +120,9 @@ as_device_dataloader <- function(x, device) {
 #' @importFrom coro as_iterator
 #' @export
 as_iterator.device_dataloader <- function(x) {
-  class(x) <- class(x)[class(x) != "device_dataloader"]
+  g <- NextMethod()
   gen <- coro::generator(function() {
-    for(batch in x) {
+    for(batch in g) {
       coro::yield(to_device(batch, device = x$.device))
     }
   })
