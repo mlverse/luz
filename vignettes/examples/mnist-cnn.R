@@ -18,8 +18,8 @@ test_ds <- mnist_dataset(
   transform = transform_to_tensor
 )
 
-train_dl <- dataloader(train_ds, batch_size = 32, shuffle = TRUE)
-test_dl <- dataloader(test_ds, batch_size = 32)
+train_dl <- dataloader(train_ds, batch_size = 128, shuffle = TRUE)
+test_dl <- dataloader(test_ds, batch_size = 128)
 
 
 # Buildifng the network ---------------------------------------------------
