@@ -31,7 +31,7 @@ light_metric_accuracy <- light_metric(
       to(dtype = torch::torch_float())$
       sum()$
       item()
-    self$total <- self$total + preds$numel()
+    self$total <- self$total + pred$numel()
   },
   compute = function() {
     self$correct/self$total

@@ -16,6 +16,8 @@ It's heavily inspired in other higher level frameworks for deep learning, to cit
 
 -   [PyTorch Lightning](https://www.pytorchlightning.ai/): The idea of the `light_module` being a subclass of `nn_module` is inspired in the **`LightningModule`** object in lightning.
 
+-   [HuggingFace Accelerate](https://huggingface.co/docs/accelerate/): The internal device placement API is heavily inspired in Accelerate, but much more modest in features. Currenly only CPU and Single GPU are supported.
+
 ## Todo
 
 -   [ ] 'compiling' and training classification models
