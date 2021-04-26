@@ -1,5 +1,6 @@
 # Packages ----------------------------------------------------------------
 
+devtools::load_all()
 library(torch)
 library(torchvision)
 
@@ -8,14 +9,15 @@ library(torchvision)
 # plotting callback
 
 plot_callback <- light_callback(
-  on_train_begin = function() {
+  name = "plot",
+  on_fit_begin = function() {
     latent_dim <- self$ctx$model$latent_dim
-    self$noise <- torch_randn(1, latent_dim, 1, 1, device = self$ctx$device)
+    self$noise <- torch_randn(1, latent_dim, device = self$ctx$accelerator$device)
   },
   on_epoch_end = function() {
     img <- self$ctx$model$G(self$noise)
     img <- img$cpu()
-    img <- img[1,1,,,newaxis]/2 + 0.5
+    img <- (img[1,1,,,newaxis] + 1)/2
     img <- torch_stack(list(img, img, img), dim = 3)[..,1]
     img <- as.raster(as_array(img))
     plot(img)
@@ -75,6 +77,7 @@ generator <- nn_module(
     self$main$apply(init_weights) # custom weight initialization
   },
   forward = function(input) {
+    input <- input$view(c(input$shape, 1, 1))
     self$main(input)
   }
 )
@@ -96,13 +99,12 @@ discriminator <- nn_module(
     )
     self$main$apply(init_weights) # custom weight initialization
     self$linear <- nn_linear(128, 1)
-    self$sigmoid <- nn_sigmoid()
   },
   forward = function(input) {
     x <- self$main(input)
     x <- torch_flatten(x, start_dim = 2)
     x <- self$linear(x)
-    self$sigmoid(x)
+    x[,1]
   }
 )
 
@@ -115,7 +117,7 @@ dcgan <- torch::nn_module(
     self$G <- generator(latent_dim = latent_dim, out_channels = channels)
     self$D <- discriminator(in_channels = 1)
 
-    self$bce <- nn_bce_loss()
+    self$bce <- torch::nn_bce_with_logits_loss()
   },
   optimizer = function(lr = 2*1e-4, betas = c(0.5, 0.999)) {
     list(
@@ -126,12 +128,14 @@ dcgan <- torch::nn_module(
   loss = function(input, ...) {
     # generate a fake image
     batch_size <- input$shape[1]
-    noise <- torch_randn(batch_size, self$latent_dim, 1, 1, device = input$device)
+    device <- input$device
+
+    noise <- torch_randn(batch_size, self$latent_dim, device = device)
     fake <- self$G(noise)
 
     # create response vectors
-    y_real <- torch_ones(batch_size, device = input$device)
-    y_fake <- torch_zeros(batch_size, device = input$device)
+    y_real <- torch_ones(batch_size, device = device)
+    y_fake <- torch_zeros(batch_size, device = device)
 
     # return different loss depending on the optimizer
     if (self$ctx$opt_name == "discriminator")
@@ -146,54 +150,3 @@ dcgan <- light_module(dcgan)
 res <- dcgan %>%
   set_hparams(latent_dim = 100, channels = 1) %>%
   fit(train_dl, epochs = 10, valid_data = test_dl, callbacks = list(plot_callback))
-
-
-# fixed_noise <- torch_randn(1, 100, 1, 1, device = device)
-#
-#
-# # Training loop -----------------------------------------------------------
-#
-# loss <- nn_bce_loss()
-#
-# for (epoch in 1:10) {
-#
-#   pb <- progress::progress_bar$new(
-#     total = length(dl),
-#     format = "[:bar] :eta Loss D: :lossd Loss G: :lossg"
-#   )
-#   lossg <- c()
-#   lossd <- c()
-#
-#   for (b in enumerate(dl)) {
-#
-#     y_real <- torch_ones(32, device = device)
-#     y_fake <- torch_zeros(32, device = device)
-#
-#     noise <- torch_randn(32, 100, 1, 1, device = device)
-#     fake <- G(noise)
-#
-#     img <- b[[1]]$to(device = device)
-#
-#     # train the discriminator ---
-#     D_loss <- loss(D(img), y_real) + loss(D(fake$detach()), y_fake)
-#
-#     D_optimizer$zero_grad()
-#     D_loss$backward()
-#     D_optimizer$step()
-#
-#     # train the generator ---
-#
-#     G_loss <- loss(D(fake), y_real)
-#
-#     G_optimizer$zero_grad()
-#     G_loss$backward()
-#     G_optimizer$step()
-#
-#     lossd <- c(lossd, D_loss$item())
-#     lossg <- c(lossg, G_loss$item())
-#     pb$tick(tokens = list(lossd = mean(lossd), lossg = mean(lossg)))
-#   }
-#
-#   plot_gen(fixed_noise)
-#   cat(sprintf("Epoch %d - Loss D: %3f Loss G: %3f\n", epoch, mean(lossd), mean(lossg)))
-# }
