@@ -70,20 +70,16 @@ fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL,
     ctx$call_callbacks("on_epoch_begin")
 
     ctx$call_callbacks("on_train_begin")
-
     ctx$model$train()
 
     coro::loop(for (batch in ctx$data) {
 
-      ctx$batch <- batch
-      ctx$input <- ctx$batch[[1]]
-      ctx$target <- ctx$batch[[2]]
+      bind_batch_to_ctx(ctx, batch)
 
       ctx$call_callbacks("on_train_batch_begin")
-
       fit_one_batch(ctx)
-
       ctx$call_callbacks("on_train_batch_end")
+
     })
 
     ctx$call_callbacks("on_train_end")
@@ -92,9 +88,9 @@ fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL,
     ctx$model$eval()
     with_no_grad({
       coro::loop(for (batch in ctx$valid_data) {
-        ctx$batch <- batch
-        ctx$input <- ctx$batch[[1]]
-        ctx$target <- ctx$batch[[2]]
+
+        bind_batch_to_ctx(ctx, batch)
+
         ctx$call_callbacks("on_valid_batch_begin")
         valid_one_batch(ctx)
         ctx$call_callbacks("on_valid_batch_end")
@@ -109,26 +105,28 @@ fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL,
   ctx$model
 }
 
+bind_batch_to_ctx <- function(ctx, batch) {
+  ctx$batch <- batch
+  ctx$input <- ctx$batch[[1]]
+  ctx$target <- ctx$batch[[2]]
+}
+
 fit_one_batch <-function(ctx) {
-
   ctx$pred <- do.call(ctx$model, list(ctx$input))
-
   ctx$call_callbacks("on_train_batch_after_pred")
 
   ctx$loss_grad <- ctx$model$loss(ctx$pred, ctx$target)
   ctx$loss <- ctx$loss_grad$detach()
-
   ctx$call_callbacks("on_train_batch_after_loss")
 
   ctx$call_callbacks("on_train_batch_before_backward")
-
   ctx$loss_grad$backward()
 
   ctx$call_callbacks("on_train_batch_before_step")
   ctx$opt$step()
   ctx$opt$zero_grad()
-
   ctx$call_callbacks("on_train_batch_after_step")
+
 }
 
 valid_one_batch <- function(ctx) {
