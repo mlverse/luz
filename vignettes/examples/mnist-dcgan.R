@@ -103,10 +103,16 @@ discriminator <- nn_module(
 
 dcgan <- torch::nn_module(
   initialize = function(latent_dim = 100, channels = 1) {
+
+    self$latent_dim <- latent_dim
+    self$channels <- channels
+
     self$G <- generator(latent_dim = latent_dim, out_channels = channels)
     self$D <- discriminator(in_channels = 1)
+
+    self$bce <- nn_bce_loss()
   },
-  optimizer = function(lr = 2*1e-4, betas = c(-.5, 0.999)) {
+  optimizer = function(lr = 2*1e-4, betas = c(0.5, 0.999)) {
     list(
       discriminator = optim_adam(self$D$parameters, lr = lr, betas = betas),
       generator = optim_adam(self$G$parameters, lr = lr, betas = betas)
@@ -116,19 +122,26 @@ dcgan <- torch::nn_module(
     # generate a fake image
     batch_size <- input$shape[1]
     noise <- torch_randn(batch_size, self$latent_dim, 1, 1, device = input$device)
-    fake <- G(noise)
+    fake <- self$G(noise)
 
     # create response vectors
     y_real <- torch_ones(batch_size, device = input$device)
     y_fake <- torch_zeros(batch_size, device = input$device)
 
     # return different loss depending on the optimizer
-    if (ctx$opt_name == "discriminator")
-      loss(D(img), y_real) + loss(D(fake$detach()), y_fake)
-    else if (ctx$opt_name == "generator")
-      loss(D(fake), y_real)
+    if (self$ctx$opt_name == "discriminator")
+      self$bce(self$D(input), y_real) + self$bce(self$D(fake$detach()), y_fake)
+    else if (self$ctx$opt_name == "generator")
+      self$bce(self$D(fake), y_real)
   }
 )
+
+dcgan <- light_module(dcgan)
+
+res <- dcgan %>%
+  set_hparams(latent_dim = 100, channels = 1) %>%
+  fit(train_dl, epochs = 10, valid_data = test_dl)
+
 
 # fixed_noise <- torch_randn(1, 100, 1, 1, device = device)
 #
