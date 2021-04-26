@@ -30,6 +30,7 @@ get_hparams <- function(module) {
   attr(module, "hparams")
 }
 
+
 fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL,
                 accelerator = NULL) {
 
@@ -58,17 +59,17 @@ fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL,
     cb$new(ctx = ctx)
   })
 
-  call_callbacks <- function(name) {
+  ctx$call_callbacks <- function(name) {
     call_all_callbacks(ctx$callbacks, name)
   }
 
-  call_callbacks("on_fit_begin")
+  ctx$call_callbacks("on_fit_begin")
 
   for (epoch in seq_len(ctx$epochs)) {
     ctx$epoch <- epoch
-    call_callbacks("on_epoch_begin")
+    ctx$call_callbacks("on_epoch_begin")
 
-    call_callbacks("on_train_begin")
+    ctx$call_callbacks("on_train_begin")
 
     ctx$model$train()
 
@@ -78,32 +79,15 @@ fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL,
       ctx$input <- ctx$batch[[1]]
       ctx$target <- ctx$batch[[2]]
 
-      call_callbacks("on_train_batch_begin")
+      ctx$call_callbacks("on_train_batch_begin")
 
-      ctx$pred <- do.call(ctx$model, list(ctx$input))
+      fit_one_batch(ctx)
 
-      call_callbacks("on_train_batch_after_pred")
-
-      ctx$loss_grad <- ctx$model$loss(ctx$pred, ctx$target)
-      ctx$loss <- ctx$loss_grad$detach()
-
-      call_callbacks("on_train_batch_after_loss")
-
-      call_callbacks("on_train_batch_before_backward")
-
-      ctx$loss_grad$backward()
-
-      call_callbacks("on_train_batch_before_step")
-      ctx$opt$step()
-      ctx$opt$zero_grad()
-
-      call_callbacks("on_train_batch_after_step")
-
-      call_callbacks("on_train_batch_end")
+      ctx$call_callbacks("on_train_batch_end")
     })
 
-    call_callbacks("on_train_end")
-    call_callbacks("on_valid_begin")
+    ctx$call_callbacks("on_train_end")
+    ctx$call_callbacks("on_valid_begin")
 
     ctx$model$eval()
     with_no_grad({
@@ -111,23 +95,46 @@ fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL,
         ctx$batch <- batch
         ctx$input <- ctx$batch[[1]]
         ctx$target <- ctx$batch[[2]]
-
-        call_callbacks("on_valid_batch_begin")
-
-        ctx$pred <- do.call(ctx$model, list(batch[[1]]))
-        call_callbacks("on_valid_batch_after_pred")
-
-        ctx$loss <- ctx$model$loss(ctx$pred, batch[[2]])
-        call_callbacks("on_valid_batch_after_loss")
-
-        call_callbacks("on_valid_batch_end")
+        ctx$call_callbacks("on_valid_batch_begin")
+        valid_one_batch(ctx)
+        ctx$call_callbacks("on_valid_batch_end")
       })
     })
 
-    call_callbacks("on_valid_end")
-    call_callbacks("on_epoch_end")
+    ctx$call_callbacks("on_valid_end")
+    ctx$call_callbacks("on_epoch_end")
   }
 
-  call_callbacks("on_fit_end")
+  ctx$call_callbacks("on_fit_end")
   ctx$model
+}
+
+fit_one_batch <-function(ctx) {
+
+  ctx$pred <- do.call(ctx$model, list(ctx$input))
+
+  ctx$call_callbacks("on_train_batch_after_pred")
+
+  ctx$loss_grad <- ctx$model$loss(ctx$pred, ctx$target)
+  ctx$loss <- ctx$loss_grad$detach()
+
+  ctx$call_callbacks("on_train_batch_after_loss")
+
+  ctx$call_callbacks("on_train_batch_before_backward")
+
+  ctx$loss_grad$backward()
+
+  ctx$call_callbacks("on_train_batch_before_step")
+  ctx$opt$step()
+  ctx$opt$zero_grad()
+
+  ctx$call_callbacks("on_train_batch_after_step")
+}
+
+valid_one_batch <- function(ctx) {
+  ctx$pred <- do.call(ctx$model, list(ctx$input))
+  ctx$call_callbacks("on_valid_batch_after_pred")
+
+  ctx$loss <- ctx$model$loss(ctx$pred, ctx$target)
+  ctx$call_callbacks("on_valid_batch_after_loss")
 }
