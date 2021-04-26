@@ -5,17 +5,22 @@ library(torchvision)
 
 # Utils -------------------------------------------------------------------
 
-# plots an image generated given the
-# intermediate state
-plot_gen <- function(noise) {
-  img <- G(noise)
-  img <- img$cpu()
-  img <- img[1,1,,,newaxis]/2 + 0.5
-  img <- torch_stack(list(img, img, img), dim = 3)[..,1]
-  img <- as.raster(as_array(img))
-  plot(img)
-}
+# plotting callback
 
+plot_callback <- light_callback(
+  on_train_begin = function() {
+    latent_dim <- self$ctx$model$latent_dim
+    self$noise <- torch_randn(1, latent_dim, 1, 1, device = self$ctx$device)
+  },
+  on_epoch_end = function() {
+    img <- self$ctx$model$G(self$noise)
+    img <- img$cpu()
+    img <- img[1,1,,,newaxis]/2 + 0.5
+    img <- torch_stack(list(img, img, img), dim = 3)[..,1]
+    img <- as.raster(as_array(img))
+    plot(img)
+  }
+)
 
 # Datasets and loaders ----------------------------------------------------
 
@@ -140,7 +145,7 @@ dcgan <- light_module(dcgan)
 
 res <- dcgan %>%
   set_hparams(latent_dim = 100, channels = 1) %>%
-  fit(train_dl, epochs = 10, valid_data = test_dl)
+  fit(train_dl, epochs = 10, valid_data = test_dl, callbacks = list(plot_callback))
 
 
 # fixed_noise <- torch_randn(1, 100, 1, 1, device = device)
