@@ -18,3 +18,30 @@ NULL
   else
     x
 }
+
+has_method <- function(x, name) {
+  if (!is.null(x$public_methods[[name]]))
+    TRUE
+  else if (!is.null(x$get_inherit()))
+    has_method(x$get_inherit(), name)
+  else
+    FALSE
+}
+
+
+get_forward <- function(x) {
+  if (!is.null(x$public_methods[["forward"]]))
+    x$public_methods[["forward"]]
+  else if (!is.null(x$get_inherit()))
+    get_forward(x$get_inherit())
+  else
+    rlang::abort("No `forward` method found.")
+}
+
+has_forward_method <- function(x) {
+  test_module <- torch::nn_module(initialize = function() {})
+  nn_forward <- test_module$get_inherit()$public_methods$forward
+  forward <- get_forward(x)
+  !isTRUE(all.equal(nn_forward, forward))
+}
+

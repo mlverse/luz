@@ -62,8 +62,13 @@ light_callback_progress <- light_callback(
   on_train_begin = function() {
     format <- ":current/:total [:bar] - ETA: :eta"
     metrics <- self$ctx$metrics[["train"]][[self$ctx$epoch]]
-    abbrevs <- self$get_abbrevs(metrics)
-    abbrevs <- paste0(glue::glue("{abbrevs}: :{tolower(abbrevs)} "), collapse = " - ")
+    if (length(metrics) > 0) {
+      abbrevs <- self$get_abbrevs(metrics)
+      abbrevs <- paste0(glue::glue("{abbrevs}: :{tolower(abbrevs)} "), collapse = " - ")
+    } else {
+      abbrevs <- NULL
+    }
+
     format <- paste0(c(format, abbrevs), collapse = " - ")
     self$pb <- progress::progress_bar$new(
       format = format,
@@ -91,6 +96,10 @@ light_callback_progress <- light_callback(
   },
   get_metrics = function(split) {
     metrics <- self$ctx$metrics[[split]][[self$ctx$epoch]]
+
+    if (length(metrics) == 0)
+      return(list())
+
     l <- list(
       values = sapply(metrics, function(x) x$format(x$compute()))
     )
@@ -99,8 +108,10 @@ light_callback_progress <- light_callback(
   },
   inform_metrics = function(split, name) {
     metrics <- self$get_metrics(split)
-    res <- paste0(glue::glue("{names(metrics)}: {metrics}"), collapse = " - ")
-    rlang::inform(glue::glue("{name} metrics: {res}"))
+    if (length(metrics) > 0) {
+      res <- paste0(glue::glue("{names(metrics)}: {metrics}"), collapse = " - ")
+      rlang::inform(glue::glue("{name} metrics: {res}"))
+    }
   }
 )
 
