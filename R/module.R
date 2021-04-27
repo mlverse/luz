@@ -91,7 +91,6 @@ fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL,
     ctx$call_callbacks("on_epoch_begin")
 
     ctx$call_callbacks("on_train_begin")
-    ctx$model$train()
 
     coro::loop(for (batch in ctx$data) {
 
@@ -106,7 +105,6 @@ fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL,
     ctx$call_callbacks("on_train_end")
     ctx$call_callbacks("on_valid_begin")
 
-    ctx$model$eval()
     with_no_grad({
       coro::loop(for (batch in ctx$valid_data) {
 

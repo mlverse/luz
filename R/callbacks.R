@@ -151,13 +151,14 @@ light_callback_metrics <- light_callback(
 )
 
 light_callback_train_valid <- light_callback(
+  "train_valid_callback",
   on_train_begin = function() {
-    ctx$model$train()
-    ctx$training <- TRUE
+    self$ctx$model$train()
+    self$ctx$training <- TRUE
   },
   on_valid_begin = function() {
-    ctx$model$eval()
-    ctx$training <- FALSE
+    self$ctx$model$eval()
+    self$ctx$training <- FALSE
   }
 )
 
