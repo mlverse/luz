@@ -1,9 +1,7 @@
 # torchlight
 
 <!-- badges: start -->
-
 [![R-CMD-check](https://github.com/mlverse/torchlight/workflows/R-CMD-check/badge.svg)](https://github.com/mlverse/torchlight/actions)
-
 [![Codecov test coverage](https://codecov.io/gh/mlverse/torchlight/branch/master/graph/badge.svg)](https://codecov.io/gh/mlverse/torchlight?branch=master)
 <!-- badges: end -->
 
