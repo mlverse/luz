@@ -13,7 +13,10 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
     torch,
-    magrittr
+    magrittr,
+    zeallot,
+    rlang,
+    coro
 Suggests: 
     knitr,
     rmarkdown,
