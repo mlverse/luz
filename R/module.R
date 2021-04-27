@@ -105,7 +105,7 @@ fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL,
     ctx$call_callbacks("on_train_end")
     ctx$call_callbacks("on_valid_begin")
 
-    with_no_grad({
+    torch::with_no_grad({
       coro::loop(for (batch in ctx$valid_data) {
 
         bind_batch_to_ctx(ctx, batch)
