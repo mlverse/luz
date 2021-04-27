@@ -2,6 +2,8 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/mlverse/torchlight/workflows/R-CMD-check/badge.svg)](https://github.com/mlverse/torchlight/actions)
+
 <!-- badges: end -->
 
 Torchlight is a higher level API for torch providing abstractions to allow for much less verbose training loops.
