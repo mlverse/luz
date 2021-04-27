@@ -41,6 +41,7 @@ call_all_callbacks <- function(callbacks, name) {
 
 default_callbacks <- function() {
   list(
+    light_callback_train_valid,
     light_callback_metrics,
     light_callback_progress
   )
@@ -135,6 +136,17 @@ light_callback_metrics <- light_callback(
       self$ctx$metrics$valid[[self$ctx$epoch]],
       function(x) x$update(self$ctx$pred, self$ctx$target)
     )
+  }
+)
+
+light_callback_train_valid <- light_callback(
+  on_train_begin = function() {
+    ctx$model$train()
+    ctx$training <- TRUE
+  },
+  on_valid_begin = function() {
+    ctx$model$eval()
+    ctx$training <- FALSE
   }
 )
 
