@@ -16,7 +16,8 @@ Imports:
     magrittr,
     zeallot,
     rlang,
-    coro
+    coro,
+    glue
 Suggests: 
     knitr,
     rmarkdown,
