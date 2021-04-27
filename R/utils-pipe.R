@@ -19,6 +19,8 @@ NULL
     x
 }
 
+utils::globalVariables(c("self"))
+
 has_method <- function(x, name) {
   if (!is.null(x$public_methods[[name]]))
     TRUE
