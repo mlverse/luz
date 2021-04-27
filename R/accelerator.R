@@ -39,6 +39,9 @@ LightAccelerator <- R6::R6Class(
       if (torch::is_dataloader(obj))
         return(self$prepare_dataloader(obj))
 
+      if (is.list(obj))
+        return(lapply(obj, self$prepare_one))
+
       rlang::abort(glue::glue(c(
         "Unhandled object with class {class(obj)}",
         "Only nn_modules, optimizers and dataloaders are supported."))
@@ -91,6 +94,7 @@ get_parameter_ids <- function(..., with_parameters) {
 switch_parameters <- function(..., .mapping) {
   objs <- rlang::list2(...)
   for (obj in objs) {
+
     if (torch::is_optimizer(obj)) {
       obj$param_groups <- lapply(
         obj$param_groups,
@@ -103,6 +107,12 @@ switch_parameters <- function(..., .mapping) {
         }
       )
     }
+
+    # recurse to support getting a list of optimizers
+    if (is.list(obj)) {
+      switch_parameters(!!!obj, .mapping = .mapping)
+    }
+
   }
   invisible(NULL)
 }
