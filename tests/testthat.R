@@ -1,4 +1,4 @@
 library(testthat)
-library(torchlight)
+library(luz)
 
-test_check("torchlight")
+test_check("luz")

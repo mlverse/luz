@@ -1,14 +1,14 @@
 accelerator <- function(device_placement = TRUE, cpu = FALSE) {
-  LightAccelerator$new(device_placement = device_placement, cpu = cpu)
+  LuzAccelerator$new(device_placement = device_placement, cpu = cpu)
 }
 
-LightAccelerator <- R6::R6Class(
-  classname = "LightAccelerator",
+LuzAccelerator <- R6::R6Class(
+  classname = "LuzAccelerator",
   lock_objects = FALSE,
   public = list(
     initialize = function(device_placement = TRUE, cpu = FALSE) {
       self$device_placement = device_placement
-      self$state <- LightAcceleratorState$new(cpu = cpu)
+      self$state <- LuzAcceleratorState$new(cpu = cpu)
     },
     prepare = function(...) {
 
@@ -67,8 +67,8 @@ LightAccelerator <- R6::R6Class(
   )
 )
 
-LightAcceleratorState <- R6::R6Class(
-  classname = "LightAcceleratorState",
+LuzAcceleratorState <- R6::R6Class(
+  classname = "LuzAcceleratorState",
   lock_objects = FALSE,
   public = list(
     initialize = function(cpu = FALSE) {

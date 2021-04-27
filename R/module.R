@@ -1,5 +1,5 @@
 
-light_module <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
+luz_module <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
 
 
   methods <- list()
@@ -27,7 +27,7 @@ light_module <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) 
     methods$forward <- identity
 
   do.call(torch::nn_module,
-          append(methods, list(name = "light_module", inherit = module)))
+          append(methods, list(name = "luz_module", inherit = module)))
 }
 
 set_hparams <- function(module, ...) {

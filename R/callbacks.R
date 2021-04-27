@@ -1,5 +1,5 @@
-LightCallback <- R6::R6Class(
-  "LightCallback",
+LuzCallback <- R6::R6Class(
+  "LuzCallback",
   lock_objects = FALSE,
   public = list(
     initialize = function(ctx) {
@@ -41,24 +41,24 @@ call_all_callbacks <- function(callbacks, name) {
 
 default_callbacks <- function() {
   list(
-    light_callback_train_valid,
-    light_callback_metrics,
-    light_callback_progress
+    luz_callback_train_valid,
+    luz_callback_metrics,
+    luz_callback_progress
   )
 }
 
-light_callback <- function(name, ..., public, active, parent_env = parent.frame()) {
+luz_callback <- function(name, ..., public, active, parent_env = parent.frame()) {
   public <- rlang::list2(...)
   R6::R6Class(
     classname = name,
-    inherit = LightCallback,
+    inherit = LuzCallback,
     public = public,
     parent_env = parent_env,
     lock_objects = FALSE
   )
 }
 
-light_callback_progress <- light_callback(
+luz_callback_progress <- luz_callback(
   "progress_callback",
   on_train_begin = function() {
     format <- ":current/:total [:bar] - ETA: :eta"
@@ -116,7 +116,7 @@ light_callback_progress <- light_callback(
   }
 )
 
-light_callback_metrics <- light_callback(
+luz_callback_metrics <- luz_callback(
   "metrics_callback",
   on_fit_begin = function() {
    self$ctx$metrics <- list(
@@ -150,7 +150,7 @@ light_callback_metrics <- light_callback(
   }
 )
 
-light_callback_train_valid <- light_callback(
+luz_callback_train_valid <- luz_callback(
   "train_valid_callback",
   on_train_begin = function() {
     self$ctx$model$train()

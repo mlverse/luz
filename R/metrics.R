@@ -1,5 +1,5 @@
-LightMetric <- R6::R6Class(
-  "LightMetric",
+LuzMetric <- R6::R6Class(
+  "LuzMetric",
   lock_objects = FALSE,
   public = list(
     format = function(v) {
@@ -8,18 +8,18 @@ LightMetric <- R6::R6Class(
   )
 )
 
-light_metric <- function(name = NULL, ..., public, active, parent_env = parent.frame()) {
+luz_metric <- function(name = NULL, ..., public, active, parent_env = parent.frame()) {
   public <- rlang::list2(...)
   R6::R6Class(
     classname = name,
-    inherit = LightMetric,
+    inherit = LuzMetric,
     public = public,
     parent_env = parent_env,
     lock_objects = FALSE
   )
 }
 
-light_metric_accuracy <- light_metric(
+luz_metric_accuracy <- luz_metric(
   abbrev = "Acc",
   initialize = function() {
     self$correct <- 0

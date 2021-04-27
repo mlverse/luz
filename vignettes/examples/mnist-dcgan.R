@@ -8,7 +8,7 @@ library(torchvision)
 
 # plotting callback
 
-plot_callback <- light_callback(
+plot_callback <- luz_callback(
   name = "plot",
   on_fit_begin = function() {
     latent_dim <- self$ctx$model$latent_dim
@@ -145,7 +145,7 @@ dcgan <- torch::nn_module(
   }
 )
 
-dcgan <- light_module(dcgan)
+dcgan <- luz_module(dcgan)
 
 res <- dcgan %>%
   set_hparams(latent_dim = 100, channels = 1) %>%

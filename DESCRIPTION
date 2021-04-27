@@ -1,4 +1,4 @@
-Package: torchlight
+Package: luz
 Title: Higher Level 'API' for 'torch'
 Version: 0.0.0.9000
 Authors@R: c(

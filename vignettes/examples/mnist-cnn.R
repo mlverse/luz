@@ -52,12 +52,12 @@ net <- nn_module(
 
 # Train -------------------------------------------------------------------
 
-m <- light_module(
+m <- luz_module(
   net,
   loss = torch::nn_cross_entropy_loss(),
   optimizer = torch::optim_adam,
   metrics = list(
-    light_metric_accuracy
+    luz_metric_accuracy
   )
 )
 

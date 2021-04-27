@@ -1,11 +1,11 @@
-# torchlight
+# luz
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/mlverse/torchlight/workflows/R-CMD-check/badge.svg)](https://github.com/mlverse/torchlight/actions)
-[![Codecov test coverage](https://codecov.io/gh/mlverse/torchlight/branch/master/graph/badge.svg)](https://codecov.io/gh/mlverse/torchlight?branch=master)
+[![R-CMD-check](https://github.com/mlverse/luz/workflows/R-CMD-check/badge.svg)](https://github.com/mlverse/luz/actions)
+[![Codecov test coverage](https://codecov.io/gh/mlverse/luz/branch/master/graph/badge.svg)](https://codecov.io/gh/mlverse/luz?branch=master)
 <!-- badges: end -->
 
-Torchlight is a higher level API for torch providing abstractions to allow for much less verbose training loops.
+luz is a higher level API for torch providing abstractions to allow for much less verbose training loops.
 
 This package is in very early stage of development. Don't use for anything meaningful yet.
 
@@ -15,7 +15,7 @@ It's heavily inspired in other higher level frameworks for deep learning, to cit
 
 -   [Keras](https://keras.io/): We are also heavily inspired by Keras, specially callback names, the lightning module interface is similar to `compile` too.
 
--   [PyTorch Lightning](https://www.pytorchlightning.ai/): The idea of the `light_module` being a subclass of `nn_module` is inspired in the **`LightningModule`** object in lightning.
+-   [PyTorch Luzning](https://www.pyluzning.ai/): The idea of the `luz_module` being a subclass of `nn_module` is inspired in the **`LuzningModule`** object in lightning.
 
 -   [HuggingFace Accelerate](https://huggingface.co/docs/accelerate/): The internal device placement API is heavily inspired in Accelerate, but much more modest in features. Currenly only CPU and Single GPU are supported.
 
@@ -39,10 +39,10 @@ It's heavily inspired in other higher level frameworks for deep learning, to cit
 
 ## Installation
 
-You can install the released version of torchlight from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of luz from [CRAN](https://CRAN.R-project.org) with:
 
 ``` {.r}
-install.packages("torchlight")
+install.packages("luz")
 ```
 
 ## Example
@@ -50,6 +50,6 @@ install.packages("torchlight")
 This is a basic example which shows you how to solve a common problem:
 
 ``` {.r}
-library(torchlight)
+library(luz)
 ## basic example code
 ```
