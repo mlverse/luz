@@ -4,6 +4,7 @@
 
 [![R-CMD-check](https://github.com/mlverse/torchlight/workflows/R-CMD-check/badge.svg)](https://github.com/mlverse/torchlight/actions)
 
+[![Codecov test coverage](https://codecov.io/gh/mlverse/torchlight/branch/master/graph/badge.svg)](https://codecov.io/gh/mlverse/torchlight?branch=master)
 <!-- badges: end -->
 
 Torchlight is a higher level API for torch providing abstractions to allow for much less verbose training loops.
