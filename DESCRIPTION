@@ -17,7 +17,9 @@ Imports:
     zeallot,
     rlang,
     coro,
-    glue
+    glue,
+    progress,
+    R6
 Suggests: 
     knitr,
     rmarkdown,
