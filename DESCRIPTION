@@ -19,7 +19,8 @@ Imports:
     coro,
     glue,
     progress,
-    R6
+    R6,
+    generics
 Suggests: 
     knitr,
     rmarkdown,

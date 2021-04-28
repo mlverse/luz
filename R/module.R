@@ -1,5 +1,5 @@
 
-luz_module <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
+setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
 
 
   methods <- list()
@@ -26,8 +26,12 @@ luz_module <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
   if (!has_forward_method(module))
     methods$forward <- identity
 
-  do.call(torch::nn_module,
-          append(methods, list(name = "luz_module", inherit = module)))
+  mod <- do.call(
+    torch::nn_module,
+    append(methods, list(name = "luz_module", inherit = module))
+  )
+  class(mod) <- c("luz_module_generator")
+  mod
 }
 
 set_hparams <- function(module, ...) {
@@ -40,9 +44,10 @@ get_hparams <- function(module) {
   attr(module, "hparams")
 }
 
-
-fit <- function(module, data, epochs = 10, callbacks = NULL, valid_data = NULL,
-                accelerator = NULL) {
+#' @importFrom generics fit
+#' @export
+fit.luz_module_generator <- function(module, data, epochs = 10, callbacks = NULL,
+                                     valid_data = NULL, accelerator = NULL) {
 
   # Initialize context:
   ctx <- rlang::new_environment()
