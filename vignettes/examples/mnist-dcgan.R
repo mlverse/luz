@@ -145,7 +145,7 @@ dcgan <- torch::nn_module(
   }
 )
 
-dcgan <- luz_module(dcgan)
+dcgan <- setup(dcgan)
 
 res <- dcgan %>%
   set_hparams(latent_dim = 100, channels = 1) %>%
