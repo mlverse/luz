@@ -2,7 +2,7 @@ LuzCallback <- R6::R6Class(
   "LuzCallback",
   lock_objects = FALSE,
   public = list(
-    initialize = function(ctx) {
+    set_ctx = function(ctx) {
       self$ctx <- ctx
     },
     call = function(callback_nm) {
@@ -41,19 +41,22 @@ call_all_callbacks <- function(callbacks, name) {
 
 default_callbacks <- function() {
   list(
-    luz_callback_train_valid,
-    luz_callback_metrics,
-    luz_callback_progress
+    luz_callback_train_valid$new(),
+    luz_callback_metrics$new(),
+    luz_callback_progress$new()
   )
 }
 
-luz_callback <- function(name, ..., public, active, parent_env = parent.frame()) {
+luz_callback <- function(name, ..., private = NULL, active = NULL, parent_env = parent.frame()) {
   public <- rlang::list2(...)
+  e <- new.env(parent = parent_env)
   R6::R6Class(
     classname = name,
     inherit = LuzCallback,
     public = public,
-    parent_env = parent_env,
+    private = private,
+    active = active,
+    parent_env = e,
     lock_objects = FALSE
   )
 }
@@ -62,7 +65,7 @@ luz_callback_progress <- luz_callback(
   "progress_callback",
   on_train_begin = function() {
     format <- ":current/:total [:bar] - ETA: :eta"
-    metrics <- self$ctx$metrics[["train"]][[self$ctx$epoch]]
+    metrics <- ctx$metrics[["train"]][[ctx$epoch]]
     if (length(metrics) > 0) {
       abbrevs <- self$get_abbrevs(metrics)
       abbrevs <- paste0(glue::glue("{abbrevs}: :{tolower(abbrevs)} "), collapse = " - ")
@@ -73,14 +76,14 @@ luz_callback_progress <- luz_callback(
     format <- paste0(c(format, abbrevs), collapse = " - ")
     self$pb <- progress::progress_bar$new(
       format = format,
-      total = length(self$ctx$data)
+      total = length(ctx$data)
     )
   },
   on_epoch_begin = function() {
     rlang::inform(sprintf(
       "Epoch %d/%d",
-      as.integer(self$ctx$epoch),
-      as.integer(self$ctx$epochs)
+      as.integer(ctx$epoch),
+      as.integer(ctx$epochs)
     ))
   },
   on_train_batch_end = function() {
@@ -96,7 +99,7 @@ luz_callback_progress <- luz_callback(
     sapply(metrics, function(x) x$abbrev %||% class(x))
   },
   get_metrics = function(split) {
-    metrics <- self$ctx$metrics[[split]][[self$ctx$epoch]]
+    metrics <- ctx$metrics[[split]][[ctx$epoch]]
 
     if (length(metrics) == 0)
       return(list())
@@ -119,33 +122,33 @@ luz_callback_progress <- luz_callback(
 luz_callback_metrics <- luz_callback(
   "metrics_callback",
   on_fit_begin = function() {
-   self$ctx$metrics <- list(
+   ctx$metrics <- list(
      train = list(),
      valid = list()
    )
   },
   on_train_begin = function() {
-    self$ctx$metrics$train[[self$ctx$epoch]] <- lapply(
-      self$ctx$model$metrics %||% list(),
+    ctx$metrics$train[[ctx$epoch]] <- lapply(
+      ctx$model$metrics %||% list(),
       function(x) x$new()
     )
   },
   on_train_batch_end = function() {
     lapply(
-      self$ctx$metrics$train[[self$ctx$epoch]],
-      function(x) x$update(self$ctx$pred, self$ctx$target)
+      ctx$metrics$train[[ctx$epoch]],
+      function(x) x$update(ctx$pred, ctx$target)
     )
   },
   on_valid_begin = function() {
-    self$ctx$metrics$valid[[self$ctx$epoch]] <- lapply(
-      self$ctx$model$metrics %||% list(),
+    ctx$metrics$valid[[ctx$epoch]] <- lapply(
+      ctx$model$metrics %||% list(),
       function(x) x$new()
     )
   },
   on_valid_batch_end = function() {
     lapply(
-      self$ctx$metrics$valid[[self$ctx$epoch]],
-      function(x) x$update(self$ctx$pred, self$ctx$target)
+      ctx$metrics$valid[[ctx$epoch]],
+      function(x) x$update(ctx$pred, ctx$target)
     )
   }
 )
@@ -153,12 +156,12 @@ luz_callback_metrics <- luz_callback(
 luz_callback_train_valid <- luz_callback(
   "train_valid_callback",
   on_train_begin = function() {
-    self$ctx$model$train()
-    self$ctx$training <- TRUE
+    ctx$model$train()
+    ctx$training <- TRUE
   },
   on_valid_begin = function() {
-    self$ctx$model$eval()
-    self$ctx$training <- FALSE
+    ctx$model$eval()
+    ctx$training <- FALSE
   }
 )
 

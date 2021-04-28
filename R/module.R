@@ -85,7 +85,9 @@ fit.luz_module_generator <- function(module, data, epochs = 10, callbacks = NULL
   ctx$epochs <- epochs
   callbacks <- append(default_callbacks(), callbacks)
   ctx$callbacks <- lapply(callbacks, function(cb) {
-    cb$new(ctx = ctx)
+    cb$set_ctx(ctx)
+    bind_context(cb, ctx)
+    cb
   })
 
   if (is.null(ctx$model$step))
