@@ -9,10 +9,11 @@ setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
     methods$loss <- function(input, target) {
       loss(input, target)
     }
-  else if (!has_method(module, "loss"))
+  else if (!has_method(module, "loss") && !has_method(module, "step"))
     rlang::abort(c("No loss function has been provided.",
                    "Use the `loss` argument or,",
-                   "Implement the `loss` method in the `nn_module`."))
+                   "Implement the `loss` method in the `nn_module` or,",
+                   "Implement a custom `step` method that manually optimized the parameters."))
 
   if (!is.null(optimizer))
     methods$optimizer <- function(...) {
@@ -85,6 +86,11 @@ fit.luz_module_generator <- function(module, data, epochs = 10, callbacks = NULL
     cb$new(ctx = ctx)
   })
 
+  if (is.null(ctx$model$step))
+    step <- function() default_step(ctx)
+  else
+    step <- ctx$model$step
+
   ctx$call_callbacks <- function(name) {
     call_all_callbacks(ctx$callbacks, name)
   }
@@ -93,30 +99,31 @@ fit.luz_module_generator <- function(module, data, epochs = 10, callbacks = NULL
 
   for (epoch in seq_len(ctx$epochs)) {
     ctx$epoch <- epoch
+    ctx$iter <- 0L
     ctx$call_callbacks("on_epoch_begin")
 
     ctx$call_callbacks("on_train_begin")
 
     coro::loop(for (batch in ctx$data) {
-
       bind_batch_to_ctx(ctx, batch)
+      ctx$iter <- ctx$iter + 1L
 
       ctx$call_callbacks("on_train_batch_begin")
-      fit_one_batch(ctx)
+      step()
       ctx$call_callbacks("on_train_batch_end")
-
     })
 
     ctx$call_callbacks("on_train_end")
     ctx$call_callbacks("on_valid_begin")
 
+    ctx$iter <- 0L
     torch::with_no_grad({
       coro::loop(for (batch in ctx$valid_data) {
-
         bind_batch_to_ctx(ctx, batch)
+        ctx$iter <- ctx$iter + 1L
 
         ctx$call_callbacks("on_valid_batch_begin")
-        valid_one_batch(ctx)
+        step()
         ctx$call_callbacks("on_valid_batch_end")
       })
     })
@@ -133,6 +140,13 @@ bind_batch_to_ctx <- function(ctx, batch) {
   ctx$batch <- batch
   ctx$input <- ctx$batch[[1]]
   ctx$target <- ctx$batch[[2]]
+}
+
+default_step <- function(ctx) {
+  if (ctx$training)
+    fit_one_batch(ctx)
+  else
+    valid_one_batch(ctx)
 }
 
 fit_one_batch <-function(ctx) {
