@@ -59,6 +59,8 @@ fit.luz_module_generator <- function(module, data, epochs = 10, callbacks = NULL
   ctx$accelerator <- accelerator
 
   model <- do.call(module, get_hparams(module) %||% list())
+  bind_context(model, ctx)
+
   optimizers <- do.call(model$optimizer, get_hparams(module)$opt_hparams %||% list())
 
   if (!is.list(optimizers)) {

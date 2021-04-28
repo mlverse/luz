@@ -138,9 +138,9 @@ dcgan <- torch::nn_module(
     y_fake <- torch_zeros(batch_size, device = device)
 
     # return different loss depending on the optimizer
-    if (self$ctx$opt_name == "discriminator")
+    if (ctx$opt_name == "discriminator")
       self$bce(self$D(input), y_real) + self$bce(self$D(fake$detach()), y_fake)
-    else if (self$ctx$opt_name == "generator")
+    else if (ctx$opt_name == "generator")
       self$bce(self$D(fake), y_real)
   }
 )

@@ -47,3 +47,20 @@ has_forward_method <- function(x) {
   !isTRUE(all.equal(nn_forward, forward))
 }
 
+bind_context <- function(x, ctx) {
+  e <- rlang::fn_env(x$initialize) # the `initialize` method must always exist in R6 classes
+  rlang::env_bind(e, ctx = ctx)
+}
+
+test <- R6::R6Class(
+  "help",
+  public = list(
+    x = NULL,
+    initialize = function(x) {
+      self$x = x
+    },
+    find_ctx = function() {
+      ctx
+    }
+  )
+)

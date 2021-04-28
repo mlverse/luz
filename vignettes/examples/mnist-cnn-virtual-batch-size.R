@@ -51,16 +51,16 @@ net <- nn_module(
     x
   },
   step = function() {
-    self$ctx$pred <- self$ctx$model(self$ctx$input)
-    loss <- self$ctx$model$loss(self$ctx$pred, self$ctx$target)
+    ctx$pred <- ctx$model(ctx$input)
+    loss <- ctx$model$loss(ctx$pred, ctx$target)
 
-    if (self$ctx$training) {
+    if (ctx$training) {
       loss <- loss/self$accumulate_batches
       loss$backward()
     }
 
-    if (self$ctx$training && (self$ctx$iter %% self$accumulate_batches == 0)) {
-      opt <- self$ctx$optimizers[[1]]
+    if (ctx$training && (ctx$iter %% self$accumulate_batches == 0)) {
+      opt <- ctx$optimizers[[1]]
       opt$step()
       opt$zero_grad()
     }
