@@ -3,7 +3,6 @@ setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
 
 
   methods <- list()
-  methods$metrics <- metrics
 
   if (!is.null(loss))
     methods$loss <- function(input, target) {
@@ -23,6 +22,9 @@ setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
     rlang::abort(c("No optimizer definition has been provided.",
                    "Use the optimizer argument or,",
                    "Implement the `optimizer` method in the `nn_module`."))
+
+  metrics <- c(luz_metric_loss_average, metrics)
+  methods$metrics <- metrics
 
   if (!has_forward_method(module))
     methods$forward <- identity
@@ -154,15 +156,16 @@ default_step <- function(ctx) {
 }
 
 fit_one_batch <-function(ctx) {
-  ctx$pred <- do.call(ctx$model, list(ctx$input))
-  ctx$call_callbacks("on_train_batch_after_pred")
-
   for (nm in names(ctx$optimizers)) {
+    ctx$pred <- do.call(ctx$model, list(ctx$input))
+    ctx$call_callbacks("on_train_batch_after_pred")
+
     ctx$opt <- ctx$optimizers[[nm]]
     ctx$opt_name <- nm
 
     ctx$loss_grad <- ctx$model$loss(ctx$pred, ctx$target)
-    ctx$loss <- ctx$loss_grad$detach()
+    ctx$loss[[ctx$opt_name]] <- ctx$loss_grad$detach()
+
     ctx$call_callbacks("on_train_batch_after_loss")
 
     ctx$call_callbacks("on_train_batch_before_backward")
@@ -171,10 +174,8 @@ fit_one_batch <-function(ctx) {
     ctx$call_callbacks("on_train_batch_before_step")
     ctx$opt$step()
     ctx$opt$zero_grad()
+    ctx$call_callbacks("on_train_batch_after_step")
   }
-
-  ctx$call_callbacks("on_train_batch_after_step")
-
 }
 
 valid_one_batch <- function(ctx) {
@@ -184,7 +185,7 @@ valid_one_batch <- function(ctx) {
     ctx$pred <- do.call(ctx$model, list(ctx$input))
     ctx$call_callbacks("on_valid_batch_after_pred")
 
-    ctx$loss <- ctx$model$loss(ctx$pred, ctx$target)
+    ctx$loss[[ctx$opt_name]] <- ctx$model$loss(ctx$pred, ctx$target)
     ctx$call_callbacks("on_valid_batch_after_loss")
   }
 }

@@ -8,8 +8,8 @@ get_ds <- torch::dataset(
   },
   .getitem = function(i) {
     list(
-      x = torch_randn(size = self$x_size),
-      y = torch_randn(size = self$y_size)
+      x = torch::torch_randn(size = self$x_size),
+      y = torch::torch_randn(size = self$y_size)
     )
   },
   .length = function() {

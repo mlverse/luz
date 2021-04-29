@@ -20,7 +20,8 @@ Imports:
     glue,
     progress,
     R6,
-    generics
+    generics,
+    purrr
 Suggests: 
     knitr,
     rmarkdown,

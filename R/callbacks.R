@@ -104,9 +104,11 @@ luz_callback_progress <- luz_callback(
     if (length(metrics) == 0)
       return(list())
 
-    l <- list(
-      values = sapply(metrics, function(x) x$format(x$compute()))
-    )
+    l <- lapply(metrics, function(x) {
+      values <- x$compute()
+      x$format(values)
+    })
+
     names(l) <- self$get_abbrevs(metrics)
     l
   },
@@ -126,11 +128,15 @@ luz_callback_metrics <- luz_callback(
      train = list(),
      valid = list()
    )
+   ctx$losses <- list(
+     train = list(),
+     valid = list()
+   )
   },
   on_train_begin = function() {
     ctx$metrics$train[[ctx$epoch]] <- lapply(
       ctx$model$metrics %||% list(),
-      function(x) x$new()
+      self$initialize_metric
     )
   },
   on_train_batch_end = function() {
@@ -138,11 +144,12 @@ luz_callback_metrics <- luz_callback(
       ctx$metrics$train[[ctx$epoch]],
       function(x) x$update(ctx$pred, ctx$target)
     )
+    ctx$losses$train[[ctx$epoch]] <- ctx$loss
   },
   on_valid_begin = function() {
     ctx$metrics$valid[[ctx$epoch]] <- lapply(
       ctx$model$metrics %||% list(),
-      function(x) x$new()
+      self$initialize_metric
     )
   },
   on_valid_batch_end = function() {
@@ -150,6 +157,12 @@ luz_callback_metrics <- luz_callback(
       ctx$metrics$valid[[ctx$epoch]],
       function(x) x$update(ctx$pred, ctx$target)
     )
+    ctx$losses$valid[[ctx$epoch]] <- ctx$loss
+  },
+  initialize_metric  = function(x) {
+    obj <- x$new()
+    bind_context(obj, ctx)
+    obj
   }
 )
 
@@ -158,10 +171,12 @@ luz_callback_train_valid <- luz_callback(
   on_train_begin = function() {
     ctx$model$train()
     ctx$training <- TRUE
+    ctx$loss <- list()
   },
   on_valid_begin = function() {
     ctx$model$eval()
     ctx$training <- FALSE
+    ctx$loss <- list()
   }
 )
 
