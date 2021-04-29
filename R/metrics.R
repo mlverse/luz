@@ -60,7 +60,7 @@ luz_metric_loss_average <- luz_metric(
   average_metric = function(x) {
 
     if (is.numeric(x[[1]]) || inherits(x[[1]], "torch_tensor"))
-      x <- sapply(x, as.numeric)
+      x <- sapply(x, to_numeric)
 
     if (is.numeric(x)) {
       mean(x)
@@ -78,5 +78,14 @@ luz_metric_loss_average <- luz_metric(
     self$average_metric(self$values)
   }
 )
+
+to_numeric <- function(x) {
+  if (is.numeric(x))
+    x
+  else if (inherits(x, "torch_tensor"))
+    as.numeric(x$to(device = "cpu"))
+  else
+    rlang::abort("Expected a numeric value or a tensor.")
+}
 
 
