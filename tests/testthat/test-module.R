@@ -15,7 +15,7 @@ test_that("Fully managed", {
     set_hparams(input_size = 10, output_size = 1) %>%
     fit(dl, valid_data = dl, verbose = FALSE)
 
-  expect_s3_class(output, "nn_module")
+  expect_s3_class(output, "luz_module_fitted")
 })
 
 test_that("Custom optimizer", {
@@ -40,7 +40,7 @@ test_that("Custom optimizer", {
     set_hparams(input_size = 10, output_size = 1) %>%
     fit(dl, valid_data = dl, verbose = FALSE)
 
-  expect_s3_class(output, "nn_module")
+  expect_s3_class(output, "luz_module_fitted")
 })
 
 test_that("Multiple optimizers", {
@@ -74,7 +74,7 @@ test_that("Multiple optimizers", {
     set_hparams(input_size = 10, output_size = 1) %>%
     fit(dl, valid_data = dl, verbose = FALSE)
 
-  expect_s3_class(output, "nn_module")
+  expect_s3_class(output, "luz_module_fitted")
 })
 
 test_that("can train without a validation dataset", {
@@ -94,5 +94,27 @@ test_that("can train without a validation dataset", {
     set_hparams(input_size = 10, output_size = 1) %>%
     fit(dl, verbose = FALSE)
 
-  expect_s3_class(output, "nn_module")
+  expect_s3_class(output, "luz_module_fitted")
+})
+
+test_that("predict works for modules", {
+
+  model <- get_model()
+  dl <- get_dl()
+
+  mod <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = optim_adam
+    )
+
+  output <- mod %>%
+    set_hparams(input_size = 10, output_size = 1) %>%
+    fit(dl, verbose = FALSE)
+
+
+  pred <- predict(output, dl)
+
+  expect_equal(pred$shape, c(10, 10, 1))
+
 })

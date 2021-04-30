@@ -112,11 +112,7 @@ fit.luz_module_generator <- function(module, data, epochs = 10, callbacks = NULL
 
   ctx$epochs <- epochs
   callbacks <- append(default_callbacks(), callbacks)
-  ctx$callbacks <- lapply(callbacks, function(cb) {
-    cb$set_ctx(ctx)
-    bind_context(cb, ctx)
-    cb
-  })
+  ctx$callbacks <- initialize_callbacks(callbacks, ctx)
 
   if (is.null(ctx$model$step))
     step <- function() default_step(ctx)
@@ -171,7 +167,63 @@ fit.luz_module_generator <- function(module, data, epochs = 10, callbacks = NULL
   }
 
   ctx$call_callbacks("on_fit_end")
-  ctx$model
+  structure(
+    list(
+      model  = ctx$model,
+      losses = ctx$losses,
+      record = ctx$records,
+      ctx = ctx
+    ),
+    class = "luz_module_fitted"
+  )
+}
+
+#' @importFrom stats predict
+#' @export
+predict.luz_module_fitted <- function(x, data, ..., callbacks = list(),
+                                       accelerator = NULL) {
+
+  ctx <- x$ctx
+
+  if (is.null(accelerator))
+    accelerator <- accelerator()
+
+  ctx$accelerator <- accelerator
+  c(model, data) %<-% ctx$accelerator$prepare(ctx$model, ctx$data)
+
+  ctx$model <- model
+  ctx$data <- data
+
+  ctx$model$eval()
+  ctx$training <- FALSE
+
+  pars <- rlang::list2(...)
+  if (is.null(pars$stack))
+    stack <- TRUE
+  else
+    stack <- pars$stack
+
+  ctx$output <- list()
+
+  ctx$callbacks <- initialize_callbacks(callbacks, ctx)
+
+  torch::with_no_grad({
+    ctx$call_callbacks("on_predict_begin")
+    coro::loop(for(batch in data) {
+      ctx$batch <- batch
+      ctx$input <- batch[[1]]
+      ctx$call_callbacks("on_predict_batch_begin")
+      ctx$output[[length(ctx$output) + 1]] <- do.call(ctx$model, list(ctx$input))
+      ctx$call_callbacks("on_predict_batch_end")
+    })
+    ctx$call_callbacks("on_predict_end")
+  })
+
+  if (stack) {
+    ctx$output <- torch::torch_stack(ctx$output)
+  }
+
+  ctx$output
 }
 
 bind_batch_to_ctx <- function(ctx, batch) {
@@ -220,4 +272,12 @@ valid_one_batch <- function(ctx) {
     ctx$loss[[ctx$opt_name]] <- ctx$model$loss(ctx$pred, ctx$target)
     ctx$call_callbacks("on_valid_batch_after_loss")
   }
+}
+
+initialize_callbacks <- function(callbacks, ctx) {
+  lapply(callbacks, function(cb) {
+    cb$set_ctx(ctx)
+    bind_context(cb, ctx)
+    cb
+  })
 }

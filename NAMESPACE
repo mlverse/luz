@@ -2,9 +2,11 @@
 
 S3method(as_iterator,device_dataloader)
 S3method(fit,luz_module_generator)
+S3method(predict,luz_module_fitted)
 export("%>%")
 export(setup)
 importFrom(coro,as_iterator)
 importFrom(generics,fit)
 importFrom(magrittr,"%>%")
+importFrom(stats,predict)
 importFrom(zeallot,"%<-%")
