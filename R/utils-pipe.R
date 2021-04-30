@@ -52,15 +52,14 @@ bind_context <- function(x, ctx) {
   rlang::env_bind(e, ctx = ctx)
 }
 
-test <- R6::R6Class(
-  "help",
-  public = list(
-    x = NULL,
-    initialize = function(x) {
-      self$x = x
-    },
-    find_ctx = function() {
-      ctx
-    }
-  )
-)
+inform <- function(message) {
+  e <- rlang::caller_env()
+  ctx <- rlang::env_get(e, "ctx", inherit = TRUE)
+
+  verbose <- ctx$verbose
+
+  if (verbose)
+    rlang::inform(message)
+
+  invisible(NULL)
+}

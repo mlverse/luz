@@ -50,10 +50,17 @@ get_hparams <- function(module) {
 #' @importFrom generics fit
 #' @export
 fit.luz_module_generator <- function(module, data, epochs = 10, callbacks = NULL,
-                                     valid_data = NULL, accelerator = NULL) {
+                                     valid_data = NULL, accelerator = NULL,
+                                     verbose = NULL) {
 
   # Initialize context:
   ctx <- rlang::new_environment()
+
+  if (is.null(verbose)) {
+    ctx$verbose <- interactive()
+  } else {
+    ctx$verbose <- verbose
+  }
 
   if (is.null(accelerator))
     accelerator <- accelerator()

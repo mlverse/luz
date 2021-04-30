@@ -13,7 +13,7 @@ test_that("Fully managed", {
 
   output <- mod %>%
     set_hparams(input_size = 10, output_size = 1) %>%
-    fit(dl, valid_data = dl)
+    fit(dl, valid_data = dl, verbose = FALSE)
 
   expect_s3_class(output, "nn_module")
 })
@@ -38,7 +38,7 @@ test_that("Custom optimizer", {
 
   output <- mod %>%
     set_hparams(input_size = 10, output_size = 1) %>%
-    fit(dl, valid_data = dl)
+    fit(dl, valid_data = dl, verbose = FALSE)
 
   expect_s3_class(output, "nn_module")
 })
@@ -72,7 +72,7 @@ test_that("Multiple optimizers", {
 
   output <- mod %>%
     set_hparams(input_size = 10, output_size = 1) %>%
-    fit(dl, valid_data = dl)
+    fit(dl, valid_data = dl, verbose = FALSE)
 
   expect_s3_class(output, "nn_module")
 })
