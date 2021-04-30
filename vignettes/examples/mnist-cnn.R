@@ -54,11 +54,10 @@ net <- nn_module(
 
 fitted <- net %>%
   setup(
-    loss = torch::nn_cross_entropy_loss(),
-    optimizer = torch::optim_adam,
+    loss = nn_cross_entropy_loss(),
+    optimizer = optim_adam,
     metrics = list(
-      luz_metric_accuracy,
-      luz_metric_loss_average
+      luz_metric_accuracy
     )
   ) %>%
   fit(train_dl, epochs = 10, valid_data = test_dl)

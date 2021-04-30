@@ -11,11 +11,11 @@ library(torchvision)
 plot_callback <- luz_callback(
   name = "plot",
   on_fit_begin = function() {
-    latent_dim <- self$ctx$model$latent_dim
+    latent_dim <- ctx$model$latent_dim
     self$noise <- torch_randn(1, latent_dim, device = self$ctx$accelerator$device)
   },
   on_epoch_end = function() {
-    img <- self$ctx$model$G(self$noise)
+    img <- ctx$model$G(self$noise)
     img <- img$cpu()
     img <- (img[1,1,,,newaxis] + 1)/2
     img <- torch_stack(list(img, img, img), dim = 3)[..,1]
