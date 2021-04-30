@@ -180,19 +180,20 @@ fit.luz_module_generator <- function(module, data, epochs = 10, callbacks = NULL
 
 #' @importFrom stats predict
 #' @export
-predict.luz_module_fitted <- function(x, data, ..., callbacks = list(),
+predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
                                        accelerator = NULL) {
 
-  ctx <- x$ctx
+  ctx <- object$ctx
 
   if (is.null(accelerator))
     accelerator <- accelerator()
 
   ctx$accelerator <- accelerator
+  model <- NULL; data <- NULL
   c(model, data) %<-% ctx$accelerator$prepare(ctx$model, ctx$data)
 
   ctx$model <- model
-  ctx$data <- data
+  ctx$data <- newdata
 
   ctx$model$eval()
   ctx$training <- FALSE
