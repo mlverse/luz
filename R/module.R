@@ -1,6 +1,25 @@
 
+#' Set's up a `nn_module` to use with luz
+#'
+#' The setup function is used to set important attributes and method for `nn_modules`
+#' to be used with Luz.
+#'
+#' It makes sure the module have all the necessary ingredients in order to be fitted.
+#'
+#' @param module (`nn_module`) The `nn_module` that you want set up.
+#' @param loss (`function`, optional) An optional function with the signature
+#' `function(input, target)`. It's only requires if your `nn_module` doesn't
+#' implement a method called `loss`.
+#' @param optimizer (`torch_optimizer`, optional) A function with the signature
+#' `function(parameters, ...)` that is used to initialize an optimizer given
+#' the model parameters.
+#' @param metrics (`list`, optional) A list of metrics to be tracked during
+#' the training procedure.
+#'
+#' @family training
+#'
+#' @export
 setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
-
 
   methods <- list()
 

@@ -3,6 +3,7 @@
 S3method(as_iterator,device_dataloader)
 S3method(fit,luz_module_generator)
 export("%>%")
+export(setup)
 importFrom(coro,as_iterator)
 importFrom(generics,fit)
 importFrom(magrittr,"%>%")
