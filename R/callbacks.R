@@ -102,7 +102,12 @@ luz_callback_progress <- luz_callback(
   },
   get_metrics = function(split) {
 
-    metrics <- ctx$metrics[[split]][[ctx$epoch]]
+    metrics_split <- ctx$metrics[[split]]
+    if (length(metrics_split) >= ctx$epoch) {
+      metrics <- ctx$metrics[[split]][[ctx$epoch]]
+    } else {
+      return(list())
+    }
 
     if (length(metrics) == 0)
       return(list())

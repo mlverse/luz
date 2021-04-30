@@ -42,6 +42,9 @@ LuzAccelerator <- R6::R6Class(
       if (is.list(obj))
         return(lapply(obj, self$prepare_one))
 
+      if (is.null(obj))
+        return(NULL)
+
       rlang::abort(glue::glue(c(
         "Unhandled object with class {class(obj)}",
         "Only nn_modules, optimizers and dataloaders are supported."))
