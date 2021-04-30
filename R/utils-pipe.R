@@ -44,7 +44,7 @@ has_forward_method <- function(x) {
   test_module <- torch::nn_module(initialize = function() {})
   nn_forward <- test_module$get_inherit()$public_methods$forward
   forward <- get_forward(x)
-  !isTRUE(all.equal(nn_forward, forward))
+  !isTRUE(identical(nn_forward, forward))
 }
 
 bind_context <- function(x, ctx) {
