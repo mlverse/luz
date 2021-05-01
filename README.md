@@ -19,24 +19,6 @@ It's heavily inspired in other higher level frameworks for deep learning, to cit
 
 -   [HuggingFace Accelerate](https://huggingface.co/docs/accelerate/): The internal device placement API is heavily inspired in Accelerate, but much more modest in features. Currenly only CPU and Single GPU are supported.
 
-## Todo
-
--   [ ] 'compiling' and training classification models
-
--   [ ] training and validation data
-
--   [ ] metrics other than the loss
-
--   [ ] callbacks for logging and progressbar
-
--   [ ] custom optimizer definition
-
--   [ ] custom training and validation steps
-
--   [ ] timings for each part of the model
-
--   [ ] handle device placement
-
 ## Installation
 
 You can install the released version of luz from [CRAN](https://CRAN.R-project.org) with:
