@@ -47,6 +47,13 @@ default_callbacks <- function() {
   )
 }
 
+#' Create a new callback
+#'
+#' @param name nm
+#' @param ... public methods
+#' @inheritParams R6::R6Class
+#'
+#' @export
 luz_callback <- function(name, ..., private = NULL, active = NULL, parent_env = parent.frame()) {
   public <- rlang::list2(...)
   e <- new.env(parent = parent_env)

@@ -103,6 +103,32 @@ get_opt_hparams <- function(module) {
   attr(module, "opt_hparams")
 }
 
+#' Fit a `nn_module`
+#'
+#' @inheritParams set_hparams
+#'
+#' @param data (dataloader) A dataloader created with [torch::dataloader()] used
+#' for training the model. The dataloader must return a list with at most 2 items.
+#' The first item will be used as input for the module and the second will be used
+#' as target for the loss function.
+#'
+#' @param epochs (int) The number of epochs for training the model.
+#'
+#' @param callbacks (list, optional) A list of callbacks defined with [luz_callback()] that
+#' will be called during the training procedure.
+#'
+#' @param valid_data (dataloader, optional) A dataloader created with [torch::dataloader()]
+#' that will be used during the validation procedure.
+#'
+#' @param accelerator (accelerator, optional) An optional [accelerator()] object used
+#' to configure device placement of the components like [nn_module]s, optimizers
+#' and batches of data.
+#'
+#' @param verbose (logical, optional) An optional boolean value indicating if the
+#' fitting procedure should emmit output to the console during training. By default,
+#' it will produce output if [interactive()] is `TRUE`, otherwise it won't print
+#' to the console.
+#'
 #' @importFrom generics fit
 #' @export
 fit.luz_module_generator <- function(module, data, epochs = 10, callbacks = NULL,

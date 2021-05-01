@@ -1,3 +1,10 @@
+#' Create an accelerator
+#'
+#' @param device_placement (logical) whether the `accelerator` object should
+#' handle device placement. Default: `TRUE`
+#' @param cpu (logical) whether the training procedure should run on the CPU.
+#'
+#' @export
 accelerator <- function(device_placement = TRUE, cpu = FALSE) {
   LuzAccelerator$new(device_placement = device_placement, cpu = cpu)
 }
