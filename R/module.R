@@ -56,14 +56,51 @@ setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
   mod
 }
 
+#' Set hyper-parameter of a module
+#'
+#' @description
+#' This function is used to define hyper-parameters before calling `fit` for
+#' `luz_modules`.
+#'
+#' @param module An `nn_module` that has been [setup()].
+#' @param ... The parameters set here will be used to initialize the `nn_module`, ie they
+#' are passed unchanged to the `initialize` method of the base `nn_module`.
+#'
+#' @family set_hparam
+#'
+#' @export
 set_hparams <- function(module, ...) {
   hparams <- rlang::list2(...)
   attr(module, "hparams") <- hparams
   module
 }
 
+#' Set optimizer hyper-parameters
+#'
+#' @description
+#' This function is used to define hyper-parameters for the optimizer initialization
+#' method.
+#'
+#' @inheritParams set_hparams
+#' @param ... The parameters passed here will be used to initialize the optimizers.
+#' For example, if your optimizer is `optim_adam` and you pass `lr=0.1`, then the
+#' `optim_adam` function is called with `optim_adam(parameters, lr=0.1)` when fitting
+#' the model.
+#'
+#' @family set_hparam
+#' @export
+set_opt_hparams <- function(module, ...) {
+  hparams <- rlang::list2(...)
+  attr(module, "opt_hparams") <- hparams
+  module
+}
+
 get_hparams <- function(module) {
   attr(module, "hparams")
+}
+
+get_opt_hparams <- function(module) {
+  attr(module, "opt_hparams")
 }
 
 #' @importFrom generics fit
@@ -89,7 +126,7 @@ fit.luz_module_generator <- function(module, data, epochs = 10, callbacks = NULL
   model <- do.call(module, get_hparams(module) %||% list())
   bind_context(model, ctx)
 
-  optimizers <- do.call(model$optimizer, get_hparams(module)$opt_hparams %||% list())
+  optimizers <- do.call(model$optimizer, get_opt_hparams(module) %||% list())
 
   if (!is.list(optimizers)) {
     optimizers <- list(opt = optimizers)
