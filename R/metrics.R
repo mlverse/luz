@@ -43,6 +43,27 @@ luz_metric_accuracy <- luz_metric(
   }
 )
 
+luz_metric_binary_accuracy_with_logits <- luz_metric(
+  abbrev = "Acc",
+  initialize = function() {
+    self$correct <- 0
+    self$total <- 0
+    self$threshold <- 0.5
+  },
+  update = function(preds, targets) {
+    preds <- (torch::torch_sigmoid(preds) > self$threshold)$
+      to(dtype = torch::torch_float())
+    self$correct <- self$correct + (preds == targets)$
+      to(dtype = torch::torch_float())$
+      sum()$
+      item()
+    self$total <- self$total + preds$numel()
+  },
+  compute = function() {
+    self$correct/self$total
+  }
+)
+
 
 luz_metric_loss_average <- luz_metric(
   abbrev = "Loss",
