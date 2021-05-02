@@ -13,8 +13,8 @@ ds <- torchdatasets::dogs_vs_cats_dataset(
   dir,
   token = "~/Downloads/kaggle.json",
   transform = . %>%
-    transform_to_tensor() %>%
-    transform_resize(size = c(224, 224)),
+    torchvision::transform_to_tensor() %>%
+    torchvision::transform_resize(size = c(224, 224)),
   target_transform = function(x) as.double(x) - 1
 )
 
@@ -22,15 +22,30 @@ train_id <- sample.int(length(ds), size = 0.7*length(ds))
 train_ds <- dataset_subset(ds, indices = train_id)
 valid_ds <- dataset_subset(ds, indices = which(!seq_along(ds) %in% train_id))
 
-train_dl <- dataloader(train_ds, batch_size = 128, shuffle = TRUE)
-valid_dl <- dataloader(valid_ds, batch_size = 128)
+train_dl <- dataloader(train_ds, batch_size = 64, shuffle = TRUE, num_workers = 4)
+valid_dl <- dataloader(valid_ds, batch_size = 64, num_workers = 4)
 
 # Buildifng the network ---------------------------------------------------
 
-net <- nn_module(
-  inherit = torchvision:::alexnet,
+net <- torch::nn_module(
+  initialize = function(num_classes) {
+    self$model <- model_alexnet(pretrained = TRUE)
+
+    for (par in self$parameters) {
+      par$requires_grad_(FALSE)
+    }
+
+    self$model$classifier <- nn_sequential(
+      nn_dropout(0.5),
+      nn_linear(9216, 512),
+      nn_relu(),
+      nn_linear(512, 256),
+      nn_relu(),
+      nn_linear(256, 1)
+    )
+  },
   forward = function(x) {
-    super$forward(x)[,1]
+    self$model(x)[,1]
   }
 )
 
@@ -39,10 +54,11 @@ net <- nn_module(
 fitted <- net %>%
   setup(
     loss = nn_bce_with_logits_loss(),
-    optimizer = optim_adam,
+    optimizer = madgrad::optim_madgrad,
     metrics = list(
       luz:::luz_metric_binary_accuracy_with_logits
     )
   ) %>%
   set_hparams(num_classes = 1) %>%
-  luz:::fit.luz_module_generator(train_dl, epochs = 10, valid_data = valid_dl)
+  set_opt_hparams(lr = 0.01) %>%
+  fit(train_dl, epochs = 5, valid_data = valid_dl, verbose = TRUE)
