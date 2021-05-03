@@ -115,6 +115,6 @@ test_that("predict works for modules", {
 
   pred <- predict(output, dl)
 
-  expect_equal(pred$shape, c(10, 10, 1))
+  expect_equal(pred$shape, c(100, 1))
 
 })

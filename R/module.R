@@ -268,8 +268,9 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
     stack <- pars$stack
 
   ctx$output <- list()
-
   ctx$callbacks <- initialize_callbacks(callbacks, ctx)
+
+  predict_fn <- if (is.null(ctx$model$predict)) ctx$model else ctx$model$predict
 
   torch::with_no_grad({
     ctx$call_callbacks("on_predict_begin")
@@ -277,14 +278,14 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
       ctx$batch <- batch
       ctx$input <- batch[[1]]
       ctx$call_callbacks("on_predict_batch_begin")
-      ctx$output[[length(ctx$output) + 1]] <- do.call(ctx$model, list(ctx$input))
+      ctx$output[[length(ctx$output) + 1]] <- do.call(predict_fn, list(ctx$input))
       ctx$call_callbacks("on_predict_batch_end")
     })
     ctx$call_callbacks("on_predict_end")
   })
 
   if (stack) {
-    ctx$output <- torch::torch_stack(ctx$output)
+    ctx$output <- torch::torch_vstack(ctx$output)
   }
 
   ctx$output
