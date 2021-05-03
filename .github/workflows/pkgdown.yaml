@@ -8,24 +8,15 @@ name: pkgdown
 
 jobs:
   pkgdown:
-    runs-on: ['self-hosted', 'gpu']
-
-    container:
-      image: nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04
-      options: --gpus all
+    runs-on: 'ubuntu-20.04'
 
     env:
-      RSPM: https://packagemanager.rstudio.com/cran/__linux__/bionic/latest
+      RSPM: https://packagemanager.rstudio.com/cran/__linux__/focal/latest
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       TORCH_INSTALL: 1
-      DEBIAN_FRONTEND: 'noninteractive'
 
     steps:
       - uses: actions/checkout@v2
-
-      - run: |
-          apt-get update -y
-          apt-get install -y sudo software-properties-common dialog apt-utils tzdata
 
       - uses: r-lib/actions/setup-r@v1
 
