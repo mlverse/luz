@@ -1,8 +1,8 @@
 ---
-title: "get-started"
+title: "Get started with Luz"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{get-started}
+  %\VignetteIndexEntry{Get started with Luz}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,4 +16,245 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(luz)
+library(torch)
 ```
+
+Luz is a high-level API for Torch that aims to encapsulate the **training loop** into a set of reusable pieces of code. Luz reduces the boilerplate code required to train a model with Torch and avoids the error prone `zero_grad()` - `backward()` - `step()` sequence of calls and moving data and models between CPU's and GPU's. Luz is designed to be highly flexible by proving a layered API that allows it to be useful no matter the level of control your need for your training loop.
+
+Luz is heavily inspired by other higher level frameworks for deep learning, to cite a few:
+
+-   [FastAI](https://docs.fast.ai/): we are heavily inspired in the FastAI library, specially the `Learner` object and the callbacks API.
+
+-   [Keras](https://keras.io/): We are also heavily inspired by Keras, specially callback names, the lightning module interface is similar to `compile` too.
+
+-   [PyTorch Lightning](https://www.pytorchlightning.ai/): The idea of the `luz_module` being a subclass of `nn_module` is inspired in the `LightningModule` object in lightning.
+
+-   [HuggingFace Accelerate](https://huggingface.co/docs/accelerate/): The internal device placement API is heavily inspired in Accelerate, but much more modest in features. Currenly only CPU and Single GPU are supported.
+
+## Training a `nn_module`
+
+Luz tries to reuse as much as possible the existing structures in Torch. For example, a model in Luz is the defined identically as you would define if using raw Torch. For example, this is the definition of a feedforward CNN that can be used to classify digits from the MNIST dataset.
+
+```{r, eval = FALSE}
+net <- nn_module(
+  "Net",
+  initialize = function() {
+    self$conv1 <- nn_conv2d(1, 32, 3, 1)
+    self$conv2 <- nn_conv2d(32, 64, 3, 1)
+    self$dropout1 <- nn_dropout2d(0.25)
+    self$dropout2 <- nn_dropout2d(0.5)
+    self$fc1 <- nn_linear(9216, 128)
+    self$fc2 <- nn_linear(128, 10)
+  },
+  forward = function(x) {
+    x <- self$conv1(x)
+    x <- nnf_relu(x)
+    x <- self$conv2(x)
+    x <- nnf_relu(x)
+    x <- nnf_max_pool2d(x, 2)
+    x <- self$dropout1(x)
+    x <- torch_flatten(x, start_dim = 2)
+    x <- self$fc1(x)
+    x <- nnf_relu(x)
+    x <- self$dropout2(x)
+    x <- self$fc2(x)
+    x
+  }
+)
+```
+
+We can now train this model in the `train_dl` and validate it in the `test_dl` `torch::dataloaders()` with:
+
+```{r, eval = FALSE}
+fitted <- net %>%
+  setup(
+    loss = nn_cross_entropy_loss(),
+    optimizer = optim_adam,
+    metrics = list(
+      luz_metric_accuracy
+    )
+  ) %>%
+  fit(train_dl, epochs = 10, valid_data = test_dl)
+```
+
+Let's understand what happens in this chunk of code:
+
+1.  The `setup` function allows you to configure the loss (objective) function and the optimizer that you will use to train your model. Optionally you can pass a list of metrics that are tracked during the training procedure. **Note:** the loss function can be any function taking `input` and `target` tensors and returning a scalar tensor value and the optimizer can be any core Torch optimizer or custom ones created with the `torch::optimizer()` function.
+2.  The `fit` method will take the model specification provided by `setup()` and run the training procedure using the specified training and validation `torch::dataloaders()` as well as the number of epochs. **Note:** we again reuse core Torch data structures, instead of providing our own data loading functionality.
+3.  The returned object `fitted` contains the trained model as well as the record of metrics and losses produced during training. It can also be used for producing predictions and for evaluating the trained model in other datasets.
+
+When fitting, Luz will use the fastest possible accelerator, ie. if a CUDA capable GPU is available it will be used otherwise we fallback to the CPU. It also automatically moves data, optimizers and models to the selected device so you don't need to handle it manually - which is in general very error prone.
+
+To create predictions from the trained model you can use the `predict` method:
+
+```{r, eval = FALSE}
+predictions <- predict(fitted, test_dl)
+```
+
+## The training loop
+
+You now have a general idea of how to use the `fit` function and now it's important to have an overview of what's happening inside it. In pseudocode, here's what `fit` does. This is not fully detailed but should help you to build your intuition:
+
+```{r, eval = FALSE}
+# -> Initialize objects: model, optimizers.
+# -> Select fitting device.
+# -> Move data, model, optimizers to the selected device.
+# -> Start training
+for (epoch in 1:epochs) {
+  # -> Training procedure
+  for (batch in train_dl) {
+    # -> Calculate model `forward` method.
+    # -> Calulate the loss
+    # -> Update weights
+    # -> Update metrics and tracking loss
+  }
+  # -> Validation procedure
+  for (batch in valid_dl) {
+    # -> Calculate model `forward` method.
+    # -> Calulate the loss
+    # -> Update metrics and tracking loss
+  }
+}
+# -> End training
+```
+
+## Customizing with callbacks
+
+Luz provides different ways to customize the training progress depending on the level of control you need in the training loop. The fastest way and the more 'reusable', in the sense that you can create training modification that can be used in many different situations is via **callbacks**.
+
+The training loop in Luz has many *breakpoints* that can call arbitrary R functions. This functionality allows you to customize the training process without having to modify the general training logic.
+
+Luz implements 3 default callbacks that occur in every training procedure:
+
+-   **train-eval callback**: Set's the model in `train()` and `eval()` depending on if the procedure is doing training or validation.
+
+-   **metrics callback**: evaluate metrics during training and validation process.
+
+-   **progress callback**: implements a progress bar and prints progress information during training.
+
+You can also implement custom callbacks that modify or act specifically for your training procedure. For example, let's implement a callback that prints 'Iteration `n`' (where `n` is the iteration number) for every batch in the training set and 'Done' when an epoch is finished. For that task we use the `luz_callback` function:
+
+```{r, eval = FALSE}
+print_callback <- luz_callback(
+  name = "print_callback",
+  on_train_batch_end = function() {
+    cat("Iteration ", ctx$iter, "\n")
+  },
+  on_epoch_end = function() {
+    cat("Done!\n")
+  }
+)
+```
+
+`luz_callback()` takes a named list of function as argument where the name indicate the moment at which the callback should be called. For instance `on_train_batch_end()` is called for every batch at the end of the training procedure and `on_epoch()` end is called at the end of every epoch.
+
+Once a callback is defined it can be passed to the `fit` function via the `callbacks` parameter, eg:
+
+```{r, eval = FALSE}
+fitted <- net %>%
+  setup(...) %>%
+  fit(..., callbacks = list(
+    print_callback$new()
+  ))
+```
+
+Callbacks can be called in many different positions of the training loop, including a combinations of them. Here's an overview of possible callback *breakpoints*:
+
+    Start Fit
+       - on_fit_begin
+      Start Epoch Loop
+         - on_epoch_begin
+        Start Train
+           - on_train_begin
+          Start Batch Loop
+             - on_train_batch_begin
+              Start Default Training Step
+                - on_train_batch_after_pred
+                - on_train_batch_after_loss
+                - on_train_batch_before_backward
+                - on_train_batch_before_step
+                - on_train_batch_after_step
+              End Default Training Step:
+             - on_train_batch_end
+          End Batch Loop
+           - on_train_end
+        End Train
+        Start Valid
+           - on_valid_begin
+          Start Batch Loop
+             - on_valid_batch_begin
+              Start Default Validation Step
+                - on_valid_batch_after_pred
+                - on_valid_batch_after_loss
+              End Default Validation Step
+             - on_valid_batch_end
+          End Batch Loop
+           - on_valid_end
+        End Valid
+          - on_epoch_end
+      End Epoch Loop
+       - on_fit_end
+    End Fit
+
+Every step market with a `on_*` is a point in the training procedure that is available for callbacks to be called.
+
+The other important part of callbacks is the `ctx` (context) object. The `ctx` object is used in Luz to share information between the training loop and callbacks (and we will see in the future that it can also be used to share information with model methods and metrics). By default, the `ctx` object will include the following information:
+
+-   `verbose`: The value (`TRUE` or `FALSE`) attributed to the `verbose` argument in `fit` .
+
+-   `accelerator`: Accelerator object used to query the correct device to place models, data, and etc. It assumes the value passed to the `accelerator` parameter in `fit`.
+
+-   `model`: Initialized `nn_module` object that will be trained during the `fit` procedure.
+
+-   `optimizers`: A named list of optimizers used during training.
+
+-   `data`: Dataloader passed to the `data` argument in `fit`. Modified to yield data in the selected device.
+
+-   `valid_data`: Dataloader passed to the `valid_data` argument in `fit`. Modified to yield data in the selected device.
+
+-   `epochs`: Total number of epochs the model will be trained on.
+
+-   `epoch`: Current training epoch.
+
+-   `iter`: Current training iteration. It's reset every epoch and when going from training to validation.
+
+-   `training`: Whether the model is in training or validation mode.
+
+-   `callbacks`: List of callbacks that will be called during the training procedure. It's the union of the list passed to the `callbacks` parameter and the default `callbacks`.
+
+-   `step`: Closure that will be used to do one `step` of the model. It's used for both training and validation. Takes no argument, but can access the `ctx` object.
+
+-   `call_callbacks`: Call callbacks by name. For example `call_callbacks("on_train_begin")` will call all callbacks that provide methods for this point.
+
+-   `batch`: Last batch obtained by the dataloader. A batch is a `list()` with 2 elements, one that is used as `input` and the other as `target`.
+
+-   `input`: First element of the last batch obtained by the current dataloader.
+
+-   `target`: Second element of the last batch obtained by the current dataloader.
+
+-   `pred`: Last predictions obtained by `ctx$model$forward` . **Note:** can be potentially modified by previously ran callbacks. Also note that this might not be available if you used a custom training step.
+
+-   `loss`: Last computed loss from the model. **Note:** this might not be available if you modified the training or validation step.
+
+-   `opt`: Current optimizer, ie. optimizer that will be used to do the next `step` to update parameters.
+
+-   `opt_nm`: Current optimizer name. By default it's `opt` , but can change if your model uses more than one optimizer depending on the set of parameters being optimized.
+
+-   `metrics`: a `list()` of metric objects that are `update`d at every `on_train_batch_end()` or `on_valid_batch_end()`.
+
+-   `records` a `list()` with the structure presented below that is filled every epoch for each record that we track during the model training.
+
+    ```{r, eval = FALSE}
+    list(metrics = list(
+      train = list(
+        metric1 = list(), # metrics have one element per epoch
+        metric2 = list()
+      ), 
+      valid = list(
+        metric1 = list(), 
+        metric2 = list()
+      )
+    ))
+    ```
+
+-   `losses`: a `list()` tracking losses over time.
