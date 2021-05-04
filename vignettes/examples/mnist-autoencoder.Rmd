@@ -44,21 +44,18 @@ test_dl <- dataloader(test_ds, batch_size = 128)
 net <- nn_module(
   "Net",
   initialize = function() {
-
     self$encoder <- nn_sequential(
       nn_conv2d(1, 6, kernel_size=5),
       nn_relu(),
       nn_conv2d(6, 16, kernel_size=5),
       nn_relu()
     )
-
     self$decoder <- nn_sequential(
       nn_conv_transpose2d(16, 6, kernel_size = 5),
       nn_relu(),
       nn_conv_transpose2d(6, 1, kernel_size = 5),
       nn_sigmoid()
     )
-
   },
   forward = function(x) {
     x %>%
