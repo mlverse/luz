@@ -75,17 +75,46 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor" aria-hidden="true"></a>Installation</h2>
-<p>You can install the released version of luz from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
+<p>Luz is not yet available on CRAN. You can install the development version with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"luz"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"mlverse/luz"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor" aria-hidden="true"></a>Example</h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
+<p>Luz let’s you take your Torch <code>nn_module</code> definition and <code>fit</code> it to a dataloader, while handling the boring parts like moving data between devices, updating the weights, showing progress bars and tracking metrics.</p>
+<p>Here’s an example defining and training an Autoencoder for the MNIST dataset. We selected parts of the code to highlight Luz functionality. You can find the full example code <a href="https://mlverse.github.io/luz/articles/examples/mnist-autoencoder.html" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">luz</span><span class="op">)</span>
-<span class="co">## basic example code</span></code></pre></div>
+<code class="sourceCode R"><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu">nn_module</span><span class="op">(</span>
+  <span class="st">"Net"</span>,
+  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">encoder</span> <span class="op">&lt;-</span> <span class="fu">nn_sequential</span><span class="op">(</span>
+      <span class="fu">nn_conv2d</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">6</span>, kernel_size<span class="op">=</span><span class="fl">5</span><span class="op">)</span>,
+      <span class="fu">nn_relu</span><span class="op">(</span><span class="op">)</span>,
+      <span class="fu">nn_conv2d</span><span class="op">(</span><span class="fl">6</span>, <span class="fl">16</span>, kernel_size<span class="op">=</span><span class="fl">5</span><span class="op">)</span>,
+      <span class="fu">nn_relu</span><span class="op">(</span><span class="op">)</span>
+    <span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">decoder</span> <span class="op">&lt;-</span> <span class="fu">nn_sequential</span><span class="op">(</span>
+      <span class="fu">nn_conv_transpose2d</span><span class="op">(</span><span class="fl">16</span>, <span class="fl">6</span>, kernel_size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,
+      <span class="fu">nn_relu</span><span class="op">(</span><span class="op">)</span>,
+      <span class="fu">nn_conv_transpose2d</span><span class="op">(</span><span class="fl">6</span>, <span class="fl">1</span>, kernel_size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,
+      <span class="fu">nn_sigmoid</span><span class="op">(</span><span class="op">)</span>
+    <span class="op">)</span>
+  <span class="op">}</span>,
+  forward <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">x</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+      <span class="va">self</span><span class="op">$</span><span class="fu">encoder</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+      <span class="va">self</span><span class="op">$</span><span class="fu">decoder</span><span class="op">(</span><span class="op">)</span>
+  <span class="op">}</span>
+<span class="op">)</span></code></pre></div>
+<p>Now that we have defined the Autoencder architecture using <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module()</a></code>, we can fit it using Luz:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="reference/setup.html">setup</a></span><span class="op">(</span>
+    loss <span class="op">=</span> <span class="fu">nn_mse_loss</span><span class="op">(</span><span class="op">)</span>,
+    optimizer <span class="op">=</span> <span class="va">optim_adam</span>
+  <span class="op">)</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
+  <span class="fu">fit</span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">1</span>, valid_data <span class="op">=</span> <span class="va">test_dl</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
   </div>
