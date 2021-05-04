@@ -118,6 +118,64 @@ for (epoch in 1:epochs) {
 # -> End training
 ```
 
+## Metrics
+
+One of the most important parts in machine learning projects is choosing the evaluation metric. Luz allows tracking many different metrics during training with minimal code changes.
+
+In order to track metrics, you only need to modify the `metrics` parameter in the `setup` function:
+
+```{r, eval=FALSE}
+fitted <- net %>%
+  setup(
+    ...
+    metrics = list(
+      luz_metric_accuracy
+    )
+  ) %>%
+  fit(...)
+```
+
+Luz provides implementations of a few of the most used metrics. If a metric is not available you can always implement a new one using the `luz_metric` function.
+
+In order to implement a new `luz_metric` we need to implement 3 methods:
+
+-   `initialize`: defines the metric initial state. This function is called for each epoch for both training and validation loops.
+
+-   `update`: updates the metric internal state. This function is called at every training and validation step with the predictions obtained by the model and the target values obtained from the dataloader.
+
+-   `compute`: uses the internal state to compute metric values. This function is called whenever we need to obtain the current metric value. Eg, it's called every training step for metrics displayed in the progress bar, but only called once per epoch to record it's value when the progress bar is not displayed.
+
+Let's take a look at the implementation of `luz_metric_accuracy` so you can see how to implement a new one:
+
+```{r, eval = FALSE}
+luz_metric_accuracy <- luz_metric(
+  # An abbreviation to be shown in progress bars, or 
+  # when printing progress
+  abbrev = "Acc", 
+  # Initial setup for the metric. Metrics are initialized
+  # every epoch, for both training and validation
+  initialize = function() {
+    self$correct <- 0
+    self$total <- 0
+  },
+  # Run at every training or validation step and updates
+  # the internal state. The update function takes `preds`
+  # and `target` as parameters.
+  update = function(preds, target) {
+    pred <- torch::torch_argmax(preds, dim = 2)
+    self$correct <- self$correct + (pred == target)$
+      to(dtype = torch::torch_float())$
+      sum()$
+      item()
+    self$total <- self$total + pred$numel()
+  },
+  # Use the internal state to query the metric value
+  compute = function() {
+    self$correct/self$total
+  }
+)
+```
+
 ## Customizing with callbacks
 
 Luz provides different ways to customize the training progress depending on the level of control you need in the training loop. The fastest way and the more 'reusable', in the sense that you can create training modification that can be used in many different situations is via **callbacks**.
@@ -251,3 +309,5 @@ The other important part of callbacks is the `ctx` (context) object. The `ctx` o
 +------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 : Context attributes
+
+Attributes in `ctx` can be used to produce the desired behavior of callbacks. In our example, we use the `ctx$iter` attribute to print the iteration number for each training batch.
