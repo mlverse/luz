@@ -311,3 +311,11 @@ The other important part of callbacks is the `ctx` (context) object. The `ctx` o
 : Context attributes
 
 Attributes in `ctx` can be used to produce the desired behavior of callbacks. In our example, we use the `ctx$iter` attribute to print the iteration number for each training batch.
+
+## Next steps
+
+In this article you learned how to train your first model using Luz and the basics of customization using both custom metrics and callbacks.
+
+Luz also allows more flexible modifications of the training loop described in the [TODO]() vignette.
+
+You should now be able to follow the examples marked with the 'basic' category in the [examples gallery](<https://mlverse.github.io/luz/articles/examples/index.html>).
