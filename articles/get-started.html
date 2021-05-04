@@ -159,6 +159,55 @@
 <span class="op">}</span>
 <span class="co"># -&gt; End training</span></code></pre></div>
 </div>
+<div id="metrics" class="section level2">
+<h2 class="hasAnchor">
+<a href="#metrics" class="anchor" aria-hidden="true"></a>Metrics</h2>
+<p>One of the most important parts in machine learning projects is choosing the evaluation metric. Luz allows tracking many different metrics during training with minimal code changes.</p>
+<p>In order to track metrics, you only need to modify the <code>metrics</code> parameter in the <code>setup</code> function:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>fitted &lt;-<span class="st"> </span>net <span class="op">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">setup</span>(</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    ...</span>
+<span id="cb6-4"><a href="#cb6-4"></a>    <span class="dt">metrics =</span> <span class="kw">list</span>(</span>
+<span id="cb6-5"><a href="#cb6-5"></a>      luz_metric_accuracy</span>
+<span id="cb6-6"><a href="#cb6-6"></a>    )</span>
+<span id="cb6-7"><a href="#cb6-7"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="st">  </span><span class="kw">fit</span>(...)</span></code></pre></div>
+<p>Luz provides implementations of a few of the most used metrics. If a metric is not available you can always implement a new one using the <code>luz_metric</code> function.</p>
+<p>In order to implement a new <code>luz_metric</code> we need to implement 3 methods:</p>
+<ul>
+<li><p><code>initialize</code>: defines the metric initial state. This function is called for each epoch for both training and validation loops.</p></li>
+<li><p><code>update</code>: updates the metric internal state. This function is called at every training and validation step with the predictions obtained by the model and the target values obtained from the dataloader.</p></li>
+<li><p><code>compute</code>: uses the internal state to compute metric values. This function is called whenever we need to obtain the current metric value. Eg, it’s called every training step for metrics displayed in the progress bar, but only called once per epoch to record it’s value when the progress bar is not displayed.</p></li>
+</ul>
+<p>Let’s take a look at the implementation of <code>luz_metric_accuracy</code> so you can see how to implement a new one:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">luz_metric_accuracy</span> <span class="op">&lt;-</span> <span class="fu">luz_metric</span><span class="op">(</span>
+  <span class="co"># An abbreviation to be shown in progress bars, or </span>
+  <span class="co"># when printing progress</span>
+  abbrev <span class="op">=</span> <span class="st">"Acc"</span>, 
+  <span class="co"># Initial setup for the metric. Metrics are initialized</span>
+  <span class="co"># every epoch, for both training and validation</span>
+  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">correct</span> <span class="op">&lt;-</span> <span class="fl">0</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">total</span> <span class="op">&lt;-</span> <span class="fl">0</span>
+  <span class="op">}</span>,
+  <span class="co"># Run at every training or validation step and updates</span>
+  <span class="co"># the internal state. The update function takes `preds`</span>
+  <span class="co"># and `target` as parameters.</span>
+  update <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">preds</span>, <span class="va">target</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_argmax.html" class="external-link">torch_argmax</a></span><span class="op">(</span><span class="va">preds</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">correct</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="va">correct</span> <span class="op">+</span> <span class="op">(</span><span class="va">pred</span> <span class="op">==</span> <span class="va">target</span><span class="op">)</span><span class="op">$</span>
+      <span class="fu">to</span><span class="op">(</span>dtype <span class="op">=</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_dtype.html" class="external-link">torch_float</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span>
+      <span class="fu">sum</span><span class="op">(</span><span class="op">)</span><span class="op">$</span>
+      <span class="fu">item</span><span class="op">(</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">total</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="va">total</span> <span class="op">+</span> <span class="va">pred</span><span class="op">$</span><span class="fu">numel</span><span class="op">(</span><span class="op">)</span>
+  <span class="op">}</span>,
+  <span class="co"># Use the internal state to query the metric value</span>
+  compute <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">correct</span><span class="op">/</span><span class="va">self</span><span class="op">$</span><span class="va">total</span>
+  <span class="op">}</span>
+<span class="op">)</span></code></pre></div>
+</div>
 <div id="customizing-with-callbacks" class="section level2">
 <h2 class="hasAnchor">
 <a href="#customizing-with-callbacks" class="anchor" aria-hidden="true"></a>Customizing with callbacks</h2>
@@ -171,7 +220,7 @@
 <li><p><strong>progress callback</strong>: implements a progress bar and prints progress information during training.</p></li>
 </ul>
 <p>You can also implement custom callbacks that modify or act specifically for your training procedure. For example, let’s implement a callback that prints ‘Iteration <code>n</code>’ (where <code>n</code> is the iteration number) for every batch in the training set and ‘Done’ when an epoch is finished. For that task we use the <code>luz_callback</code> function:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">print_callback</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback.html">luz_callback</a></span><span class="op">(</span>
   name <span class="op">=</span> <span class="st">"print_callback"</span>,
   on_train_batch_end <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
@@ -183,7 +232,7 @@
 <span class="op">)</span></code></pre></div>
 <p><code><a href="../reference/luz_callback.html">luz_callback()</a></code> takes a named list of function as argument where the name indicate the moment at which the callback should be called. For instance <code>on_train_batch_end()</code> is called for every batch at the end of the training procedure and <code>on_epoch()</code> end is called at the end of every epoch.</p>
 <p>Once a callback is defined it can be passed to the <code>fit</code> function via the <code>callbacks</code> parameter, eg:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu">fit</span><span class="op">(</span><span class="va">...</span>, callbacks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
@@ -335,6 +384,7 @@ End Fit</code></pre>
 </tr>
 </tbody>
 </table>
+<p>Attributes in <code>ctx</code> can be used to produce the desired behavior of callbacks. In our example, we use the <code>ctx$iter</code> attribute to print the iteration number for each training batch.</p>
 </div>
   </div>
  <div class="col-md-3 d-none d-md-block" id="pkgdown-sidebar">
