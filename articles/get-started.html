@@ -226,45 +226,115 @@
    - on_fit_end
 End Fit</code></pre>
 <p>Every step market with a <code>on_*</code> is a point in the training procedure that is available for callbacks to be called.</p>
-<p>The other important part of callbacks is the <code>ctx</code> (context) object. The <code>ctx</code> object is used in Luz to share information between the training loop and callbacks (and we will see in the future that it can also be used to share information with model methods and metrics). By default, the <code>ctx</code> object will include the following information:</p>
-<ul>
-<li><p><code>verbose</code>: The value (<code>TRUE</code> or <code>FALSE</code>) attributed to the <code>verbose</code> argument in <code>fit</code> .</p></li>
-<li><p><code>accelerator</code>: Accelerator object used to query the correct device to place models, data, and etc. It assumes the value passed to the <code>accelerator</code> parameter in <code>fit</code>.</p></li>
-<li><p><code>model</code>: Initialized <code>nn_module</code> object that will be trained during the <code>fit</code> procedure.</p></li>
-<li><p><code>optimizers</code>: A named list of optimizers used during training.</p></li>
-<li><p><code>data</code>: Dataloader passed to the <code>data</code> argument in <code>fit</code>. Modified to yield data in the selected device.</p></li>
-<li><p><code>valid_data</code>: Dataloader passed to the <code>valid_data</code> argument in <code>fit</code>. Modified to yield data in the selected device.</p></li>
-<li><p><code>epochs</code>: Total number of epochs the model will be trained on.</p></li>
-<li><p><code>epoch</code>: Current training epoch.</p></li>
-<li><p><code>iter</code>: Current training iteration. It’s reset every epoch and when going from training to validation.</p></li>
-<li><p><code>training</code>: Whether the model is in training or validation mode.</p></li>
-<li><p><code>callbacks</code>: List of callbacks that will be called during the training procedure. It’s the union of the list passed to the <code>callbacks</code> parameter and the default <code>callbacks</code>.</p></li>
-<li><p><code>step</code>: Closure that will be used to do one <code>step</code> of the model. It’s used for both training and validation. Takes no argument, but can access the <code>ctx</code> object.</p></li>
-<li><p><code>call_callbacks</code>: Call callbacks by name. For example <code>call_callbacks("on_train_begin")</code> will call all callbacks that provide methods for this point.</p></li>
-<li><p><code>batch</code>: Last batch obtained by the dataloader. A batch is a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with 2 elements, one that is used as <code>input</code> and the other as <code>target</code>.</p></li>
-<li><p><code>input</code>: First element of the last batch obtained by the current dataloader.</p></li>
-<li><p><code>target</code>: Second element of the last batch obtained by the current dataloader.</p></li>
-<li><p><code>pred</code>: Last predictions obtained by <code>ctx$model$forward</code> . <strong>Note:</strong> can be potentially modified by previously ran callbacks. Also note that this might not be available if you used a custom training step.</p></li>
-<li><p><code>loss</code>: Last computed loss from the model. <strong>Note:</strong> this might not be available if you modified the training or validation step.</p></li>
-<li><p><code>opt</code>: Current optimizer, ie. optimizer that will be used to do the next <code>step</code> to update parameters.</p></li>
-<li><p><code>opt_nm</code>: Current optimizer name. By default it’s <code>opt</code> , but can change if your model uses more than one optimizer depending on the set of parameters being optimized.</p></li>
-<li><p><code>metrics</code>: a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of metric objects that are <code>update</code>d at every <code>on_train_batch_end()</code> or <code>on_valid_batch_end()</code>.</p></li>
-<li>
-<p><code>records</code> a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with the structure presented below that is filled every epoch for each record that we track during the model training.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-  train <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-    metric1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="co"># metrics have one element per epoch</span>
-    metric2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
-  <span class="op">)</span>, 
-  valid <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-    metric1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, 
-    metric2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
-  <span class="op">)</span>
-<span class="op">)</span><span class="op">)</span></code></pre></div>
-</li>
-<li><p><code>losses</code>: a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> tracking losses over time.</p></li>
-</ul>
+<p>The other important part of callbacks is the <code>ctx</code> (context) object. The <code>ctx</code> object is used in Luz to share information between the training loop and callbacks (and we will see in the future that it can also be used to share information with model methods and metrics). The table below describes information available in the <code>ctx</code> by default. Other callbacks could potentially modify these attributes or add new ones.</p>
+<table class="table">
+<caption>Context attributes</caption>
+<colgroup>
+<col width="8%">
+<col width="91%">
+</colgroup>
+<thead><tr class="header">
+<th>Attribute</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>verbose</code></td>
+<td>The value (<code>TRUE</code> or <code>FALSE</code>) attributed to the <code>verbose</code> argument in <code>fit</code> .</td>
+</tr>
+<tr class="even">
+<td><code>accelerator</code></td>
+<td>Accelerator object used to query the correct device to place models, data, and etc. It assumes the value passed to the <code>accelerator</code> parameter in <code>fit</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>model</code></td>
+<td>Initialized <code>nn_module</code> object that will be trained during the <code>fit</code> procedure.</td>
+</tr>
+<tr class="even">
+<td><code>optimizers</code></td>
+<td>A named list of optimizers used during training.</td>
+</tr>
+<tr class="odd">
+<td><code>data</code></td>
+<td>Dataloader passed to the <code>data</code> argument in <code>fit</code>. Modified to yield data in the selected device.</td>
+</tr>
+<tr class="even">
+<td><code>valid_data</code></td>
+<td>Dataloader passed to the <code>valid_data</code> argument in <code>fit</code>. Modified to yield data in the selected device.</td>
+</tr>
+<tr class="odd">
+<td><code>epochs</code></td>
+<td>Total number of epochs the model will be trained on.</td>
+</tr>
+<tr class="even">
+<td><code>epoch</code></td>
+<td>Current training epoch.</td>
+</tr>
+<tr class="odd">
+<td><code>iter</code></td>
+<td>Current training iteration. It’s reset every epoch and when going from training to validation.</td>
+</tr>
+<tr class="even">
+<td><code>training</code></td>
+<td>Whether the model is in training or validation mode.</td>
+</tr>
+<tr class="odd">
+<td><code>callbacks</code></td>
+<td>List of callbacks that will be called during the training procedure. It’s the union of the list passed to the <code>callbacks</code> parameter and the default <code>callbacks</code>.</td>
+</tr>
+<tr class="even">
+<td><code>step</code></td>
+<td>Closure that will be used to do one <code>step</code> of the model. It’s used for both training and validation. Takes no argument, but can access the <code>ctx</code> object.</td>
+</tr>
+<tr class="odd">
+<td><code>call_callbacks</code></td>
+<td>Call callbacks by name. For example <code>call_callbacks("on_train_begin")</code> will call all callbacks that provide methods for this point.</td>
+</tr>
+<tr class="even">
+<td><code>batch</code></td>
+<td>Last batch obtained by the dataloader. A batch is a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with 2 elements, one that is used as <code>input</code> and the other as <code>target</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>input</code></td>
+<td>First element of the last batch obtained by the current dataloader.</td>
+</tr>
+<tr class="even">
+<td><code>target</code></td>
+<td>Second element of the last batch obtained by the current dataloader.</td>
+</tr>
+<tr class="odd">
+<td><code>pred</code></td>
+<td>Last predictions obtained by <code>ctx$model$forward</code> . <strong>Note:</strong> can be potentially modified by previously ran callbacks. Also note that this might not be available if you used a custom training step.</td>
+</tr>
+<tr class="even">
+<td><code>loss</code></td>
+<td>Last computed loss from the model. <strong>Note:</strong> this might not be available if you modified the training or validation step.</td>
+</tr>
+<tr class="odd">
+<td><code>opt</code></td>
+<td>Current optimizer, ie. optimizer that will be used to do the next <code>step</code> to update parameters.</td>
+</tr>
+<tr class="even">
+<td><code>opt_nm</code></td>
+<td>Current optimizer name. By default it’s <code>opt</code> , but can change if your model uses more than one optimizer depending on the set of parameters being optimized.</td>
+</tr>
+<tr class="odd">
+<td><code>metrics</code></td>
+<td>
+<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of metric objects that are <code>update</code>d at every <code>on_train_batch_end()</code> or <code>on_valid_batch_end()</code>.</td>
+</tr>
+<tr class="even">
+<td><code>records</code></td>
+<td>
+<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> recording metric values for training and validation for each epoch.</td>
+</tr>
+<tr class="odd">
+<td><code>losses</code></td>
+<td>
+<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> tracking losses over time.</td>
+</tr>
+</tbody>
+</table>
 </div>
   </div>
  <div class="col-md-3 d-none d-md-block" id="pkgdown-sidebar">
