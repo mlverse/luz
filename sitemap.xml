@@ -10,6 +10,27 @@
     <loc>/LICENSE.html</loc>
   </url>
   <url>
+    <loc>/articles/examples/dogs-vs-casts-binary-classification.html</loc>
+  </url>
+  <url>
+    <loc>/articles/examples/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/examples/mnist-autoencoder.html</loc>
+  </url>
+  <url>
+    <loc>/articles/examples/mnist-cnn-virtual-batch-size.html</loc>
+  </url>
+  <url>
+    <loc>/articles/examples/mnist-cnn.html</loc>
+  </url>
+  <url>
+    <loc>/articles/examples/mnist-dcgan.html</loc>
+  </url>
+  <url>
+    <loc>/articles/examples/mnist-triplet.html</loc>
+  </url>
+  <url>
     <loc>/articles/get-started.html</loc>
   </url>
   <url>
