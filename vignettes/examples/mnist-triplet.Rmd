@@ -1,6 +1,7 @@
 ---
 title: "Triplet loss"
 desc: "Train an embedding model to minimized the triplet loss."
+category: 'intermediate'
 ---
 
 ```{r, eval = FALSE}

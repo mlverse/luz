@@ -1,6 +1,7 @@
 ---
 title: "Simple CNN"
 desc: "Trains an AlexNet like CNN to classify digits of the MNIST dataset"
+category: 'basic'
 ---
 
 

@@ -1,6 +1,7 @@
 ---
 title: "DCGAN"
 desc: "Deep Convolutional Generative Adversarial Network to generate images."
+category: 'intermediate'
 ---
 
 

@@ -1,6 +1,7 @@
 ---
 title: 'Binary classification'
 desc: 'Demonstrates using pre-trained models to build a binary classification model.'
+category: 'basic'
 ---
 
 ```{r, eval = FALSE}

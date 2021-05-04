@@ -15,11 +15,23 @@ examples <- lapply(examples, function(x) {
 })
 
 card <- function(x) {
+  
+  badge_type <- 
+    if (x$category == "basic") 
+      "success" 
+    else if (x$category == "intermediate")
+      "warning"
+    else if (x$category == "advanced")
+      "danger"
+    else
+      "light"
+  
   glue::glue('
 <div class="col-6">
 <div class="card">
   <div class="card-body">
-  <h5 class="card-title">{x$title}</h5>
+  <h5 class="card-title mb-1">{x$title}</h5>
+  <span class="badge badge-pill badge-{badge_type} mb-1">{x$category}</span>
   <p class="card-text">{x$desc}</p>
   <a href="{x$handle}" class="btn btn-primary">See code</a>
   </div>

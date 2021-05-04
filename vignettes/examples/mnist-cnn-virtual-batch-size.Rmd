@@ -1,6 +1,7 @@
 ---
 title: "Virtual batch size"
 desc: "Showcases how to create a custom fully customized training step"
+category: 'advanced'
 ---
 
 ```{r, eval = FALSE}
