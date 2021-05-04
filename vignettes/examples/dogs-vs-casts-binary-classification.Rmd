@@ -1,3 +1,9 @@
+---
+title: 'Binary classification'
+desc: 'Demonstrates using pre-trained models to build a binary classification model.'
+---
+
+```{r, eval = FALSE}
 # Packages ----------------------------------------------------------------
 library(torch)
 library(torchvision)
@@ -62,3 +68,7 @@ fitted <- net %>%
   set_hparams(num_classes = 1) %>%
   set_opt_hparams(lr = 0.01) %>%
   fit(train_dl, epochs = 5, valid_data = valid_dl, verbose = TRUE)
+
+```
+
+

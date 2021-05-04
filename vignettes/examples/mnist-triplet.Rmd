@@ -1,3 +1,9 @@
+---
+title: "Triplet loss"
+desc: "Train an embedding model to minimized the triplet loss."
+---
+
+```{r, eval = FALSE}
 # Packages ----------------------------------------------------------------
 
 devtools::load_all()
@@ -90,3 +96,5 @@ fitted <- triplet_model %>%
   setup(optimizer = optim_adam) %>%
   set_hparams(embedding_dim = 2) %>%
   fit(train_dl, epochs = 10, valid_data = test_dl)
+```
+

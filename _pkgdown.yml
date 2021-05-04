@@ -1,2 +1,16 @@
 template:
   bootstrap: 4
+
+navbar:
+ structure:
+   left:  [articles, examples, reference, news]
+   right: [github]
+ components:
+  articles:
+    text: Articles
+    menu:
+      - text: Get started
+        href: articles/get-started.html
+  examples:
+    text: Examples
+    href: articles/examples/index.html

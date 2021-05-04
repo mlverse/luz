@@ -1,3 +1,9 @@
+---
+title: "Autoencoder"
+desc: "Builds an autoencoder for the MNIST dataset. Demonstrates overwriting the predict method"
+---
+
+```{r, eval = FALSE}
 # Packages ----------------------------------------------------------------
 library(torch)
 library(torchvision)
@@ -74,3 +80,6 @@ fitted <- net %>%
   fit(train_dl, epochs = 1, valid_data = test_dl)
 
 preds <- predict(fitted, test_dl)
+
+```
+

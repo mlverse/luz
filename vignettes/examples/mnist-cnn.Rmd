@@ -1,3 +1,10 @@
+---
+title: "Simple CNN"
+desc: "Trains an AlexNet like CNN to classify digits of the MNIST dataset"
+---
+
+
+```{r, eval = FALSE}
 # Packages ----------------------------------------------------------------
 library(torch)
 library(torchvision)
@@ -61,3 +68,7 @@ fitted <- net %>%
     )
   ) %>%
   fit(train_dl, epochs = 10, valid_data = test_dl)
+
+```
+
+

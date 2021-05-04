@@ -1,3 +1,10 @@
+---
+title: "DCGAN"
+desc: "Deep Convolutional Generative Adversarial Network to generate images."
+---
+
+
+```{r, eval = FALSE}
 # Packages ----------------------------------------------------------------
 
 devtools::load_all()
@@ -150,3 +157,6 @@ dcgan <- setup(dcgan)
 res <- dcgan %>%
   set_hparams(latent_dim = 100, channels = 1) %>%
   fit(train_dl, epochs = 10, valid_data = test_dl, callbacks = list(plot_callback))
+
+```
+

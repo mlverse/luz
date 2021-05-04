@@ -1,0 +1,68 @@
+---
+title: "Examples"
+---
+
+This gallery of examples uses Luz to train a validate a range of common deep learning architectures as well as demonstrates basic and advanced usage of Luz.
+
+<div class="container">
+```{r echo=FALSE, results = "asis"}
+examples <- list.files(".")
+examples <- examples[examples != "index.Rmd"]
+examples <- lapply(examples, function(x) {
+  out <- rmarkdown::yaml_front_matter(x)
+  out$handle <- gsub("\\.Rmd", ".html", x)
+  out
+})
+
+card <- function(x) {
+  glue::glue('
+<div class="col-6">
+<div class="card">
+  <div class="card-body">
+  <h5 class="card-title">{x$title}</h5>
+  <p class="card-text">{x$desc}</p>
+  <a href="{x$handle}" class="btn btn-primary">See code</a>
+  </div>
+</div>
+</div>')
+}
+
+row <- function(x) {
+  paste0(
+    '<div class="row mt-3">',
+    x[[1]],
+    x[[2]],
+    '</div>'
+  )
+}
+
+cards <- lapply(examples, card)
+cards <- split(cards, (seq_along(examples) + 1) %/% 2)
+rows <- lapply(cards, function(x) cat(row(x)))
+```
+</div>
+
+
+
+<!-- <div class="row"> -->
+<!--   <div class="col-sm-6"> -->
+
+<!--   <div class="card"> -->
+<!--   <div class="card-body"> -->
+<!--   <h5 class="card-title">Special title treatment</h5> -->
+<!--   <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+<!--   <a href="#" class="btn btn-primary">Go somewhere</a> -->
+<!--   </div> -->
+<!--   </div> -->
+<!--   </div> -->
+<!--   <div class="col-sm-6"> -->
+<!--   <div class="card"> -->
+<!--   <div class="card-body"> -->
+<!--   <h5 class="card-title">Special title treatment</h5> -->
+<!--   <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+<!--   <a href="#" class="btn btn-primary">Go somewhere</a> -->
+<!--   </div> -->
+<!--   </div> -->
+<!--   </div> -->
+<!--   </div> -->
+  
