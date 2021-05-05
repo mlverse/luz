@@ -21,7 +21,8 @@ Imports:
     progress,
     R6,
     generics,
-    purrr
+    purrr,
+    ellipsis
 Suggests: 
     knitr,
     rmarkdown,

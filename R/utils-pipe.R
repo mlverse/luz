@@ -77,3 +77,5 @@ inform <- function(message) {
 
   invisible(NULL)
 }
+
+utils::globalVariables(c("super"))

@@ -5,17 +5,18 @@
 \title{Fit a \code{nn_module}}
 \usage{
 \method{fit}{luz_module_generator}(
-  module,
+  object,
   data,
   epochs = 10,
   callbacks = NULL,
   valid_data = NULL,
   accelerator = NULL,
-  verbose = NULL
+  verbose = NULL,
+  ...
 )
 }
 \arguments{
-\item{module}{An \code{nn_module} that has been \code{\link[=setup]{setup()}}.}
+\item{object}{An \code{nn_module} that has been \code{\link[=setup]{setup()}}.}
 
 \item{data}{(dataloader) A dataloader created with \code{\link[torch:dataloader]{torch::dataloader()}} used
 for training the model. The dataloader must return a list with at most 2 items.
@@ -38,6 +39,8 @@ and batches of data.}
 fitting procedure should emmit output to the console during training. By default,
 it will produce output if \code{\link[=interactive]{interactive()}} is \code{TRUE}, otherwise it won't print
 to the console.}
+
+\item{...}{Currently unused,}
 }
 \description{
 Fit a \code{nn_module}

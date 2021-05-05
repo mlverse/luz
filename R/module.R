@@ -105,7 +105,7 @@ get_opt_hparams <- function(module) {
 
 #' Fit a `nn_module`
 #'
-#' @inheritParams set_hparams
+#' @param object An `nn_module` that has been [setup()].
 #'
 #' @param data (dataloader) A dataloader created with [torch::dataloader()] used
 #' for training the model. The dataloader must return a list with at most 2 items.
@@ -129,11 +129,17 @@ get_opt_hparams <- function(module) {
 #' it will produce output if [interactive()] is `TRUE`, otherwise it won't print
 #' to the console.
 #'
+#' @param ... Currently unused,
+#'
 #' @importFrom generics fit
 #' @export
-fit.luz_module_generator <- function(module, data, epochs = 10, callbacks = NULL,
+#'
+fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL,
                                      valid_data = NULL, accelerator = NULL,
-                                     verbose = NULL) {
+                                     verbose = NULL, ...) {
+
+  module <- object
+  ellipsis::check_dots_empty()
 
   # Initialize context:
   ctx <- rlang::new_environment()
