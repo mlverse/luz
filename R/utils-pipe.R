@@ -57,6 +57,15 @@ bind_context <- function(x, ctx) {
   invisible(NULL)
 }
 
+get_init <- function(x) {
+
+  if (!is.null(x$public_methods$initialize))
+    return(x$public_methods$initialize)
+  else
+    return(get_init(x$get_inherit()))
+
+}
+
 inform <- function(message) {
   e <- rlang::caller_env()
   ctx <- rlang::env_get(e, "ctx", inherit = TRUE)

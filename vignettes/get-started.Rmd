@@ -318,4 +318,4 @@ In this article you learned how to train your first model using Luz and the basi
 
 Luz also allows more flexible modifications of the training loop described in the [TODO]() vignette.
 
-You should now be able to follow the examples marked with the 'basic' category in the [examples gallery](<https://mlverse.github.io/luz/articles/examples/index.html>).
+You should now be able to follow the examples marked with the 'basic' category in the [examples gallery](https://mlverse.github.io/luz/articles/examples/index.html).
