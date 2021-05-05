@@ -113,6 +113,7 @@ luz_metric_accuracy <- luz_metric(
 }
 \seealso{
 Other luz_metrics: 
-\code{\link{luz_metric_accuracy}()}
+\code{\link{luz_metric_accuracy}()},
+\code{\link{luz_metric_binary_accuracy_with_logits}()}
 }
 \concept{luz_metrics}

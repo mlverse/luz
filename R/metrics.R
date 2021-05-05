@@ -123,12 +123,33 @@ luz_metric_accuracy <- luz_metric(
   }
 )
 
+#' Binary accuracy with logits
+#'
+#' Computes accuracy for binary classification problems where the model
+#' return logits. Commonly used together with [torch::nn_bce_with_logits_loss()].
+#'
+#' Probabilities are generated using `nnf_sigmoid()` and `threshold` is used to
+#' classify between 0 or 1.
+#'
+#' @param threshold value used to classifiy observations between 0 and 1.
+#'
+#' @examples
+#' if (torch::torch_is_installed()) {
+#' library(torch)
+#' metric <- luz_metric_binary_accuracy_with_logits(threshold = 0.5)
+#' metric <- metric$new()
+#' metric$update(torch_randn(100), torch::torch_randint(0, 1, size = 100))
+#' metric$compute()
+#' }
+#'
+#' @family luz_metrics
+#' @export
 luz_metric_binary_accuracy_with_logits <- luz_metric(
   abbrev = "Acc",
-  initialize = function() {
+  initialize = function(threshold = 0.5) {
     self$correct <- 0
     self$total <- 0
-    self$threshold <- 0.5
+    self$threshold <- threshold
   },
   update = function(preds, targets) {
     preds <- (torch::torch_sigmoid(preds) > self$threshold)$
