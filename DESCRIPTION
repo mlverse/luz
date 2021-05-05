@@ -33,7 +33,7 @@ Config/testthat/edition: 3
 Collate: 
     'accelerator.R'
     'callbacks.R'
-    'utils-pipe.R'
+    'utils.R'
     'metrics.R'
     'module.R'
     'reexports.R'

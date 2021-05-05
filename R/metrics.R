@@ -1,4 +1,4 @@
-#' @include utils-pipe.R
+#' @include utils.R
 
 LuzMetric <- R6::R6Class(
   "LuzMetric",

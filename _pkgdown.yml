@@ -14,3 +14,17 @@ navbar:
   examples:
     text: Examples
     href: articles/examples/index.html
+
+reference:
+  - title: "Training"
+  - contents:
+    - setup
+    - starts_with("fit")
+    - set_hparams
+    - set_opt_hparams
+  - title: "Metrics"
+  - contents:
+    - starts_with("luz_metric")
+  - title: "Callbacks"
+  - contents:
+    - starts_with("luz_callback")
