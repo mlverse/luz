@@ -35,3 +35,4 @@ Collate:
     'utils-pipe.R'
     'metrics.R'
     'module.R'
+    'reexports.R'
