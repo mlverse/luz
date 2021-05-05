@@ -47,17 +47,18 @@
 
     <div id="ref-usage" class="ref-usage section level2"><pre class="usage"><code class="sourceCode R"><span class="co"># S3 method for luz_module_generator</span>
 <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span>
-  <span class="va">module</span>,
+  <span class="va">object</span>,
   <span class="va">data</span>,
   epochs <span class="op">=</span> <span class="fl">10</span>,
   callbacks <span class="op">=</span> <span class="cn">NULL</span>,
   valid_data <span class="op">=</span> <span class="cn">NULL</span>,
   accelerator <span class="op">=</span> <span class="cn">NULL</span>,
-  verbose <span class="op">=</span> <span class="cn">NULL</span>
+  verbose <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
 
     <h2>Arguments</h2>
-    <dl class="row" id="ref-arguments"><dt class="col-sm-3 section level2" id="pkg-arg-module">module</dt>
+    <dl class="row" id="ref-arguments"><dt class="col-sm-3 section level2" id="pkg-arg-object">object</dt>
       <dd class="col-sm-9" id="ref-arguments desc"><p>An <code>nn_module</code> that has been <code><a href="setup.html">setup()</a></code>.</p></dd>
     <dt class="col-sm-3 section level2" id="pkg-arg-data">data</dt>
       <dd class="col-sm-9" id="ref-arguments desc"><p>(dataloader) A dataloader created with <code><a href="https://torch.mlverse.org/docs/reference/dataloader.html">torch::dataloader()</a></code> used
@@ -81,6 +82,8 @@ and batches of data.</p></dd>
 fitting procedure should emmit output to the console during training. By default,
 it will produce output if <code><a href="https://rdrr.io/r/base/interactive.html">interactive()</a></code> is <code>TRUE</code>, otherwise it won't print
 to the console.</p></dd>
+    <dt class="col-sm-3 section level2" id="pkg-arg-...">...</dt>
+      <dd class="col-sm-9" id="ref-arguments desc"><p>Currently unused,</p></dd>
     </dl></div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="sticky-top">
