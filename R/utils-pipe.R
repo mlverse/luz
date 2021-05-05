@@ -50,6 +50,11 @@ has_forward_method <- function(x) {
 bind_context <- function(x, ctx) {
   e <- rlang::fn_env(x$clone) # the `clone` method must always exist in R6 classes
   rlang::env_bind(e, ctx = ctx)
+
+  if (!is.null(x <- x$.__enclos_env__$super))
+    bind_context(x, ctx)
+
+  invisible(NULL)
 }
 
 inform <- function(message) {

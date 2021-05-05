@@ -15,13 +15,24 @@ LuzMetric <- R6::R6Class(
 
 luz_metric <- function(name = NULL, ..., public, active, parent_env = parent.frame()) {
   public <- rlang::list2(...)
-  R6::R6Class(
+  metric_class <- R6::R6Class(
     classname = name,
     inherit = LuzMetric,
     public = public,
     parent_env = parent_env,
     lock_objects = FALSE
   )
+  function(...) {
+    R6::R6Class(
+      inherit = metric_class,
+      public = list(
+        initialize = function() {
+          super$initialize(...)
+        }
+      ),
+      lock_objects = FALSE
+    )
+  }
 }
 
 luz_metric_accuracy <- luz_metric(
@@ -79,7 +90,6 @@ luz_metric_loss_average <- luz_metric(
     self$values[[length(self$values) + 1]] <- loss
   },
   average_metric = function(x) {
-
     if (is.numeric(x[[1]]) || inherits(x[[1]], "torch_tensor"))
       x <- sapply(x, to_numeric)
 

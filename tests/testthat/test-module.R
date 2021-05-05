@@ -6,7 +6,7 @@ test_that("Fully managed", {
   mod <- model %>%
     setup(
       loss = torch::nn_mse_loss(),
-      optimizer = optim_adam
+      optimizer = torch::optim_adam
     )
 
   expect_s3_class(mod, "luz_module_generator")

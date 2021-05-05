@@ -42,7 +42,7 @@ setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
                    "Use the optimizer argument or,",
                    "Implement the `optimizer` method in the `nn_module`."))
 
-  metrics <- c(luz_metric_loss_average, metrics)
+  metrics <- c(luz_metric_loss_average(), metrics)
   methods$metrics <- metrics
 
   if (!has_forward_method(module))
