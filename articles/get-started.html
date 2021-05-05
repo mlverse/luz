@@ -120,7 +120,7 @@
       <span class="va">luz_metric_accuracy</span>
     <span class="op">)</span>
   <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu">fit</span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">10</span>, valid_data <span class="op">=</span> <span class="va">test_dl</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">10</span>, valid_data <span class="op">=</span> <span class="va">test_dl</span><span class="op">)</span></code></pre></div>
 <p>Let’s understand what happens in this chunk of code:</p>
 <ol style="list-style-type: decimal">
 <li>The <code>setup</code> function allows you to configure the loss (objective) function and the optimizer that you will use to train your model. Optionally you can pass a list of metrics that are tracked during the training procedure. <strong>Note:</strong> the loss function can be any function taking <code>input</code> and <code>target</code> tensors and returning a scalar tensor value and the optimizer can be any core Torch optimizer or custom ones created with the <code><a href="https://torch.mlverse.org/docs/reference/optimizer.html" class="external-link">torch::optimizer()</a></code> function.</li>
@@ -178,6 +178,7 @@
 <li><p><code>update</code>: updates the metric internal state. This function is called at every training and validation step with the predictions obtained by the model and the target values obtained from the dataloader.</p></li>
 <li><p><code>compute</code>: uses the internal state to compute metric values. This function is called whenever we need to obtain the current metric value. Eg, it’s called every training step for metrics displayed in the progress bar, but only called once per epoch to record it’s value when the progress bar is not displayed.</p></li>
 </ul>
+<p>Optionally, you can implement a <code>abbrev</code> field that gives the metric an abbreviation that will be used when displaying metric information in the console or tracking record. If no <code>abbrev</code> is passed, the class name will be used.</p>
 <p>Let’s take a look at the implementation of <code>luz_metric_accuracy</code> so you can see how to implement a new one:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">luz_metric_accuracy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_metric.html">luz_metric</a></span><span class="op">(</span>
@@ -234,7 +235,7 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu">fit</span><span class="op">(</span><span class="va">...</span>, callbacks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">...</span>, callbacks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     <span class="va">print_callback</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Callbacks can be called in many different positions of the training loop, including a combinations of them. Here’s an overview of possible callback <em>breakpoints</em>:</p>
