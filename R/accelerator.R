@@ -52,10 +52,10 @@ LuzAccelerator <- R6::R6Class(
       if (is.null(obj))
         return(NULL)
 
-      rlang::abort(glue::glue(c(
-        "Unhandled object with class {class(obj)}",
-        "Only nn_modules, optimizers and dataloaders are supported."))
-      )
+      rlang::abort(glue::glue(
+        "Unhandled object with class {class(obj)}\n",
+        "Only nn_modules, optimizers and dataloaders are supported."
+      ))
     },
     prepare_model = function(model) {
       if (self$device_placement) {
