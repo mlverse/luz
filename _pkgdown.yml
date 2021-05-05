@@ -28,3 +28,6 @@ reference:
   - title: "Callbacks"
   - contents:
     - starts_with("luz_callback")
+  - title: "Accelerator"
+    contents:
+    - accelerator
