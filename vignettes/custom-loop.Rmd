@@ -29,9 +29,7 @@ A part from the use of callbacks there are three more ways that you can use luz 
 
 -   **Fully flexible step:** You might want to be in control of how to call `backward()`, `zero_grad()`and `step()` as well as maybe having more control of gradient computation. For example, you might want to use 'virtual batch sizes', ie. you accumulate the gradients for a few steps before updating the weights.
 
--   **Completely flexible loop**: Your training loop can be anything you want but you still want to use luz to handle device placement of the dataloaders, optimizers and models.
-
-Now we will describe each of these approaches by implementing the same model for each API.
+-   **Completely flexible loop**: Your training loop can be anything you want but you still want to use luz to handle device placement of the dataloaders, optimizers and models. See the accelerator vignette.
 
 Let's consider a simplified version of the `net` that we implemented in the getting started vignette:
 
@@ -120,3 +118,78 @@ fitted <- net %>%
   )) %>% 
   fit(train_dl, epochs = 10, valid_data = test_dl)
 ```
+
+Now let's re-implement this same model using the slightly more flexible approach of consisting in overriding the training and validation step.
+
+## **Fully flexible step**
+
+Instead of implementing the `loss()` method we can implement the `step()` method, this allows us to flexibly modify what happens when training and validating for each batch in the dataset. You are now responsible for updating the weights by stepping the optimizers and backpropagating the loss.
+
+```{r}
+net <- nn_module(
+  "Net",
+  initialize = function() {
+    self$fc1 <- nn_linear(100, 50)
+    self$fc1 <- nn_linear(50, 10)
+  },
+  forward = function(x) {
+    x %>% 
+      self$fc1() %>% 
+      nnf_relu() %>% 
+      self$fc2()
+  },
+  optimizers = function(lr_fc1 = 0.1, lr_fc2 = 0.01) {
+    list(
+      opt_fc1 = optim_adam(self$fc1$parameters, lr = lr_fc1),
+      opt_fc2 = optim_adam(self$fc2$parameters, lr = lr_fc2)
+    )
+  },
+  step = function() {
+    
+    # optimizing the for first fc layer.
+    pred <- ctx$model(ctx$input)
+    opt <- ctx$optimizers[["opt_fc1"]]
+    
+    loss_fc1 <- nnf_cross_entropy(pred, target)
+    if (ctx$training) {
+      opt$zero_grad()
+      loss_fc1$backward()
+      opt$step()  
+    }
+    
+    # optimizing the second fc layer
+    pred <- ctx$model(ctx$input)
+    opt <- ctx$optimizers[["opt_fc1"]]
+    
+    loss_fc2 <- nnf_cross_entropy(pred, target)
+    if (ctx$training) {
+      opt$zero_grad()
+      loss_fc2$backward()
+      opt$step()  
+    }
+    
+    ctx$loss <- list(
+      opt_fc1 = loss_fc1$detach(),
+      opt_fc2 = loss_fc2$detach()
+    )
+  }
+)
+```
+
+The important things to notice here are:
+
+-   The `step()` method is used for both training and validation. You need to be careful only modify the weights when training.
+
+-   `ctx$optimizers` is a named list holding each optimizer that was created when the `optimizers()` method was called.
+
+-   You need to manually track the losses by saving saving them in a named list in `ctx$loss`. By convention, we use the same name as the optimizer it refers to. It's good practice to `detach()` them before saving to reduce memory usage.
+
+-   Callbacks that would be called inside the default `step()` method like `on_train_batch_after_pred`, `on_train_batch_after_loss` , etc won't be automatically called. You can still cal them manually by adding `ctx$call_callbacks("<callback name>")` inside you training step. See the code for `fit_one_batch()` and `valid_one_batch` to find all the callbacks that won't be called.
+
+## Next steps
+
+In this article you learned how to customize the `step()` of your training loop using luz layered functionality.
+
+Luz also allows more flexible modifications of the training loop described in the Accelerator vignette.
+
+You should now be able to follow the examples marked with the 'intermediate' category in the [examples gallery](https://mlverse.github.io/luz/articles/examples/index.html).
