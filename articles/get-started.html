@@ -38,6 +38,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/get-started.html">Get started</a>
+    <a class="dropdown-item" href="../articles/custom-loop.html">Custom loops</a>
   </div>
 </li>
 <li class="nav-item">
@@ -71,7 +72,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">luz</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://torch.mlverse.org/docs" class="external-link">torch</a></span><span class="op">)</span></code></pre></div>
-<p>Luz is a high-level API for Torch that aims to encapsulate the <strong>training loop</strong> into a set of reusable pieces of code. Luz reduces the boilerplate code required to train a model with Torch and avoids the error prone <code>zero_grad()</code> - <code>backward()</code> - <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> sequence of calls and moving data and models between CPU’s and GPU’s. Luz is designed to be highly flexible by proving a layered API that allows it to be useful no matter the level of control your need for your training loop.</p>
+<p>Luz is a high-level API for Torch that aims to encapsulate the <strong>training loop</strong> into a set of reusable pieces of code. Luz reduces the boilerplate code required to train a model with Torch and avoids the error prone <code>zero_grad()</code> - <code>backward()</code> - <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> sequence of calls and moving data and models between CPU’s and GPU’s. Luz is designed to be highly flexible by providing a layered API that allows it to be useful no matter the level of control your need for your training loop.</p>
 <p>Luz is heavily inspired by other higher level frameworks for deep learning, to cite a few:</p>
 <ul>
 <li><p><a href="https://docs.fast.ai/" class="external-link">FastAI</a>: we are heavily inspired in the FastAI library, specially the <code>Learner</code> object and the callbacks API.</p></li>
@@ -390,7 +391,7 @@ End Fit</code></pre>
 <h2 class="hasAnchor">
 <a href="#next-steps" class="anchor" aria-hidden="true"></a>Next steps</h2>
 <p>In this article you learned how to train your first model using Luz and the basics of customization using both custom metrics and callbacks.</p>
-<p>Luz also allows more flexible modifications of the training loop described in the <a href="">TODO</a> vignette.</p>
+<p>Luz also allows more flexible modifications of the training loop described in the <a href="https://mlverse.github.io/luz/articles/custom-loop.html" class="external-link">custom loop</a> vignette.</p>
 <p>You should now be able to follow the examples marked with the ‘basic’ category in the <a href="https://mlverse.github.io/luz/articles/examples/index.html" class="external-link">examples gallery</a>.</p>
 </div>
   </div>

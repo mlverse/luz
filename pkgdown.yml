@@ -1,7 +1,8 @@
 pandoc: 2.7.3
 pkgdown: 1.6.1.9001
-pkgdown_sha: 5051be01ee75042520b523410ff5dc31e9b46256
+pkgdown_sha: 150610c5bcbc00b81340925bec97e164301d3502
 articles:
+  custom-loop: custom-loop.html
   examples/dogs-vs-casts-binary-classification: dogs-vs-casts-binary-classification.html
   examples/index: index.html
   examples/mnist-autoencoder: mnist-autoencoder.html
@@ -10,5 +11,5 @@ articles:
   examples/mnist-dcgan: mnist-dcgan.html
   examples/mnist-triplet: mnist-triplet.html
   get-started: get-started.html
-last_built: 2021-05-05T22:12Z
+last_built: 2021-05-10T20:18Z
 
