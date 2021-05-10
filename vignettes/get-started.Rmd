@@ -19,7 +19,7 @@ library(luz)
 library(torch)
 ```
 
-Luz is a high-level API for Torch that aims to encapsulate the **training loop** into a set of reusable pieces of code. Luz reduces the boilerplate code required to train a model with Torch and avoids the error prone `zero_grad()` - `backward()` - `step()` sequence of calls and moving data and models between CPU's and GPU's. Luz is designed to be highly flexible by proving a layered API that allows it to be useful no matter the level of control your need for your training loop.
+Luz is a high-level API for Torch that aims to encapsulate the **training loop** into a set of reusable pieces of code. Luz reduces the boilerplate code required to train a model with Torch and avoids the error prone `zero_grad()` - `backward()` - `step()` sequence of calls and moving data and models between CPU's and GPU's. Luz is designed to be highly flexible by provding a layered API that allows it to be useful no matter the level of control your need for your training loop.
 
 Luz is heavily inspired by other higher level frameworks for deep learning, to cite a few:
 
@@ -139,7 +139,6 @@ Luz provides implementations of a few of the most used metrics. If a metric is n
 
 ```{r, child='../man/rmd/metrics.Rmd'}
 ```
-
 
 ## Customizing with callbacks
 
@@ -284,3 +283,4 @@ In this article you learned how to train your first model using Luz and the basi
 Luz also allows more flexible modifications of the training loop described in the [TODO]() vignette.
 
 You should now be able to follow the examples marked with the 'basic' category in the [examples gallery](https://mlverse.github.io/luz/articles/examples/index.html).
+
