@@ -10,7 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
@@ -193,3 +194,4 @@ In this article you learned how to customize the `step()` of your training loop 
 Luz also allows more flexible modifications of the training loop described in the Accelerator vignette.
 
 You should now be able to follow the examples marked with the 'intermediate' category in the [examples gallery](https://mlverse.github.io/luz/articles/examples/index.html).
+
