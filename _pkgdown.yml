@@ -11,6 +11,8 @@ navbar:
     menu:
       - text: Get started
         href: articles/get-started.html
+      - text: Custom loops
+        href: articles/custom-loop.html
   examples:
     text: Examples
     href: articles/examples/index.html
