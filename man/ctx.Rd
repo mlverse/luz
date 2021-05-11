@@ -22,7 +22,7 @@ could potentially modify these attributes or add new ones.\tabular{ll}{
    \code{epochs} \tab Total number of epochs the model will be trained on. \cr
    \code{epoch} \tab Current training epoch. \cr
    \code{iter} \tab Current training iteration. It’s reset every epoch and when going from training to validation. \cr
-   \code{training} \tab Whether the model is in training or validation mode. \cr
+   \code{training} \tab Whether the model is in training or validation mode. See also \code{help("luz_callback_train_valid")} \cr
    \code{callbacks} \tab List of callbacks that will be called during the training procedure. It’s the union of the list passed to the \code{callbacks} parameter and the default \code{callbacks}. \cr
    \code{step} \tab Closure that will be used to do one \code{step} of the model. It’s used for both training and validation. Takes no argument, but can access the \code{ctx} object. \cr
    \code{call_callbacks} \tab Call callbacks by name. For example \code{call_callbacks("on_train_begin")} will call all callbacks that provide methods for this point. \cr
@@ -33,9 +33,9 @@ could potentially modify these attributes or add new ones.\tabular{ll}{
    \code{loss} \tab Last computed loss from the model. \strong{Note:} this might not be available if you modified the training or validation step. \cr
    \code{opt} \tab Current optimizer, ie. optimizer that will be used to do the next \code{step} to update parameters. \cr
    \code{opt_nm} \tab Current optimizer name. By default it’s \code{opt} , but can change if your model uses more than one optimizer depending on the set of parameters being optimized. \cr
-   \code{metrics} \tab \code{list()} of metric objects that are \code{update}d at every \code{on_train_batch_end()} or \code{on_valid_batch_end()}. \cr
-   \code{records} \tab \code{list()} recording metric values for training and validation for each epoch. \cr
-   \code{losses} \tab \code{list()} tracking losses over time. \cr
+   \code{metrics} \tab \code{list()} of metric objects that are \code{update}d at every \code{on_train_batch_end()} or \code{on_valid_batch_end()}. See also \code{help("luz_callback_metrics")} \cr
+   \code{records} \tab \code{list()} recording metric values for training and validation for each epoch. See also \code{help("luz_callback_metrics")} \cr
+   \code{losses} \tab \code{list()} tracking losses over time. See also \code{help("luz_callback_metrics")} \cr
 }
 
 

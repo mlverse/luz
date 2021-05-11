@@ -51,6 +51,7 @@ default_callbacks <- function() {
 #' )
 #' @returns
 #' A `luz_callback` that can be passed to [fit.luz_module_generator()].
+#' @family luz_callbacks
 #' @export
 luz_callback <- function(name, ..., private = NULL, active = NULL, parent_env = parent.frame()) {
   public <- rlang::list2(...)
@@ -85,6 +86,17 @@ luz_callback <- function(name, ..., private = NULL, active = NULL, parent_env = 
   f
 }
 
+#' Progress callback
+#'
+#' Responsible for printing progress during training.
+#'
+#' @note In general you don't need to use these callback by yourself because it's always
+#'   included by default in [fit.luz_module_generator()].
+#'
+#' @note Printing can be disabled by passing [verbose=FALSE] to [fit.luz_module_generator()].
+#'
+#' @family luz_callbacks
+#' @export
 luz_callback_progress <- luz_callback(
   "progress_callback",
   on_train_begin = function() {
@@ -162,6 +174,23 @@ luz_callback_progress <- luz_callback(
   }
 )
 
+#' Metrics callback
+#'
+#' Tracks metrics passed to [setup()] during training and validation.
+#'
+#' @details This callback takes care of 3 `ctx` attributes:
+#' - `ctx$metrics`: stores the metrics objects that are initialized once for epoch,
+#'   and are further `update()`d and `compute()`d every batch.
+#' - `ctx$losses`: stores the loss values in a named list with names ("train", "valid").
+#'   Each one is a sequence of the loss values per epoch.
+#' - `ctx$records$metrics`: Stores metrics per training/validation and epoch. The
+#'   structure is very similar to `ctx$losses`.
+#'
+#' @note In general you won't need to explicitly use the metrics callback as it's
+#' used by default in [fit.luz_module_generator()].
+#'
+#' @family luz_callbacks
+#' @export
 luz_callback_metrics <- luz_callback(
   "metrics_callback",
   on_fit_begin = function() {
@@ -223,6 +252,23 @@ luz_callback_metrics <- luz_callback(
   }
 )
 
+#' Train-eval callback
+#'
+#' Switches important flags for training and evaluation modes.
+#'
+#' @details It takes care of the three `ctx` attributes:
+#' - `ctx$model`: Responsible for calling `ctx$model$train()` and `ctx$model$eval()`,
+#'   when appropriate.
+#' - `ctx$training`: Sets this flag to `TRUE` when training and `FALSE` when in
+#'   validation mode.
+#' - `ctx$loss`: Resets the `loss` attribute to `list()` when finished training/ or
+#'   validating.
+#'
+#' @note In general you won't need to explicitly use the metrics callback as it's
+#' used by default in [fit.luz_module_generator()].
+#'
+#' @family luz_callbacks
+#' @export
 luz_callback_train_valid <- luz_callback(
   "train_valid_callback",
   on_train_begin = function() {

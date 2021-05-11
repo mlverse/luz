@@ -26,6 +26,9 @@ and non-functions.}
 \item{parent_env}{An environment to use as the parent of newly-created
 objects.}
 }
+\value{
+A \code{luz_callback} that can be passed to \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}}.
+}
 \description{
 Create a new callback
 }
@@ -34,11 +37,14 @@ Let’s implement a callback that prints ‘Iteration \code{n}’ (where \code{n
 iteration number) for every batch in the training set and ‘Done’ when an
 epoch is finished. For that task we use the \code{luz_callback} function:\if{html}{\out{<div class="r">}}\preformatted{print_callback <- luz_callback(
   name = "print_callback",
+  initialize = function(message) \{
+    self$message <- message
+  \},
   on_train_batch_end = function() \{
     cat("Iteration ", ctx$iter, "\n")
   \},
   on_epoch_end = function() \{
-    cat("Done!\n")
+    cat(self$message, "\n")
   \}
 )
 }\if{html}{\out{</div>}}
@@ -49,11 +55,19 @@ instance \code{on_train_batch_end()} is called for every batch at the end of
 the training procedure and \code{on_epoch()} end is called at the end of
 every epoch.
 
+The returned value of \code{luz_callback()} is a function that initializes an
+instance of the callback. Callbacks can have initialization parameters,
+like the name of a file you want to log the results, in this case, you
+can pass an \code{initialize} method when creating the callback definition
+and save these parameters to the \code{self} object. In the above example,
+the callback has a \code{message} parameter that is printed at the end of
+each epoch.
+
 Once a callback is defined it can be passed to the \code{fit} function via
 the \code{callbacks} parameter, eg:\if{html}{\out{<div class="r">}}\preformatted{fitted <- net \%>\%
   setup(...) \%>\%
   fit(..., callbacks = list(
-    print_callback$new()
+    print_callback(message = "Done!")
   ))
 }\if{html}{\out{</div>}}
 
@@ -113,3 +127,10 @@ print_callback <- luz_callback(
  }
 )
 }
+\seealso{
+Other luz_callbacks: 
+\code{\link{luz_callback_metrics}()},
+\code{\link{luz_callback_progress}()},
+\code{\link{luz_callback_train_valid}()}
+}
+\concept{luz_callbacks}

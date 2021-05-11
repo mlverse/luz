@@ -115,7 +115,8 @@ get_opt_hparams <- function(module) {
 #' @param epochs (int) The number of epochs for training the model.
 #'
 #' @param callbacks (list, optional) A list of callbacks defined with [luz_callback()] that
-#' will be called during the training procedure.
+#' will be called during the training procedure. The callbacks [luz_callback_metrics()],
+#' [lux_callback_progress()] and [luz_callback_train_valid()] are always added by default.
 #'
 #' @param valid_data (dataloader, optional) A dataloader created with [torch::dataloader()]
 #' that will be used during the validation procedure.

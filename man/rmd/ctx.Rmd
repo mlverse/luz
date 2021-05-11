@@ -21,7 +21,7 @@ The `ctx` object is used in luz to share information between the training loop a
 +------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | `iter`           | Current training iteration. It's reset every epoch and when going from training to validation.                                                                                                       |
 +------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| `training`       | Whether the model is in training or validation mode.                                                                                                                                                 |
+| `training`       | Whether the model is in training or validation mode. See also `help("luz_callback_train_valid")`                                                                                                     |
 +------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | `callbacks`      | List of callbacks that will be called during the training procedure. It's the union of the list passed to the `callbacks` parameter and the default `callbacks`.                                     |
 +------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -43,11 +43,11 @@ The `ctx` object is used in luz to share information between the training loop a
 +------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | `opt_nm`         | Current optimizer name. By default it's `opt` , but can change if your model uses more than one optimizer depending on the set of parameters being optimized.                                        |
 +------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| `metrics`        | `list()` of metric objects that are `update`d at every `on_train_batch_end()` or `on_valid_batch_end()`.                                                                                             |
+| `metrics`        | `list()` of metric objects that are `update`d at every `on_train_batch_end()` or `on_valid_batch_end()`. See also `help("luz_callback_metrics")`                                                     |
 +------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| `records`        | `list()` recording metric values for training and validation for each epoch.                                                                                                                         |
+| `records`        | `list()` recording metric values for training and validation for each epoch. See also `help("luz_callback_metrics")`                                                                                 |
 +------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| `losses`         | `list()` tracking losses over time.                                                                                                                                                                  |
+| `losses`         | `list()` tracking losses over time. See also `help("luz_callback_metrics")`                                                                                                                          |
 +------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 : Context attributes
