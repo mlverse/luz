@@ -358,7 +358,7 @@ initialize_callbacks <- function(callbacks, ctx) {
 #' Context objects used in luz to share information between model methods,
 #' metrics and callbacks.
 #'
-#' @name Context object
+#' @name ctx
 #'
 #' @includeRmd man/rmd/ctx.Rmd details
 #' @rdname ctx
