@@ -127,7 +127,7 @@ dcgan <- torch::nn_module(
 
     self$bce <- torch::nn_bce_with_logits_loss()
   },
-  optimizer = function(lr = 2*1e-4, betas = c(0.5, 0.999)) {
+  set_optimizers = function(lr = 2*1e-4, betas = c(0.5, 0.999)) {
     list(
       discriminator = optim_adam(self$D$parameters, lr = lr, betas = betas),
       generator = optim_adam(self$G$parameters, lr = lr, betas = betas)
