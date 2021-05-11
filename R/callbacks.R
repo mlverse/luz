@@ -263,24 +263,51 @@ luz_callback_train_valid <- luz_callback(
   }
 )
 
+#' Early stopping callback
+#'
+#' Stops training when a monitored metric stops improving
+#'
+#' @param monitor A string in the format `<set>_<metric>` where `<set>` can be
+#'  'train' or 'valid' and `<metric>` can be the abbreviation of any metric
+#'  that you are tracking during training.
+#' @param min_delta Minimum improvement to reset the patience counter.
+#' @param patience Number of epochs without improving until stoping training.
+#' @param verbose If `TRUE` a message will be printed when early stopping occurs.
+#' @param mode Specifies the direction that is considered an improvement. By default
+#'  'min' is used. Can also be 'max' (higher is better) and 'zero'
+#'  (closer to zero is better).
+#' @param baseline An initial value that will be used as the best seen value
+#'  in the begining. Model will stopm training if no better than baseline value
+#'  is found in the first `patience` epochs.
+#'
+#' @returns
+#' A `luz_callback` that does early stopping.
+#'
+#' @examples
+#' cb <- luz_callback_early_stopping()
+#'
+#' @family luz_callbacks
+#' @export
 luz_callback_early_stopping <- luz_callback(
   name = "early_stopping_callback",
   initialize = function(monitor = "valid_loss", min_delta = 0, patience = 0,
                         verbose = FALSE, mode="min", baseline=NULL) {
     self$monitor <- monitor
-    self$min_delta <- 0
-    self$patience <- 0
+    self$min_delta <- min_delta
+    self$patience <- patience
     self$verbose <- verbose
     self$mode <- mode
     self$baseline <- baseline
 
     if (!is.null(self$baseline))
       private$current_best <- baseline
+
+    self$patience_counter <- 0L
   },
   on_fit_begin = function() {
     ctx$handlers <- append(ctx$handlers, list(
       early_stopping = function(err) {
-        ctx$call_all_callbacks("on_early_stopping")
+        ctx$call_callbacks("on_early_stopping")
         invisible(NULL)
       }
     ))
@@ -306,7 +333,8 @@ luz_callback_early_stopping <- luz_callback(
 
   },
   on_early_stopping = function() {
-    inform(glue::glue("Early stopping at epoch {ctx$epoch} of {ctx$epochs}"))
+    if (self$verbose)
+      rlang::inform(glue::glue("Early stopping at epoch {ctx$epoch} of {ctx$epochs}"))
   },
   find_quantity = function() {
     o <- strsplit(self$monitor, "_")[[1]]
@@ -319,8 +347,6 @@ luz_callback_early_stopping <- luz_callback(
     } else {
       as.numeric(ctx$records$metrics[[set]][[qty]][[opt]])
     }
-
-    browser()
 
     if (length(out) != 1)
       rlang::abort(glue::glue("Expected monitored metric to be length 1, got {length(out)}"))
@@ -335,7 +361,7 @@ luz_callback_early_stopping <- luz_callback(
     else if (self$mode == "zero")
       abs(x) < abs(y)
 
-    as.numeric(out)
+    as.array(out)
   }
 )
 

@@ -1,4 +1,7 @@
 test_that("early stopping", {
+  torch::torch_manual_seed(1)
+  set.seed(1)
+
   model <- get_model()
   dl <- get_dl()
 
@@ -8,10 +11,14 @@ test_that("early stopping", {
       optimizer = optim_adam,
     )
 
-  output <- mod %>%
-    set_hparams(input_size = 10, output_size = 1) %>%
-    fit(dl, verbose = TRUE, callbacks = list(
-      luz_callback_early_stopping(monitor = "train_loss", patience = 1)
-    ))
+  expect_snapshot({
+    expect_message({
+      output <- mod %>%
+        set_hparams(input_size = 10, output_size = 1) %>%
+        fit(dl, verbose = TRUE, epochs = 25, callbacks = list(
+          luz_callback_early_stopping(monitor = "train_loss", patience = 1)
+        ))
+    })
+  })
 
 })
