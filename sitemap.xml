@@ -61,6 +61,15 @@
     <loc>/reference/luz_callback.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_callback_metrics.html</loc>
+  </url>
+  <url>
+    <loc>/reference/luz_callback_progress.html</loc>
+  </url>
+  <url>
+    <loc>/reference/luz_callback_train_valid.html</loc>
+  </url>
+  <url>
     <loc>/reference/luz_metric.html</loc>
   </url>
   <url>

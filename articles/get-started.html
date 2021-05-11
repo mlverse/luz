@@ -220,24 +220,29 @@
 <li><p><strong>metrics callback</strong>: evaluate metrics during training and validation process.</p></li>
 <li><p><strong>progress callback</strong>: implements a progress bar and prints progress information during training.</p></li>
 </ul>
-<p>You can also implement custom callbacks that modify or act specifically for your training procedure. For example, let’s implement a callback that prints ‘Iteration <code>n</code>’ (where <code>n</code> is the iteration number) for every batch in the training set and ‘Done’ when an epoch is finished. For that task we use the <code>luz_callback</code> function:</p>
+<p>You can also implement custom callbacks that modify or act specifically for your training procedure. For example:</p>
+<p>Let’s implement a callback that prints ‘Iteration <code>n</code>’ (where <code>n</code> is the iteration number) for every batch in the training set and ‘Done’ when an epoch is finished. For that task we use the <code>luz_callback</code> function:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">print_callback</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback.html">luz_callback</a></span><span class="op">(</span>
   name <span class="op">=</span> <span class="st">"print_callback"</span>,
+  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">message</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">message</span> <span class="op">&lt;-</span> <span class="va">message</span>
+  <span class="op">}</span>,
   on_train_batch_end <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Iteration "</span>, <span class="va">ctx</span><span class="op">$</span><span class="va">iter</span>, <span class="st">"\n"</span><span class="op">)</span>
   <span class="op">}</span>,
   on_epoch_end <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Done!\n"</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">message</span>, <span class="st">"\n"</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">)</span></code></pre></div>
 <p><code><a href="../reference/luz_callback.html">luz_callback()</a></code> takes a named list of function as argument where the name indicate the moment at which the callback should be called. For instance <code>on_train_batch_end()</code> is called for every batch at the end of the training procedure and <code>on_epoch()</code> end is called at the end of every epoch.</p>
+<p>The returned value of <code><a href="../reference/luz_callback.html">luz_callback()</a></code> is a function that initializes an instance of the callback. Callbacks can have initialization parameters, like the name of a file you want to log the results, in this case, you can pass an <code>initialize</code> method when creating the callback definition and save these parameters to the <code>self</code> object. In the above example, the callback has a <code>message</code> parameter that is printed at the end of each epoch.</p>
 <p>Once a callback is defined it can be passed to the <code>fit</code> function via the <code>callbacks</code> parameter, eg:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">...</span>, callbacks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-    <span class="va">print_callback</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span>
+    <span class="fu">print_callback</span><span class="op">(</span>message <span class="op">=</span> <span class="st">"Done!"</span><span class="op">)</span>
   <span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Callbacks can be called in many different positions of the training loop, including a combinations of them. Here’s an overview of possible callback <em>breakpoints</em>:</p>
 <pre><code>Start Fit
@@ -276,7 +281,7 @@
    - on_fit_end
 End Fit</code></pre>
 <p>Every step market with a <code>on_*</code> is a point in the training procedure that is available for callbacks to be called.</p>
-<p>The other important part of callbacks is the <code>ctx</code> (context) object.</p>
+<p>The other important part of callbacks is the <code>ctx</code> (context) object. See <code><a href="../reference/ctx.html">help("ctx")</a></code> for details.</p>
 <p>The <code>ctx</code> object is used in luz to share information between the training loop and callbacks, model methods and metrics. The table below describes information available in the <code>ctx</code> by default. Other callbacks could potentially modify these attributes or add new ones.</p>
 <table class="table">
 <caption>Context attributes</caption>
@@ -327,7 +332,8 @@ End Fit</code></pre>
 </tr>
 <tr class="even">
 <td><code>training</code></td>
-<td>Whether the model is in training or validation mode.</td>
+<td>Whether the model is in training or validation mode. See also <code><a href="../reference/luz_callback_train_valid.html">help("luz_callback_train_valid")</a></code>
+</td>
 </tr>
 <tr class="odd">
 <td><code>callbacks</code></td>
@@ -372,17 +378,20 @@ End Fit</code></pre>
 <tr class="odd">
 <td><code>metrics</code></td>
 <td>
-<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of metric objects that are <code>update</code>d at every <code>on_train_batch_end()</code> or <code>on_valid_batch_end()</code>.</td>
+<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of metric objects that are <code>update</code>d at every <code>on_train_batch_end()</code> or <code>on_valid_batch_end()</code>. See also <code><a href="../reference/luz_callback_metrics.html">help("luz_callback_metrics")</a></code>
+</td>
 </tr>
 <tr class="even">
 <td><code>records</code></td>
 <td>
-<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> recording metric values for training and validation for each epoch.</td>
+<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> recording metric values for training and validation for each epoch. See also <code><a href="../reference/luz_callback_metrics.html">help("luz_callback_metrics")</a></code>
+</td>
 </tr>
 <tr class="odd">
 <td><code>losses</code></td>
 <td>
-<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> tracking losses over time.</td>
+<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> tracking losses over time. See also <code><a href="../reference/luz_callback_metrics.html">help("luz_callback_metrics")</a></code>
+</td>
 </tr>
 </tbody>
 </table>
@@ -392,7 +401,7 @@ End Fit</code></pre>
 <h2 class="hasAnchor">
 <a href="#next-steps" class="anchor" aria-hidden="true"></a>Next steps</h2>
 <p>In this article you learned how to train your first model using Luz and the basics of customization using both custom metrics and callbacks.</p>
-<p>Luz also allows more flexible modifications of the training loop described in the <a href="https://mlverse.github.io/luz/articles/custom-loop.html" class="external-link">custom loop</a> vignette.</p>
+<p>Luz also allows more flexible modifications of the training loop described in <code><a href="../articles/custom-loop.html">vignette("custom-loop")</a></code>.</p>
 <p>You should now be able to follow the examples marked with the ‘basic’ category in the <a href="https://mlverse.github.io/luz/articles/examples/index.html" class="external-link">examples gallery</a>.</p>
 </div>
   </div>
