@@ -108,7 +108,7 @@ net <- nn_module(
 
 Notice that model optimizers will be initialized according to the `optimizers()` method return value. In this case, we are initializing the optimizers using different model parameters and learning rates.
 
-The `loss()` method is responsible for computing the loss that will be then backpropagated to compute gradients and update the weights. This `loss()` method can access the `ctx` object that will contain a `opt_name` field, describing which optimizer is currently being used. Note that this function will be called once for each optimizer for each training and validation step.
+The `loss()` method is responsible for computing the loss that will be then backpropagated to compute gradients and update the weights. This `loss()` method can access the `ctx` object that will contain a `opt_name` field, describing which optimizer is currently being used. Note that this function will be called once for each optimizer for each training and validation step. See `help("ctx")` for complete information about the context object.
 
 We can finally `setup` and `fit` this module, however we no longer need to specify optimizers and loss functions.
 
@@ -179,7 +179,7 @@ net <- nn_module(
 
 The important things to notice here are:
 
--   The `step()` method is used for both training and validation. You need to be careful only modify the weights when training.
+-   The `step()` method is used for both training and validation. You need to be careful only modify the weights when training. Again, you can get complete information regarding the context object using `help("ctx")`.
 
 -   `ctx$optimizers` is a named list holding each optimizer that was created when the `optimizers()` method was called.
 
@@ -194,4 +194,3 @@ In this article you learned how to customize the `step()` of your training loop 
 Luz also allows more flexible modifications of the training loop described in the Accelerator vignette.
 
 You should now be able to follow the examples marked with the 'intermediate' category in the [examples gallery](https://mlverse.github.io/luz/articles/examples/index.html).
-
