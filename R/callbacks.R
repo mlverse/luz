@@ -53,37 +53,17 @@ default_callbacks <- function() {
 #' A `luz_callback` that can be passed to [fit.luz_module_generator()].
 #' @family luz_callbacks
 #' @export
-luz_callback <- function(name, ..., private = NULL, active = NULL, parent_env = parent.frame()) {
-  public <- rlang::list2(...)
-  callback_class <- R6::R6Class(
-    classname = name,
-    inherit = LuzCallback,
-    public = public,
+luz_callback <- function(name, ..., private = NULL, active = NULL, parent_env = parent.frame(),
+                         inherit = NULL) {
+  make_class(
+    name = name,
+    ...,
     private = private,
     active = active,
     parent_env = parent_env,
-    lock_objects = FALSE
+    inherit = attr(inherit, "r6_class") %||% LuzCallback,
+    .init_fun = TRUE
   )
-  init <- get_init(callback_class)
-  f <- rlang::new_function(
-    args = rlang::fn_fmls(init),
-    body = rlang::expr({
-      obj <- R6::R6Class(
-        inherit = callback_class,
-        public = list(
-          initialize = function() {
-            super$initialize(!!!rlang::fn_fmls_syms(init))
-          }
-        ),
-        private = private,
-        active = active,
-        lock_objects = FALSE
-      )
-      obj$new()
-    })
-  )
-  attr(f, "r6_class") <- callback_class
-  f
 }
 
 #' Progress callback

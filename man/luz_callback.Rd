@@ -9,7 +9,8 @@ luz_callback(
   ...,
   private = NULL,
   active = NULL,
-  parent_env = parent.frame()
+  parent_env = parent.frame(),
+  inherit = NULL
 )
 }
 \arguments{
@@ -25,6 +26,10 @@ and non-functions.}
 
 \item{parent_env}{An environment to use as the parent of newly-created
 objects.}
+
+\item{inherit}{A R6ClassGenerator object to inherit from; in other words, a
+superclass. This is captured as an unevaluated expression which is
+evaluated in \code{parent_env} each time an object is instantiated.}
 }
 \value{
 A \code{luz_callback} that can be passed to \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}}.

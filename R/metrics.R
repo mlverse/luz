@@ -58,31 +58,15 @@ LuzMetric <- R6::R6Class(
 #' @export
 #' @family luz_metrics
 luz_metric <- function(name = NULL, ..., private = NULL, active = NULL,
-                       parent_env = parent.frame()) {
-  public <- rlang::list2(...)
-  metric_class <- R6::R6Class(
-    classname = name,
-    inherit = LuzMetric,
-    public = public,
+                       parent_env = parent.frame(), inherit = NULL) {
+  make_class(
+    name = name,
+    ...,
+    private = private,
+    active = active,
     parent_env = parent_env,
-    lock_objects = FALSE
-  )
-  init <- get_init(metric_class)
-  rlang::new_function(
-    args = rlang::fn_fmls(init),
-    body = rlang::expr({
-      R6::R6Class(
-        inherit = metric_class,
-        public = list(
-          initialize = function() {
-            super$initialize(!!!rlang::fn_fmls_syms(init))
-          }
-        ),
-        private = private,
-        active = active,
-        lock_objects = FALSE
-      )
-    })
+    inherit = attr(inherit, "r6_class") %||% LuzMetric,
+    .init_fun = FALSE
   )
 }
 

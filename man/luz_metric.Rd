@@ -9,7 +9,8 @@ luz_metric(
   ...,
   private = NULL,
   active = NULL,
-  parent_env = parent.frame()
+  parent_env = parent.frame(),
+  inherit = NULL
 )
 }
 \arguments{
@@ -26,6 +27,10 @@ and non-functions.}
 
 \item{parent_env}{An environment to use as the parent of newly-created
 objects.}
+
+\item{inherit}{A R6ClassGenerator object to inherit from; in other words, a
+superclass. This is captured as an unevaluated expression which is
+evaluated in \code{parent_env} each time an object is instantiated.}
 }
 \value{
 Returns new Luz metric.

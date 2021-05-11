@@ -79,3 +79,49 @@ inform <- function(message) {
 }
 
 utils::globalVariables(c("super"))
+
+make_class <- function(name, ..., private, active, inherit, parent_env, .init_fun) {
+  public <- rlang::list2(...)
+
+  e <- new.env(parent = parent_env)
+
+  e$inherit <- inherit
+
+  r6_class <- R6::R6Class(
+    classname = name,
+    inherit = inherit,
+    public = public,
+    private = private,
+    active = active,
+    parent_env = e,
+    lock_objects = FALSE
+  )
+
+  e$r6_class <- r6_class
+  init <- get_init(r6_class)
+
+
+  f <- rlang::new_function(
+    args = rlang::fn_fmls(init),
+    body = rlang::expr({
+      obj <- R6::R6Class(
+        inherit = r6_class,
+        public = list(
+          initialize = function() {
+            super$initialize(!!!rlang::fn_fmls_syms(init))
+          }
+        ),
+        private = private,
+        active = active,
+        lock_objects = FALSE,
+        parent_env = rlang::current_env()
+      )
+      if (.init_fun)
+        obj$new()
+      else
+        obj
+    })
+  )
+  attr(f, "r6_class") <- r6_class
+  f
+}
