@@ -38,6 +38,10 @@ A \code{luz_callback} that does early stopping.
 \description{
 Stops training when a monitored metric stops improving
 }
+\note{
+This callback adds a \code{on_early_stopping} callback that can be used to
+call callbacks after as soon as the model stopped training.
+}
 \examples{
 cb <- luz_callback_early_stopping()
 

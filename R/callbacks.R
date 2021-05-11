@@ -280,6 +280,10 @@ luz_callback_train_valid <- luz_callback(
 #'  in the begining. Model will stopm training if no better than baseline value
 #'  is found in the first `patience` epochs.
 #'
+#' @note
+#' This callback adds a `on_early_stopping` callback that can be used to
+#' call callbacks after as soon as the model stopped training.
+#'
 #' @returns
 #' A `luz_callback` that does early stopping.
 #'
