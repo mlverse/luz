@@ -70,7 +70,7 @@ Suppose we want to do an experiment where we train the first fully connected lay
 
 In order to use luz for this we will implement two methods in the `net` module:
 
--   `optimizers`: returns a named list of optimizers depending on the `ctx`.
+-   `set_optimizers`: returns a named list of optimizers depending on the `ctx`.
 
 -   `loss`: computes the loss depending on the selected optimizer.
 
@@ -89,7 +89,7 @@ net <- nn_module(
       nnf_relu() %>% 
       self$fc2()
   },
-  optimizers = function(lr_fc1 = 0.1, lr_fc2 = 0.01) {
+  set_optimizers = function(lr_fc1 = 0.1, lr_fc2 = 0.01) {
     list(
       opt_fc1 = optim_adam(self$fc1$parameters, lr = lr_fc1),
       opt_fc2 = optim_adam(self$fc2$parameters, lr = lr_fc2)
@@ -106,7 +106,7 @@ net <- nn_module(
 )
 ```
 
-Notice that model optimizers will be initialized according to the `optimizers()` method return value. In this case, we are initializing the optimizers using different model parameters and learning rates.
+Notice that model optimizers will be initialized according to the `set_optimizers()` method return value. In this case, we are initializing the optimizers using different model parameters and learning rates.
 
 The `loss()` method is responsible for computing the loss that will be then backpropagated to compute gradients and update the weights. This `loss()` method can access the `ctx` object that will contain a `opt_name` field, describing which optimizer is currently being used. Note that this function will be called once for each optimizer for each training and validation step. See `help("ctx")` for complete information about the context object.
 
@@ -139,7 +139,7 @@ net <- nn_module(
       nnf_relu() %>% 
       self$fc2()
   },
-  optimizers = function(lr_fc1 = 0.1, lr_fc2 = 0.01) {
+  set_optimizers = function(lr_fc1 = 0.1, lr_fc2 = 0.01) {
     list(
       opt_fc1 = optim_adam(self$fc1$parameters, lr = lr_fc1),
       opt_fc2 = optim_adam(self$fc2$parameters, lr = lr_fc2)
@@ -175,7 +175,7 @@ The important things to notice here are:
 
 -   The `step()` method is used for both training and validation. You need to be careful only modify the weights when training. Again, you can get complete information regarding the context object using `help("ctx")`.
 
--   `ctx$optimizers` is a named list holding each optimizer that was created when the `optimizers()` method was called.
+-   `ctx$optimizers` is a named list holding each optimizer that was created when the `set_optimizers()` method was called.
 
 -   You need to manually track the losses by saving saving them in a named list in `ctx$loss`. By convention, we use the same name as the optimizer it refers to. It's good practice to `detach()` them before saving to reduce memory usage.
 

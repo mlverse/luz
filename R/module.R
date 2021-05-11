@@ -34,13 +34,13 @@ setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
                    "Implement a custom `step` method that manually optimized the parameters."))
 
   if (!is.null(optimizer))
-    methods$optimizer <- function(...) {
+    methods$set_optimizers <- function(...) {
       optimizer(self$parameters, ...)
     }
-  else if (!has_method(module, "optimizer"))
+  else if (!has_method(module, "set_optimizers"))
     rlang::abort(c("No optimizer definition has been provided.",
                    "Use the optimizer argument or,",
-                   "Implement the `optimizer` method in the `nn_module`."))
+                   "Implement the `set_optimizers` method in the `nn_module`."))
 
   metrics <- c(luz_metric_loss_average(), metrics)
   methods$metrics <- metrics
@@ -159,7 +159,7 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
   model <- do.call(module, get_hparams(module) %||% list())
   bind_context(model, ctx)
 
-  optimizers <- do.call(model$optimizer, get_opt_hparams(module) %||% list())
+  optimizers <- do.call(model$set_optimizers, get_opt_hparams(module) %||% list())
 
   if (!is.list(optimizers)) {
     optimizers <- list(opt = optimizers)

@@ -23,7 +23,7 @@ test_that("Custom optimizer", {
   model <- get_model()
   model <- torch::nn_module(
     inherit = model,
-    optimizer = function() {
+    set_optimizers = function() {
       optim_adam(self$parameters, lr = 0.01)
     }
   )
@@ -54,7 +54,7 @@ test_that("Multiple optimizers", {
     forward = function(x) {
       self$model1(x) + self$model2(x)
     },
-    optimizer = function() {
+    set_optimizers = function() {
       list(
         one = torch::optim_adam(self$model1$parameters, lr = 0.01),
         two = torch::optim_adam(self$model2$parameters, lr = 0.01)
