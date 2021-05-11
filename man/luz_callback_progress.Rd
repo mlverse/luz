@@ -13,7 +13,7 @@ Responsible for printing progress during training.
 In general you don't need to use these callback by yourself because it's always
 included by default in \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}}.
 
-Printing can be disabled by passing \link{verbose=FALSE} to \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}}.
+Printing can be disabled by passing \code{verbose=FALSE} to \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}}.
 }
 \seealso{
 Other luz_callbacks: 

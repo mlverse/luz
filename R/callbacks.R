@@ -73,7 +73,7 @@ luz_callback <- function(name, ..., private = NULL, active = NULL, parent_env = 
 #' @note In general you don't need to use these callback by yourself because it's always
 #'   included by default in [fit.luz_module_generator()].
 #'
-#' @note Printing can be disabled by passing [verbose=FALSE] to [fit.luz_module_generator()].
+#' @note Printing can be disabled by passing `verbose=FALSE` to [fit.luz_module_generator()].
 #'
 #' @family luz_callbacks
 #' @export
