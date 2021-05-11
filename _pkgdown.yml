@@ -24,6 +24,7 @@ reference:
     - starts_with("fit")
     - set_hparams
     - set_opt_hparams
+    - ctx
   - title: "Metrics"
   - contents:
     - starts_with("luz_metric")
