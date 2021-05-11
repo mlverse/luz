@@ -49,10 +49,22 @@ default_callbacks <- function() {
 
 #' Create a new callback
 #'
-#' @param name nm
-#' @param ... public methods
+#' @param name name of the callback
+#' @param ... Public methods of the callback. The name of the methods is used
+#'  to know how they should be called. See the details section.
 #' @inheritParams R6::R6Class
 #'
+#' @includeRmd man/rmd/callbacks.Rmd details
+#' @examples
+#' print_callback <- luz_callback(
+#'  name = "print_callback",
+#'  on_train_batch_end = function() {
+#'    cat("Iteration ", ctx$iter, "\n")
+#'  },
+#'  on_epoch_end = function() {
+#'    cat("Done!\n")
+#'  }
+#' )
 #' @export
 luz_callback <- function(name, ..., private = NULL, active = NULL, parent_env = parent.frame()) {
   public <- rlang::list2(...)

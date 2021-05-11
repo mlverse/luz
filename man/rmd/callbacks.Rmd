@@ -1,0 +1,67 @@
+Let's implement a callback that prints 'Iteration `n`' (where `n` is the iteration number) for every batch in the training set and 'Done' when an epoch is finished. For that task we use the `luz_callback` function:
+
+```{r, eval = FALSE}
+print_callback <- luz_callback(
+  name = "print_callback",
+  on_train_batch_end = function() {
+    cat("Iteration ", ctx$iter, "\n")
+  },
+  on_epoch_end = function() {
+    cat("Done!\n")
+  }
+)
+```
+
+`luz_callback()` takes a named list of function as argument where the name indicate the moment at which the callback should be called. For instance `on_train_batch_end()` is called for every batch at the end of the training procedure and `on_epoch()` end is called at the end of every epoch.
+
+Once a callback is defined it can be passed to the `fit` function via the `callbacks` parameter, eg:
+
+```{r, eval = FALSE}
+fitted <- net %>%
+  setup(...) %>%
+  fit(..., callbacks = list(
+    print_callback$new()
+  ))
+```
+
+Callbacks can be called in many different positions of the training loop, including a combinations of them. Here's an overview of possible callback *breakpoints*:
+
+    Start Fit
+       - on_fit_begin
+      Start Epoch Loop
+         - on_epoch_begin
+        Start Train
+           - on_train_begin
+          Start Batch Loop
+             - on_train_batch_begin
+              Start Default Training Step
+                - on_train_batch_after_pred
+                - on_train_batch_after_loss
+                - on_train_batch_before_backward
+                - on_train_batch_before_step
+                - on_train_batch_after_step
+              End Default Training Step:
+             - on_train_batch_end
+          End Batch Loop
+           - on_train_end
+        End Train
+        Start Valid
+           - on_valid_begin
+          Start Batch Loop
+             - on_valid_batch_begin
+              Start Default Validation Step
+                - on_valid_batch_after_pred
+                - on_valid_batch_after_loss
+              End Default Validation Step
+             - on_valid_batch_end
+          End Batch Loop
+           - on_valid_end
+        End Valid
+          - on_epoch_end
+      End Epoch Loop
+       - on_fit_end
+    End Fit
+
+Every step market with a `on_*` is a point in the training procedure that is available for callbacks to be called.
+
+The other important part of callbacks is the `ctx` (context) object. See `help("ctx")` for details.

@@ -13,9 +13,10 @@ luz_callback(
 )
 }
 \arguments{
-\item{name}{nm}
+\item{name}{name of the callback}
 
-\item{...}{public methods}
+\item{...}{Public methods of the callback. The name of the methods is used
+to know how they should be called. See the details section.}
 
 \item{private}{An optional list of private members, which can be functions
 and non-functions.}
@@ -27,4 +28,88 @@ objects.}
 }
 \description{
 Create a new callback
+}
+\details{
+Let’s implement a callback that prints ‘Iteration \code{n}’ (where \code{n} is the
+iteration number) for every batch in the training set and ‘Done’ when an
+epoch is finished. For that task we use the \code{luz_callback} function:\if{html}{\out{<div class="r">}}\preformatted{print_callback <- luz_callback(
+  name = "print_callback",
+  on_train_batch_end = function() \{
+    cat("Iteration ", ctx$iter, "\n")
+  \},
+  on_epoch_end = function() \{
+    cat("Done!\n")
+  \}
+)
+}\if{html}{\out{</div>}}
+
+\code{luz_callback()} takes a named list of function as argument where the
+name indicate the moment at which the callback should be called. For
+instance \code{on_train_batch_end()} is called for every batch at the end of
+the training procedure and \code{on_epoch()} end is called at the end of
+every epoch.
+
+Once a callback is defined it can be passed to the \code{fit} function via
+the \code{callbacks} parameter, eg:\if{html}{\out{<div class="r">}}\preformatted{fitted <- net \%>\%
+  setup(...) \%>\%
+  fit(..., callbacks = list(
+    print_callback$new()
+  ))
+}\if{html}{\out{</div>}}
+
+Callbacks can be called in many different positions of the training
+loop, including a combinations of them. Here’s an overview of possible
+callback \emph{breakpoints}:\preformatted{Start Fit
+   - on_fit_begin
+  Start Epoch Loop
+     - on_epoch_begin
+    Start Train
+       - on_train_begin
+      Start Batch Loop
+         - on_train_batch_begin
+          Start Default Training Step
+            - on_train_batch_after_pred
+            - on_train_batch_after_loss
+            - on_train_batch_before_backward
+            - on_train_batch_before_step
+            - on_train_batch_after_step
+          End Default Training Step:
+         - on_train_batch_end
+      End Batch Loop
+       - on_train_end
+    End Train
+    Start Valid
+       - on_valid_begin
+      Start Batch Loop
+         - on_valid_batch_begin
+          Start Default Validation Step
+            - on_valid_batch_after_pred
+            - on_valid_batch_after_loss
+          End Default Validation Step
+         - on_valid_batch_end
+      End Batch Loop
+       - on_valid_end
+    End Valid
+      - on_epoch_end
+  End Epoch Loop
+   - on_fit_end
+End Fit
+}
+
+Every step market with a \verb{on_*} is a point in the training procedure
+that is available for callbacks to be called.
+
+The other important part of callbacks is the \code{ctx} (context) object. See
+\code{help("ctx")} for details.
+}
+\examples{
+print_callback <- luz_callback(
+ name = "print_callback",
+ on_train_batch_end = function() {
+   cat("Iteration ", ctx$iter, "\n")
+ },
+ on_epoch_end = function() {
+   cat("Done!\n")
+ }
+)
 }
