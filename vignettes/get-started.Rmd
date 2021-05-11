@@ -169,6 +169,6 @@ Attributes in `ctx` can be used to produce the desired behavior of callbacks. At
 
 In this article you learned how to train your first model using Luz and the basics of customization using both custom metrics and callbacks.
 
-Luz also allows more flexible modifications of the training loop described in the [custom loop](https://mlverse.github.io/luz/articles/custom-loop.html) vignette.
+Luz also allows more flexible modifications of the training loop described in `vignette("custom-loop")`.
 
 You should now be able to follow the examples marked with the 'basic' category in the [examples gallery](https://mlverse.github.io/luz/articles/examples/index.html).
