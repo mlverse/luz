@@ -193,48 +193,53 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
     call_all_callbacks(ctx$callbacks, name)
   }
 
+  ctx$handlers <- list()
+
   ctx$call_callbacks("on_fit_begin")
+  rlang::with_handlers(
+    !!! ctx$handlers,
+    .expr = {
+      for (epoch in seq_len(ctx$epochs)) {
+        ctx$epoch <- epoch
+        ctx$iter <- 0L
+        ctx$call_callbacks("on_epoch_begin")
 
-  for (epoch in seq_len(ctx$epochs)) {
-    ctx$epoch <- epoch
-    ctx$iter <- 0L
-    ctx$call_callbacks("on_epoch_begin")
+        ctx$call_callbacks("on_train_begin")
 
-    ctx$call_callbacks("on_train_begin")
-
-    coro::loop(for (batch in ctx$data) {
-      bind_batch_to_ctx(ctx, batch)
-      ctx$iter <- ctx$iter + 1L
-
-      ctx$call_callbacks("on_train_batch_begin")
-      step()
-      ctx$call_callbacks("on_train_batch_end")
-    })
-
-    ctx$call_callbacks("on_train_end")
-
-    if (!is.null(ctx$valid_data)) {
-
-      ctx$call_callbacks("on_valid_begin")
-
-      ctx$iter <- 0L
-      torch::with_no_grad({
-        coro::loop(for (batch in ctx$valid_data) {
+        coro::loop(for (batch in ctx$data) {
           bind_batch_to_ctx(ctx, batch)
           ctx$iter <- ctx$iter + 1L
 
-          ctx$call_callbacks("on_valid_batch_begin")
+          ctx$call_callbacks("on_train_batch_begin")
           step()
-          ctx$call_callbacks("on_valid_batch_end")
+          ctx$call_callbacks("on_train_batch_end")
         })
-      })
 
-      ctx$call_callbacks("on_valid_end")
+        ctx$call_callbacks("on_train_end")
 
-    }
+        if (!is.null(ctx$valid_data)) {
 
-    ctx$call_callbacks("on_epoch_end")
-  }
+          ctx$call_callbacks("on_valid_begin")
+
+          ctx$iter <- 0L
+          torch::with_no_grad({
+            coro::loop(for (batch in ctx$valid_data) {
+              bind_batch_to_ctx(ctx, batch)
+              ctx$iter <- ctx$iter + 1L
+
+              ctx$call_callbacks("on_valid_batch_begin")
+              step()
+              ctx$call_callbacks("on_valid_batch_end")
+            })
+          })
+
+          ctx$call_callbacks("on_valid_end")
+
+        }
+
+        ctx$call_callbacks("on_epoch_end")
+      }
+    })
 
   ctx$call_callbacks("on_fit_end")
   structure(
@@ -251,7 +256,7 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
 #' @importFrom stats predict
 #' @export
 predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
-                                       accelerator = NULL) {
+                                      accelerator = NULL) {
 
   ctx <- object$ctx
 
@@ -274,6 +279,7 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
   else
     stack <- pars$stack
 
+  ctx$handlers <- list()
   ctx$output <- list()
   ctx$callbacks <- initialize_callbacks(callbacks, ctx)
 
@@ -281,13 +287,18 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
 
   torch::with_no_grad({
     ctx$call_callbacks("on_predict_begin")
-    coro::loop(for(batch in data) {
-      ctx$batch <- batch
-      ctx$input <- batch[[1]]
-      ctx$call_callbacks("on_predict_batch_begin")
-      ctx$output[[length(ctx$output) + 1]] <- do.call(predict_fn, list(ctx$input))
-      ctx$call_callbacks("on_predict_batch_end")
-    })
+    rlang::with_handlers(
+      !!! ctx$handlers,
+      .expr = {
+        coro::loop(for(batch in data) {
+          ctx$batch <- batch
+          ctx$input <- batch[[1]]
+          ctx$call_callbacks("on_predict_batch_begin")
+          ctx$output[[length(ctx$output) + 1]] <- do.call(predict_fn, list(ctx$input))
+          ctx$call_callbacks("on_predict_batch_end")
+        })
+      }
+    )
     ctx$call_callbacks("on_predict_end")
   })
 

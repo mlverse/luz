@@ -263,4 +263,80 @@ luz_callback_train_valid <- luz_callback(
   }
 )
 
+luz_callback_early_stopping <- luz_callback(
+  name = "early_stopping_callback",
+  initialize = function(monitor = "valid_loss", min_delta = 0, patience = 0,
+                        verbose = FALSE, mode="min", baseline=NULL) {
+    self$monitor <- monitor
+    self$min_delta <- 0
+    self$patience <- 0
+    self$verbose <- verbose
+    self$mode <- mode
+    self$baseline <- baseline
+
+    if (!is.null(self$baseline))
+      private$current_best <- baseline
+  },
+  on_fit_begin = function() {
+    ctx$handlers <- append(ctx$handlers, list(
+      early_stopping = function(err) {
+        ctx$call_all_callbacks("on_early_stopping")
+        invisible(NULL)
+      }
+    ))
+  },
+  on_epoch_end = function() {
+
+    qty <- self$find_quantity()
+    if (is.null(self$current_best))
+      self$current_best <- qty
+
+    if (self$compare(qty, self$current_best)) {
+      # means that new qty is better then previous
+      self$current_best <- qty
+      self$patience_counter <- 0L
+    } else {
+      # mean that qty did not improve
+      self$patience_counter <- self$patience_counter + 1L
+    }
+
+    if (self$patience_counter > self$patience) {
+      rlang::signal("Early stopping", class = "early_stopping")
+    }
+
+  },
+  on_early_stopping = function() {
+    inform(glue::glue("Early stopping at epoch {ctx$epoch} of {ctx$epochs}"))
+  },
+  find_quantity = function() {
+    o <- strsplit(self$monitor, "_")[[1]]
+    set <- o[[1]]
+    qty <- o[[2]]
+    opt <- if (length(o) >= 3) o[[3]] else "opt"
+
+    out <- if (qty == "loss") {
+      as.numeric(utils::tail(ctx$losses[[set]], 1)[[1]][[opt]])
+    } else {
+      as.numeric(ctx$records$metrics[[set]][[qty]][[opt]])
+    }
+
+    browser()
+
+    if (length(out) != 1)
+      rlang::abort(glue::glue("Expected monitored metric to be length 1, got {length(out)}"))
+
+    out
+  },
+  compare = function(x, y) {
+    out <- if (self$mode == "min")
+      x < y
+    else if (self$mode == "max")
+      x > y
+    else if (self$mode == "zero")
+      abs(x) < abs(y)
+
+    as.numeric(out)
+  }
+)
+
 
