@@ -146,33 +146,27 @@ net <- nn_module(
     )
   },
   step = function() {
+    ctx$loss <- list()
+    for (opt_name in names(ctx$optimizers)) {
     
-    # optimizing the for first fc layer.
-    pred <- ctx$model(ctx$input)
-    opt <- ctx$optimizers[["opt_fc1"]]
-    
-    loss_fc1 <- nnf_cross_entropy(pred, target)
-    if (ctx$training) {
-      opt$zero_grad()
-      loss_fc1$backward()
-      opt$step()  
+      pred <- ctx$model(ctx$input)
+      opt <- ctx$optimizers[[opt_name]]
+      loss <- nnf_cross_entropy(pred, target)
+      
+      if (opt_name == "opt_fc1") {
+        # we have L1 regularization in layer 1
+        loss <- nnf_cross_entropy(pred, target) + 
+          torch_norm(self$fc1$weight, p = 1)
+      }
+        
+      if (ctx$training) {
+        opt$zero_grad()
+        loss$backward()
+        opt$step()  
+      }
+      
+      ctx$loss[[opt_name]] <- loss$detach()
     }
-    
-    # optimizing the second fc layer
-    pred <- ctx$model(ctx$input)
-    opt <- ctx$optimizers[["opt_fc1"]]
-    
-    loss_fc2 <- nnf_cross_entropy(pred, target)
-    if (ctx$training) {
-      opt$zero_grad()
-      loss_fc2$backward()
-      opt$step()  
-    }
-    
-    ctx$loss <- list(
-      opt_fc1 = loss_fc1$detach(),
-      opt_fc2 = loss_fc2$detach()
-    )
   }
 )
 ```
