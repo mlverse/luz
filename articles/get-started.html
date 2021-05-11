@@ -276,7 +276,8 @@
    - on_fit_end
 End Fit</code></pre>
 <p>Every step market with a <code>on_*</code> is a point in the training procedure that is available for callbacks to be called.</p>
-<p>The other important part of callbacks is the <code>ctx</code> (context) object. The <code>ctx</code> object is used in Luz to share information between the training loop and callbacks (and we will see in the future that it can also be used to share information with model methods and metrics). The table below describes information available in the <code>ctx</code> by default. Other callbacks could potentially modify these attributes or add new ones.</p>
+<p>The other important part of callbacks is the <code>ctx</code> (context) object.</p>
+<p>The <code>ctx</code> object is used in luz to share information between the training loop and callbacks, model methods and metrics. The table below describes information available in the <code>ctx</code> by default. Other callbacks could potentially modify these attributes or add new ones.</p>
 <table class="table">
 <caption>Context attributes</caption>
 <colgroup>
@@ -385,7 +386,7 @@ End Fit</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Attributes in <code>ctx</code> can be used to produce the desired behavior of callbacks. In our example, we use the <code>ctx$iter</code> attribute to print the iteration number for each training batch.</p>
+<p>Attributes in <code>ctx</code> can be used to produce the desired behavior of callbacks. At any time you can find information about the context object using <code><a href="../reference/ctx.html">help("ctx")</a></code>. In our example, we use the <code>ctx$iter</code> attribute to print the iteration number for each training batch.</p>
 </div>
 <div id="next-steps" class="section level2">
 <h2 class="hasAnchor">
