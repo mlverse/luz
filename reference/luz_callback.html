@@ -51,7 +51,8 @@
   <span class="va">...</span>,
   private <span class="op">=</span> <span class="cn">NULL</span>,
   active <span class="op">=</span> <span class="cn">NULL</span>,
-  parent_env <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame</a></span><span class="op">(</span><span class="op">)</span>
+  parent_env <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html">parent.frame</a></span><span class="op">(</span><span class="op">)</span>,
+  inherit <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
 
     <h2>Arguments</h2>
@@ -68,6 +69,10 @@ and non-functions.</p></dd>
     <dt class="col-sm-3 section level2" id="pkg-arg-parent_env">parent_env</dt>
       <dd class="col-sm-9" id="ref-arguments desc"><p>An environment to use as the parent of newly-created
 objects.</p></dd>
+    <dt class="col-sm-3 section level2" id="pkg-arg-inherit">inherit</dt>
+      <dd class="col-sm-9" id="ref-arguments desc"><p>A R6ClassGenerator object to inherit from; in other words, a
+superclass. This is captured as an unevaluated expression which is
+evaluated in <code>parent_env</code> each time an object is instantiated.</p></dd>
     </dl><div class="ref-section section level2" id="section-value">
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value" aria-hidden="true"></a>Value</h2>
 
@@ -173,7 +178,6 @@ that is available for callbacks to be called.</p>
 <span class="r-in">   <span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"Done!\n"</span><span class="op">)</span></span>
 <span class="r-in"> <span class="op">}</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(inherit, parent_env, NULL)</span> object 'LuzCallback' not found</span>
 </code></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
