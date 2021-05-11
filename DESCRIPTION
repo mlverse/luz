@@ -32,8 +32,8 @@ VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
     'accelerator.R'
-    'callbacks.R'
     'utils.R'
+    'callbacks.R'
     'metrics.R'
     'module.R'
     'reexports.R'

@@ -1,7 +1,10 @@
+#' @include utils.R
+
 LuzCallback <- R6::R6Class(
   "LuzCallback",
   lock_objects = FALSE,
   public = list(
+    initialize = function() {},
     set_ctx = function(ctx) {
       self$ctx <- ctx
     },
@@ -11,25 +14,6 @@ LuzCallback <- R6::R6Class(
       self[[callback_nm]]()
       invisible()
     }
-    # on_fit_begin = NULL,
-    # on_epoch_begin = NULL,
-    # on_train_begin = NULL,
-    # on_train_batch_begin = NULL,
-    # on_train_batch_after_pred = NULL,
-    # on_train_batch_after_loss = NULL,
-    # on_train_batch_before_backward = NULL,
-    # on_train_batch_before_step = NULL,
-    # on_train_batch_after_step = NULL,
-    # on_train_batch_end = NULL,
-    # on_train_end = NULL,
-    # on_valid_begin = NULL,
-    # on_valid_batch_begin = NULL,
-    # on_valid_batch_after_pred = NULL,
-    # on_valid_batch_after_loss = NULL,
-    # on_valid_batch_end = NULL,
-    # on_valid_end = NULL,
-    # on_epoch_end = NULL,
-    # on_fit_end = NULL
   )
 )
 
@@ -41,9 +25,9 @@ call_all_callbacks <- function(callbacks, name) {
 
 default_callbacks <- function() {
   list(
-    luz_callback_train_valid$new(),
-    luz_callback_metrics$new(),
-    luz_callback_progress$new()
+    luz_callback_train_valid(),
+    luz_callback_metrics(),
+    luz_callback_progress()
   )
 }
 
@@ -65,19 +49,40 @@ default_callbacks <- function() {
 #'    cat("Done!\n")
 #'  }
 #' )
+#' @returns
+#' A `luz_callback` that can be passed to [fit.luz_module_generator()].
 #' @export
 luz_callback <- function(name, ..., private = NULL, active = NULL, parent_env = parent.frame()) {
   public <- rlang::list2(...)
-  e <- new.env(parent = parent_env)
-  R6::R6Class(
+  callback_class <- R6::R6Class(
     classname = name,
     inherit = LuzCallback,
     public = public,
     private = private,
     active = active,
-    parent_env = e,
+    parent_env = parent_env,
     lock_objects = FALSE
   )
+  init <- get_init(callback_class)
+  f <- rlang::new_function(
+    args = rlang::fn_fmls(init),
+    body = rlang::expr({
+      obj <- R6::R6Class(
+        inherit = callback_class,
+        public = list(
+          initialize = function() {
+            super$initialize(!!!rlang::fn_fmls_syms(init))
+          }
+        ),
+        private = private,
+        active = active,
+        lock_objects = FALSE
+      )
+      obj$new()
+    })
+  )
+  attr(f, "r6_class") <- callback_class
+  f
 }
 
 luz_callback_progress <- luz_callback(

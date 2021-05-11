@@ -59,8 +59,8 @@ bind_context <- function(x, ctx) {
 
 get_init <- function(x) {
 
-  if (!is.null(x$public_methods$initialize))
-    return(x$public_methods$initialize)
+  if (!is.null(x$public_methods[["initialize"]]))
+    return(x$public_methods[["initialize"]])
   else
     return(get_init(x$get_inherit()))
 
