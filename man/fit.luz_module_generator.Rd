@@ -27,7 +27,7 @@ as target for the loss function.}
 
 \item{callbacks}{(list, optional) A list of callbacks defined with \code{\link[=luz_callback]{luz_callback()}} that
 will be called during the training procedure. The callbacks \code{\link[=luz_callback_metrics]{luz_callback_metrics()}},
-\code{\link[=lux_callback_progress]{lux_callback_progress()}} and \code{\link[=luz_callback_train_valid]{luz_callback_train_valid()}} are always added by default.}
+\code{\link[=luz_callback_progress]{luz_callback_progress()}} and \code{\link[=luz_callback_train_valid]{luz_callback_train_valid()}} are always added by default.}
 
 \item{valid_data}{(dataloader, optional) A dataloader created with \code{\link[torch:dataloader]{torch::dataloader()}}
 that will be used during the validation procedure.}
