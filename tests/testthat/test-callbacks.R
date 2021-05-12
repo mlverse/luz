@@ -60,8 +60,8 @@ test_that("early stopping", {
       output <- mod %>%
         set_hparams(input_size = 10, output_size = 1) %>%
         fit(dl, verbose = TRUE, epochs = 25, callbacks = list(
-          luz_callback_early_stopping(monitor = "train_mae", patience = 5,
-                                      baseline = 0.85)
+          luz_callback_early_stopping(monitor = "train_mae", patience = 2,
+                                      baseline = 0.91)
         ))
     })
   })

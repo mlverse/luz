@@ -1,15 +1,15 @@
 # Helper train dataloaders and models for tests
 
 get_ds <- torch::dataset(
-  initialize = function(len = 100, x_size = 10, y_size = 1) {
+  initialize = function(len = 100, x_size = 10, y_size = 1, fixed_values = FALSE) {
     self$len <- len
-    self$x_size <- x_size
-    self$y_size <- y_size
+    self$x <- torch_randn(size = c(len, x_size))
+    self$y <- torch_randn(size = c(len, y_size))
   },
   .getitem = function(i) {
     list(
-      x = torch::torch_randn(size = self$x_size),
-      y = torch::torch_randn(size = self$y_size)
+      x = self$x[i,..],
+      y = self$y[i,..]
     )
   },
   .length = function() {
@@ -19,6 +19,10 @@ get_ds <- torch::dataset(
 
 get_dl <- function(batch_size = 10, ...) {
   torch::dataloader(get_ds(...), batch_size = batch_size)
+}
+
+get_test_dl <- function(batch_size = 10, ...) {
+  torch::dataloader(get_ds(...), batch_size = batch_size, shuffle = FALSE)
 }
 
 get_model <- function() {
@@ -35,7 +39,6 @@ get_model <- function() {
     }
   )
 }
-
 
 
 

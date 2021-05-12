@@ -264,10 +264,10 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
 
   ctx$accelerator <- accelerator
   model <- NULL; data <- NULL
-  c(model, data) %<-% ctx$accelerator$prepare(ctx$model, ctx$data)
+  c(model, data) %<-% ctx$accelerator$prepare(ctx$model, newdata)
 
   ctx$model <- model
-  ctx$data <- newdata
+  ctx$data <- data
 
   ctx$model$eval()
   ctx$training <- FALSE
@@ -289,7 +289,7 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
     rlang::with_handlers(
       !!! ctx$handlers,
       .expr = {
-        coro::loop(for(batch in data) {
+        coro::loop(for(batch in ctx$data) {
           ctx$batch <- batch
           ctx$input <- batch[[1]]
           ctx$call_callbacks("on_predict_batch_begin")

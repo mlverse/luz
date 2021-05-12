@@ -114,7 +114,15 @@ test_that("predict works for modules", {
 
 
   pred <- predict(output, dl)
+  pred2 <- predict(output, dl)
 
   expect_equal(pred$shape, c(100, 1))
+  expect_equal(as.array(pred), as.array(pred2))
+
+  # try with a different dataloader
+  dl <- get_dl()
+  pred <- predict(output, dl)
+  pred2 <- predict(output, dl)
+  expect_equal(as.array(pred), as.array(pred2))
 
 })
