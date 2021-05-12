@@ -8,7 +8,6 @@ luz_callback_early_stopping(
   monitor = "valid_loss",
   min_delta = 0,
   patience = 0,
-  verbose = FALSE,
   mode = "min",
   baseline = NULL
 )
@@ -21,8 +20,6 @@ that you are tracking during training.}
 \item{min_delta}{Minimum improvement to reset the patience counter.}
 
 \item{patience}{Number of epochs without improving until stoping training.}
-
-\item{verbose}{If \code{TRUE} a message will be printed when early stopping occurs.}
 
 \item{mode}{Specifies the direction that is considered an improvement. By default
 'min' is used. Can also be 'max' (higher is better) and 'zero'
@@ -41,6 +38,9 @@ Stops training when a monitored metric stops improving
 \note{
 This callback adds a \code{on_early_stopping} callback that can be used to
 call callbacks after as soon as the model stopped training.
+
+If \code{verbose=TRUE} in \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}} a message is printed when
+early stopping.
 }
 \examples{
 cb <- luz_callback_early_stopping()

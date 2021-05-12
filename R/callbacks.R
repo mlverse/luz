@@ -272,7 +272,6 @@ luz_callback_train_valid <- luz_callback(
 #'  that you are tracking during training.
 #' @param min_delta Minimum improvement to reset the patience counter.
 #' @param patience Number of epochs without improving until stoping training.
-#' @param verbose If `TRUE` a message will be printed when early stopping occurs.
 #' @param mode Specifies the direction that is considered an improvement. By default
 #'  'min' is used. Can also be 'max' (higher is better) and 'zero'
 #'  (closer to zero is better).
@@ -283,6 +282,10 @@ luz_callback_train_valid <- luz_callback(
 #' @note
 #' This callback adds a `on_early_stopping` callback that can be used to
 #' call callbacks after as soon as the model stopped training.
+#'
+#' @note
+#' If `verbose=TRUE` in [fit.luz_module_generator()] a message is printed when
+#' early stopping.
 #'
 #' @returns
 #' A `luz_callback` that does early stopping.
@@ -295,11 +298,10 @@ luz_callback_train_valid <- luz_callback(
 luz_callback_early_stopping <- luz_callback(
   name = "early_stopping_callback",
   initialize = function(monitor = "valid_loss", min_delta = 0, patience = 0,
-                        verbose = FALSE, mode="min", baseline=NULL) {
+                        mode="min", baseline=NULL) {
     self$monitor <- monitor
     self$min_delta <- min_delta
     self$patience <- patience
-    self$verbose <- verbose
     self$mode <- mode
     self$baseline <- baseline
 
@@ -337,8 +339,7 @@ luz_callback_early_stopping <- luz_callback(
 
   },
   on_early_stopping = function() {
-    if (self$verbose)
-      rlang::inform(glue::glue("Early stopping at epoch {ctx$epoch} of {ctx$epochs}"))
+    inform(glue::glue("Early stopping at epoch {ctx$epoch} of {ctx$epochs}"))
   },
   find_quantity = function() {
     o <- strsplit(self$monitor, "_")[[1]]
