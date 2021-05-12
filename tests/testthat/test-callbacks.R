@@ -32,6 +32,7 @@ test_that("early stopping", {
     })
   })
 
+  # the new callback breakpoint is used
   x <- 0
   output <- mod %>%
     set_hparams(input_size = 10, output_size = 1) %>%
@@ -44,5 +45,27 @@ test_that("early stopping", {
     ))
 
   expect_equal(x, 1)
+
+  # metric that is not the loss
+
+  mod <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam,
+      metrics = luz_metric_mae()
+    )
+
+  expect_snapshot({
+    expect_message({
+      output <- mod %>%
+        set_hparams(input_size = 10, output_size = 1) %>%
+        fit(dl, verbose = TRUE, epochs = 25, callbacks = list(
+          luz_callback_early_stopping(monitor = "train_mae", patience = 5,
+                                      baseline = 0.85)
+        ))
+    })
+  })
+
+
 })
 
