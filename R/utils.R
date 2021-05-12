@@ -125,3 +125,5 @@ make_class <- function(name, ..., private, active, inherit, parent_env, .init_fu
   attr(f, "r6_class") <- r6_class
   f
 }
+
+

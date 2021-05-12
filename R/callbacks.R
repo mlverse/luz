@@ -53,7 +53,7 @@ default_callbacks <- function() {
 #' A `luz_callback` that can be passed to [fit.luz_module_generator()].
 #' @family luz_callbacks
 #' @export
-luz_callback <- function(name, ..., private = NULL, active = NULL, parent_env = parent.frame(),
+luz_callback <- function(name = NULL, ..., private = NULL, active = NULL, parent_env = parent.frame(),
                          inherit = NULL) {
   make_class(
     name = name,
@@ -260,6 +260,114 @@ luz_callback_train_valid <- luz_callback(
     ctx$model$eval()
     ctx$training <- FALSE
     ctx$loss <- list()
+  }
+)
+
+#' Early stopping callback
+#'
+#' Stops training when a monitored metric stops improving
+#'
+#' @param monitor A string in the format `<set>_<metric>` where `<set>` can be
+#'  'train' or 'valid' and `<metric>` can be the abbreviation of any metric
+#'  that you are tracking during training.
+#' @param min_delta Minimum improvement to reset the patience counter.
+#' @param patience Number of epochs without improving until stoping training.
+#' @param mode Specifies the direction that is considered an improvement. By default
+#'  'min' is used. Can also be 'max' (higher is better) and 'zero'
+#'  (closer to zero is better).
+#' @param baseline An initial value that will be used as the best seen value
+#'  in the begining. Model will stopm training if no better than baseline value
+#'  is found in the first `patience` epochs.
+#'
+#' @note
+#' This callback adds a `on_early_stopping` callback that can be used to
+#' call callbacks after as soon as the model stopped training.
+#'
+#' @note
+#' If `verbose=TRUE` in [fit.luz_module_generator()] a message is printed when
+#' early stopping.
+#'
+#' @returns
+#' A `luz_callback` that does early stopping.
+#'
+#' @examples
+#' cb <- luz_callback_early_stopping()
+#'
+#' @family luz_callbacks
+#' @export
+luz_callback_early_stopping <- luz_callback(
+  name = "early_stopping_callback",
+  initialize = function(monitor = "valid_loss", min_delta = 0, patience = 0,
+                        mode="min", baseline=NULL) {
+    self$monitor <- monitor
+    self$min_delta <- min_delta
+    self$patience <- patience
+    self$mode <- mode
+    self$baseline <- baseline
+
+    if (!is.null(self$baseline))
+      self$current_best <- baseline
+
+    self$patience_counter <- 0L
+  },
+  on_fit_begin = function() {
+    ctx$handlers <- append(ctx$handlers, list(
+      early_stopping = function(err) {
+        ctx$call_callbacks("on_early_stopping")
+        invisible(NULL)
+      }
+    ))
+  },
+  on_epoch_end = function() {
+
+    qty <- self$find_quantity()
+    if (is.null(self$current_best))
+      self$current_best <- qty
+
+    if (self$compare(qty, self$current_best)) {
+      # means that new qty is better then previous
+      self$current_best <- qty
+      self$patience_counter <- 0L
+    } else {
+      # mean that qty did not improve
+      self$patience_counter <- self$patience_counter + 1L
+    }
+
+    if (self$patience_counter >= self$patience) {
+      rlang::signal("Early stopping", class = "early_stopping")
+    }
+
+  },
+  on_early_stopping = function() {
+    inform(glue::glue("Early stopping at epoch {ctx$epoch} of {ctx$epochs}"))
+  },
+  find_quantity = function() {
+    o <- strsplit(self$monitor, "_")[[1]]
+    set <- o[[1]]
+    qty <- o[[2]]
+    opt <- if (length(o) >= 3) o[[3]] else "opt"
+
+    out <- if (qty == "loss") {
+      as.numeric(utils::tail(ctx$losses[[set]], 1)[[1]][[opt]])
+    } else {
+      as.numeric(ctx$records$metrics[[set]][[qty]][[opt]])
+    }
+
+    if (length(out) != 1)
+      rlang::abort(glue::glue("Expected monitored metric to be length 1, got {length(out)}"))
+
+    out
+  },
+  # returns TRUE when the new is better then previous acording to mode
+  compare = function(new, old) {
+    out <- if (self$mode == "min")
+      (old - self$min_delta) > new
+    else if (self$mode == "max")
+      (new - self$min_delta) > old
+    else if (self$mode == "zero")
+      (abs(old) - self$min_delta) > abs(self$min_delta)
+
+    as.array(out)
   }
 )
 
