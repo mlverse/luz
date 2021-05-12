@@ -82,6 +82,9 @@
     <loc>/reference/luz_metric_binary_accuracy_with_logits.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_metric_mae.html</loc>
+  </url>
+  <url>
     <loc>/reference/pipe.html</loc>
   </url>
   <url>
