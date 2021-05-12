@@ -270,7 +270,7 @@ luz_callback_train_valid <- luz_callback(
 #'
 #' @param monitor A string in the format `<set>_<metric>` where `<set>` can be
 #'  'train' or 'valid' and `<metric>` can be the abbreviation of any metric
-#'  that you are tracking during training.
+#'  that you are tracking during training. The metric name is case insensitive.
 #' @param min_delta Minimum improvement to reset the patience counter.
 #' @param patience Number of epochs without improving until stoping training.
 #' @param mode Specifies the direction that is considered an improvement. By default

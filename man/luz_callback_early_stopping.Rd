@@ -15,7 +15,7 @@ luz_callback_early_stopping(
 \arguments{
 \item{monitor}{A string in the format \verb{<set>_<metric>} where \verb{<set>} can be
 'train' or 'valid' and \verb{<metric>} can be the abbreviation of any metric
-that you are tracking during training.}
+that you are tracking during training. The metric name is case insensitive.}
 
 \item{min_delta}{Minimum improvement to reset the patience counter.}
 
