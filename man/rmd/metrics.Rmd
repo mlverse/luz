@@ -40,3 +40,6 @@ luz_metric_accuracy <- luz_metric(
   }
 )
 ```
+
+**Note**: It's good practice that the `compute` metric returns regular R values
+instead of torch tensors and other parts of luz will expect that.

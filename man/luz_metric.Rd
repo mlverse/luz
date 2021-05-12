@@ -86,6 +86,9 @@ can see how to implement a new one:\if{html}{\out{<div class="r">}}\preformatted
   \}
 )
 }\if{html}{\out{</div>}}
+
+\strong{Note}: It’s good practice that the \code{compute} metric returns regular R
+values instead of torch tensors and other parts of luz will expect that.
 }
 \examples{
 luz_metric_accuracy <- luz_metric(
