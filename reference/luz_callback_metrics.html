@@ -52,10 +52,9 @@
     <div class="ref-section section level2" id="section-details">
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details" aria-hidden="true"></a>Details</h2>
 
-    <p>This callback takes care of 3 <code>ctx</code> attributes:</p><ul><li><p><code>ctx$metrics</code>: stores the metrics objects that are initialized once for epoch,
-and are further <code><a href="https://rdrr.io/r/stats/update.html">update()</a></code>d and <code>compute()</code>d every batch.</p></li>
-<li><p><code>ctx$losses</code>: stores the loss values in a named list with names ("train", "valid").
-Each one is a sequence of the loss values per epoch.</p></li>
+    <p>This callback takes care of 2 <code>ctx</code> attributes:</p><ul><li><p><code>ctx$metrics</code>: stores the metrics objects that are initialized once for epoch,
+and are further <code><a href="https://rdrr.io/r/stats/update.html">update()</a></code>d and <code>compute()</code>d every batch. You will rarely need
+to work with these metrics.</p></li>
 <li><p><code>ctx$records$metrics</code>: Stores metrics per training/validation and epoch. The
 structure is very similar to <code>ctx$losses</code>.</p></li>
 </ul></div>
