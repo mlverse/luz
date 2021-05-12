@@ -245,8 +245,7 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
   structure(
     list(
       model  = ctx$model,
-      losses = ctx$losses,
-      record = ctx$records,
+      records = ctx$records,
       ctx = ctx
     ),
     class = "luz_module_fitted"

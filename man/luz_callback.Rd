@@ -5,7 +5,7 @@
 \title{Create a new callback}
 \usage{
 luz_callback(
-  name,
+  name = NULL,
   ...,
   private = NULL,
   active = NULL,

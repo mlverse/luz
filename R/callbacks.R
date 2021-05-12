@@ -158,11 +158,10 @@ luz_callback_progress <- luz_callback(
 #'
 #' Tracks metrics passed to [setup()] during training and validation.
 #'
-#' @details This callback takes care of 3 `ctx` attributes:
+#' @details This callback takes care of 2 `ctx` attributes:
 #' - `ctx$metrics`: stores the metrics objects that are initialized once for epoch,
-#'   and are further `update()`d and `compute()`d every batch.
-#' - `ctx$losses`: stores the loss values in a named list with names ("train", "valid").
-#'   Each one is a sequence of the loss values per epoch.
+#'   and are further `update()`d and `compute()`d every batch. You will rarely need
+#'   to work with these metrics.
 #' - `ctx$records$metrics`: Stores metrics per training/validation and epoch. The
 #'   structure is very similar to `ctx$losses`.
 #'
@@ -175,10 +174,6 @@ luz_callback_metrics <- luz_callback(
   "metrics_callback",
   on_fit_begin = function() {
    ctx$metrics <- list(
-     train = list(),
-     valid = list()
-   )
-   ctx$losses <- list(
      train = list(),
      valid = list()
    )
@@ -198,7 +193,6 @@ luz_callback_metrics <- luz_callback(
       ctx$metrics$train[[ctx$epoch]],
       function(x) x$update(ctx$pred, ctx$target)
     )
-    ctx$losses$train[[ctx$epoch]] <- ctx$loss
   },
   on_train_end = function() {
     ctx$records$metrics$train[[ctx$epoch]] <- lapply(
@@ -221,7 +215,6 @@ luz_callback_metrics <- luz_callback(
       ctx$metrics$valid[[ctx$epoch]],
       function(x) x$update(ctx$pred, ctx$target)
     )
-    ctx$losses$valid[[ctx$epoch]] <- ctx$loss
   },
   on_valid_end = function() {
     ctx$records$metrics$valid[[ctx$epoch]] <- lapply(

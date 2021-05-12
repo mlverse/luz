@@ -10,12 +10,11 @@ luz_callback_metrics()
 Tracks metrics passed to \code{\link[=setup]{setup()}} during training and validation.
 }
 \details{
-This callback takes care of 3 \code{ctx} attributes:
+This callback takes care of 2 \code{ctx} attributes:
 \itemize{
 \item \code{ctx$metrics}: stores the metrics objects that are initialized once for epoch,
-and are further \code{update()}d and \code{compute()}d every batch.
-\item \code{ctx$losses}: stores the loss values in a named list with names ("train", "valid").
-Each one is a sequence of the loss values per epoch.
+and are further \code{update()}d and \code{compute()}d every batch. You will rarely need
+to work with these metrics.
 \item \code{ctx$records$metrics}: Stores metrics per training/validation and epoch. The
 structure is very similar to \code{ctx$losses}.
 }
