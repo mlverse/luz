@@ -205,6 +205,10 @@ luz_callback_metrics <- luz_callback(
       ctx$metrics$train[[ctx$epoch]],
       function(x) x$compute()
     )
+    names(ctx$records$metrics$train[[ctx$epoch]]) <- sapply(
+      ctx$metrics$train[[ctx$epoch]],
+      function(x) tolower(x$abbrev)
+    )
   },
   on_valid_begin = function() {
     ctx$metrics$valid[[ctx$epoch]] <- lapply(
@@ -223,6 +227,10 @@ luz_callback_metrics <- luz_callback(
     ctx$records$metrics$valid[[ctx$epoch]] <- lapply(
       ctx$metrics$valid[[ctx$epoch]],
       function(x) x$compute()
+    )
+    names(ctx$records$metrics$valid[[ctx$epoch]]) <- sapply(
+      ctx$metrics$valid[[ctx$epoch]],
+      function(x) tolower(x$abbrev)
     )
   },
   initialize_metric  = function(x) {
@@ -342,16 +350,16 @@ luz_callback_early_stopping <- luz_callback(
     inform(glue::glue("Early stopping at epoch {ctx$epoch} of {ctx$epochs}"))
   },
   find_quantity = function() {
+
     o <- strsplit(self$monitor, "_")[[1]]
     set <- o[[1]]
     qty <- o[[2]]
-    opt <- if (length(o) >= 3) o[[3]] else "opt"
+    opt <- if (length(o) >= 3) o[[3]] else NULL
 
-    out <- if (qty == "loss") {
-      as.numeric(utils::tail(ctx$losses[[set]], 1)[[1]][[opt]])
-    } else {
-      as.numeric(ctx$records$metrics[[set]][[qty]][[opt]])
-    }
+    out <- ctx$records$metrics[[set]][[ctx$epoch]][[qty]]
+
+    if (!is.null(opt))
+      out <- out[[opt]]
 
     if (length(out) != 1)
       rlang::abort(glue::glue("Expected monitored metric to be length 1, got {length(out)}"))

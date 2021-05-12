@@ -8,7 +8,7 @@ test_that("early stopping", {
   mod <- model %>%
     setup(
       loss = torch::nn_mse_loss(),
-      optimizer = optim_adam,
+      optimizer = torch::optim_adam,
     )
 
   expect_snapshot({
