@@ -193,4 +193,36 @@ luz_metric_loss_average <- luz_metric(
   }
 )
 
+#' Mean absolute error
+#'
+#' Computes the mean absolute error.
+#'
+#'
+#' @examples
+#' if (torch::torch_is_installed()) {
+#' library(torch)
+#' metric <- luz_metric_mae()
+#' metric <- metric$new()
+#' metric$update(torch_randn(100), torch_randn(100))
+#' metric$compute()
+#' }
+#'
+#' @family luz_metrics
+#' @export
+luz_metric_mae <- luz_metric(
+  abbrev = "MAE",
+  initialize = function() {
+    self$sum_abs_error <- torch::torch_tensor(0, dtype = torch::torch_float64())
+    self$n <- torch::torch_tensor(0, dtype = torch::torch_int64())
+  },
+  update = function(preds, targets) {
+    self$sum_abs_error <- self$sum_abs_error + torch::torch_sum(torch::torch_abs(preds - targets))$
+      to(device = "cpu", dtype = torch::torch_float64())
+    self$n <- self$n + targets$numel()
+  },
+  compute = function() {
+    as.array(self$sum_abs_error / self$n)
+  }
+)
+
 

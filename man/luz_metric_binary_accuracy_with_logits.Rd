@@ -30,6 +30,7 @@ metric$compute()
 \seealso{
 Other luz_metrics: 
 \code{\link{luz_metric_accuracy}()},
+\code{\link{luz_metric_mae}()},
 \code{\link{luz_metric}()}
 }
 \concept{luz_metrics}

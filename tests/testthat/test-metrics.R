@@ -27,3 +27,18 @@ test_that("Can create a simple metric", {
 
   expect_equal(m$compute(), 1)
 })
+
+test_that("mae works", {
+
+  x <- torch::torch_randn(100, 100)
+  y <- torch::torch_randn(100, 100)
+
+  m <- luz_metric_mae()
+  m <- m$new()
+
+  m$update(x, y)
+  o <- m$compute()
+  eo <- mean(abs(as.array(x) - as.array(y)))
+
+  expect_equal(o, eo, tolerance = 1e-5)
+})
