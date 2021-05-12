@@ -53,7 +53,7 @@ default_callbacks <- function() {
 #' A `luz_callback` that can be passed to [fit.luz_module_generator()].
 #' @family luz_callbacks
 #' @export
-luz_callback <- function(name, ..., private = NULL, active = NULL, parent_env = parent.frame(),
+luz_callback <- function(name = NULL, ..., private = NULL, active = NULL, parent_env = parent.frame(),
                          inherit = NULL) {
   make_class(
     name = name,
@@ -306,7 +306,7 @@ luz_callback_early_stopping <- luz_callback(
     self$baseline <- baseline
 
     if (!is.null(self$baseline))
-      private$current_best <- baseline
+      self$current_best <- baseline
 
     self$patience_counter <- 0L
   },
@@ -333,7 +333,7 @@ luz_callback_early_stopping <- luz_callback(
       self$patience_counter <- self$patience_counter + 1L
     }
 
-    if (self$patience_counter > self$patience) {
+    if (self$patience_counter >= self$patience) {
       rlang::signal("Early stopping", class = "early_stopping")
     }
 
@@ -358,13 +358,14 @@ luz_callback_early_stopping <- luz_callback(
 
     out
   },
-  compare = function(x, y) {
+  # returns TRUE when the new is better then previous acording to mode
+  compare = function(new, old) {
     out <- if (self$mode == "min")
-      x < y
+      (old - self$min_delta) > new
     else if (self$mode == "max")
-      x > y
+      (new - self$min_delta) > old
     else if (self$mode == "zero")
-      abs(x) < abs(y)
+      (abs(old) - self$min_delta) > abs(self$min_delta)
 
     as.array(out)
   }

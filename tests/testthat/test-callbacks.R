@@ -21,4 +21,28 @@ test_that("early stopping", {
     })
   })
 
+  expect_snapshot({
+    expect_message({
+      output <- mod %>%
+        set_hparams(input_size = 10, output_size = 1) %>%
+        fit(dl, verbose = TRUE, epochs = 25, callbacks = list(
+          luz_callback_early_stopping(monitor = "train_loss", patience = 5,
+                                      baseline = 0.001)
+        ))
+    })
+  })
+
+  x <- 0
+  output <- mod %>%
+    set_hparams(input_size = 10, output_size = 1) %>%
+    fit(dl, verbose = FALSE, epochs = 25, callbacks = list(
+      luz_callback_early_stopping(monitor = "train_loss", patience = 5,
+                                  baseline = 0.001),
+      luz_callback(on_early_stopping = function() {
+        x <<- 1
+      })()
+    ))
+
+  expect_equal(x, 1)
 })
+
