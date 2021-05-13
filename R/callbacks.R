@@ -264,6 +264,43 @@ luz_callback_train_valid <- luz_callback(
   }
 )
 
+monitor_metrics <- luz_callback(
+  name = "monitor_metrics",
+  initialize = function(monitor, mode, min_delta) {
+    self$monitor <- monitor
+    self$mode <- mode
+    self$min_delta <- min_delta
+  },
+  find_quantity = function() {
+
+    o <- strsplit(self$monitor, "_")[[1]]
+    set <- o[[1]]
+    qty <- o[[2]]
+    opt <- if (length(o) >= 3) o[[3]] else NULL
+
+    out <- ctx$records$metrics[[set]][[ctx$epoch]][[qty]]
+
+    if (!is.null(opt))
+      out <- out[[opt]]
+
+    if (length(out) != 1)
+      rlang::abort(glue::glue("Expected monitored metric to be length 1, got {length(out)}"))
+
+    out
+  },
+  # returns TRUE when the new is better then previous acording to mode
+  compare = function(new, old) {
+    out <- if (self$mode == "min")
+      (old - self$min_delta) > new
+    else if (self$mode == "max")
+      (new - self$min_delta) > old
+    else if (self$mode == "zero")
+      (abs(old) - self$min_delta) > abs(self$min_delta)
+
+    as.array(out)
+  }
+)
+
 #' Early stopping callback
 #'
 #' Stops training when a monitored metric stops improving
@@ -298,12 +335,13 @@ luz_callback_train_valid <- luz_callback(
 #' @export
 luz_callback_early_stopping <- luz_callback(
   name = "early_stopping_callback",
+  inherit = monitor_metrics,
   initialize = function(monitor = "valid_loss", min_delta = 0, patience = 0,
                         mode="min", baseline=NULL) {
-    self$monitor <- monitor
-    self$min_delta <- min_delta
+
+    super$initialize(monitor, mode, min_delta)
+
     self$patience <- patience
-    self$mode <- mode
     self$baseline <- baseline
 
     if (!is.null(self$baseline))
@@ -341,34 +379,82 @@ luz_callback_early_stopping <- luz_callback(
   },
   on_early_stopping = function() {
     inform(glue::glue("Early stopping at epoch {ctx$epoch} of {ctx$epochs}"))
+  }
+)
+
+#' Checkpoints model weights
+#'
+#' This saves checkpoints of the model according to the specified metric and
+#' behavior.
+#'
+#' @param path Path to save the model on disk. The path is interpolated with `glue`,
+#' so you can use any attribute within the [ctx] by using `'{ctx$epoch}'`. Specially
+#' the `epoch` and `monitor` quantities are already in the environment. If the specified
+#' path is a path to a directory (ends with `/` or `\`), then models are saved with the name given by
+#' `epoch-{epoch:02d}-{self$monitor}-{monitor:.3f}.pt`. See more in the examples.
+#' You can use [sprintf()] to quickly format quantities, for example:`'{epoch:02d}'`.
+#' @inheritParams luz_callback_early_stopping
+#' @param save_best_only if `TRUE` models are only saved if they have an improvement
+#' over a previously saved model.
+#' @param min_delta Minimum difference to consider as improvement. Only used when
+#' `save_best_only=TRUE`.
+#'
+#' @note `mode` and `min_delta` are only used when `save_best_only=TRUE`.
+#' `save_best_only` will overwrite the saved models if the `path` parameter
+#' don't differentiate by epochs.
+#'
+#' @examples
+#' luz_callback_checkpoint(path= "path/to/dir")
+#' luz_callback_checkpoint(path= "path/to/dir/epoch-{epoch:02d}/model.pt")
+#' luz_callback_checkpoint(path= "path/to/dir/epoch-{epoch:02d}/model-{monitor:.2f}.pt")
+#'
+#' @family luz_callbacks
+#' @export
+luz_callback_model_checkpoint <- luz_callback(
+  name = "model_checkpoint_callback",
+  inherit = monitor_metrics,
+  initialize = function(path, monitor = "valid_loss", save_best_only = FALSE,
+                        mode = "min", min_delta = 0) {
+
+    if (grepl("/$", path) || grepl("\\\\$", path)) {
+      path <- paste0(path, "epoch-{epoch:02d}-{self$monitor}-{monitor:.3f}.pt")
+    }
+
+    self$path <- path
+    self$save_best_only <- save_best_only
+
+    if (self$save_best_only)
+      self$current_best <- 0
+
+    super$initialize(monitor, mode, min_delta)
   },
-  find_quantity = function() {
+  on_epoch_end = function() {
 
-    o <- strsplit(self$monitor, "_")[[1]]
-    set <- o[[1]]
-    qty <- o[[2]]
-    opt <- if (length(o) >= 3) o[[3]] else NULL
+    qty <- self$find_quantity()
+    if (is.null(self$current_best))
+      self$current_best <- qty
 
-    out <- ctx$records$metrics[[set]][[ctx$epoch]][[qty]]
+    monitor <- qty
+    epoch <- ctx$epoch
 
-    if (!is.null(opt))
-      out <- out[[opt]]
+    path <- self$fmt_path(self$path)
 
-    if (length(out) != 1)
-      rlang::abort(glue::glue("Expected monitored metric to be length 1, got {length(out)}"))
-
-    out
+    if (self$save_best_only) {
+      if (self$compare(qty, self$current_best)) {
+        # means that new qty is better then previous
+        self$current_best <- qty
+        fs::dir_create(fs::path_dir(path), recurse = TRUE)
+        fs::file_create(path)
+        luz_save_model_weights(ctx, path)
+      }
+    } else {
+      fs::dir_create(fs::path_dir(path), recurse = TRUE)
+      fs::file_create(path)
+      luz_save_model_weights(ctx, path)
+    }
   },
-  # returns TRUE when the new is better then previous acording to mode
-  compare = function(new, old) {
-    out <- if (self$mode == "min")
-      (old - self$min_delta) > new
-    else if (self$mode == "max")
-      (new - self$min_delta) > old
-    else if (self$mode == "zero")
-      (abs(old) - self$min_delta) > abs(self$min_delta)
-
-    as.array(out)
+  fmt_path = function(path) {
+    glue::glue(path, .transformer = sprintf_transformer, .envir = rlang::caller_env())
   }
 )
 

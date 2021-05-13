@@ -81,8 +81,6 @@ luz_load_model_weights <- function(obj, path) {
 #' @rdname luz_load_model_weights
 #' @export
 luz_save_model_weights <- function(obj, path) {
-  if (!inherits(obj, "luz_module_fitted"))
-    rlang::abort("Expected 'luz_module_fitted_objects' and got {class(obj)[1]}")
   # 'package:luz' may not be available when loading
   suppressWarnings({
     o <- torch::torch_save(obj$model, path)

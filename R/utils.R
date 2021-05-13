@@ -126,4 +126,17 @@ make_class <- function(name, ..., private, active, inherit, parent_env, .init_fu
   f
 }
 
+# from https://glue.tidyverse.org/articles/transformers.html
+sprintf_transformer <- function(text, envir) {
+  m <- regexpr(":.+$", text)
+  if (m != -1) {
+    format <- substring(regmatches(text, m), 2)
+    regmatches(text, m) <- ""
+    res <- eval(parse(text = text, keep.source = FALSE), envir)
+    do.call(sprintf, list(glue::glue("%{format}"), res))
+  } else {
+    eval(parse(text = text, keep.source = FALSE), envir)
+  }
+}
+
 

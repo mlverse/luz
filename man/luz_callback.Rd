@@ -136,6 +136,7 @@ print_callback <- luz_callback(
 Other luz_callbacks: 
 \code{\link{luz_callback_early_stopping}()},
 \code{\link{luz_callback_metrics}()},
+\code{\link{luz_callback_model_checkpoint}()},
 \code{\link{luz_callback_progress}()},
 \code{\link{luz_callback_train_valid}()}
 }
