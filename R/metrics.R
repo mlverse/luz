@@ -130,6 +130,7 @@ luz_metric_accuracy <- luz_metric(
 #' @export
 luz_metric_binary_accuracy_with_logits <- luz_metric(
   abbrev = "Acc",
+  inherit = luz_metric_accuracy,
   initialize = function(threshold = 0.5) {
     self$correct <- 0
     self$total <- 0
@@ -149,20 +150,13 @@ luz_metric_binary_accuracy_with_logits <- luz_metric(
   }
 )
 
-#' Internal metric that is used to track the loss
-#' @noRd
-luz_metric_loss_average <- luz_metric(
-  abbrev = "Loss",
+luz_metric_average <- luz_metric(
+  name = "average",
   initialize = function() {
     self$values <- list()
   },
-  update = function(preds, targets) {
-    if (length(ctx$loss) == 1)
-      loss <- ctx$loss[[1]]
-    else
-      loss <- ctx$loss
-
-    self$values[[length(self$values) + 1]] <- loss
+  update = function(values, ...) {
+    self$values[[length(self$values) + 1]] <- values
   },
   average_metric = function(x) {
     if (is.numeric(x[[1]]) || inherits(x[[1]], "torch_tensor"))
@@ -190,6 +184,21 @@ luz_metric_loss_average <- luz_metric(
       as.numeric(x$to(device = "cpu"))
     else
       rlang::abort("Expected a numeric value or a tensor.")
+  }
+)
+
+#' Internal metric that is used to track the loss
+#' @noRd
+luz_metric_loss_average <- luz_metric(
+  abbrev = "Loss",
+  inherit = luz_metric_average,
+  update = function(preds, targets) {
+    if (length(ctx$loss) == 1)
+      loss <- ctx$loss[[1]]
+    else
+      loss <- ctx$loss
+
+    super$update(loss)
   }
 )
 
@@ -222,6 +231,29 @@ luz_metric_mae <- luz_metric(
   },
   compute = function() {
     as.array(self$sum_abs_error / self$n)
+  }
+)
+
+
+luz_metric_yardstick <- luz_metric(
+  name = "yardstick_metric",
+  initialize = function(metric_nm, ...) {
+    self$abbrev <- nm
+    self$metric_fn <- getFromNamespace(paste0(nm, "_vec"), "yardstick")
+    self$args <- rlang::list2(...)
+  },
+  update = function(preds, targets) {
+    values <- do.call(
+      self$metric_fn,
+      append(
+        seld$args,
+        list(
+          truth = as.array(targets$cpu()),
+          estimate = as.array(preds$cpu())
+        )
+      )
+    )
+    super$update(values)
   }
 )
 
