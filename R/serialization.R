@@ -1,0 +1,60 @@
+#' Saves luz objects to disk
+#'
+#' ALlows saving luz fitted models to the disk.
+#'
+#' @param obj an object of class 'luz_module_fitted' as returned by
+#' [fit.luz_module_generator()].
+#' @param path path in file system so save the object.
+#' @param ... currently unused.
+#'
+#' @family luz_save
+#' @export
+luz_save <- function(obj, path, ...) {
+  ellipsis::check_dots_empty()
+
+  if (!inherits(obj, "luz_module_fitted"))
+    rlang::abort("Luz save only works with 'luz_module_fitted_objects' and got {class(obj)[1]}")
+
+  # avoid warning because luz will always be available when reloading
+  # because we reload with `luz_load()`.
+  suppressWarnings({
+    serialized_model <- model_to_raw(obj$ctx$model)
+    obj$ctx$.serialized_model <- serialized_model
+    o <- saveRDS(obj, path)
+  })
+
+  o
+}
+
+
+
+#' Load trained model
+#'
+#' @inheritParams luz_save
+#'
+#' @family luz_save
+#' @export
+luz_load <- function(path) {
+  obj <- readRDS(file = path)
+  model <- model_from_raw(obj$ctx$.serialized_model)
+  bind_context(model, obj$ctx)
+  obj$model <- model
+  obj$ctx$model <- model
+  obj
+}
+
+
+model_to_raw <- function(model) {
+  con <- rawConnection(raw(), open = "wr")
+  torch::torch_save(model, con)
+  on.exit({close(con)}, add = TRUE)
+  r <- rawConnectionValue(con)
+  r
+}
+
+model_from_raw <- function(object) {
+  con <- rawConnection(object)
+  on.exit({close(con)}, add = TRUE)
+  module <- torch::torch_load(con)
+  module
+}
