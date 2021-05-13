@@ -94,6 +94,12 @@
     <loc>/reference/luz_metric_mae.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_metric_mse.html</loc>
+  </url>
+  <url>
+    <loc>/reference/luz_metric_rmse.html</loc>
+  </url>
+  <url>
     <loc>/reference/luz_save.html</loc>
   </url>
   <url>
