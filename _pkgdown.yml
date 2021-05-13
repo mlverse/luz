@@ -34,3 +34,7 @@ reference:
   - title: "Accelerator"
     contents:
     - accelerator
+  - title: "Serialization"
+    contents:
+    - luz_save
+    - luz_load

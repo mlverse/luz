@@ -1,6 +1,15 @@
 #' Saves luz objects to disk
 #'
-#' ALlows saving luz fitted models to the disk.
+#' Allows saving luz fitted models to the disk. Objects can be loaded back with
+#' [luz_load()].
+#'
+#' @note Objects are saved as plain `.rds` files but `obj$model` is serialized
+#' with `torch_save` before saving it.
+#'
+#' @section Warning:
+#' The [ctx] is naively serialized. Ie, we only use [saveRDS()] to serialize it.
+#' Don't expect `luz_save` to work correctly if you have unserializable objects
+#' in the [ctx] like `torch_tensor`s and external pointers in general.
 #'
 #' @param obj an object of class 'luz_module_fitted' as returned by
 #' [fit.luz_module_generator()].
@@ -30,6 +39,8 @@ luz_save <- function(obj, path, ...) {
 
 #' Load trained model
 #'
+#' Loads a fitted model. See documentation in [luz_save()].
+#'
 #' @inheritParams luz_save
 #'
 #' @family luz_save
@@ -40,6 +51,7 @@ luz_load <- function(path) {
   bind_context(model, obj$ctx)
   obj$model <- model
   obj$ctx$model <- model
+  rm(envir = obj$ctx, list = ".serialized_model")
   obj
 }
 

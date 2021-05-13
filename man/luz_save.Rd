@@ -15,8 +15,20 @@ luz_save(obj, path, ...)
 \item{...}{currently unused.}
 }
 \description{
-ALlows saving luz fitted models to the disk.
+Allows saving luz fitted models to the disk. Objects can be loaded back with
+\code{\link[=luz_load]{luz_load()}}.
 }
+\note{
+Objects are saved as plain \code{.rds} files but \code{obj$model} is serialized
+with \code{torch_save} before saving it.
+}
+\section{Warning}{
+
+The \link{ctx} is naively serialized. Ie, we only use \code{\link[=saveRDS]{saveRDS()}} to serialize it.
+Don't expect \code{luz_save} to work correctly if you have unserializable objects
+in the \link{ctx} like \code{torch_tensor}s and external pointers in general.
+}
+
 \seealso{
 Other luz_save: 
 \code{\link{luz_load}()}

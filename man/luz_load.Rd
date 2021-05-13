@@ -10,7 +10,7 @@ luz_load(path)
 \item{path}{path in file system so save the object.}
 }
 \description{
-Load trained model
+Loads a fitted model. See documentation in \code{\link[=luz_save]{luz_save()}}.
 }
 \seealso{
 Other luz_save: 
