@@ -22,7 +22,7 @@ luz_save <- function(obj, path, ...) {
   ellipsis::check_dots_empty()
 
   if (!inherits(obj, "luz_module_fitted"))
-    rlang::abort("Luz save only works with 'luz_module_fitted_objects' and got {class(obj)[1]}")
+    rlang::abort("luz_save only works with 'luz_module_fitted_objects' and got {class(obj)[1]}")
 
   # avoid warning because luz will always be available when reloading
   # because we reload with `luz_load()`.
@@ -53,6 +53,41 @@ luz_load <- function(path) {
   obj$ctx$model <- model
   rm(envir = obj$ctx, list = ".serialized_model")
   obj
+}
+
+#' Loads model weights into a fitted object.
+#'
+#' This can be useful when you have saved model checkpoints during training and
+#' want to reload the best checkpoint in the end.
+#'
+#' @section Warning:
+#' `luz_save_model_weights` operates inplace, ie modifies the model object to contain the
+#' new weights.
+#'
+#' @returns
+#' Returns `NULL` invisibly.
+#'
+#' @param obj luz object to which you want to copy the new weights.
+#' @param path path to saved model in disk.
+#'
+#' @export
+luz_load_model_weights <- function(obj, path) {
+  saved_model <- torch::torch_load(path)
+  obj$model$load_state_dict(saved_model$state_dict())
+  # we return NULL to make sure people don't expect it to return a copy of obj
+  invisible(NULL)
+}
+
+#' @rdname luz_load_model_weights
+#' @export
+luz_save_model_weights <- function(obj, path) {
+  if (!inherits(obj, "luz_module_fitted"))
+    rlang::abort("Expected 'luz_module_fitted_objects' and got {class(obj)[1]}")
+  # 'package:luz' may not be available when loading
+  suppressWarnings({
+    o <- torch::torch_save(obj$model, path)
+  })
+  invisible(o)
 }
 
 

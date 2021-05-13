@@ -82,3 +82,39 @@ test_that("serialization works when model uses `ctx` in forward", {
     as.array(torch::torch_zeros(100,1))
   )
 })
+
+test_that("save and load model weights", {
+
+  model <- get_model()
+  dl <- get_dl()
+
+  mod <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam,
+    )
+
+  output <- mod %>%
+    set_hparams(input_size = 10, output_size = 1) %>%
+    fit(dl, verbose = FALSE, epochs = 1)
+
+  pars <- lapply(output$model$parameters, function(x) x$clone())
+
+  tmp <- tempfile(fileext = "rds")
+  luz_save_model_weights(output, tmp)
+
+  # modify parameters
+  torch::with_no_grad({
+    output$model$fc$weight$add_(5)
+  })
+
+  expect_not_equal_to_tensor(output$model$parameters$fc.weight, pars$fc.weight)
+
+  #restore parameters
+  luz_load_model_weights(output, tmp)
+
+  pars2 <- output$model$parameters
+
+  expect_equal_to_tensor(pars2$fc.weight, pars$fc.weight)
+  expect_equal_to_tensor(pars2$fc.bias, pars$fc.bias)
+})
