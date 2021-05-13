@@ -42,3 +42,28 @@ test_that("mae works", {
 
   expect_equal(o, eo, tolerance = 1e-5)
 })
+
+test_that("yardstick metrics", {
+
+  x <- torch::torch_randn(100)
+  y <- torch::torch_randn(100)
+
+  m <- luz_metric_yardstick("mae")
+  m <- m$new()
+
+  m$update(x, y)
+  o <- m$compute()
+  eo <- mean(abs(as.array(x) - as.array(y)))
+
+  expect_equal(o, eo, tolerance = 1e-5)
+
+  m <- luz_metric_yardstick("rmse")
+  m <- m$new()
+
+  m$update(x, y)
+  o <- m$compute()
+  eo <- sqrt(mean((as.array(x) - as.array(y))^2))
+
+  expect_equal(o, eo, tolerance = 1e-5)
+
+})

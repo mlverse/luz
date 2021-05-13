@@ -234,22 +234,64 @@ luz_metric_mae <- luz_metric(
   }
 )
 
-
+#' Computes the average for any yardstick metric
+#'
+#' Allows using any yardstick metric with luz.
+#'
+#' @param metric_nm Name of the metric from yardstick (without the `_vec`).
+#' For example `'accuracy'`, `'mae'`, etc.
+#' @param transform A function of `preds` and `targets` that will be applied
+#' to the values before computing the metric. This function is called after
+#' moving `preds` and `targets` to R vectors.
+#' @param ... Additional parameters forwarded to the metric implementation in
+#' yardstick.
+#'
+#' @section Warning:
+#' The only transformation we do on the predicted values and in the
+#' moving to R with [torch::as_array()]. However, many metrics in yardstick
+#' expect that values are factors, or in other formats. In that case you can use
+#' the `transform` argument to specify a transformation.
+#'
+#' @examples
+#' if (torch::torch_is_installed()) {
+#' x <- torch::torch_randn(100)
+#' y <- torch::torch_randn(100)
+#'
+#' m <- luz_metric_yardstick("mae")
+#' m <- m$new()
+#'
+#' m$update(x, y)
+#' o <- m$compute()
+#' }
+#' @returns
+#' A luz metric object.
+#'
+#' @export
 luz_metric_yardstick <- luz_metric(
   name = "yardstick_metric",
-  initialize = function(metric_nm, ...) {
-    self$abbrev <- nm
-    self$metric_fn <- getFromNamespace(paste0(nm, "_vec"), "yardstick")
+  inherit = luz_metric_average,
+  initialize = function(metric_nm, transform = NULL, ...) {
+    self$abbrev <- metric_nm
+    self$metric_fn <- getFromNamespace(paste0(metric_nm, "_vec"), "yardstick")
     self$args <- rlang::list2(...)
+    self$transform <- transform
   },
   update = function(preds, targets) {
+    preds <- as.array(preds$cpu())
+    targets <- as.array(targets$cpu())
+
+    if (!is.null(self$transform))
+      transformed <- self$transform(preds, targets)
+    else
+      transformed <- list(preds, targets)
+
     values <- do.call(
       self$metric_fn,
       append(
-        seld$args,
+        self$args,
         list(
-          truth = as.array(targets$cpu()),
-          estimate = as.array(preds$cpu())
+          truth = transformed[[2]],
+          estimate = transformed[[1]]
         )
       )
     )
