@@ -73,6 +73,12 @@
     <loc>/reference/luz_callback_train_valid.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_load.html</loc>
+  </url>
+  <url>
+    <loc>/reference/luz_load_model_weights.html</loc>
+  </url>
+  <url>
     <loc>/reference/luz_metric.html</loc>
   </url>
   <url>
@@ -83,6 +89,9 @@
   </url>
   <url>
     <loc>/reference/luz_metric_mae.html</loc>
+  </url>
+  <url>
+    <loc>/reference/luz_save.html</loc>
   </url>
   <url>
     <loc>/reference/pipe.html</loc>
