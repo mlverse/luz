@@ -404,9 +404,9 @@ luz_callback_early_stopping <- luz_callback(
 #' don't differentiate by epochs.
 #'
 #' @examples
-#' luz_callback_checkpoint(path= "path/to/dir")
-#' luz_callback_checkpoint(path= "path/to/dir/epoch-{epoch:02d}/model.pt")
-#' luz_callback_checkpoint(path= "path/to/dir/epoch-{epoch:02d}/model-{monitor:.2f}.pt")
+#' luz_callback_model_checkpoint(path= "path/to/dir")
+#' luz_callback_model_checkpoint(path= "path/to/dir/epoch-{epoch:02d}/model.pt")
+#' luz_callback_model_checkpoint(path= "path/to/dir/epoch-{epoch:02d}/model-{monitor:.2f}.pt")
 #'
 #' @family luz_callbacks
 #' @export
