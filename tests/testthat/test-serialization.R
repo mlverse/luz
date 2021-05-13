@@ -31,7 +31,10 @@ test_that("serialization works as expected", {
   params2 <- output$model$state_dict()
   actual_predictions <- predict(output, test)
 
-  expect_equal(as.array(actual_predictions), as.array(expected_predictions))
+  expect_equal(
+    as.array(actual_predictions$to(device="cpu")),
+    as.array(expected_predictions)$to(device="cpu")
+  )
 })
 
 test_that("serialization works when model uses `ctx` in forward", {
@@ -74,6 +77,8 @@ test_that("serialization works when model uses `ctx` in forward", {
 
   output <- luz_load(path)
   pred <- predict(output, dl)
-  expect_equal(as.array(pred), as.array(torch::torch_zeros(100,1)))
-
+  expect_equal(
+    as.array(pred$to(device="cpu")),
+    as.array(torch::torch_zeros(100,1))
+  )
 })
