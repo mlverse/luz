@@ -98,12 +98,57 @@ don't differentiate by epochs.</p>
     </div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples" aria-hidden="true"></a>Examples</h2>
-    <pre class="examples"><code class="sourceCode R"><span class="r-in"><span class="fu">luz_callback_checkpoint</span><span class="op">(</span>path<span class="op">=</span> <span class="st">"path/to/dir"</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in luz_callback_checkpoint(path = "path/to/dir")</span> could not find function "luz_callback_checkpoint"</span>
-<span class="r-in"><span class="fu">luz_callback_checkpoint</span><span class="op">(</span>path<span class="op">=</span> <span class="st">"path/to/dir/epoch-{epoch:02d}/model.pt"</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in luz_callback_checkpoint(path = "path/to/dir/epoch-{epoch:02d}/model.pt")</span> could not find function "luz_callback_checkpoint"</span>
-<span class="r-in"><span class="fu">luz_callback_checkpoint</span><span class="op">(</span>path<span class="op">=</span> <span class="st">"path/to/dir/epoch-{epoch:02d}/model-{monitor:.2f}.pt"</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in luz_callback_checkpoint(path = "path/to/dir/epoch-{epoch:02d}/model-{monitor:.2f}.pt")</span> could not find function "luz_callback_checkpoint"</span>
+    <pre class="examples"><code class="sourceCode R"><span class="r-in"><span class="fu">luz_callback_model_checkpoint</span><span class="op">(</span>path<span class="op">=</span> <span class="st">"path/to/dir"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;model_checkpoint_callback&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Inherits from: &lt;monitor_metrics&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Public:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     call: function (callback_nm) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     clone: function (deep = FALSE) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     compare: function (new, old) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     find_quantity: function () </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     fmt_path: function (path) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function () </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     min_delta: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     mode: min</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     monitor: valid_loss</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     on_epoch_end: function () </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     path: path/to/dir</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     save_best_only: FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     set_ctx: function (ctx) </span>
+<span class="r-in"><span class="fu">luz_callback_model_checkpoint</span><span class="op">(</span>path<span class="op">=</span> <span class="st">"path/to/dir/epoch-{epoch:02d}/model.pt"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;model_checkpoint_callback&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Inherits from: &lt;monitor_metrics&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Public:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     call: function (callback_nm) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     clone: function (deep = FALSE) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     compare: function (new, old) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     find_quantity: function () </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     fmt_path: function (path) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function () </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     min_delta: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     mode: min</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     monitor: valid_loss</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     on_epoch_end: function () </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     path: path/to/dir/epoch-{epoch:02d}/model.pt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     save_best_only: FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     set_ctx: function (ctx) </span>
+<span class="r-in"><span class="fu">luz_callback_model_checkpoint</span><span class="op">(</span>path<span class="op">=</span> <span class="st">"path/to/dir/epoch-{epoch:02d}/model-{monitor:.2f}.pt"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;model_checkpoint_callback&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Inherits from: &lt;monitor_metrics&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Public:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     call: function (callback_nm) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     clone: function (deep = FALSE) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     compare: function (new, old) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     find_quantity: function () </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     fmt_path: function (path) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     initialize: function () </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     min_delta: 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     mode: min</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     monitor: valid_loss</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     on_epoch_end: function () </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     path: path/to/dir/epoch-{epoch:02d}/model-{monitor:.2f}.pt</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     save_best_only: FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     set_ctx: function (ctx) </span>
 <span class="r-in"></span>
 </code></pre>
   </div>
