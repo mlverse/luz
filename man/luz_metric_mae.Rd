@@ -23,6 +23,8 @@ metric$compute()
 Other luz_metrics: 
 \code{\link{luz_metric_accuracy}()},
 \code{\link{luz_metric_binary_accuracy_with_logits}()},
+\code{\link{luz_metric_mse}()},
+\code{\link{luz_metric_rmse}()},
 \code{\link{luz_metric}()}
 }
 \concept{luz_metrics}

@@ -42,3 +42,33 @@ test_that("mae works", {
 
   expect_equal(o, eo, tolerance = 1e-5)
 })
+
+test_that("mse works", {
+
+  x <- torch::torch_randn(100, 100)
+  y <- torch::torch_randn(100, 100)
+
+  m <- luz_metric_mse()
+  m <- m$new()
+
+  m$update(x, y)
+  o <- m$compute()
+  eo <- mean((as.array(x) - as.array(y))^2)
+
+  expect_equal(o, eo, tolerance = 1e-5)
+})
+
+test_that("rmse works", {
+
+  x <- torch::torch_randn(100, 100)
+  y <- torch::torch_randn(100, 100)
+
+  m <- luz_metric_rmse()
+  m <- m$new()
+
+  m$update(x, y)
+  o <- m$compute()
+  eo <- sqrt(mean((as.array(x) - as.array(y))^2))
+
+  expect_equal(o, eo, tolerance = 1e-5)
+})

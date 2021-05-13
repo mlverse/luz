@@ -225,4 +225,40 @@ luz_metric_mae <- luz_metric(
   }
 )
 
+#' Mean squared error
+#'
+#' Computes the mean squared error
+#'
+#' @returns
+#' A luz_metric object.
+#'
+#' @family luz_metrics
+#' @export
+luz_metric_mse <- luz_metric(
+  abbrev = "MSE",
+  initialize = function() {
+    self$sum_error <- torch::torch_tensor(0, dtype = torch::torch_float64())
+    self$n <- torch::torch_tensor(0, dtype = torch::torch_int64())
+  },
+  update = function(preds, targets) {
+    self$sum_error <- self$sum_error + torch::torch_sum(torch::torch_pow(exponent = 2, preds - targets))$
+      to(device = "cpu", dtype = torch::torch_float64())
+    self$n <- self$n + targets$numel()
+  },
+  compute = function() {
+    as.array(self$sum_error / self$n)
+  }
+)
 
+#' Root mean squared error
+#'
+#' Computes the root mean squared error.
+#'
+#' @family luz_metrics
+#' @export
+luz_metric_rmse <- luz_metric(
+  inherit = luz_metric_mse,
+  compute = function() {
+    sqrt(super$compute())
+  }
+)
