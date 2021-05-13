@@ -3,8 +3,8 @@
 get_ds <- torch::dataset(
   initialize = function(len = 100, x_size = 10, y_size = 1, fixed_values = FALSE) {
     self$len <- len
-    self$x <- torch_randn(size = c(len, x_size))
-    self$y <- torch_randn(size = c(len, y_size))
+    self$x <- torch::torch_randn(size = c(len, x_size))
+    self$y <- torch::torch_randn(size = c(len, y_size))
   },
   .getitem = function(i) {
     list(
