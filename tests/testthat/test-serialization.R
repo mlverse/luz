@@ -33,7 +33,7 @@ test_that("serialization works as expected", {
 
   expect_equal(
     as.array(actual_predictions$to(device="cpu")),
-    as.array(expected_predictions)$to(device="cpu")
+    as.array(expected_predictions$to(device="cpu"))
   )
 })
 
