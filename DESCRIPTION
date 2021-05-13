@@ -22,7 +22,8 @@ Imports:
     R6,
     generics,
     purrr,
-    ellipsis
+    ellipsis,
+    fs
 Suggests: 
     knitr,
     rmarkdown,
