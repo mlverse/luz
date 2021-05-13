@@ -107,12 +107,50 @@ luz_metric_accuracy <- luz_metric(
   }
 )
 
+#' Binary accuracy
+#'
+#' Computes the accuracy for binary classification problems where the
+#' model returns probabilities. Commonly used when the loss is [torch::nn_bce_loss()].
+#'
+#' @inheritParams luz_metric_binary_accuracy_with_logits
+#'
+#' @examples
+#' if (torch::torch_is_installed()) {
+#' library(torch)
+#' metric <- luz_metric_binary_accuracy(threshold = 0.5)
+#' metric <- metric$new()
+#' metric$update(torch_rand(100), torch::torch_randint(0, 1, size = 100))
+#' metric$compute()
+#' }
+#' @family luz_metrics
+#' @export
+luz_metric_binary_accuracy <- luz_metric(
+  abbrev = "Acc",
+  initialize = function(threshold = 0.5) {
+    self$correct <- 0
+    self$total <- 0
+    self$threshold <- threshold
+  },
+  update = function(preds, targets) {
+    preds <- (preds > self$threshold)$
+      to(dtype = torch::torch_float())
+    self$correct <- self$correct + (preds == targets)$
+      to(dtype = torch::torch_float())$
+      sum()$
+      item()
+    self$total <- self$total + preds$numel()
+  },
+  compute = function() {
+    self$correct/self$total
+  }
+)
+
 #' Binary accuracy with logits
 #'
 #' Computes accuracy for binary classification problems where the model
 #' return logits. Commonly used together with [torch::nn_bce_with_logits_loss()].
 #'
-#' Probabilities are generated using `nnf_sigmoid()` and `threshold` is used to
+#' Probabilities are generated using [torch::nnf_sigmoid()] and `threshold` is used to
 #' classify between 0 or 1.
 #'
 #' @param threshold value used to classifiy observations between 0 and 1.
@@ -130,22 +168,9 @@ luz_metric_accuracy <- luz_metric(
 #' @export
 luz_metric_binary_accuracy_with_logits <- luz_metric(
   abbrev = "Acc",
-  initialize = function(threshold = 0.5) {
-    self$correct <- 0
-    self$total <- 0
-    self$threshold <- threshold
-  },
+  inherit = luz_metric_binary_accuracy,
   update = function(preds, targets) {
-    preds <- (torch::torch_sigmoid(preds) > self$threshold)$
-      to(dtype = torch::torch_float())
-    self$correct <- self$correct + (preds == targets)$
-      to(dtype = torch::torch_float())$
-      sum()$
-      item()
-    self$total <- self$total + preds$numel()
-  },
-  compute = function() {
-    self$correct/self$total
+    super$update(torch::torch_sigmoid(preds), targets)
   }
 )
 

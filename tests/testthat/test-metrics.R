@@ -72,3 +72,19 @@ test_that("rmse works", {
 
   expect_equal(o, eo, tolerance = 1e-5)
 })
+
+test_that("binary accuracy with logits", {
+
+  m <- luz_metric_binary_accuracy_with_logits(threshold = 0.5)
+  m <- m$new()
+
+  x <- torch_randn(100)
+  y <- torch_randint(0, 1, 100)
+
+  m$update(x, y)
+  expect_equal(
+    m$compute(),
+    mean(as.array(x > 0) == as.array(y))
+  )
+
+})

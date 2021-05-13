@@ -16,6 +16,7 @@ Computes the mean squared error
 Other luz_metrics: 
 \code{\link{luz_metric_accuracy}()},
 \code{\link{luz_metric_binary_accuracy_with_logits}()},
+\code{\link{luz_metric_binary_accuracy}()},
 \code{\link{luz_metric_mae}()},
 \code{\link{luz_metric_rmse}()},
 \code{\link{luz_metric}()}
