@@ -67,6 +67,9 @@
     <loc>/reference/luz_callback_metrics.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_callback_model_checkpoint.html</loc>
+  </url>
+  <url>
     <loc>/reference/luz_callback_progress.html</loc>
   </url>
   <url>
