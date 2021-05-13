@@ -65,7 +65,7 @@ test_that("serialization works when model uses `ctx` in forward", {
 
 
   pred <- predict(output, dl)
-  expect_equal(as.array(pred), as.array(torch::torch_zeros(100,1)))
+  expect_equal(as.array(pred$cpu()), as.array(torch::torch_zeros(100,1)))
 
   output$ctx$training <- TRUE
 
