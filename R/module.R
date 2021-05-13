@@ -242,6 +242,8 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
     })
 
   ctx$call_callbacks("on_fit_end")
+  clean_context(ctx)
+
   structure(
     list(
       model  = ctx$model,
@@ -281,6 +283,10 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
   ctx$handlers <- list()
   ctx$output <- list()
   ctx$callbacks <- initialize_callbacks(callbacks, ctx)
+
+  ctx$call_callbacks <- function(name) {
+    call_all_callbacks(ctx$callbacks, name)
+  }
 
   predict_fn <- if (is.null(ctx$model$predict)) ctx$model else ctx$model$predict
 
@@ -374,3 +380,24 @@ initialize_callbacks <- function(callbacks, ctx) {
 #' @includeRmd man/rmd/ctx.Rmd details
 #' @rdname ctx
 NULL
+
+clean_context <- function(ctx) {
+  rm(envir = ctx, list = c(
+    "callbacks",
+    "metrics",
+    "iter",
+    "target",
+    "batch",
+    "accelerator",
+    "pred",
+    "opt",
+    "opt_name",
+    "data",
+    "handlers",
+    "valid_data",
+    "loss",
+    "input",
+    "loss_grad",
+    "call_callbacks"
+  ))
+}

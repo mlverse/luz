@@ -37,3 +37,4 @@ Collate:
     'metrics.R'
     'module.R'
     'reexports.R'
+    'serialization.R'
