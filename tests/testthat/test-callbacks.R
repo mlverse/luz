@@ -110,6 +110,8 @@ test_that("model checkpoint callback works", {
 
 test_that("callback lr scheduler", {
 
+  skip_on_os("windows")
+
   torch::torch_manual_seed(1)
   set.seed(1)
 
