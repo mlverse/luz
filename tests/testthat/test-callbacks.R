@@ -107,3 +107,30 @@ test_that("model checkpoint callback works", {
   expect_length(files, 5)
 
 })
+
+test_that("callback lr scheduler", {
+
+  torch::torch_manual_seed(1)
+  set.seed(1)
+
+  model <- get_model()
+  dl <- get_dl()
+
+  mod <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam,
+    )
+
+  expect_snapshot({
+    expect_message({
+      output <- mod %>%
+        set_hparams(input_size = 10, output_size = 1) %>%
+        fit(dl, verbose = FALSE, epochs = 5, callbacks = list(
+          luz_callback_lr_scheduler(torch::lr_multiplicative, verbose = TRUE,
+                                    lr_lambda = function(epoch) 0.5)
+        ))
+    })
+  })
+
+})

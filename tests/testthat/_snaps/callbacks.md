@@ -89,3 +89,18 @@
       Epoch 25/25
       Train metrics: Loss: 0.8749 - MAE: 0.7801
 
+# callback lr scheduler
+
+    Code
+      expect_message({
+        output <- mod %>% set_hparams(input_size = 10, output_size = 1) %>% fit(dl,
+          verbose = FALSE, epochs = 5, callbacks = list(luz_callback_lr_scheduler(
+            torch::lr_multiplicative, verbose = TRUE, lr_lambda = function(epoch) 0.5)))
+      })
+    Message <message>
+      Adjusting learning rate of group 1 to 0.0005
+      Adjusting learning rate of group 1 to 0.0003
+      Adjusting learning rate of group 1 to 0.0001
+      Adjusting learning rate of group 1 to 0.0001
+      Adjusting learning rate of group 1 to 0.0000
+

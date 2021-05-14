@@ -18,6 +18,7 @@ Printing can be disabled by passing \code{verbose=FALSE} to \code{\link[=fit.luz
 \seealso{
 Other luz_callbacks: 
 \code{\link{luz_callback_early_stopping}()},
+\code{\link{luz_callback_lr_scheduler}()},
 \code{\link{luz_callback_metrics}()},
 \code{\link{luz_callback_model_checkpoint}()},
 \code{\link{luz_callback_train_valid}()},

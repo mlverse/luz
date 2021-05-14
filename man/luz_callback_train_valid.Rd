@@ -27,6 +27,7 @@ used by default in \code{\link[=fit.luz_module_generator]{fit.luz_module_generat
 \seealso{
 Other luz_callbacks: 
 \code{\link{luz_callback_early_stopping}()},
+\code{\link{luz_callback_lr_scheduler}()},
 \code{\link{luz_callback_metrics}()},
 \code{\link{luz_callback_model_checkpoint}()},
 \code{\link{luz_callback_progress}()},

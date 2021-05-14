@@ -458,4 +458,53 @@ luz_callback_model_checkpoint <- luz_callback(
   }
 )
 
+#' Learning rate scheduler callback
+#'
+#' Initializes and runs [torch::lr_scheduler()]s.
+#'
+#' @param lr_scheduler A [torch::lr_scheduler()] that will be initialized with
+#' the optimizer and the `...` parameters.
+#' @param ... Additional arguments passed to `lr_scheduler` together with
+#' the optimizers.
+#' @param call_on The callback breakpoint that `scheduler$step()` is called.
+#' Default is `'on_epoch_end'`. See [luz_callback()] for more information.
+#' @param opt_name name of the optimizer that will be affected by this callback.
+#' Should match the name given in `set_optimizers`. If your module has a single
+#' optimizer, `opt_name` is not used.
+#'
+#' @examples
+#' if (torch::torch_is_installed()) {
+#' cb <- luz_callback_lr_scheduler(torch::lr_step, step_size = 30)
+#' }
+#' @returns
+#' A [luz_callback()] generator.
+#'
+#' @family luz_callbacks
+#' @export
+luz_callback_lr_scheduler <- luz_callback(
+  name = "lr_scheduler_callback",
+  initialize = function(lr_scheduler, ..., call_on = "on_epoch_end",
+                        opt_name = NULL) {
+    self$lr_scheduler_fn <- function(optimizer) {
+      lr_scheduler(optimizer, ...)
+    }
+    self[[call_on]] <- function() {
+      self$scheduler$step()
+    }
+    self$opt_name <- opt_name
+  },
+  on_fit_begin = function() {
+
+    if (is.null(self$opt_name) && (length(ctx$optimizers) == 1))
+      self$opt_name <- names(ctx$optimizers)
+    else
+      rlang::abort("An optimizer name was not supported and your model has multiple optimizers")
+
+    if (!self$opt_name %in% names(ctx$optimizers))
+      rlang::abort(glue::glue("opt_name '{self$opt_name}' not found in ctx$optimizers."))
+
+    self$scheduler <- self$lr_scheduler_fn(ctx$optimizers[[self$opt_name]])
+  }
+)
+
 
