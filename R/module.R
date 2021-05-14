@@ -143,7 +143,7 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
   ellipsis::check_dots_empty()
 
   # Initialize context:
-  ctx <- rlang::new_environment()
+  ctx <- context$new()
 
   if (is.null(verbose)) {
     ctx$verbose <- interactive()
