@@ -14,7 +14,7 @@ Computes accuracy for binary classification problems where the model
 return logits. Commonly used together with \code{\link[torch:nn_bce_with_logits_loss]{torch::nn_bce_with_logits_loss()}}.
 }
 \details{
-Probabilities are generated using \code{nnf_sigmoid()} and \code{threshold} is used to
+Probabilities are generated using \code{\link[torch:nnf_sigmoid]{torch::nnf_sigmoid()}} and \code{threshold} is used to
 classify between 0 or 1.
 }
 \examples{
@@ -30,7 +30,10 @@ metric$compute()
 \seealso{
 Other luz_metrics: 
 \code{\link{luz_metric_accuracy}()},
+\code{\link{luz_metric_binary_accuracy}()},
 \code{\link{luz_metric_mae}()},
+\code{\link{luz_metric_mse}()},
+\code{\link{luz_metric_rmse}()},
 \code{\link{luz_metric}()}
 }
 \concept{luz_metrics}

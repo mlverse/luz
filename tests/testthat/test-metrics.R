@@ -50,14 +50,41 @@ test_that("yardstick metrics", {
 
   m <- luz_metric_yardstick("mae")
   m <- m$new()
-
   m$update(x, y)
   o <- m$compute()
   eo <- mean(abs(as.array(x) - as.array(y)))
+  
+  m <- luz_metric_yardstick("rmse")
+  m$update(x, y)
+  o <- m$compute()
+  eo <- sqrt(mean((as.array(x) - as.array(y))^2))
 
   expect_equal(o, eo, tolerance = 1e-5)
+}
+          
+test_that("mse works", {
 
-  m <- luz_metric_yardstick("rmse")
+  x <- torch::torch_randn(100, 100)
+  y <- torch::torch_randn(100, 100)
+
+  m <- luz_metric_mse()
+  m <- m$new()
+
+  m$update(x, y)
+  o <- m$compute()
+  eo <- mean((as.array(x) - as.array(y))^2)
+
+  expect_equal(o, eo, tolerance = 1e-5)
+  
+})
+
+test_that("rmse works", {
+
+  x <- torch::torch_randn(100, 100)
+  y <- torch::torch_randn(100, 100)
+
+  m <- luz_metric_rmse()
+
   m <- m$new()
 
   m$update(x, y)
@@ -65,5 +92,22 @@ test_that("yardstick metrics", {
   eo <- sqrt(mean((as.array(x) - as.array(y))^2))
 
   expect_equal(o, eo, tolerance = 1e-5)
+
+})
+
+test_that("binary accuracy with logits", {
+
+  m <- luz_metric_binary_accuracy_with_logits(threshold = 0.5)
+  m <- m$new()
+
+  x <- torch_randn(100)
+  y <- torch_randint(0, 1, 100)
+
+  m$update(x, y)
+  expect_equal(
+    m$compute(),
+    mean(as.array(x > 0) == as.array(y))
+  )
+
 
 })
