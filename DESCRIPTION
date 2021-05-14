@@ -35,6 +35,7 @@ Collate:
     'accelerator.R'
     'utils.R'
     'callbacks.R'
+    'context.R'
     'metrics.R'
     'module.R'
     'reexports.R'
