@@ -64,6 +64,9 @@
     <loc>/reference/luz_callback_early_stopping.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_callback_lr_scheduler.html</loc>
+  </url>
+  <url>
     <loc>/reference/luz_callback_metrics.html</loc>
   </url>
   <url>
