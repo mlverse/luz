@@ -497,4 +497,51 @@ luz_callback_lr_scheduler <- luz_callback(
   }
 )
 
+#' CSV logger callback
+#'
+#' Logs metrics obtained during training a fiel on disk.
+#' The file will have 1 line for each epoch/validation.
+#'
+#' @param path path to a file on disk.
+#'
+#' @family luz_callbacks
+#' @export
+luz_callback_csv_logger <- luz_callback(
+  name = "csv_logger_callback",
+  initialize = function(path) {
+    self$path <- path.expand(path)
+    self$append <- FALSE
+  },
+  on_epoch_end = function() {
+
+    metrics <- rbind(
+      self$to_metric_df(ctx$get_metrics("train", ctx$epoch), "train"),
+      self$to_metric_df(ctx$get_metrics("valid", ctx$epoch), "valid")
+    )
+
+    utils::write.table(
+      metrics,
+      file = self$path,
+      append = self$append,
+      col.names = !self$append,
+      row.names = FALSE
+    )
+
+    # now that we wrote for the first time it's ok to set append to TRUE
+    self$append <- TRUE
+  },
+  to_metric_df = function(metrics, set) {
+
+    if (is.null(metrics))
+      return(NULL)
+
+    metrics <- as.data.frame(metrics)
+    nms <- names(metrics)
+    metrics$epoch <- ctx$epoch
+    metrics$set <- set
+    metrics <- metrics[, c("epoch", "set", nms)]
+    metrics
+  }
+)
+
 
