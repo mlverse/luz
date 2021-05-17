@@ -4,7 +4,7 @@ test_that("bind_context works for more complicated classes", {
   y <- R6::R6Class(inherit = x)
 
   instance <- y$new()
-  ctx <- rlang::new_environment(list(x = 1))
+  ctx <- context$new()
   bind_context(instance, ctx)
 
   expect_equal(instance$get_x(), ctx$x)

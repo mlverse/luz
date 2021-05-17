@@ -129,10 +129,9 @@ luz_callback_progress <- luz_callback(
       return(list())
 
     # grab pre-computed values (they might not be available though)
-    metric_record <- ctx$records$metrics[[split]]
-    if (length(metric_record) >= ctx$epoch) {
-      values <- ctx$records$metrics[[split]][[ctx$epoch]]
-    } else {
+    values <- ctx$get_metrics(set = split, epoch = ctx$epoch)
+
+    if (is.null(values)) {
       values <- lapply(metrics, function(x) {
         x$compute()
       })
@@ -142,6 +141,7 @@ luz_callback_progress <- luz_callback(
     l <- lapply(seq_along(metrics), function(i) {
       metrics[[i]]$format(values[[i]])
     })
+
     names(l) <- self$get_abbrevs(metrics)
     l
   },
@@ -177,10 +177,6 @@ luz_callback_metrics <- luz_callback(
      train = list(),
      valid = list()
    )
-   ctx$records$metrics <- list(
-     train = list(),
-     valid = list()
-   )
   },
   on_train_begin = function() {
     ctx$metrics$train[[ctx$epoch]] <- lapply(
@@ -195,14 +191,7 @@ luz_callback_metrics <- luz_callback(
     )
   },
   on_train_end = function() {
-    ctx$records$metrics$train[[ctx$epoch]] <- lapply(
-      ctx$metrics$train[[ctx$epoch]],
-      function(x) x$compute()
-    )
-    names(ctx$records$metrics$train[[ctx$epoch]]) <- sapply(
-      ctx$metrics$train[[ctx$epoch]],
-      function(x) tolower(x$abbrev)
-    )
+    self$log_all_metrics("train")
   },
   on_valid_begin = function() {
     ctx$metrics$valid[[ctx$epoch]] <- lapply(
@@ -217,19 +206,20 @@ luz_callback_metrics <- luz_callback(
     )
   },
   on_valid_end = function() {
-    ctx$records$metrics$valid[[ctx$epoch]] <- lapply(
-      ctx$metrics$valid[[ctx$epoch]],
-      function(x) x$compute()
-    )
-    names(ctx$records$metrics$valid[[ctx$epoch]]) <- sapply(
-      ctx$metrics$valid[[ctx$epoch]],
-      function(x) tolower(x$abbrev)
-    )
+    self$log_all_metrics("valid")
   },
   initialize_metric  = function(x) {
     obj <- x$new()
     bind_context(obj, ctx)
     obj
+  },
+  log_all_metrics = function(set) {
+    lapply(
+      ctx$metrics[[set]][[ctx$epoch]],
+      function(x) {
+        ctx$log_metric(tolower(x$abbrev), x$compute())
+      }
+    )
   }
 )
 
@@ -278,7 +268,7 @@ monitor_metrics <- luz_callback(
     qty <- o[[2]]
     opt <- if (length(o) >= 3) o[[3]] else NULL
 
-    out <- ctx$records$metrics[[set]][[ctx$epoch]][[qty]]
+    out <- ctx$get_metric(qty, set, ctx$epoch)
 
     if (!is.null(opt))
       out <- out[[opt]]

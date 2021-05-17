@@ -143,7 +143,7 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
   ellipsis::check_dots_empty()
 
   # Initialize context:
-  ctx <- rlang::new_environment()
+  ctx <- context$new()
 
   if (is.null(verbose)) {
     ctx$verbose <- interactive()
@@ -369,17 +369,6 @@ initialize_callbacks <- function(callbacks, ctx) {
     cb
   })
 }
-
-#' Context object
-#'
-#' Context objects used in luz to share information between model methods,
-#' metrics and callbacks.
-#'
-#' @name ctx
-#'
-#' @includeRmd man/rmd/ctx.Rmd details
-#' @rdname ctx
-NULL
 
 clean_context <- function(ctx) {
   rm(envir = ctx, list = c(

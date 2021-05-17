@@ -24,7 +24,7 @@ test_that("Custom optimizer", {
   model <- torch::nn_module(
     inherit = model,
     set_optimizers = function() {
-      optim_adam(self$parameters, lr = 0.01)
+      torch::optim_adam(self$parameters, lr = 0.01)
     }
   )
   dl <- get_dl()
