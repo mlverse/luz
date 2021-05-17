@@ -25,6 +25,7 @@ reference:
     - set_hparams
     - set_opt_hparams
     - ctx
+    - context
   - title: "Metrics"
   - contents:
     - starts_with("luz_metric")
