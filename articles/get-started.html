@@ -392,6 +392,14 @@ End Fit</code></pre>
 <td><code>handlers</code></td>
 <td>A named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of handlers that is passed to <code><a href="https://rlang.r-lib.org/reference/with_handlers.html" class="external-link">rlang::with_handlers()</a></code> during the training loop and can be used to handle errors or conditions that might be raised by other callbacks.</td>
 </tr>
+<tr class="even">
+<td><code>log</code></td>
+<td>Method that allows logging information to the <code>records</code> list.</td>
+</tr>
+<tr class="odd">
+<td><code>log_metric</code></td>
+<td>Allows logging a metric value to the <code>records</code> list while respecting the internal conventions.</td>
+</tr>
 </tbody>
 </table>
 <p>Attributes in <code>ctx</code> can be used to produce the desired behavior of callbacks. At any time you can find information about the context object using <code><a href="../reference/ctx.html">help("ctx")</a></code>. In our example, we use the <code>ctx$iter</code> attribute to print the iteration number for each training batch.</p>
