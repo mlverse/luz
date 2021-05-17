@@ -43,3 +43,6 @@ could potentially modify these attributes or add new ones.\tabular{ll}{
 
 Context attributes
 }
+\seealso{
+Context object: \link{context}
+}

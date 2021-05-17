@@ -3,16 +3,38 @@
 #' Context objects used in luz to share information between model methods,
 #' metrics and callbacks.
 #'
-#' @name ctx
-#'
 #' @includeRmd man/rmd/ctx.Rmd details
 #' @rdname ctx
+#' @name ctx
+#'
+#' @seealso Context object: [context]
 NULL
 
+#' Context object
+#'
+#' @description
+#' Context object storing information about the model training context.
+#' See also [ctx].
+#'
+#' @param name name of the metric
+#' @param value value to log
+#' @param what (string) What you are logging.
+#' @param set (string) Usually 'train' or 'valid' indicating the set you want
+#'  to lot to. But can be arbitrary info.
+#' @param value Arbitrary value to log.
+#' @param index Index that this value should be logged. If `NULL` the value
+#'  is added to the end of list, otherwise the index is used.
+#' @param append If `TRUE` and a value in the corresponding index already
+#'  exists, then value is appended to the current value. If `FALSE` value
+#'  is overwritten in favor of the new value.
+#' @param epoch The epoch you want to extract metrics from.
+#'
 context <- R6::R6Class(
   "luz_context",
   lock_objects = FALSE,
   public = list(
+    #' @description
+    #' Allows logging arbitrary information in the `ctx`.
     log = function(what, set, value, index = NULL, append = TRUE) {
 
       if (is.null(index)) {
@@ -37,6 +59,9 @@ context <- R6::R6Class(
       private$.records[[what]][[set]][[index]] <- value
       invisible(self)
     },
+    #' @description
+    #' Log a metric gen its name and value.
+    #' Metric values are indexed by epoch.
     log_metric = function(name, value) {
       set <- if (self$training) "train" else "valid"
 
@@ -48,6 +73,8 @@ context <- R6::R6Class(
 
       invisible(self)
     },
+    #' @description
+    #' Get an specific value from the log.
     get_log = function(what, set, index = NULL) {
       if (is.null(index)) {
         index <- length(private$.records[[what]][[set]])
@@ -60,17 +87,22 @@ context <- R6::R6Class(
 
       val[[index]]
     },
+    #' @description
+    #' Get all metric given an epoch and set.
     get_metrics = function(set, epoch) {
       if (is.null(epoch)) {
         epoch <- length(private$.records[[what]][[set]])
       }
       self$get_log("metrics", set, epoch)
     },
+    #' @description
+    #' Get the value of a metric given its name, epoch and set.
     get_metric = function(name, set, epoch= NULL) {
       self$get_metrics(set, epoch)[[name]]
     }
   ),
   active = list(
+    #' @field records stores information about values logged with `self$log`.
     records = function(x) {
       if (!missing(x))
         rlang::abort("Not allowed to modify records manually. Use ctx$log() or ctx$log_metric()")
