@@ -129,10 +129,9 @@ luz_callback_progress <- luz_callback(
       return(list())
 
     # grab pre-computed values (they might not be available though)
-    metric_record <- ctx$records$metrics[[split]]
-    if (length(metric_record) >= ctx$epoch) {
-      values <- ctx$records$metrics[[split]][[ctx$epoch]]
-    } else {
+    values <- ctx$get_metrics(set = split, epoch = ctx$epoch)
+
+    if (is.null(values)) {
       values <- lapply(metrics, function(x) {
         x$compute()
       })
@@ -142,6 +141,7 @@ luz_callback_progress <- luz_callback(
     l <- lapply(seq_along(metrics), function(i) {
       metrics[[i]]$format(values[[i]])
     })
+
     names(l) <- self$get_abbrevs(metrics)
     l
   },
@@ -268,7 +268,7 @@ monitor_metrics <- luz_callback(
     qty <- o[[2]]
     opt <- if (length(o) >= 3) o[[3]] else NULL
 
-    out <- ctx$records$metrics[[set]][[ctx$epoch]][[qty]]
+    out <- ctx$get_metric(qty, set, ctx$epoch)
 
     if (!is.null(opt))
       out <- out[[opt]]

@@ -47,6 +47,27 @@ context <- R6::R6Class(
 
 
       invisible(self)
+    },
+    get_log = function(what, set, index = NULL) {
+      if (is.null(index)) {
+        index <- length(private$.records[[what]][[set]])
+      }
+
+      val <- private$.records[[what]][[set]]
+
+      if (length(val) < index)
+        return(NULL)
+
+      val[[index]]
+    },
+    get_metrics = function(set, epoch) {
+      if (is.null(epoch)) {
+        epoch <- length(private$.records[[what]][[set]])
+      }
+      self$get_log("metrics", set, epoch)
+    },
+    get_metric = function(name, set, epoch= NULL) {
+      self$get_metrics(set, epoch)[[name]]
     }
   ),
   active = list(
