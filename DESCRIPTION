@@ -37,6 +37,7 @@ Collate:
     'callbacks.R'
     'context.R'
     'metrics.R'
+    'metrics-auc.R'
     'module.R'
     'reexports.R'
     'serialization.R'
