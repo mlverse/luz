@@ -136,3 +136,39 @@ test_that("callback lr scheduler", {
   })
 
 })
+
+test_that("csv callback", {
+
+  model <- get_model()
+  dl <- get_dl()
+
+  mod <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam,
+    )
+
+  tmp <- tempfile()
+
+  output <- mod %>%
+    set_hparams(input_size = 10, output_size = 1) %>%
+    fit(dl, verbose = FALSE, epochs = 5, callbacks = list(
+      luz_callback_csv_logger(tmp)
+    ))
+
+  x <- read.table(tmp, header = TRUE)
+  expect_equal(nrow(x), 5)
+  expect_equal(names(x), c("epoch", "set", "loss"))
+
+  output <- mod %>%
+    set_hparams(input_size = 10, output_size = 1) %>%
+    fit(dl, verbose = FALSE, epochs = 5, valid_data = dl, callbacks = list(
+      luz_callback_csv_logger(tmp)
+    ))
+
+  x <- read.table(tmp, header = TRUE)
+
+  expect_equal(nrow(x), 10)
+  expect_equal(names(x), c("epoch", "set", "loss"))
+
+})
