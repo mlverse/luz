@@ -28,7 +28,8 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
-    covr
+    covr,
+    Metrics
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
