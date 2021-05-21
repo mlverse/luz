@@ -85,9 +85,46 @@ luz_metric_binary_auroc <- luz_metric(
   }
 )
 
-luz_metric_multiclass_auc <- luz_metric(
+#' Computes the multi-class AUROC
+#'
+#' The same definition as [Keras](https://www.tensorflow.org/api_docs/python/tf/keras/metrics/AUC)
+#' is used by default. This is equivalent to the `'micro'` method in Scikit Learn
+#' too. See [docs](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_auc_score.html).
+#'
+#' **Note** that class imbalance can affect this metric unlike
+#' the AUC for binary classification.
+#'
+#' @inheritParams luz_metric_binary_auroc
+#' @param from_logits If `TRUE` then we call [torch::nnf_softmax()] in the predictions
+#'   before computing the metric.
+#' @param average The averaging method:
+#'   - `'micro'`: Stack all classes and computes the AUROC as if it was a binary
+#'     classification problem.
+#'   - `'macro'`: Finds the AUCROC for each class and computes their mean.
+#'   - `'weighted'`: Finds the AUROC for each class and computes their weighted
+#'     mean pondering by the number of instances for each class.
+#'   - `'none'`: Returns the AUROC for each class in a list.
+#'
+#' @details
+#' Currently the AUC is approximated using the 'interpolation' method described in
+#' [Keras](https://www.tensorflow.org/api_docs/python/tf/keras/metrics/AUC).
+#'
+#'
+#' @family luz_metrics
+#' @export
+luz_metric_multiclass_auroc <- luz_metric(
   abbrev = "AUC",
   inherit = luz_metric_auc_base,
+  initialize = function(num_thresholds=200,
+                        thresholds=NULL,
+                        from_logits=FALSE,
+                        average = c("micro", "macro", "weighted", "none")) {
+
+    self$average <- rlang::arg_match(average)
+    super$initialize(num_thresholds = num_thresholds,
+                     thresholds = thresholds,
+                     from_logits = from_logits)
+  },
   initialize_state = function(num_classes) {
 
     if (missing(num_classes))
@@ -98,21 +135,31 @@ luz_metric_multiclass_auc <- luz_metric(
 
     self$true_positives <- torch::torch_zeros(size = size)
     self$false_positives <- torch::torch_zeros(size = size)
-    self$n_pos <- torch::torch_zeros(size = self$num_classes)
-    self$n_neg <- torch::torch_zeros(size = self$num_classes)
+    self$n_pos <- torch::torch_zeros(size = c(self$num_classes, 1))
+    self$n_neg <- torch::torch_zeros(size = c(self$num_classes, 1))
   },
   update = function(preds, targets) {
 
     # initialize state. we expect one column for each class
-    if (is.null(self$num_classes))
-      self$initialize_state(preds$shape[2])
+    if (is.null(self$num_classes)) {
+      if (self$average == "micro") {
+        self$initialize_state(1L)
+      } else {
+        self$initialize_state(preds$shape[2])
+      }
+    }
 
     if (self$from_logits)
       preds <- torch::nnf_softmax(preds)
 
     # targets are expected to be integers representing the classes
     # so we one hot encode them
-    targets <- nnf_one_hot(targets, num_classes = self$num_classes)
+    targets <- nnf_one_hot(targets, num_classes = preds$shape[2])
+
+    if (self$average == "micro") {
+      preds <- micro_stack(preds)
+      targets <- micro_stack(targets)
+    }
 
     # usqueeze dims
     preds <- preds$unsqueeze(3)
@@ -123,16 +170,40 @@ luz_metric_multiclass_auc <- luz_metric(
 
     self$true_positives$add_(torch_sum(comparisons * (targets == 1), dim = 1))
     self$false_positives$add_(torch_sum(comparisons * (targets == 0), dim = 1))
-    self$n_pos$add_(torch_sum(targets == 1, dim = 1)$squeeze(2))
-    self$n_neg$add_(torch_sum(targets == 0, dim = 1)$squeeze(2))
+    self$n_pos$add_(torch_sum(targets == 1, dim = 1))
+    self$n_neg$add_(torch_sum(targets == 0, dim = 1))
   },
   compute = function() {
 
-    tpr <- self$true_positives/self$n_pos$unsqueeze(2)
-    fpr <- self$false_positives/self$n_neg$unsqueeze(2)
-    mult <- torch::torch_diff(fpr, n=1, prepend = torch_zeros(2,1), dim = 2)
+    tpr <- self$true_positives/self$n_pos
+    fpr <- self$false_positives/self$n_neg
 
-    torch_mean(torch_sum(tpr*mult,dim=2))$item()
+    mult <- torch::torch_diff(fpr, n=1, dim = 2,prepend = torch_zeros(self$num_classes,1))
+    mult <- torch_cat(list(mult, torch_zeros(self$num_classes, 1)), dim = 2)
+
+    aucs_minor <- torch::torch_sum(tpr*mult[,1:-2], dim = 2)
+    aucs_major <- torch::torch_sum(tpr*mult[,2:N], dim = 2)
+
+    aucs <- (aucs_minor + aucs_major)/2
+
+    if (self$average == "none") {
+      as.list(as.numeric(aucs))
+    } else if (self$average == "micro") {
+      aucs$item()
+    } else if (self$average == "macro") {
+      torch::torch_mean(aucs)$item()
+    } else if (self$average == "weighted") {
+      w <- self$n_pos + self$n_neg
+      w <- w/torch::torch_sum(w)
+      torch::torch_sum(w * aucs)
+    }
   }
 )
+
+# stacking for the micro method
+micro_stack <- function(x) {
+  x <- torch::torch_unbind(x, dim = 2)
+  x <- torch::torch_cat(x, dim = 1)
+  x$unsqueeze(2)
+}
 
