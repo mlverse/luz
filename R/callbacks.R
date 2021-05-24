@@ -185,10 +185,12 @@ luz_callback_metrics <- luz_callback(
     )
   },
   on_train_batch_end = function() {
-    lapply(
-      ctx$metrics$train[[ctx$epoch]],
-      function(x) x$update(ctx$pred, ctx$target)
-    )
+    torch::with_no_grad({
+      lapply(
+        ctx$metrics$train[[ctx$epoch]],
+        function(x) x$update(ctx$pred, ctx$target)
+      )
+    })
   },
   on_train_end = function() {
     self$log_all_metrics("train")
@@ -200,10 +202,12 @@ luz_callback_metrics <- luz_callback(
     )
   },
   on_valid_batch_end = function() {
-    lapply(
-      ctx$metrics$valid[[ctx$epoch]],
-      function(x) x$update(ctx$pred, ctx$target)
-    )
+    torch::with_no_grad({
+      lapply(
+        ctx$metrics$valid[[ctx$epoch]],
+        function(x) x$update(ctx$pred, ctx$target)
+      )
+    })
   },
   on_valid_end = function() {
     self$log_all_metrics("valid")
@@ -214,12 +218,14 @@ luz_callback_metrics <- luz_callback(
     obj
   },
   log_all_metrics = function(set) {
-    lapply(
-      ctx$metrics[[set]][[ctx$epoch]],
-      function(x) {
-        ctx$log_metric(tolower(x$abbrev), x$compute())
-      }
-    )
+    torch::with_no_grad({
+      lapply(
+        ctx$metrics[[set]][[ctx$epoch]],
+        function(x) {
+          ctx$log_metric(tolower(x$abbrev), x$compute())
+        }
+      )
+    })
   }
 )
 

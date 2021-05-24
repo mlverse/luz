@@ -6,10 +6,9 @@ category: 'intermediate'
 
 ```{r, eval = FALSE}
 # Packages ----------------------------------------------------------------
-
-devtools::load_all()
 library(torch)
 library(torchvision)
+library(luz)
 
 # Datasets and loaders ----------------------------------------------------
 

@@ -9,6 +9,10 @@ category: 'basic'
 # Packages ----------------------------------------------------------------
 library(torch)
 library(torchvision)
+library(luz)
+
+set.seed(1)
+torch_manual_seed(1)
 
 # Datasets and loaders ----------------------------------------------------
 
@@ -43,18 +47,18 @@ net <- nn_module(
     self$fc2 <- nn_linear(128, 10)
   },
   forward = function(x) {
-    x <- self$conv1(x)
-    x <- nnf_relu(x)
-    x <- self$conv2(x)
-    x <- nnf_relu(x)
-    x <- nnf_max_pool2d(x, 2)
-    x <- self$dropout1(x)
-    x <- torch_flatten(x, start_dim = 2)
-    x <- self$fc1(x)
-    x <- nnf_relu(x)
-    x <- self$dropout2(x)
-    x <- self$fc2(x)
-    x
+    x %>% 
+      self$conv1() %>% 
+      nnf_relu() %>% 
+      self$conv2() %>% 
+      nnf_relu() %>% 
+      nnf_max_pool2d(2) %>% 
+      self$dropout1() %>% 
+      torch_flatten(start_dim = 2) %>% 
+      self$fc1() %>% 
+      nnf_relu() %>% 
+      self$dropout2() %>% 
+      self$fc2()
   }
 )
 
@@ -65,7 +69,7 @@ fitted <- net %>%
     loss = nn_cross_entropy_loss(),
     optimizer = optim_adam,
     metrics = list(
-      luz_metric_accuracy
+      luz_metric_accuracy()
     )
   ) %>%
   fit(train_dl, epochs = 10, valid_data = test_dl)

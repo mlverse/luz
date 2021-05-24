@@ -9,8 +9,10 @@ category: 'basic'
 library(torch)
 library(torchvision)
 library(torchdatasets)
+library(luz)
 
 set.seed(1)
+torch_manual_seed(1)
 
 # Datasets and loaders ----------------------------------------------------
 
@@ -21,7 +23,8 @@ ds <- torchdatasets::dogs_vs_cats_dataset(
   token = "~/Downloads/kaggle.json",
   transform = . %>%
     torchvision::transform_to_tensor() %>%
-    torchvision::transform_resize(size = c(224, 224)),
+    torchvision::transform_resize(size = c(224, 224)) %>% 
+    torchvision::transform_normalize(rep(0.5, 3), rep(0.5, 3)),
   target_transform = function(x) as.double(x) - 1
 )
 
@@ -48,7 +51,7 @@ net <- torch::nn_module(
       nn_relu(),
       nn_linear(512, 256),
       nn_relu(),
-      nn_linear(256, 1)
+      nn_linear(256, num_classes)
     )
   },
   forward = function(x) {
@@ -63,13 +66,18 @@ fitted <- net %>%
     loss = nn_bce_with_logits_loss(),
     optimizer = madgrad::optim_madgrad,
     metrics = list(
-      luz:::luz_metric_binary_accuracy_with_logits
+      luz_metric_binary_accuracy_with_logits()
     )
   ) %>%
   set_hparams(num_classes = 1) %>%
   set_opt_hparams(lr = 0.01) %>%
   fit(train_dl, epochs = 5, valid_data = valid_dl, verbose = TRUE)
 
+# Make predictions --------------------------------------------------------
+
+
+# Serialization -----------------------------------------------------------
+luz_save(fitted, "model-dogs-and-cats.pt")
 ```
 
 
