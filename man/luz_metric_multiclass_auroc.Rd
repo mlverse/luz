@@ -34,7 +34,7 @@ mean pondering by the number of instances for each class.
 }
 \description{
 The same definition as \href{https://www.tensorflow.org/api_docs/python/tf/keras/metrics/AUC}{Keras}
-is used by default. This is equivalent to the \code{'micro'} method in Scikit Learn
+is used by default. This is equivalent to the \code{'micro'} method in SciKit Learn
 too. See \href{https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_auc_score.html}{docs}.
 }
 \details{
@@ -43,6 +43,25 @@ the AUC for binary classification.
 
 Currently the AUC is approximated using the 'interpolation' method described in
 \href{https://www.tensorflow.org/api_docs/python/tf/keras/metrics/AUC}{Keras}.
+}
+\examples{
+if (torch::torch_is_installed()) {
+actual <- c(1, 1, 1, 0, 0, 0) + 1L
+predicted <- c(0.9, 0.8, 0.4, 0.5, 0.3, 0.2)
+predicted <- cbind(1-predicted, predicted)
+
+y_true <- torch_tensor(as.integer(actual))
+y_pred <- torch_tensor(predicted)
+
+m <- luz_metric_multiclass_auroc(thresholds = as.numeric(predicted),
+                                 average = "micro")
+m <- m$new()
+
+m$update(y_pred[1:2,], y_true[1:2])
+m$update(y_pred[3:4,], y_true[3:4])
+m$update(y_pred[5:6,], y_true[5:6])
+m$compute()
+}
 }
 \seealso{
 Other luz_metrics: 
