@@ -157,7 +157,21 @@ dcgan <- setup(dcgan)
 
 res <- dcgan %>%
   set_hparams(latent_dim = 100, channels = 1) %>%
-  fit(train_dl, epochs = 10, valid_data = test_dl, callbacks = list(plot_callback))
+  fit(train_dl, epochs = 10, valid_data = test_dl, callbacks = list(plot_callback()))
+
+# Generate picture -------------------------------------------------
+
+noise <- torch_randn(1, 100, device = res$model$G$parameters[[1]]$device)
+img <- res$model$G(noise)
+img <- img$cpu()
+img <- (img[1,1,,,newaxis] + 1)/2
+img <- torch_stack(list(img, img, img), dim = 3)[..,1]
+img <- as.raster(as_array(img))
+plot(img)
+
+# Serialization ----------------------------------------------------
+
+luz_save(res, "mnist-dcgan.pt")
 
 ```
 
