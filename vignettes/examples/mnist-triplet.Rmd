@@ -96,5 +96,10 @@ fitted <- triplet_model %>%
   setup(optimizer = optim_adam) %>%
   set_hparams(embedding_dim = 2) %>%
   fit(train_dl, epochs = 10, valid_data = test_dl)
+
+# Serializing
+
+luz_save(fitted, "triplet.pt")
+
 ```
 
