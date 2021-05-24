@@ -140,6 +140,7 @@
 
 <span class="co"># Make predictions --------------------------------------------------------</span>
 
+<span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_sigmoid.html" class="external-link">torch_sigmoid</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fitted</span>, <span class="va">valid_dl</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Serialization -----------------------------------------------------------</span>
 <span class="fu"><a href="../../reference/luz_save.html">luz_save</a></span><span class="op">(</span><span class="va">fitted</span>, <span class="st">"model-dogs-and-cats.pt"</span><span class="op">)</span></code></pre></div>
