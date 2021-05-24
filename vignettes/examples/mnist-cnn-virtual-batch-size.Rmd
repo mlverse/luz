@@ -9,6 +9,7 @@ category: 'advanced'
 # Packages ----------------------------------------------------------------
 library(torch)
 library(torchvision)
+library(luz)
 
 # Datasets and loaders ----------------------------------------------------
 
@@ -83,10 +84,14 @@ fitted <- net %>%
     loss = nn_cross_entropy_loss(),
     optimizer = torch::optim_adam,
     metrics = list(
-      luz_metric_accuracy
+      luz_metric_accuracy()
     )
   ) %>%
   fit(train_dl, epochs = 10, valid_data = test_dl)
 
+
+# Serialization -----------------------------------------------------------
+
+luz_save(fitted, "mnist-virtual-batch_size.pt")
 ```
 
