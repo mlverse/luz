@@ -1,4 +1,5 @@
 #' @include utils.R
+NULL
 
 LuzMetric <- R6::R6Class(
   "LuzMetric",
