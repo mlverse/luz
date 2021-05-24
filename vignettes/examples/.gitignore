@@ -2,3 +2,4 @@ mnist-cnn.pt
 mnist-dcgan.pt
 triplet.pt
 mnist-virtual-batch_size.pt
+mnist-autoencoder.pt

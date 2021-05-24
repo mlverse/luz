@@ -8,7 +8,7 @@ category: 'basic'
 # Packages ----------------------------------------------------------------
 library(torch)
 library(torchvision)
-devtools::load_all()
+library(luz)
 
 # Datasets and loaders ----------------------------------------------------
 
@@ -77,7 +77,13 @@ fitted <- net %>%
   ) %>%
   fit(train_dl, epochs = 1, valid_data = test_dl)
 
+# Create predictions ------------------------------------------------------
+
 preds <- predict(fitted, test_dl)
+
+# Serialize ---------------------------------------------------------------
+
+luz_save(fitted, "mnist-autoencoder.pt")
 
 ```
 
