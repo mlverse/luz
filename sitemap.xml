@@ -112,6 +112,9 @@
     <loc>/reference/luz_metric_mse.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_metric_multiclass_auroc.html</loc>
+  </url>
+  <url>
     <loc>/reference/luz_metric_rmse.html</loc>
   </url>
   <url>
