@@ -75,6 +75,7 @@ fitted <- net %>%
 
 # Make predictions --------------------------------------------------------
 
+preds <- torch_sigmoid(predict(fitted, valid_dl))
 
 # Serialization -----------------------------------------------------------
 luz_save(fitted, "model-dogs-and-cats.pt")

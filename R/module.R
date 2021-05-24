@@ -308,7 +308,7 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
   })
 
   if (stack) {
-    ctx$output <- torch::torch_vstack(ctx$output)
+    ctx$output <- torch::torch_cat(ctx$output)
   }
 
   ctx$output
