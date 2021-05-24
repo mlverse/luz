@@ -136,7 +136,16 @@
       <span class="fu"><a href="../../reference/luz_metric_accuracy.html">luz_metric_accuracy</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">10</span>, valid_data <span class="op">=</span> <span class="va">test_dl</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">10</span>, valid_data <span class="op">=</span> <span class="va">test_dl</span><span class="op">)</span>
+
+<span class="co"># Making predictions ------------------------------------------------------</span>
+
+<span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fitted</span>, <span class="va">test_dl</span><span class="op">)</span>
+<span class="va">preds</span><span class="op">$</span><span class="va">shape</span>
+
+<span class="co"># Serialization -----------------------------------------------------------</span>
+
+<span class="fu"><a href="../../reference/luz_save.html">luz_save</a></span><span class="op">(</span><span class="va">fitted</span>, <span class="st">"mnist-cnn.pt"</span><span class="op">)</span></code></pre></div>
   </div>
  <div class="col-md-3 d-none d-md-block" id="pkgdown-sidebar">
       </div>
