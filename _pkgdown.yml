@@ -13,6 +13,8 @@ navbar:
         href: articles/get-started.html
       - text: Custom loops
         href: articles/custom-loop.html
+      - text: Accelerator API
+        href: articles/accelerator.html
   examples:
     text: Examples
     href: articles/examples/index.html
