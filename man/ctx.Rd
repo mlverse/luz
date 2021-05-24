@@ -36,8 +36,6 @@ could potentially modify these attributes or add new ones.\tabular{ll}{
    \code{metrics} \tab \code{list()} of metric objects that are \code{update}d at every \code{on_train_batch_end()} or \code{on_valid_batch_end()}. See also \code{help("luz_callback_metrics")} \cr
    \code{records} \tab \code{list()} recording metric values for training and validation for each epoch. See also \code{help("luz_callback_metrics")} \cr
    \code{handlers} \tab A named \code{list()} of handlers that is passed to \code{rlang::with_handlers()} during the training loop and can be used to handle errors or conditions that might be raised by other callbacks. \cr
-   \code{log} \tab Method that allows logging information to the \code{records} list. \cr
-   \code{log_metric} \tab Allows logging a metric value to the \code{records} list while respecting the internal conventions. \cr
 }
 
 

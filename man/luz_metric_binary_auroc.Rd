@@ -2,10 +2,7 @@
 % Please edit documentation in R/metrics-auc.R
 \name{luz_metric_binary_auroc}
 \alias{luz_metric_binary_auroc}
-\title{Computes the area under the ROC
-
-To avoid storing all predictions and targets for an epoch we compute confusion
-matrices across a range of pre-established thresholds.}
+\title{Computes the area under the ROC}
 \usage{
 luz_metric_binary_auroc(
   num_thresholds = 200,
@@ -25,8 +22,6 @@ confusion matrices and \code{num_thresholds} is ignored.}
 we use sigmoid to put them in the unit interval.}
 }
 \description{
-Computes the area under the ROC
-
 To avoid storing all predictions and targets for an epoch we compute confusion
 matrices across a range of pre-established thresholds.
 }
@@ -37,6 +32,7 @@ Other luz_metrics:
 \code{\link{luz_metric_binary_accuracy}()},
 \code{\link{luz_metric_mae}()},
 \code{\link{luz_metric_mse}()},
+\code{\link{luz_metric_multiclass_auroc}()},
 \code{\link{luz_metric_rmse}()},
 \code{\link{luz_metric}()}
 }

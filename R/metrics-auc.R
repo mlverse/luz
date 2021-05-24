@@ -193,9 +193,9 @@ luz_metric_multiclass_auroc <- luz_metric(
     } else if (self$average == "macro") {
       torch::torch_mean(aucs)$item()
     } else if (self$average == "weighted") {
-      w <- self$n_pos + self$n_neg
+      w <- self$n_pos
       w <- w/torch::torch_sum(w)
-      torch::torch_sum(w * aucs)
+      torch::torch_sum(w$squeeze(2) * aucs)$item()
     }
   }
 )
