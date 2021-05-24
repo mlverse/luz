@@ -46,6 +46,7 @@ Currently the AUC is approximated using the 'interpolation' method described in
 }
 \examples{
 if (torch::torch_is_installed()) {
+library(torch)
 actual <- c(1, 1, 1, 0, 0, 0) + 1L
 predicted <- c(0.9, 0.8, 0.4, 0.5, 0.3, 0.2)
 predicted <- cbind(1-predicted, predicted)

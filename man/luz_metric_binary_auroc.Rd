@@ -27,6 +27,7 @@ matrices across a range of pre-established thresholds.
 }
 \examples{
 if (torch::torch_is_installed()){
+library(torch)
 actual <- c(1, 1, 1, 0, 0, 0)
 predicted <- c(0.9, 0.8, 0.4, 0.5, 0.3, 0.2)
 
