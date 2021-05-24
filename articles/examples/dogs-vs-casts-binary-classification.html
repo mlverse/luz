@@ -74,8 +74,10 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://torch.mlverse.org/docs" class="external-link">torch</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">torchvision</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">torchdatasets</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">luz</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_manual_seed.html" class="external-link">torch_manual_seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 
 <span class="co"># Datasets and loaders ----------------------------------------------------</span>
 
@@ -86,7 +88,8 @@
   token <span class="op">=</span> <span class="st">"~/Downloads/kaggle.json"</span>,
   transform <span class="op">=</span> <span class="va">.</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span>
     <span class="fu">torchvision</span><span class="fu">::</span><span class="fu">transform_to_tensor</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu">torchvision</span><span class="fu">::</span><span class="fu">transform_resize</span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">224</span>, <span class="fl">224</span><span class="op">)</span><span class="op">)</span>,
+    <span class="fu">torchvision</span><span class="fu">::</span><span class="fu">transform_resize</span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">224</span>, <span class="fl">224</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span> 
+    <span class="fu">torchvision</span><span class="fu">::</span><span class="fu">transform_normalize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>,
   target_transform <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>
 <span class="op">)</span>
 
@@ -113,7 +116,7 @@
       <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_relu.html" class="external-link">nn_relu</a></span><span class="op">(</span><span class="op">)</span>,
       <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">512</span>, <span class="fl">256</span><span class="op">)</span>,
       <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_relu.html" class="external-link">nn_relu</a></span><span class="op">(</span><span class="op">)</span>,
-      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">256</span>, <span class="fl">1</span><span class="op">)</span>
+      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">256</span>, <span class="va">num_classes</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">}</span>,
   forward <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
@@ -128,12 +131,18 @@
     loss <span class="op">=</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_bce_with_logits_loss.html" class="external-link">nn_bce_with_logits_loss</a></span><span class="op">(</span><span class="op">)</span>,
     optimizer <span class="op">=</span> <span class="fu">madgrad</span><span class="fu">::</span><span class="va">optim_madgrad</span>,
     metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-      <span class="fu">luz</span><span class="fu">:::</span><span class="va"><a href="../../reference/luz_metric_binary_accuracy_with_logits.html">luz_metric_binary_accuracy_with_logits</a></span>
+      <span class="fu"><a href="../../reference/luz_metric_binary_accuracy_with_logits.html">luz_metric_binary_accuracy_with_logits</a></span><span class="op">(</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../../reference/set_hparams.html">set_hparams</a></span><span class="op">(</span>num_classes <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../../reference/set_opt_hparams.html">set_opt_hparams</a></span><span class="op">(</span>lr <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">5</span>, valid_data <span class="op">=</span> <span class="va">valid_dl</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">5</span>, valid_data <span class="op">=</span> <span class="va">valid_dl</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="co"># Make predictions --------------------------------------------------------</span>
+
+
+<span class="co"># Serialization -----------------------------------------------------------</span>
+<span class="fu"><a href="../../reference/luz_save.html">luz_save</a></span><span class="op">(</span><span class="va">fitted</span>, <span class="st">"model-dogs-and-cats.pt"</span><span class="op">)</span></code></pre></div>
   </div>
  <div class="col-md-3 d-none d-md-block" id="pkgdown-sidebar">
       </div>
