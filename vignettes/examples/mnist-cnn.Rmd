@@ -74,6 +74,14 @@ fitted <- net %>%
   ) %>%
   fit(train_dl, epochs = 10, valid_data = test_dl)
 
+# Making predictions ------------------------------------------------------
+
+preds <- predict(fitted, test_dl)
+preds$shape
+
+# Serialization -----------------------------------------------------------
+
+luz_save(fitted, "mnist-cnn.pt")
 ```
 
 
