@@ -81,7 +81,7 @@ luz_callback_progress <- luz_callback(
   "progress_callback",
   on_train_begin = function() {
     format <- ":current/:total [:bar] - ETA: :eta"
-    metrics <- ctx$metrics[["train"]][[ctx$epoch]]
+    metrics <- ctx$metrics[["train"]]
     if (length(metrics) > 0) {
       abbrevs <- self$get_abbrevs(metrics)
       abbrevs <- paste0(glue::glue("{abbrevs}: :{tolower(abbrevs)} "), collapse = " - ")
@@ -118,12 +118,7 @@ luz_callback_progress <- luz_callback(
   },
   get_metrics = function(split) {
 
-    metrics_split <- ctx$metrics[[split]]
-    if (length(metrics_split) >= ctx$epoch) {
-      metrics <- ctx$metrics[[split]][[ctx$epoch]]
-    } else {
-      return(list())
-    }
+    metrics <- ctx$metrics[[split]]
 
     if (length(metrics) == 0)
       return(list())
@@ -158,8 +153,8 @@ luz_callback_progress <- luz_callback(
 #'
 #' Tracks metrics passed to [setup()] during training and validation.
 #'
-#' @details This callback takes care of 2 `ctx` attributes:
-#' - `ctx$metrics`: stores the metrics objects that are initialized once for epoch,
+#' @details This callback takes care of 2 [ctx] attributes:
+#' - `ctx$metrics`: stores the current metrics objects that are initialized once for epoch,
 #'   and are further `update()`d and `compute()`d every batch. You will rarely need
 #'   to work with these metrics.
 #' - `ctx$records$metrics`: Stores metrics per training/validation and epoch. The
@@ -174,12 +169,12 @@ luz_callback_metrics <- luz_callback(
   "metrics_callback",
   on_fit_begin = function() {
    ctx$metrics <- list(
-     train = list(),
-     valid = list()
+     train = NULL,
+     valid = NULL
    )
   },
   on_train_begin = function() {
-    ctx$metrics$train[[ctx$epoch]] <- lapply(
+    ctx$metrics$train <- lapply(
       ctx$model$metrics %||% list(),
       self$initialize_metric
     )
@@ -187,7 +182,7 @@ luz_callback_metrics <- luz_callback(
   on_train_batch_end = function() {
     torch::with_no_grad({
       lapply(
-        ctx$metrics$train[[ctx$epoch]],
+        ctx$metrics$train,
         function(x) x$update(ctx$pred, ctx$target)
       )
     })
@@ -196,7 +191,7 @@ luz_callback_metrics <- luz_callback(
     self$log_all_metrics("train")
   },
   on_valid_begin = function() {
-    ctx$metrics$valid[[ctx$epoch]] <- lapply(
+    ctx$metrics$valid <- lapply(
       ctx$model$metrics %||% list(),
       self$initialize_metric
     )
@@ -204,7 +199,7 @@ luz_callback_metrics <- luz_callback(
   on_valid_batch_end = function() {
     torch::with_no_grad({
       lapply(
-        ctx$metrics$valid[[ctx$epoch]],
+        ctx$metrics$valid,
         function(x) x$update(ctx$pred, ctx$target)
       )
     })
@@ -220,7 +215,7 @@ luz_callback_metrics <- luz_callback(
   log_all_metrics = function(set) {
     torch::with_no_grad({
       lapply(
-        ctx$metrics[[set]][[ctx$epoch]],
+        ctx$metrics[[set]],
         function(x) {
           ctx$log_metric(tolower(x$abbrev), x$compute())
         }

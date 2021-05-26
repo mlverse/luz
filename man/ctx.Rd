@@ -33,7 +33,7 @@ could potentially modify these attributes or add new ones.\tabular{ll}{
    \code{loss} \tab Last computed loss from the model. \strong{Note:} this might not be available if you modified the training or validation step. \cr
    \code{opt} \tab Current optimizer, ie. optimizer that will be used to do the next \code{step} to update parameters. \cr
    \code{opt_nm} \tab Current optimizer name. By default it’s \code{opt} , but can change if your model uses more than one optimizer depending on the set of parameters being optimized. \cr
-   \code{metrics} \tab \code{list()} of metric objects that are \code{update}d at every \code{on_train_batch_end()} or \code{on_valid_batch_end()}. See also \code{help("luz_callback_metrics")} \cr
+   \code{metrics} \tab \code{list()} with current metric object that are \code{update}d at every \code{on_train_batch_end()} or \code{on_valid_batch_end()}. See also \code{help("luz_callback_metrics")} \cr
    \code{records} \tab \code{list()} recording metric values for training and validation for each epoch. See also \code{help("luz_callback_metrics")} \cr
    \code{handlers} \tab A named \code{list()} of handlers that is passed to \code{rlang::with_handlers()} during the training loop and can be used to handle errors or conditions that might be raised by other callbacks. \cr
 }
