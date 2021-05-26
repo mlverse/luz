@@ -18,8 +18,10 @@ LuzCallback <- R6::R6Class(
 )
 
 call_all_callbacks <- function(callbacks, name) {
-  lapply(callbacks, function(callback) {
-    callback$call(name)
+  torch::with_no_grad({
+    lapply(callbacks, function(callback) {
+      callback$call(name)
+    })
   })
 }
 
@@ -27,6 +29,12 @@ default_callbacks <- function() {
   list(
     luz_callback_train_valid(),
     luz_callback_metrics(),
+    luz_callback_progress()
+  )
+}
+
+default_predict_callbacks <- function() {
+  list(
     luz_callback_progress()
   )
 }
@@ -97,6 +105,12 @@ luz_callback_progress <- luz_callback(
   },
   on_valid_batch_end = function() {
     self$tick_progress_bar("valid")
+  },
+  on_predict_begin = function() {
+    self$initialize_progress_bar("predict")
+  },
+  on_predict_batch_end = function() {
+    self$tick_progress_bar("predict")
   },
   on_epoch_end = function() {
     self$inform_metrics("train", "Train")
@@ -203,12 +217,10 @@ luz_callback_metrics <- luz_callback(
     )
   },
   on_train_batch_end = function() {
-    torch::with_no_grad({
-      lapply(
-        ctx$metrics$train,
-        function(x) x$update(ctx$pred, ctx$target)
-      )
-    })
+    lapply(
+      ctx$metrics$train,
+      function(x) x$update(ctx$pred, ctx$target)
+    )
   },
   on_train_end = function() {
     self$log_all_metrics("train")
@@ -220,12 +232,10 @@ luz_callback_metrics <- luz_callback(
     )
   },
   on_valid_batch_end = function() {
-    torch::with_no_grad({
-      lapply(
-        ctx$metrics$valid,
-        function(x) x$update(ctx$pred, ctx$target)
-      )
-    })
+    lapply(
+      ctx$metrics$valid,
+      function(x) x$update(ctx$pred, ctx$target)
+    )
   },
   on_valid_end = function() {
     self$log_all_metrics("valid")
@@ -236,14 +246,12 @@ luz_callback_metrics <- luz_callback(
     obj
   },
   log_all_metrics = function(set) {
-    torch::with_no_grad({
-      lapply(
-        ctx$metrics[[set]],
-        function(x) {
-          ctx$log_metric(tolower(x$abbrev), x$compute())
-        }
-      )
-    })
+    lapply(
+      ctx$metrics[[set]],
+      function(x) {
+        ctx$log_metric(tolower(x$abbrev), x$compute())
+      }
+    )
   }
 )
 

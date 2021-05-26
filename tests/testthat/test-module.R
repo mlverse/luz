@@ -85,7 +85,7 @@ test_that("can train without a validation dataset", {
   mod <- model %>%
     setup(
       loss = torch::nn_mse_loss(),
-      optimizer = optim_adam
+      optimizer = torch::optim_adam
     )
 
   expect_s3_class(mod, "luz_module_generator")
@@ -105,7 +105,7 @@ test_that("predict works for modules", {
   mod <- model %>%
     setup(
       loss = torch::nn_mse_loss(),
-      optimizer = optim_adam
+      optimizer = torch::optim_adam
     )
 
   output <- mod %>%
@@ -124,5 +124,35 @@ test_that("predict works for modules", {
   pred <- predict(output, dl)
   pred2 <- predict(output, dl)
   expect_equal(as.array(pred$to(device = "cpu")), as.array(pred2$to(device="cpu")))
+
+})
+
+test_that("predict can use a progress bar", {
+
+  model <- get_model()
+  dl <- get_dl()
+
+  mod <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam
+    )
+
+  output <- mod %>%
+    set_hparams(input_size = 10, output_size = 1) %>%
+    fit(dl, epochs = 1, verbose = FALSE)
+
+  dl <- get_dl(len = 500)
+
+  withr::with_options(
+    list(luz.force_progress_bar = TRUE,
+         luz.show_progress_bar_eta = FALSE,
+         width = 80),
+    {
+      expect_snapshot(
+        pred <- predict(output, dl, verbose=TRUE)
+      )
+    }
+  )
 
 })
