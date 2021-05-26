@@ -172,3 +172,26 @@ test_that("csv callback", {
   expect_equal(names(x), c("epoch", "set", "loss"))
 
 })
+
+test_that("progressbar appears with training and validation", {
+
+  model <- get_model()
+  dl <- get_dl(len = 500)
+
+  mod <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam,
+    )
+
+  withr::with_options(list(luz.force_progress_bar = TRUE), {
+    expect_snapshot({
+      expect_message({
+        output <- mod %>%
+          set_hparams(input_size = 10, output_size = 1) %>%
+          fit(dl, verbose = TRUE, epochs = 2, valid_data = dl)
+      })
+    })
+  })
+
+})

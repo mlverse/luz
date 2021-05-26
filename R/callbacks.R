@@ -79,22 +79,6 @@ luz_callback <- function(name = NULL, ..., private = NULL, active = NULL, parent
 #' @export
 luz_callback_progress <- luz_callback(
   "progress_callback",
-  on_train_begin = function() {
-    format <- ":current/:total [:bar] - ETA: :eta"
-    metrics <- ctx$metrics[["train"]]
-    if (length(metrics) > 0) {
-      abbrevs <- self$get_abbrevs(metrics)
-      abbrevs <- paste0(glue::glue("{abbrevs}: :{tolower(abbrevs)} "), collapse = " - ")
-    } else {
-      abbrevs <- NULL
-    }
-
-    format <- paste0(c(format, abbrevs), collapse = " - ")
-    self$pb <- progress::progress_bar$new(
-      format = format,
-      total = length(ctx$data)
-    )
-  },
   on_epoch_begin = function() {
     inform(sprintf(
       "Epoch %d/%d",
@@ -102,12 +86,17 @@ luz_callback_progress <- luz_callback(
       as.integer(ctx$epochs)
     ))
   },
+  on_train_begin = function() {
+    self$initialize_progress_bar("train")
+  },
   on_train_batch_end = function() {
-    if (ctx$verbose) {
-      tokens <- self$get_metrics("train")
-      names(tokens) <- tolower(names(tokens))
-      self$pb$tick(tokens = tokens)
-    }
+    self$tick_progress_bar("train")
+  },
+  on_valid_begin = function() {
+    self$initialize_progress_bar("valid")
+  },
+  on_valid_batch_end = function() {
+    self$tick_progress_bar("valid")
   },
   on_epoch_end = function() {
     self$inform_metrics("train", "Train")
@@ -145,6 +134,30 @@ luz_callback_progress <- luz_callback(
     if (length(metrics) > 0) {
       res <- paste0(glue::glue("{names(metrics)}: {metrics}"), collapse = " - ")
       inform(glue::glue("{name} metrics: {res}"))
+    }
+  },
+  initialize_progress_bar = function(split) {
+    format <- ":current/:total [:bar] - ETA: :eta"
+    metrics <- ctx$metrics[[split]]
+    if (length(metrics) > 0) {
+      abbrevs <- self$get_abbrevs(metrics)
+      abbrevs <- paste0(glue::glue("{abbrevs}: :{tolower(abbrevs)} "), collapse = " - ")
+    } else {
+      abbrevs <- NULL
+    }
+
+    format <- paste0(c(format, abbrevs), collapse = " - ")
+    self$pb <- progress::progress_bar$new(
+      force = getOption("luz.force_progress_bar", FALSE),
+      format = format,
+      total = length(ctx$data)
+    )
+  },
+  tick_progress_bar = function(split) {
+    if (ctx$verbose) {
+      tokens <- self$get_metrics(split)
+      names(tokens) <- tolower(names(tokens))
+      self$pb$tick(tokens = tokens)
     }
   }
 )
