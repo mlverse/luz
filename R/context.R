@@ -99,6 +99,13 @@ context <- R6::R6Class(
     #' Get the value of a metric given its name, epoch and set.
     get_metric = function(name, set, epoch= NULL) {
       self$get_metrics(set, epoch)[[name]]
+    },
+    set_verbose = function(verbose = NULL) {
+      if (is.null(verbose)) {
+        self$verbose <- interactive()
+      } else {
+        self$verbose <- verbose
+      }
     }
   ),
   active = list(

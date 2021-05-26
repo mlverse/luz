@@ -144,12 +144,7 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
 
   # Initialize context:
   ctx <- context$new()
-
-  if (is.null(verbose)) {
-    ctx$verbose <- interactive()
-  } else {
-    ctx$verbose <- verbose
-  }
+  ctx$set_verbose(verbose)
 
   if (is.null(accelerator))
     accelerator <- accelerator()
@@ -257,9 +252,10 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
 #' @importFrom stats predict
 #' @export
 predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
-                                      accelerator = NULL) {
+                                      accelerator = NULL, verbose = NULL) {
 
   ctx <- object$ctx
+  ctx$set_verbose(verbose)
 
   if (is.null(accelerator))
     accelerator <- accelerator()
@@ -279,6 +275,8 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
     stack <- TRUE
   else
     stack <- pars$stack
+
+  callbacks <- c(default_predict_callbacks(), callbacks)
 
   ctx$handlers <- list()
   ctx$output <- list()

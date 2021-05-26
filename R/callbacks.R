@@ -31,6 +31,12 @@ default_callbacks <- function() {
   )
 }
 
+default_predict_callbacks <- function() {
+  list(
+    luz_callback_progress()
+  )
+}
+
 #' Create a new callback
 #'
 #' @param name name of the callback
@@ -97,6 +103,12 @@ luz_callback_progress <- luz_callback(
   },
   on_valid_batch_end = function() {
     self$tick_progress_bar("valid")
+  },
+  on_predict_begin = function() {
+    self$initialize_progress_bar("predict")
+  },
+  on_predict_batch_end = function() {
+    self$tick_progress_bar("predict")
   },
   on_epoch_end = function() {
     self$inform_metrics("train", "Train")
