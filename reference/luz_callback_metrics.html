@@ -55,7 +55,7 @@
     <div class="ref-section section level2" id="section-details">
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details" aria-hidden="true"></a>Details</h2>
 
-    <p>This callback takes care of 2 <code>ctx</code> attributes:</p><ul><li><p><code>ctx$metrics</code>: stores the metrics objects that are initialized once for epoch,
+    <p>This callback takes care of 2 <a href="ctx.html">ctx</a> attributes:</p><ul><li><p><code>ctx$metrics</code>: stores the current metrics objects that are initialized once for epoch,
 and are further <code><a href="https://rdrr.io/r/stats/update.html">update()</a></code>d and <code>compute()</code>d every batch. You will rarely need
 to work with these metrics.</p></li>
 <li><p><code>ctx$records$metrics</code>: Stores metrics per training/validation and epoch. The
