@@ -137,7 +137,14 @@ luz_callback_progress <- luz_callback(
     }
   },
   initialize_progress_bar = function(split) {
-    format <- ":current/:total [:bar] - ETA: :eta"
+    format <- ":current/:total [:bar]"
+
+    # Specially for testing purposes we don't want to have the
+    # progress bar showing the ETA.
+    if (getOption("luz.show_progress_bar_eta", TRUE)) {
+      format <- paste0(format,  " - ETA: :eta")
+    }
+
     metrics <- ctx$metrics[[split]]
     if (length(metrics) > 0) {
       abbrevs <- self$get_abbrevs(metrics)
@@ -146,9 +153,12 @@ luz_callback_progress <- luz_callback(
       abbrevs <- NULL
     }
 
+    show_after <- if (getOption("luz.force_progress_bar", FALSE)) 0 else 0.2
+
     format <- paste0(c(format, abbrevs), collapse = " - ")
     self$pb <- progress::progress_bar$new(
       force = getOption("luz.force_progress_bar", FALSE),
+      show_after = show_after,
       format = format,
       total = length(ctx$data)
     )

@@ -175,8 +175,11 @@ test_that("csv callback", {
 
 test_that("progressbar appears with training and validation", {
 
+  torch::torch_manual_seed(1)
+  set.seed(1)
+
   model <- get_model()
-  dl <- get_dl(len = 500)
+  dl <- get_test_dl(len = 500)
 
   mod <- model %>%
     setup(
@@ -184,7 +187,9 @@ test_that("progressbar appears with training and validation", {
       optimizer = torch::optim_adam,
     )
 
-  withr::with_options(list(luz.force_progress_bar = TRUE), {
+  withr::with_options(list(luz.force_progress_bar = TRUE,
+                           luz.show_progress_bar_eta = FALSE,
+                           width = 80), {
     expect_snapshot({
       expect_message({
         output <- mod %>%
