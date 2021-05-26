@@ -11,6 +11,8 @@ See also \link{ctx}.
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
 \item{\code{records}}{stores information about values logged with \code{self$log}.}
+
+\item{\code{device}}{allows querying the current accelerator device}
 }
 \if{html}{\out{</div>}}
 }
@@ -22,6 +24,7 @@ See also \link{ctx}.
 \item \href{#method-get_log}{\code{context$get_log()}}
 \item \href{#method-get_metrics}{\code{context$get_metrics()}}
 \item \href{#method-get_metric}{\code{context$get_metric()}}
+\item \href{#method-set_verbose}{\code{context$set_verbose()}}
 \item \href{#method-clone}{\code{context$clone()}}
 }
 }
@@ -139,6 +142,24 @@ Get the value of a metric given its name, epoch and set.
 to lot to. But can be arbitrary info.}
 
 \item{\code{epoch}}{The epoch you want to extract metrics from.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-set_verbose"></a>}}
+\if{latex}{\out{\hypertarget{method-set_verbose}{}}}
+\subsection{Method \code{set_verbose()}}{
+Allows setting the \code{verbose} attribute.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{context$set_verbose(verbose = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{verbose}}{boolean. If \code{TRUE} verbose mode is used. If \code{FALSE} non verbose.
+if \code{NULL} we use the result of \code{\link[=interactive]{interactive()}}.}
 }
 \if{html}{\out{</div>}}
 }
