@@ -241,7 +241,7 @@ luz_callback_metrics <- luz_callback(
     self$log_all_metrics("valid")
   },
   initialize_metric  = function(x) {
-    obj <- x$new()
+    obj <- x$new()$to(device = ctx$device)
     bind_context(obj, ctx)
     obj
   },

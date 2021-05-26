@@ -12,6 +12,14 @@ LuzMetric <- R6::R6Class(
         v <- lapply(v, round, 4)
         paste0(glue::glue("{names(v)}: {v}"), collapse = " | ")
       }
+    },
+    to = function(device) {
+      # move tensors to the correct device
+      for (nm in names(self)) {
+        if (inherits(self[[nm]], "torch_tensor"))
+          self[[nm]] <- self[[nm]]$to(device = device)
+      }
+      invisible(self)
     }
   )
 )
