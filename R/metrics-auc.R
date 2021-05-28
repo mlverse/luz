@@ -89,17 +89,17 @@ luz_metric_binary_auroc <- luz_metric(
     predictions_per_thresh <- preds$unsqueeze(2) > self$thresholds
     comparisons <- predictions_per_thresh == targets$unsqueeze(2)
 
-    self$true_positives$add_(torch_sum(comparisons[targets == 1,], dim = 1))
-    self$false_positives$add_(torch_sum(comparisons[targets == 0,], dim = 1))
-    self$n_pos$add_(torch_sum(targets))
-    self$n_neg$add_(torch_sum(targets == 0))
+    self$true_positives$add_(torch::torch_sum(comparisons[targets == 1,], dim = 1))
+    self$false_positives$add_(torch::torch_sum(comparisons[targets == 0,], dim = 1))
+    self$n_pos$add_(torch::torch_sum(targets))
+    self$n_neg$add_(torch::torch_sum(targets == 0))
   },
   compute = function() {
     tpr <- self$true_positives/self$n_pos
     fpr <- self$false_positives/self$n_neg
-    mult <- torch:::torch_diff(fpr, n=1, prepend = 0)
+    mult <- torch:::torch_diff(fpr, n=1, prepend = torch::torch_tensor(0, device = tpr$device))
 
-    torch_sum(tpr*mult)$item()
+    torch::torch_sum(tpr*mult)$item()
   }
 )
 
@@ -161,7 +161,7 @@ luz_metric_multiclass_auroc <- luz_metric(
                      thresholds = thresholds,
                      from_logits = from_logits)
   },
-  initialize_state = function(num_classes) {
+  initialize_state = function(num_classes, device = "cpu") {
 
     if (missing(num_classes))
       return()
@@ -169,19 +169,19 @@ luz_metric_multiclass_auroc <- luz_metric(
     self$num_classes <- num_classes
     size <- c(self$num_classes, self$num_thresholds)
 
-    self$true_positives <- torch::torch_zeros(size = size)
-    self$false_positives <- torch::torch_zeros(size = size)
-    self$n_pos <- torch::torch_zeros(size = c(self$num_classes, 1))
-    self$n_neg <- torch::torch_zeros(size = c(self$num_classes, 1))
+    self$true_positives <- torch::torch_zeros(size = size, device = device)
+    self$false_positives <- torch::torch_zeros(size = size, device = device)
+    self$n_pos <- torch::torch_zeros(size = c(self$num_classes, 1), device = device)
+    self$n_neg <- torch::torch_zeros(size = c(self$num_classes, 1), device = device)
   },
   update = function(preds, targets) {
 
     # initialize state. we expect one column for each class
     if (is.null(self$num_classes)) {
       if (self$average == "micro") {
-        self$initialize_state(1L)
+        self$initialize_state(1L, preds$device)
       } else {
-        self$initialize_state(preds$shape[2])
+        self$initialize_state(preds$shape[2], preds$device)
       }
     }
 
@@ -190,7 +190,7 @@ luz_metric_multiclass_auroc <- luz_metric(
 
     # targets are expected to be integers representing the classes
     # so we one hot encode them
-    targets <- nnf_one_hot(targets, num_classes = preds$shape[2])
+    targets <- torch::nnf_one_hot(targets, num_classes = preds$shape[2])
 
     if (self$average == "micro") {
       preds <- micro_stack(preds)
@@ -204,18 +204,18 @@ luz_metric_multiclass_auroc <- luz_metric(
     predictions_per_thresh <- preds > self$thresholds
     comparisons <- predictions_per_thresh == targets
 
-    self$true_positives$add_(torch_sum(comparisons * (targets == 1), dim = 1))
-    self$false_positives$add_(torch_sum(comparisons * (targets == 0), dim = 1))
-    self$n_pos$add_(torch_sum(targets == 1, dim = 1))
-    self$n_neg$add_(torch_sum(targets == 0, dim = 1))
+    self$true_positives$add_(torch::torch_sum(comparisons * (targets == 1), dim = 1))
+    self$false_positives$add_(torch::torch_sum(comparisons * (targets == 0), dim = 1))
+    self$n_pos$add_(torch::torch_sum(targets == 1, dim = 1))
+    self$n_neg$add_(torch::torch_sum(targets == 0, dim = 1))
   },
   compute = function() {
 
     tpr <- self$true_positives/self$n_pos
     fpr <- self$false_positives/self$n_neg
 
-    mult <- torch::torch_diff(fpr, n=1, dim = 2,prepend = torch_zeros(self$num_classes,1))
-    mult <- torch_cat(list(mult, torch_zeros(self$num_classes, 1)), dim = 2)
+    mult <- torch::torch_diff(fpr, n=1, dim = 2,prepend = torch::torch_zeros(self$num_classes,1, device = tpr$device))
+    mult <- torch::torch_cat(list(mult, torch::torch_zeros(self$num_classes, 1, device = tpr$device)), dim = 2)
 
     aucs_minor <- torch::torch_sum(tpr*mult[,1:-2], dim = 2)
     aucs_major <- torch::torch_sum(tpr*mult[,2:N], dim = 2)
@@ -223,7 +223,7 @@ luz_metric_multiclass_auroc <- luz_metric(
     aucs <- (aucs_minor + aucs_major)/2
 
     if (self$average == "none") {
-      as.list(as.numeric(aucs))
+      as.list(as.numeric(aucs$cpu()))
     } else if (self$average == "micro") {
       aucs$item()
     } else if (self$average == "macro") {

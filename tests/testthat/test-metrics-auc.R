@@ -3,8 +3,8 @@ test_that("binary auc works", {
   actual <- c(1, 1, 1, 0, 0, 0)
   predicted <- c(0.9, 0.8, 0.4, 0.5, 0.3, 0.2)
 
-  y_true <- torch_tensor(actual, device = get_device())
-  y_pred <- torch_tensor(predicted, device = get_device())
+  y_true <- torch::torch_tensor(actual, device = get_device())
+  y_pred <- torch::torch_tensor(predicted, device = get_device())
 
   m <- luz_metric_binary_auroc(thresholds = predicted)
   m <- m$new()$to(device = get_device())
@@ -26,8 +26,8 @@ test_that("multiclass auc works with method = micro", {
   predicted <- c(0.9, 0.8, 0.4, 0.5, 0.3, 0.2)
   predicted <- cbind(1-predicted, predicted)
 
-  y_true <- torch_tensor(as.integer(actual), device = get_device())
-  y_pred <- torch_tensor(predicted, device = get_device())
+  y_true <- torch::torch_tensor(as.integer(actual), device = get_device())
+  y_pred <- torch::torch_tensor(predicted, device = get_device())
 
   m <- luz_metric_multiclass_auroc(thresholds = as.numeric(predicted),
                                    average = "micro")
@@ -53,8 +53,8 @@ test_that("multiclass auc works with method = macro", {
   predicted <- c(0.9, 0.8, 0.4, 0.5, 0.3, 0.2)
   predicted <- cbind(1-predicted, predicted)
 
-  y_true <- torch_tensor(as.integer(actual), device = get_device())
-  y_pred <- torch_tensor(predicted, device = get_device())
+  y_true <- torch::torch_tensor(as.integer(actual), device = get_device())
+  y_pred <- torch::torch_tensor(predicted, device = get_device())
 
   m <- luz_metric_multiclass_auroc(num_thresholds = 1e5, average = "macro")
   m <- m$new()$to(device = get_device())
@@ -79,8 +79,8 @@ test_that("multiclass auc works with method = weighted", {
   predicted <- c(0.9, 0.8, 0.4, 0.5, 0.3, 0.2, 0.4, 0.3)
   predicted <- cbind(predicted, predicted)
 
-  y_true <- torch_tensor(as.integer(actual), device = get_device())
-  y_pred <- torch_tensor(predicted, device = get_device())
+  y_true <- torch::torch_tensor(as.integer(actual), device = get_device())
+  y_pred <- torch::torch_tensor(predicted, device = get_device())
 
   m <- luz_metric_multiclass_auroc(num_thresholds = 1e5, average = "weighted")
   m <- m$new()$to(device = get_device())
@@ -104,8 +104,8 @@ test_that("multiclass auc works with `none`", {
   predicted <- c(0.9, 0.8, 0.4, 0.5, 0.3, 0.2)
   predicted <- cbind(1-predicted, predicted)
 
-  y_true <- torch_tensor(as.integer(actual), device = get_device())
-  y_pred <- torch_tensor(predicted, device = get_device())
+  y_true <- torch::torch_tensor(as.integer(actual), device = get_device())
+  y_pred <- torch::torch_tensor(predicted, device = get_device())
 
   m <- luz_metric_multiclass_auroc(num_thresholds = 1e5, average = "none")
   m <- m$new()$to(device = get_device())
