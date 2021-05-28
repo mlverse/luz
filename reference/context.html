@@ -57,6 +57,8 @@ See also <a href="ctx.html">ctx</a>.</p>
 
     <p></p><div class="r6-active-bindings"><dl><dt><code>records</code></dt><dd><p>stores information about values logged with <code>self$log</code>.</p></dd>
 
+<dt><code>device</code></dt><dd><p>allows querying the current accelerator device</p></dd>
+
 </dl><p></p></div>
     </div>
     <div class="ref-section section level2" id="section-methods">
@@ -70,6 +72,7 @@ See also <a href="ctx.html">ctx</a>.</p>
 <li><p><a href="#method-get_log"><code>context$get_log()</code></a></p></li>
 <li><p><a href="#method-get_metrics"><code>context$get_metrics()</code></a></p></li>
 <li><p><a href="#method-get_metric"><code>context$get_metric()</code></a></p></li>
+<li><p><a href="#method-set_verbose"><code>context$set_verbose()</code></a></p></li>
 <li><p><a href="#method-clone"><code>context$clone()</code></a></p></li>
 </ul><p></p><hr><a id="method-log"></a><h3 class="hasAnchor" id="method-"><a class="anchor" aria-hidden="true" href="#method-"></a>Method <code><a href="https://rdrr.io/r/base/Log.html">log()</a></code></h3>
 <p>Allows logging arbitrary information in the <code>ctx</code>.</p><h4 class="hasAnchor" id="usage"><a class="anchor" aria-hidden="true" href="#usage"></a>Usage</h4>
@@ -215,6 +218,24 @@ to lot to. But can be arbitrary info.</p></dd>
 to lot to. But can be arbitrary info.</p></dd>
 
 <dt><code>epoch</code></dt><dd><p>The epoch you want to extract metrics from.</p></dd>
+
+</dl><p></p></div>
+<p></p><hr><a id="method-set_verbose"></a><h3 class="hasAnchor" id="method-"><a class="anchor" aria-hidden="true" href="#method-"></a>Method <code>set_verbose()</code></h3>
+<p>Allows setting the <code>verbose</code> attribute.</p><h4 class="hasAnchor" id="usage"><a class="anchor" aria-hidden="true" href="#usage"></a>Usage</h4>
+<p></p><div class="r"><pre class="sourceCode r"><code><span class="va">context</span><span class="op">$</span><span class="fu">set_verbose</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre><p></p></div>
+
+<h4 class="hasAnchor" id="arguments"><a class="anchor" aria-hidden="true" href="#arguments"></a>Arguments</h4>
+<p></p><div class="arguments"><dl><dt><code>verbose</code></dt><dd><p>boolean. If <code>TRUE</code> verbose mode is used. If <code>FALSE</code> non verbose.
+if <code>NULL</code> we use the result of <code><a href="https://rdrr.io/r/base/interactive.html">interactive()</a></code>.</p></dd>
+
+</dl><p></p></div>
+<h3 class="hasAnchor" id="list-set-verbose-"><a class="anchor" aria-hidden="true" href="#list-set-verbose-"></a>Method <code>set_verbose()</code></h3>
+<p>Allows setting the <code>verbose</code> attribute.</p><h4 class="hasAnchor" id="usage"><a class="anchor" aria-hidden="true" href="#usage"></a>Usage</h4>
+<p></p><div class="r"><pre class="sourceCode r"><code><span class="va">context</span><span class="op">$</span><span class="fu">set_verbose</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre><p></p></div>
+
+<h4 class="hasAnchor" id="arguments"><a class="anchor" aria-hidden="true" href="#arguments"></a>Arguments</h4>
+<p></p><div class="arguments"><dl><dt><code>verbose</code></dt><dd><p>boolean. If <code>TRUE</code> verbose mode is used. If <code>FALSE</code> non verbose.
+if <code>NULL</code> we use the result of <code><a href="https://rdrr.io/r/base/interactive.html">interactive()</a></code>.</p></dd>
 
 </dl><p></p></div>
 <p></p><hr><a id="method-clone"></a><h3 class="hasAnchor" id="method-"><a class="anchor" aria-hidden="true" href="#method-"></a>Method <code>clone()</code></h3>
