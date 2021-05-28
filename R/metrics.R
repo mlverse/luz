@@ -12,6 +12,14 @@ LuzMetric <- R6::R6Class(
         v <- lapply(v, round, 4)
         paste0(glue::glue("{names(v)}: {v}"), collapse = " | ")
       }
+    },
+    to = function(device) {
+      # move tensors to the correct device
+      for (nm in names(self)) {
+        if (inherits(self[[nm]], "torch_tensor"))
+          self[[nm]] <- self[[nm]]$to(device = device)
+      }
+      invisible(self)
     }
   )
 )
@@ -247,7 +255,7 @@ luz_metric_mae <- luz_metric(
     self$n <- self$n + targets$numel()
   },
   compute = function() {
-    as.array(self$sum_abs_error / self$n)
+    (self$sum_abs_error / self$n)$item()
   }
 )
 
@@ -272,7 +280,7 @@ luz_metric_mse <- luz_metric(
     self$n <- self$n + targets$numel()
   },
   compute = function() {
-    as.array(self$sum_error / self$n)
+    (self$sum_error / self$n)$item()
   }
 )
 

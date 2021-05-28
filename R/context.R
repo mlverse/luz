@@ -100,6 +100,9 @@ context <- R6::R6Class(
     get_metric = function(name, set, epoch= NULL) {
       self$get_metrics(set, epoch)[[name]]
     },
+    #' @description Allows setting the `verbose` attribute.
+    #' @param verbose boolean. If `TRUE` verbose mode is used. If `FALSE` non verbose.
+    #'   if `NULL` we use the result of [interactive()].
     set_verbose = function(verbose = NULL) {
       if (is.null(verbose)) {
         self$verbose <- interactive()
@@ -115,6 +118,17 @@ context <- R6::R6Class(
         rlang::abort("Not allowed to modify records manually. Use ctx$log() or ctx$log_metric()")
 
       private$.records
+    },
+    #' @field device allows querying the current accelerator device
+    device = function(x) {
+
+      if (!missing(x))
+        rlang::abort("Not allowed to modify the device manually. Modify the ctx$accelerator")
+
+      if (is.null(self$accelerator))
+        rlang::abort("Context doesn't have an accelerator attached.")
+
+      self$accelerator$device
     }
   ),
   private = list(
