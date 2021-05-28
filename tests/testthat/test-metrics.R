@@ -30,45 +30,45 @@ test_that("Can create a simple metric", {
 
 test_that("mae works", {
 
-  x <- torch::torch_randn(100, 100)
-  y <- torch::torch_randn(100, 100)
+  x <- torch::torch_randn(100, 100, device = get_device())
+  y <- torch::torch_randn(100, 100, device = get_device())
 
   m <- luz_metric_mae()
-  m <- m$new()
+  m <- m$new()$to(device = get_device())
 
   m$update(x, y)
   o <- m$compute()
-  eo <- mean(abs(as.array(x) - as.array(y)))
+  eo <- mean(abs(as.array(x$cpu()) - as.array(y$cpu())))
 
   expect_equal(o, eo, tolerance = 1e-5)
 })
 
 test_that("mse works", {
 
-  x <- torch::torch_randn(100, 100)
-  y <- torch::torch_randn(100, 100)
+  x <- torch::torch_randn(100, 100, device = get_device())
+  y <- torch::torch_randn(100, 100, device = get_device())
 
   m <- luz_metric_mse()
-  m <- m$new()
+  m <- m$new()$to(device = get_device())
 
   m$update(x, y)
   o <- m$compute()
-  eo <- mean((as.array(x) - as.array(y))^2)
+  eo <- mean((as.array(x$cpu()) - as.array(y$cpu()))^2)
 
   expect_equal(o, eo, tolerance = 1e-5)
 })
 
 test_that("rmse works", {
 
-  x <- torch::torch_randn(100, 100)
-  y <- torch::torch_randn(100, 100)
+  x <- torch::torch_randn(100, 100, device = get_device())
+  y <- torch::torch_randn(100, 100, device = get_device())
 
   m <- luz_metric_rmse()
-  m <- m$new()
+  m <- m$new()$to(device = get_device())
 
   m$update(x, y)
   o <- m$compute()
-  eo <- sqrt(mean((as.array(x) - as.array(y))^2))
+  eo <- sqrt(mean((as.array(x$cpu()) - as.array(y$cpu()))^2))
 
   expect_equal(o, eo, tolerance = 1e-5)
 })
@@ -76,15 +76,15 @@ test_that("rmse works", {
 test_that("binary accuracy with logits", {
 
   m <- luz_metric_binary_accuracy_with_logits(threshold = 0.5)
-  m <- m$new()
+  m <- m$new()$to(device = get_device())
 
-  x <- torch_randn(100)
-  y <- torch_randint(0, 1, 100)
+  x <- torch_randn(100, device = get_device())
+  y <- torch_randint(0, 1, 100, device = get_device())
 
   m$update(x, y)
   expect_equal(
     m$compute(),
-    mean(as.array(x > 0) == as.array(y))
+    mean(as.array((x > 0)$cpu()) == as.array(y$cpu()))
   )
 
 })

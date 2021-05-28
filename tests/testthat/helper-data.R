@@ -1,3 +1,11 @@
+
+get_device <- function() {
+  if (torch::cuda_is_available())
+    "cuda"
+  else
+    "cpu"
+}
+
 # Helper train dataloaders and models for tests
 
 get_ds <- torch::dataset(
