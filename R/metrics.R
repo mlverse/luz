@@ -255,7 +255,7 @@ luz_metric_mae <- luz_metric(
     self$n <- self$n + targets$numel()
   },
   compute = function() {
-    as.array(self$sum_abs_error / self$n)
+    (self$sum_abs_error / self$n)$item()
   }
 )
 
