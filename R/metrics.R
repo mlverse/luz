@@ -280,7 +280,7 @@ luz_metric_mse <- luz_metric(
     self$n <- self$n + targets$numel()
   },
   compute = function() {
-    as.array(self$sum_error / self$n)
+    (self$sum_error / self$n)$item()
   }
 )
 
