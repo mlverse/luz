@@ -17,8 +17,20 @@ get_ds <- torch::dataset(
   }
 )
 
+get_binary_ds <- torch::dataset(
+  inherit = get_ds,
+  initialize = function(...) {
+    super$initialize(...)
+    self$y <- torch::torch_randint(low = 0,high = 2, size = self$y$shape)
+  }
+)
+
 get_dl <- function(batch_size = 10, ...) {
   torch::dataloader(get_ds(...), batch_size = batch_size)
+}
+
+get_binary_dl <- function(batch_size = 10,...) {
+  torch::dataloader(get_binary_ds(...), batch_size = batch_size)
 }
 
 get_test_dl <- function(batch_size = 10, ...) {

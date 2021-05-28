@@ -88,3 +88,33 @@ test_that("binary accuracy with logits", {
   )
 
 })
+
+test_that("metrics works within models", {
+
+  dl <- get_binary_dl()
+  model <- torch::nn_linear
+
+  mod <- model %>%
+    setup(
+      loss = torch::nn_bce_with_logits_loss(),
+      optimizer = torch::optim_adam,
+      metrics = list(
+        luz_metric_binary_accuracy_with_logits(),
+        luz_metric_binary_auroc(from_logits = TRUE),
+        luz_metric_binary_accuracy()
+      )
+    )
+
+  expect_error(
+    output <- mod %>%
+      set_hparams(in_features = 10, out_features = 1) %>%
+      fit(dl, epochs = 1, verbose = FALSE),
+    regexp = NA
+  )
+
+  expect_length(
+    output$records$metrics$train[[1]],
+    4
+  )
+
+})
