@@ -32,7 +32,7 @@ luz_save <- function(obj, path, ...) {
     o <- saveRDS(obj, path)
   })
 
-  o
+  invisible(o)
 }
 
 
