@@ -51,7 +51,7 @@ want to reload the best checkpoint in the end.</p>
     </div>
 
     <div id="ref-usage" class="ref-usage section level2 sourceCode">
-    <pre class="sourceCode r"><code><span class="fu">luz_load_model_weights</span><span class="op">(</span><span class="va">obj</span>, <span class="va">path</span><span class="op">)</span>
+    <pre class="sourceCode r"><code><span class="fu">luz_load_model_weights</span><span class="op">(</span><span class="va">obj</span>, <span class="va">path</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="fu">luz_save_model_weights</span><span class="op">(</span><span class="va">obj</span>, <span class="va">path</span><span class="op">)</span></code></pre>
     </div>
@@ -61,6 +61,8 @@ want to reload the best checkpoint in the end.</p>
       <dd class="col-sm-9" id="ref-arguments desc"><p>luz object to which you want to copy the new weights.</p></dd>
     <dt class="col-sm-3 section level2" id="pkg-arg-path">path</dt>
       <dd class="col-sm-9" id="ref-arguments desc"><p>path to saved model in disk.</p></dd>
+    <dt class="col-sm-3 section level2" id="pkg-arg-...">...</dt>
+      <dd class="col-sm-9" id="ref-arguments desc"><p>other arguments passed to <code>torch_load()</code>.</p></dd>
     </dl><div class="ref-section section level2" id="section-value">
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value" aria-hidden="true"></a>Value</h2>
 

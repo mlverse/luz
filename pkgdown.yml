@@ -1,6 +1,6 @@
 pandoc: 2.7.3
 pkgdown: 1.6.1.9001
-pkgdown_sha: 3b870d0efcfcf92a42aa881d58c3462cdbb110a8
+pkgdown_sha: b7b462438bc6252d40e9e5f223b0c56bf938f6d7
 articles:
   accelerator: accelerator.html
   custom-loop: custom-loop.html
@@ -12,5 +12,5 @@ articles:
   examples/mnist-dcgan: mnist-dcgan.html
   examples/mnist-triplet: mnist-triplet.html
   get-started: get-started.html
-last_built: 2021-05-31T19:09Z
+last_built: 2021-06-01T20:57Z
 
