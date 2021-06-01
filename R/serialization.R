@@ -69,10 +69,11 @@ luz_load <- function(path) {
 #'
 #' @param obj luz object to which you want to copy the new weights.
 #' @param path path to saved model in disk.
+#' @param ... other arguments passed to [torch_load()].
 #'
 #' @export
-luz_load_model_weights <- function(obj, path) {
-  saved_model <- torch::torch_load(path)
+luz_load_model_weights <- function(obj, path, ...) {
+  saved_model <- torch::torch_load(path, ...)
   obj$model$load_state_dict(saved_model$state_dict())
   # we return NULL to make sure people don't expect it to return a copy of obj
   invisible(NULL)

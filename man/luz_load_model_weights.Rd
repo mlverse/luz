@@ -5,7 +5,7 @@
 \alias{luz_save_model_weights}
 \title{Loads model weights into a fitted object.}
 \usage{
-luz_load_model_weights(obj, path)
+luz_load_model_weights(obj, path, ...)
 
 luz_save_model_weights(obj, path)
 }
@@ -13,6 +13,8 @@ luz_save_model_weights(obj, path)
 \item{obj}{luz object to which you want to copy the new weights.}
 
 \item{path}{path to saved model in disk.}
+
+\item{...}{other arguments passed to \code{\link[=torch_load]{torch_load()}}.}
 }
 \value{
 Returns \code{NULL} invisibly.
