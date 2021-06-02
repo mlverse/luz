@@ -37,6 +37,7 @@ Collate:
     'accelerator.R'
     'utils.R'
     'callbacks.R'
+    'callbacks-interrupt.R'
     'context.R'
     'metrics.R'
     'metrics-auc.R'
