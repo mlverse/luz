@@ -29,7 +29,8 @@ default_callbacks <- function() {
   list(
     luz_callback_train_valid(),
     luz_callback_metrics(),
-    luz_callback_progress()
+    luz_callback_progress(),
+    luz_callback_interrupt()
   )
 }
 
