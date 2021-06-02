@@ -53,6 +53,7 @@ luz_callback_model_checkpoint(path= "path/to/dir/epoch-{epoch:02d}/model-{monito
 Other luz_callbacks: 
 \code{\link{luz_callback_csv_logger}()},
 \code{\link{luz_callback_early_stopping}()},
+\code{\link{luz_callback_interrupt}()},
 \code{\link{luz_callback_lr_scheduler}()},
 \code{\link{luz_callback_metrics}()},
 \code{\link{luz_callback_progress}()},

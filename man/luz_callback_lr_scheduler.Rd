@@ -40,6 +40,7 @@ cb <- luz_callback_lr_scheduler(torch::lr_step, step_size = 30)
 Other luz_callbacks: 
 \code{\link{luz_callback_csv_logger}()},
 \code{\link{luz_callback_early_stopping}()},
+\code{\link{luz_callback_interrupt}()},
 \code{\link{luz_callback_metrics}()},
 \code{\link{luz_callback_model_checkpoint}()},
 \code{\link{luz_callback_progress}()},

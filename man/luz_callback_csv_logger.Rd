@@ -16,6 +16,7 @@ The file will have 1 line for each epoch/validation.
 \seealso{
 Other luz_callbacks: 
 \code{\link{luz_callback_early_stopping}()},
+\code{\link{luz_callback_interrupt}()},
 \code{\link{luz_callback_lr_scheduler}()},
 \code{\link{luz_callback_metrics}()},
 \code{\link{luz_callback_model_checkpoint}()},
