@@ -446,9 +446,6 @@ luz_callback_model_checkpoint <- luz_callback(
     self$path <- path
     self$save_best_only <- save_best_only
 
-    if (self$save_best_only)
-      self$current_best <- 0
-
     super$initialize(monitor, mode, min_delta)
   },
   on_epoch_end = function() {
@@ -463,7 +460,7 @@ luz_callback_model_checkpoint <- luz_callback(
     path <- self$fmt_path(self$path)
 
     if (self$save_best_only) {
-      if (self$compare(qty, self$current_best)) {
+      if (self$compare(qty, self$current_best) || ctx$epoch == 1) {
         # means that new qty is better then previous
         self$current_best <- qty
         fs::dir_create(fs::path_dir(path), recurse = TRUE)
