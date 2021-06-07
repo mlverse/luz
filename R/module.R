@@ -150,11 +150,13 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
     accelerator <- accelerator()
 
   ctx$accelerator <- accelerator
+  ctx$hparams <- get_hparams(module) %||% list()
+  ctx$opt_hparams <- get_opt_hparams(module) %||% list()
 
-  model <- do.call(module, get_hparams(module) %||% list())
+  model <- do.call(module, ctx$hparams)
   bind_context(model, ctx)
 
-  optimizers <- do.call(model$set_optimizers, get_opt_hparams(module) %||% list())
+  optimizers <- do.call(model$set_optimizers, ctx$opt_hparams)
 
   if (!is.list(optimizers)) {
     optimizers <- list(opt = optimizers)
