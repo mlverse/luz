@@ -38,6 +38,7 @@ Collate:
     'utils.R'
     'callbacks.R'
     'callbacks-interrupt.R'
+    'callbacks-profile.R'
     'context.R'
     'metrics.R'
     'metrics-auc.R'
