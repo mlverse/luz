@@ -27,6 +27,7 @@ call_all_callbacks <- function(callbacks, name) {
 
 default_callbacks <- function() {
   list(
+    luz_callback_profile(),
     luz_callback_train_valid(),
     luz_callback_metrics(),
     luz_callback_progress(),
