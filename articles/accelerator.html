@@ -53,7 +53,14 @@
         <input type="search" class="form-control mr-sm-2" aria-label="Search" name="search-input" data-search-index="/search.json" id="search-input" placeholder="Search..." autocomplete="off">
 </form>
 
-      <ul class="navbar-nav ml-1"></ul>
+      <ul class="navbar-nav ml-1">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/mlverse/luz/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
   </div>
 </nav><div class="container template-article">
@@ -63,7 +70,7 @@
       <h1 class="display-4" data-toc-skip>Accelerator API</h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/mlverse/luz/blob/master/vignettes/accelerator.Rmd" class="external-link"><code>vignettes/accelerator.Rmd</code></a></small>
       <div class="d-none name"><code>accelerator.Rmd</code></div>
 
     </div>
@@ -71,7 +78,7 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">luz</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/luz" class="external-link">luz</a></span><span class="op">)</span></code></pre></div>
 <p>The Accelerator API is a simplified port of the Hugging Face <a href="https://github.com/huggingface/accelerate" class="external-link">Accelerate library</a>. Currently it only handles CPU and single GPU usage but allows users avoid the boilerplate code necessary to write training loops that works correctly on both devices.</p>
 <p>This API is meant to be the most flexible way you can use the luz package. With the Accelerator API, you write the raw torch training loop and with a few code changes you handle device placement of model, optimizers and dataloaders so you don’t need to add many <code>$to(device="cuda")</code> in your code or think about the order to create model and optimizers.</p>
 <div id="example" class="section level2">
