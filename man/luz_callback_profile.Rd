@@ -9,6 +9,18 @@ luz_callback_profile()
 \description{
 Computes the times for high-level operations in the training loops.
 }
+\details{
+Records are saved in \code{ctx$records$profile}. Times are stored as seconds.
+Data is stored in the following structure:
+\itemize{
+\item \strong{fit} time for the entire fit procedure.
+\item \strong{epoch} times per epoch
+\item \strong{(train/valid)_batch} time per batch of data processed, including data
+acquisition and step.
+\item \strong{(train/valid)_batch} time per step (training or validation step) - only
+the model step. (not including data acquisition and preprocessing)
+}
+}
 \note{
 In general you don't need to use these callback by yourself because it's always
 included by default in \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}}.
