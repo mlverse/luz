@@ -112,6 +112,7 @@ context <- R6::R6Class(
     #' @description
     #' Get a data.frame containing all metrics.
     get_metrics_df = function() {
+      check_installed("dplyr")
       purrr::imap_dfr(self$records$metrics, make_metrics_df)
     },
     #' @description Allows setting the `verbose` attribute.

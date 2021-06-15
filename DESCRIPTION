@@ -35,7 +35,8 @@ Suggests:
     Metrics,
     withr,
     vdiffr,
-    ggplot2
+    ggplot2,
+    dplyr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
