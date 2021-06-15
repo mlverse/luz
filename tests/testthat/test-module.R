@@ -159,3 +159,4 @@ test_that("predict can use a progress bar", {
   expect_equal(output$ctx$hparams$input_size, 10)
   expect_equal(output$ctx$opt_hparams$lr, 0.001)
 })
+

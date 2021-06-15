@@ -3,6 +3,8 @@
 S3method(as_iterator,device_dataloader)
 S3method(fit,luz_module_generator)
 S3method(predict,luz_module_fitted)
+S3method(print,luz_module_fitted)
+S3method(print,luz_module_generator)
 export("%>%")
 export(accelerator)
 export(fit)
