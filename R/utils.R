@@ -139,4 +139,13 @@ sprintf_transformer <- function(text, envir) {
   }
 }
 
+check_installed <- function (pkg, fun) {
+  if (rlang::is_installed(pkg)) {
+    return()
+  }
+  rlang::abort(c(paste0("The ", pkg, " package must be installed in order to use `",
+                 fun, "`"), i = paste0("Do you need to run `install.packages('",
+                                       pkg, "')`?")))
+}
+
 
