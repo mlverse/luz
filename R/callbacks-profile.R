@@ -10,7 +10,7 @@
 #' - **epoch** times per epoch
 #' - **(train/valid)_batch** time per batch of data processed, including data
 #'   acquisition and step.
-#' - **(train/valid)_batch** time per step (training or validation step) - only
+#' - **(train/valid)_step** time per step (training or validation step) - only
 #'   the model step. (not including data acquisition and preprocessing)
 #'
 #' @note In general you don't need to use these callback by yourself because it's always
@@ -88,4 +88,10 @@ luz_callback_profile <- luz_callback(
   }
 )
 
+get_total_time <- function(x) {
+  unlist(x$ctx$records$profile$fit)
+}
 
+get_average_time <- function(x, what) {
+  mean(unlist(x$ctx$records$profile[[what]]))
+}

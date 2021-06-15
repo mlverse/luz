@@ -24,7 +24,9 @@ Imports:
     generics,
     purrr,
     ellipsis,
-    fs
+    fs,
+    prettyunits,
+    cli
 Suggests: 
     knitr,
     rmarkdown,
@@ -43,6 +45,7 @@ Collate:
     'context.R'
     'metrics.R'
     'metrics-auc.R'
+    'module-print.R'
     'module.R'
     'reexports.R'
     'serialization.R'

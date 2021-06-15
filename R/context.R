@@ -89,9 +89,9 @@ context <- R6::R6Class(
     },
     #' @description
     #' Get all metric given an epoch and set.
-    get_metrics = function(set, epoch) {
+    get_metrics = function(set, epoch = NULL) {
       if (is.null(epoch)) {
-        epoch <- length(private$.records[[what]][[set]])
+        epoch <- length(private$.records[["metrics"]][[set]])
       }
       self$get_log("metrics", set, epoch)
     },
@@ -99,6 +99,15 @@ context <- R6::R6Class(
     #' Get the value of a metric given its name, epoch and set.
     get_metric = function(name, set, epoch= NULL) {
       self$get_metrics(set, epoch)[[name]]
+    },
+    #' @description
+    #' Get formatted metrics values
+    get_formatted_metrics = function(set, epoch = NULL) {
+      values <- self$get_metrics(set, epoch)
+      for (i in seq_along(values)) {
+        values[[i]] <- self$model$metrics[[i]]$new()$format(values[[i]])
+      }
+      values
     },
     #' @description Allows setting the `verbose` attribute.
     #' @param verbose boolean. If `TRUE` verbose mode is used. If `FALSE` non verbose.
