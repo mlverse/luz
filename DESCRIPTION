@@ -25,7 +25,8 @@ Imports:
     purrr,
     ellipsis,
     fs,
-    prettyunits
+    prettyunits,
+    cli
 Suggests: 
     knitr,
     rmarkdown,
