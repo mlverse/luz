@@ -109,6 +109,12 @@ context <- R6::R6Class(
       }
       values
     },
+    #' @description
+    #' Get a data.frame containing all metrics.
+    get_metrics_df = function() {
+      check_installed("dplyr")
+      purrr::imap_dfr(self$records$metrics, make_metrics_df)
+    },
     #' @description Allows setting the `verbose` attribute.
     #' @param verbose boolean. If `TRUE` verbose mode is used. If `FALSE` non verbose.
     #'   if `NULL` we use the result of [interactive()].
@@ -147,3 +153,17 @@ context <- R6::R6Class(
     ))
   )
 )
+
+make_metrics_df <- function(metrics_list, set) {
+  purrr::imap_dfr(metrics_list, function(x, epoch) {
+    purrr::imap_dfr(x, function(value, metric_name) {
+      data.frame(
+        stringsAsFactors = FALSE,
+        set = set,
+        metric = metric_name,
+        epoch = epoch,
+        value = value
+      )
+    })
+  })
+}

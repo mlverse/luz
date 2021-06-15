@@ -33,7 +33,10 @@ Suggests:
     testthat (>= 3.0.0),
     covr,
     Metrics,
-    withr
+    withr,
+    vdiffr,
+    ggplot2,
+    dplyr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
@@ -45,6 +48,7 @@ Collate:
     'context.R'
     'metrics.R'
     'metrics-auc.R'
+    'module-plot.R'
     'module-print.R'
     'module.R'
     'reexports.R'
