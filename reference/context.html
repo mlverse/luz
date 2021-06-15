@@ -79,6 +79,7 @@ See also <a href="ctx.html">ctx</a>.</p>
 <li><p><a href="#method-get_metrics"><code>context$get_metrics()</code></a></p></li>
 <li><p><a href="#method-get_metric"><code>context$get_metric()</code></a></p></li>
 <li><p><a href="#method-get_formatted_metrics"><code>context$get_formatted_metrics()</code></a></p></li>
+<li><p><a href="#method-get_metrics_df"><code>context$get_metrics_df()</code></a></p></li>
 <li><p><a href="#method-set_verbose"><code>context$set_verbose()</code></a></p></li>
 <li><p><a href="#method-clone"><code>context$clone()</code></a></p></li>
 </ul><p></p><hr><a id="method-log"></a><h3 class="hasAnchor" id="method-"><a class="anchor" aria-hidden="true" href="#method-"></a>Method <code><a href="https://rdrr.io/r/base/Log.html">log()</a></code></h3>
@@ -249,6 +250,14 @@ to lot to. But can be arbitrary info.</p></dd>
 <dt><code>epoch</code></dt><dd><p>The epoch you want to extract metrics from.</p></dd>
 
 </dl><p></p></div>
+<p></p><hr><a id="method-get_metrics_df"></a><h3 class="hasAnchor" id="method-"><a class="anchor" aria-hidden="true" href="#method-"></a>Method <code>get_metrics_df()</code></h3>
+<p>Get a data.frame containing all metrics.</p><h4 class="hasAnchor" id="usage"><a class="anchor" aria-hidden="true" href="#usage"></a>Usage</h4>
+<p></p><div class="r"><pre class="sourceCode r"><code><span class="va">context</span><span class="op">$</span><span class="fu">get_metrics_df</span><span class="op">(</span><span class="op">)</span></code></pre><p></p></div>
+
+<h3 class="hasAnchor" id="list-get-metrics-df-"><a class="anchor" aria-hidden="true" href="#list-get-metrics-df-"></a>Method <code>get_metrics_df()</code></h3>
+<p>Get a data.frame containing all metrics.</p><h4 class="hasAnchor" id="usage"><a class="anchor" aria-hidden="true" href="#usage"></a>Usage</h4>
+<p></p><div class="r"><pre class="sourceCode r"><code><span class="va">context</span><span class="op">$</span><span class="fu">get_metrics_df</span><span class="op">(</span><span class="op">)</span></code></pre><p></p></div>
+
 <p></p><hr><a id="method-set_verbose"></a><h3 class="hasAnchor" id="method-"><a class="anchor" aria-hidden="true" href="#method-"></a>Method <code>set_verbose()</code></h3>
 <p>Allows setting the <code>verbose</code> attribute.</p><h4 class="hasAnchor" id="usage"><a class="anchor" aria-hidden="true" href="#usage"></a>Usage</h4>
 <p></p><div class="r"><pre class="sourceCode r"><code><span class="va">context</span><span class="op">$</span><span class="fu">set_verbose</span><span class="op">(</span>verbose <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre><p></p></div>
