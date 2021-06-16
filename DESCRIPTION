@@ -1,6 +1,6 @@
 Package: luz
 Title: Higher Level 'API' for 'torch'
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: c(
     person("Daniel", "Falbel", email = "daniel@rstudio.com", role = c("aut", "cre", "cph")),
     person(family = "RStudio", role = c("cph"))
