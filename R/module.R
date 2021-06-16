@@ -16,6 +16,9 @@
 #' @param metrics (`list`, optional) A list of metrics to be tracked during
 #' the training procedure.
 #'
+#' @returns
+#' A luz module that can be trained with [fit()].
+#'
 #' @family training
 #'
 #' @export
@@ -68,6 +71,9 @@ setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
 #'
 #' @family set_hparam
 #'
+#' @returns
+#' The same luz module
+#'
 #' @export
 set_hparams <- function(module, ...) {
   hparams <- rlang::list2(...)
@@ -86,6 +92,9 @@ set_hparams <- function(module, ...) {
 #' For example, if your optimizer is `optim_adam` and you pass `lr=0.1`, then the
 #' `optim_adam` function is called with `optim_adam(parameters, lr=0.1)` when fitting
 #' the model.
+#'
+#' @returns
+#' The same luz module
 #'
 #' @family set_hparam
 #' @export
@@ -132,9 +141,12 @@ get_opt_hparams <- function(module) {
 #'
 #' @param ... Currently unused,
 #'
+#' @returns
+#' A fitted object that can be saved with [luz_save()] and can be printed with
+#' [print()] and plotted with [plot()].
+#'
 #' @importFrom generics fit
 #' @export
-#'
 fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL,
                                      valid_data = NULL, accelerator = NULL,
                                      verbose = NULL, ...) {

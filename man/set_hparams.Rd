@@ -12,6 +12,9 @@ set_hparams(module, ...)
 \item{...}{The parameters set here will be used to initialize the \code{nn_module}, ie they
 are passed unchanged to the \code{initialize} method of the base \code{nn_module}.}
 }
+\value{
+The same luz module
+}
 \description{
 This function is used to define hyper-parameters before calling \code{fit} for
 \code{luz_modules}.

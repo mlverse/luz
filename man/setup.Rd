@@ -20,6 +20,9 @@ the model parameters.}
 \item{metrics}{(\code{list}, optional) A list of metrics to be tracked during
 the training procedure.}
 }
+\value{
+A luz module that can be trained with \code{\link[=fit]{fit()}}.
+}
 \description{
 The setup function is used to set important attributes and method for \code{nn_modules}
 to be used with Luz.
