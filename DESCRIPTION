@@ -12,7 +12,7 @@ Description: A high level interface for 'torch' providing utilities to reduce th
     Howard et al. (2020) <arXiv:2002.04688>, 'Keras' by Chollet et al. (2015) and 
     'Pytorch Lightning' by Falcon et al. (2019) <doi:10.5281/zenodo.3828935>.
 License: MIT + file LICENSE
-URL: https://mlverse.github.io/luz, https://github.com/mlverse/luz
+URL: https://mlverse.github.io/luz/, https://github.com/mlverse/luz
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
