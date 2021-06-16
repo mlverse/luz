@@ -14,7 +14,7 @@ model returns probabilities. Commonly used when the loss is torch::nn_bce_loss()
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <button type="button" id="version-badge" class="badge badge-default d-none d-lg-block" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Released version">0.0.0.9000</button>
+    <button type="button" id="version-badge" class="badge badge-default d-none d-lg-block" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Released version">0.1.0</button>
 
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="navbar-nav mr-auto ml-3"><li class="nav-item dropdown">
@@ -63,7 +63,12 @@ model returns probabilities. Commonly used when the loss is <code><a href="https
     <h2>Arguments</h2>
     <dl class="row" id="ref-arguments"><dt class="col-sm-3 section level2" id="pkg-arg-threshold">threshold</dt>
       <dd class="col-sm-9" id="ref-arguments desc"><p>value used to classifiy observations between 0 and 1.</p></dd>
-    </dl><div class="ref-section section level2" id="section-see-also">
+    </dl><div class="ref-section section level2" id="section-value">
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value" aria-hidden="true"></a>Value</h2>
+
+    <p>Returns new Luz metric.</p>
+    </div>
+    <div class="ref-section section level2" id="section-see-also">
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also" aria-hidden="true"></a>See also</h2>
 
     <div class="dont-index"><p>Other luz_metrics: 
@@ -85,7 +90,8 @@ model returns probabilities. Commonly used when the loss is <code><a href="https
 <span class="r-in"><span class="va">metric</span><span class="op">$</span><span class="fu">update</span><span class="op">(</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_rand.html">torch_rand</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_randint.html">torch_randint</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, size <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">metric</span><span class="op">$</span><span class="fu">compute</span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.55</span>
+<span class="r-in"></span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
