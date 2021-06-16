@@ -19,6 +19,9 @@
 #' @examples
 #' profile_callback <- luz_callback_profile()
 #'
+#' @returns
+#' A `luz_callback`
+#'
 #' @family luz_callbacks
 #' @export
 luz_callback_profile <- luz_callback(

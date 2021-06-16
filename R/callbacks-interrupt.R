@@ -13,6 +13,9 @@ NULL
 #' @examples
 #' interrupt_callback <- luz_callback_interrupt()
 #'
+#' @returns
+#' A `luz_callback`
+#'
 #' @family luz_callbacks
 #' @export
 luz_callback_interrupt <- luz_callback(

@@ -6,6 +6,9 @@
 \usage{
 luz_callback_progress()
 }
+\value{
+A \code{luz_callback}
+}
 \description{
 Responsible for printing progress during training.
 }

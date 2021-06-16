@@ -6,6 +6,9 @@
 \usage{
 luz_callback_profile()
 }
+\value{
+A \code{luz_callback}
+}
 \description{
 Computes the times for high-level operations in the training loops.
 }
@@ -24,6 +27,10 @@ the model step. (not including data acquisition and preprocessing)
 \note{
 In general you don't need to use these callback by yourself because it's always
 included by default in \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}}.
+}
+\examples{
+profile_callback <- luz_callback_profile()
+
 }
 \seealso{
 Other luz_callbacks: 

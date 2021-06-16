@@ -6,6 +6,9 @@
 \usage{
 luz_metric_mae()
 }
+\value{
+Returns new Luz metric.
+}
 \description{
 Computes the mean absolute error.
 }
@@ -17,7 +20,6 @@ metric <- metric$new()
 metric$update(torch_randn(100), torch_randn(100))
 metric$compute()
 }
-
 }
 \seealso{
 Other luz_metrics: 
