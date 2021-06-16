@@ -5,3 +5,5 @@ plot.luz_module_fitted <- function(x, ...) {
   p <- p + ggplot2::geom_point() + ggplot2::geom_line()
   p + ggplot2::facet_grid(metric ~ set, scales = "free_y")
 }
+
+globalVariables(c("epoch", "value"))

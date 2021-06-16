@@ -43,6 +43,10 @@ to the console.}
 
 \item{...}{Currently unused,}
 }
+\value{
+A fitted object that can be saved with \code{\link[=luz_save]{luz_save()}} and can be printed with
+\code{\link[=print]{print()}} and plotted with \code{\link[=plot]{plot()}}.
+}
 \description{
 Fit a \code{nn_module}
 }

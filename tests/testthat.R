@@ -1,4 +1,6 @@
 library(testthat)
 library(luz)
 
-test_check("luz")
+if (Sys.getenv("TORCH_TEST", unset = 0) == 1)
+  test_check("luz")
+

@@ -6,6 +6,9 @@
 \usage{
 luz_callback_metrics()
 }
+\value{
+A \code{luz_callback}
+}
 \description{
 Tracks metrics passed to \code{\link[=setup]{setup()}} during training and validation.
 }

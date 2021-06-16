@@ -86,6 +86,10 @@ luz_callback <- function(name = NULL, ..., private = NULL, active = NULL, parent
 #' @note Printing can be disabled by passing `verbose=FALSE` to [fit.luz_module_generator()].
 #'
 #' @family luz_callbacks
+#'
+#' @returns
+#' A `luz_callback`
+#'
 #' @export
 luz_callback_progress <- luz_callback(
   "progress_callback",
@@ -203,6 +207,10 @@ luz_callback_progress <- luz_callback(
 #' used by default in [fit.luz_module_generator()].
 #'
 #' @family luz_callbacks
+#'
+#' @returns
+#' A `luz_callback`
+#'
 #' @export
 luz_callback_metrics <- luz_callback(
   "metrics_callback",
@@ -271,6 +279,9 @@ luz_callback_metrics <- luz_callback(
 #'
 #' @note In general you won't need to explicitly use the metrics callback as it's
 #' used by default in [fit.luz_module_generator()].
+#'
+#' @returns
+#' A `luz_callback`
 #'
 #' @family luz_callbacks
 #' @export

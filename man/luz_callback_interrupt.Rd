@@ -6,6 +6,9 @@
 \usage{
 luz_callback_interrupt()
 }
+\value{
+A \code{luz_callback}
+}
 \description{
 Adds a handler that allows interrupting the training loop using \code{ctrl + C}.
 Also registers a \code{on_interrupt} breakpoint so users can register callbacks to
@@ -14,6 +17,10 @@ be run on training loop interruption.
 \note{
 In general you don't need to use these callback by yourself because it's always
 included by default in \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}}.
+}
+\examples{
+interrupt_callback <- luz_callback_interrupt()
+
 }
 \seealso{
 Other luz_callbacks: 

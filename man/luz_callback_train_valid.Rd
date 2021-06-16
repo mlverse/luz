@@ -6,6 +6,9 @@
 \usage{
 luz_callback_train_valid()
 }
+\value{
+A \code{luz_callback}
+}
 \description{
 Switches important flags for training and evaluation modes.
 }

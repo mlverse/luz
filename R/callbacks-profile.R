@@ -16,6 +16,12 @@
 #' @note In general you don't need to use these callback by yourself because it's always
 #'   included by default in [fit.luz_module_generator()].
 #'
+#' @examples
+#' profile_callback <- luz_callback_profile()
+#'
+#' @returns
+#' A `luz_callback`
+#'
 #' @family luz_callbacks
 #' @export
 luz_callback_profile <- luz_callback(

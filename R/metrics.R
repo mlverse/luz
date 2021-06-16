@@ -96,6 +96,11 @@ luz_metric <- function(name = NULL, ..., private = NULL, active = NULL,
 #' metric$compute()
 #' }
 #' @export
+#'
+#'
+#' @returns
+#' Returns new Luz metric.
+#'
 #' @family luz_metrics
 luz_metric_accuracy <- luz_metric(
   abbrev = "Acc",
@@ -131,6 +136,10 @@ luz_metric_accuracy <- luz_metric(
 #' metric$update(torch_rand(100), torch::torch_randint(0, 1, size = 100))
 #' metric$compute()
 #' }
+#'
+#' @returns
+#' Returns new Luz metric.
+#'
 #' @family luz_metrics
 #' @export
 luz_metric_binary_accuracy <- luz_metric(
@@ -172,6 +181,8 @@ luz_metric_binary_accuracy <- luz_metric(
 #' metric$update(torch_randn(100), torch::torch_randint(0, 1, size = 100))
 #' metric$compute()
 #' }
+#' @returns
+#' Returns new Luz metric.
 #'
 #' @family luz_metrics
 #' @export
@@ -240,6 +251,8 @@ luz_metric_loss_average <- luz_metric(
 #' metric$update(torch_randn(100), torch_randn(100))
 #' metric$compute()
 #' }
+#' @returns
+#' Returns new Luz metric.
 #'
 #' @family luz_metrics
 #' @export
@@ -289,6 +302,10 @@ luz_metric_mse <- luz_metric(
 #' Computes the root mean squared error.
 #'
 #' @family luz_metrics
+#'
+#' @returns
+#' Returns new Luz metric.
+#'
 #' @export
 luz_metric_rmse <- luz_metric(
   inherit = luz_metric_mse,
