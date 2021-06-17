@@ -22,7 +22,13 @@ It's heavily inspired in other higher level frameworks for deep learning, to cit
 
 ## Installation
 
-Luz is not yet available on CRAN. You can install the development version with:
+You can install the released version from CRAN with:
+
+```{.r}
+install.packages("luz")
+```
+
+or the development version with:
 
 ```{.r}
 remotes::install_github("mlverse/luz")
