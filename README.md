@@ -4,6 +4,8 @@
 [![R-CMD-check](https://github.com/mlverse/luz/workflows/R-CMD-check/badge.svg)](https://github.com/mlverse/luz/actions)
 [![Codecov test coverage](https://codecov.io/gh/mlverse/luz/branch/master/graph/badge.svg)](https://codecov.io/gh/mlverse/luz?branch=master)
 [![Discord](https://img.shields.io/discord/837019024499277855?logo=discord)](https://discord.com/invite/s3D5cKhBkx)
+[![CRAN status](https://www.r-pkg.org/badges/version/luz)](https://CRAN.R-project.org/package=luz)
+[![](https://cranlogs.r-pkg.org/badges/luz)](https://cran.r-project.org/package=luz)
 <!-- badges: end -->
 
 luz is a higher level API for torch providing abstractions to allow for much less verbose training loops.
