@@ -561,7 +561,7 @@ luz_callback_csv_logger <- luz_callback(
       self$to_metric_df(ctx$get_metrics("valid", ctx$epoch), "valid")
     )
 
-    utils::write.table(
+    utils::write.csv(
       metrics,
       file = self$path,
       append = self$append,
