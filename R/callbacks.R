@@ -563,12 +563,13 @@ luz_callback_csv_logger <- luz_callback(
       self$to_metric_df(ctx$get_metrics("valid", ctx$epoch), "valid")
     )
 
-    utils::write.csv(
+    utils::write.table(
       metrics,
       file = self$path,
       append = self$append,
       col.names = !self$append,
-      row.names = FALSE
+      row.names = FALSE,
+      sep = ","
     )
 
     # now that we wrote for the first time it's ok to set append to TRUE
