@@ -176,11 +176,13 @@ luz_callback_progress <- luz_callback(
     show_after <- if (getOption("luz.force_progress_bar", FALSE)) 0 else 0.2
 
     format <- paste0(c(format, abbrevs), collapse = " - ")
+    total <- if (ctx$training) length(ctx$data) else length(ctx$valid_data)
+
     self$pb <- progress::progress_bar$new(
       force = getOption("luz.force_progress_bar", FALSE),
       show_after = show_after,
       format = format,
-      total = length(ctx$data)
+      total = total
     )
   },
   tick_progress_bar = function(split) {
