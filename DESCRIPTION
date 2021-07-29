@@ -47,6 +47,7 @@ Collate:
     'accelerator.R'
     'utils.R'
     'callbacks.R'
+    'callback-validation-check.R'
     'callbacks-interrupt.R'
     'callbacks-profile.R'
     'context.R'
