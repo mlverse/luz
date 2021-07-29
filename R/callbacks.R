@@ -97,7 +97,7 @@ luz_callback_progress <- luz_callback(
     inform(sprintf(
       "Epoch %d/%d",
       as.integer(ctx$epoch),
-      as.integer(ctx$epochs)
+      as.integer(ctx$max_epochs)
     ))
   },
   on_train_begin = function() {
@@ -356,7 +356,7 @@ monitor_metrics <- luz_callback(
 #'
 #' @note
 #' This callback adds a `on_early_stopping` callback that can be used to
-#' call callbacks after as soon as the model stopped training.
+#'   call callbacks as soon as the model stops training.
 #'
 #' @note
 #' If `verbose=TRUE` in [fit.luz_module_generator()] a message is printed when
@@ -409,13 +409,16 @@ luz_callback_early_stopping <- luz_callback(
       self$patience_counter <- self$patience_counter + 1L
     }
 
-    if (self$patience_counter >= self$patience) {
+    if (self$patience_counter >= self$patience &
+        ctx$epoch >= ctx$min_epochs) {
       rlang::signal("Early stopping", class = "early_stopping")
     }
 
   },
   on_early_stopping = function() {
-    inform(glue::glue("Early stopping at epoch {ctx$epoch} of {ctx$epochs}"))
+    inform(
+      glue::glue("Early stopping at epoch {ctx$epoch} of {ctx$max_epochs}")
+    )
   }
 )
 
