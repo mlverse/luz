@@ -1,16 +1,16 @@
 pandoc: 2.7.3
 pkgdown: 1.6.1.9001
-pkgdown_sha: 9ce6af43b55cd21e9563526e12a12d1243657bf6
+pkgdown_sha: ce9781a15c7ea07df9fb17a11295ba4abec0b54b
 articles:
   accelerator: accelerator.html
   custom-loop: custom-loop.html
-  examples/dogs-vs-casts-binary-classification: dogs-vs-casts-binary-classification.html
-  examples/index: index.html
-  examples/mnist-autoencoder: mnist-autoencoder.html
-  examples/mnist-cnn-virtual-batch-size: mnist-cnn-virtual-batch-size.html
-  examples/mnist-cnn: mnist-cnn.html
-  examples/mnist-dcgan: mnist-dcgan.html
-  examples/mnist-triplet: mnist-triplet.html
+  dogs-vs-casts-binary-classification: examples/dogs-vs-casts-binary-classification.html
+  index: examples/index.html
+  mnist-autoencoder: examples/mnist-autoencoder.html
+  mnist-cnn-virtual-batch-size: examples/mnist-cnn-virtual-batch-size.html
+  mnist-cnn: examples/mnist-cnn.html
+  mnist-dcgan: examples/mnist-dcgan.html
+  mnist-triplet: examples/mnist-triplet.html
   get-started: get-started.html
-last_built: 2021-06-17T12:34Z
+last_built: 2021-07-29T12:56Z
 
