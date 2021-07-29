@@ -339,74 +339,78 @@ End Fit</code></pre>
 <td>Dataloader passed to the <code>valid_data</code> argument in <code>fit</code>. Modified to yield data in the selected device.</td>
 </tr>
 <tr class="even">
-<td><code>epochs</code></td>
-<td>Total number of epochs the model will be trained on.</td>
+<td><code>min_epochs</code></td>
+<td>| Minimum number of epochs the model will be trained for.</td>
 </tr>
 <tr class="odd">
+<td><code>max_epochs</code></td>
+<td>| Maximum number of epochs the model will be trained for.</td>
+</tr>
+<tr class="even">
 <td><code>epoch</code></td>
 <td>Current training epoch.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>iter</code></td>
 <td>Current training iteration. It’s reset every epoch and when going from training to validation.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>training</code></td>
 <td>Whether the model is in training or validation mode. See also <code><a href="../reference/luz_callback_train_valid.html">help("luz_callback_train_valid")</a></code>
 </td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>callbacks</code></td>
 <td>List of callbacks that will be called during the training procedure. It’s the union of the list passed to the <code>callbacks</code> parameter and the default <code>callbacks</code>.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>step</code></td>
 <td>Closure that will be used to do one <code>step</code> of the model. It’s used for both training and validation. Takes no argument, but can access the <code>ctx</code> object.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>call_callbacks</code></td>
 <td>Call callbacks by name. For example <code>call_callbacks("on_train_begin")</code> will call all callbacks that provide methods for this point.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>batch</code></td>
 <td>Last batch obtained by the dataloader. A batch is a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with 2 elements, one that is used as <code>input</code> and the other as <code>target</code>.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>input</code></td>
 <td>First element of the last batch obtained by the current dataloader.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>target</code></td>
 <td>Second element of the last batch obtained by the current dataloader.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>pred</code></td>
 <td>Last predictions obtained by <code>ctx$model$forward</code> . <strong>Note:</strong> can be potentially modified by previously ran callbacks. Also note that this might not be available if you used a custom training step.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>loss</code></td>
 <td>Last computed loss from the model. <strong>Note:</strong> this might not be available if you modified the training or validation step.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>opt</code></td>
 <td>Current optimizer, ie. optimizer that will be used to do the next <code>step</code> to update parameters.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>opt_nm</code></td>
 <td>Current optimizer name. By default it’s <code>opt</code> , but can change if your model uses more than one optimizer depending on the set of parameters being optimized.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>metrics</code></td>
 <td>
 <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with current metric object that are <code>update</code>d at every <code>on_train_batch_end()</code> or <code>on_valid_batch_end()</code>. See also <code><a href="../reference/luz_callback_metrics.html">help("luz_callback_metrics")</a></code>
 </td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>records</code></td>
 <td>
 <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> recording metric values for training and validation for each epoch. See also <code><a href="../reference/luz_callback_metrics.html">help("luz_callback_metrics")</a></code> . Also records profiling metrics. See <code><a href="../reference/luz_callback_profile.html">help("luz_callback_profile")</a></code> for more information.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>handlers</code></td>
 <td>A named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of handlers that is passed to <code><a href="https://rlang.r-lib.org/reference/with_handlers.html" class="external-link">rlang::with_handlers()</a></code> during the training loop and can be used to handle errors or conditions that might be raised by other callbacks.</td>
 </tr>

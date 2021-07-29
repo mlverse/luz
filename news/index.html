@@ -58,6 +58,8 @@
 <li>Fixed bug in the length of the progress bar for the validation dataset (<a href="https://github.com/mlverse/luz/issues/52">#52</a>, <a href="https://github.com/mattwarkentin">@mattwarkentin</a>).</li>
 <li>
 <code>ctx$data</code> now refers to the current in use <code>data</code> instead of always refering to <code>ctx$train_data</code>. (<a href="https://github.com/mlverse/luz/issues/54">#54</a>)</li>
+<li>Allow users to provide the minimum and maximum number of epochs when calling <code><a href="../reference/fit.luz_module_generator.html">fit.luz_module_generator()</a></code>. Removed <code>ctx$epochs</code> from context object and replaced it with <code>ctx$min_epochs</code> and <code>ctx$max_epochs</code> (<a href="https://github.com/mlverse/luz/issues/53">#53</a>, <a href="https://github.com/mattwarkentin">@mattwarkentin</a>)</li>
+<li>Early stopping will now only occur if the minimum number of training epochs has been met (<a href="https://github.com/mlverse/luz/issues/53">#53</a>, <a href="https://github.com/mattwarkentin">@mattwarkentin</a>)</li>
 </ul></div>
     <div id="luz-010" class="section level2">
 <h2 class="pb-2 mt-4 mb-2 border-bottom pkg-version" data-toc-text="0.1.0">

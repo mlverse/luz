@@ -75,27 +75,33 @@
       <dd class="col-sm-9" id="ref-arguments desc"><p>An <code>nn_module</code> that has been <code><a href="setup.html">setup()</a></code>.</p></dd>
     <dt class="col-sm-3 section level2" id="pkg-arg-data">data</dt>
       <dd class="col-sm-9" id="ref-arguments desc"><p>(dataloader) A dataloader created with <code><a href="https://torch.mlverse.org/docs/reference/dataloader.html">torch::dataloader()</a></code> used
-for training the model. The dataloader must return a list with at most 2 items.
-The first item will be used as input for the module and the second will be used
-as target for the loss function.</p></dd>
+for training the model. The dataloader must return a list with at most 2
+items. The first item will be used as input for the module and the second
+will be used as target for the loss function.</p></dd>
     <dt class="col-sm-3 section level2" id="pkg-arg-epochs">epochs</dt>
-      <dd class="col-sm-9" id="ref-arguments desc"><p>(int) The number of epochs for training the model.</p></dd>
+      <dd class="col-sm-9" id="ref-arguments desc"><p>(int) The maximum number of epochs for training the model.
+If a single value is provided, this is taken to be the <code>max_epochs</code> and
+<code>min_epochs</code> is set to 0. If a vector of two numbers is provided, the
+first value is <code>min_epochs</code> and the second value is <code>max_epochs</code>.
+The minimum and maximum number of epochs are included in the context
+object as <code>ctx$min_epochs</code> and <code>ctx$max_epochs</code>, respectively.</p></dd>
     <dt class="col-sm-3 section level2" id="pkg-arg-callbacks">callbacks</dt>
-      <dd class="col-sm-9" id="ref-arguments desc"><p>(list, optional) A list of callbacks defined with <code><a href="luz_callback.html">luz_callback()</a></code> that
-will be called during the training procedure. The callbacks <code><a href="luz_callback_metrics.html">luz_callback_metrics()</a></code>,
-<code><a href="luz_callback_progress.html">luz_callback_progress()</a></code> and <code><a href="luz_callback_train_valid.html">luz_callback_train_valid()</a></code> are always added by default.</p></dd>
+      <dd class="col-sm-9" id="ref-arguments desc"><p>(list, optional) A list of callbacks defined with
+<code><a href="luz_callback.html">luz_callback()</a></code> that will be called during the training procedure. The
+callbacks <code><a href="luz_callback_metrics.html">luz_callback_metrics()</a></code>, <code><a href="luz_callback_progress.html">luz_callback_progress()</a></code> and
+<code><a href="luz_callback_train_valid.html">luz_callback_train_valid()</a></code> are always added by default.</p></dd>
     <dt class="col-sm-3 section level2" id="pkg-arg-valid_data">valid_data</dt>
-      <dd class="col-sm-9" id="ref-arguments desc"><p>(dataloader, optional) A dataloader created with <code><a href="https://torch.mlverse.org/docs/reference/dataloader.html">torch::dataloader()</a></code>
-that will be used during the validation procedure.</p></dd>
+      <dd class="col-sm-9" id="ref-arguments desc"><p>(dataloader, optional) A dataloader created with
+<code><a href="https://torch.mlverse.org/docs/reference/dataloader.html">torch::dataloader()</a></code> that will be used during the validation procedure.</p></dd>
     <dt class="col-sm-3 section level2" id="pkg-arg-accelerator">accelerator</dt>
-      <dd class="col-sm-9" id="ref-arguments desc"><p>(accelerator, optional) An optional <code><a href="accelerator.html">accelerator()</a></code> object used
-to configure device placement of the components like nn_modules, optimizers
-and batches of data.</p></dd>
+      <dd class="col-sm-9" id="ref-arguments desc"><p>(accelerator, optional) An optional <code><a href="accelerator.html">accelerator()</a></code> object
+used to configure device placement of the components like nn_modules,
+optimizers and batches of data.</p></dd>
     <dt class="col-sm-3 section level2" id="pkg-arg-verbose">verbose</dt>
-      <dd class="col-sm-9" id="ref-arguments desc"><p>(logical, optional) An optional boolean value indicating if the
-fitting procedure should emmit output to the console during training. By default,
-it will produce output if <code><a href="https://rdrr.io/r/base/interactive.html">interactive()</a></code> is <code>TRUE</code>, otherwise it won't print
-to the console.</p></dd>
+      <dd class="col-sm-9" id="ref-arguments desc"><p>(logical, optional) An optional boolean value indicating if
+the fitting procedure should emmit output to the console during training.
+By default, it will produce output if <code><a href="https://rdrr.io/r/base/interactive.html">interactive()</a></code> is <code>TRUE</code>, otherwise
+it won't print to the console.</p></dd>
     <dt class="col-sm-3 section level2" id="pkg-arg-...">...</dt>
       <dd class="col-sm-9" id="ref-arguments desc"><p>Currently unused,</p></dd>
     </dl><div class="ref-section section level2" id="section-value">
