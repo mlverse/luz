@@ -17,7 +17,8 @@ could potentially modify these attributes or add new ones.\tabular{ll}{
    \code{accelerator} \tab Accelerator object used to query the correct device to place models, data, and etc. It assumes the value passed to the \code{accelerator} parameter in \code{fit}. \cr
    \code{model} \tab Initialized \code{nn_module} object that will be trained during the \code{fit} procedure. \cr
    \code{optimizers} \tab A named list of optimizers used during training. \cr
-   \code{data} \tab Dataloader passed to the \code{data} argument in \code{fit}. Modified to yield data in the selected device. \cr
+   \code{data} \tab Current in use dataloader. When training it’s \code{ctx$train_data}, when doing validation its \code{ctx$valid_data}. It can also be the prediction dataset when in \code{predict}. \cr
+   \code{train_data} \tab Dataloader passed to the \code{data} argument in \code{fit}. Modified to yield data in the selected device. \cr
    \code{valid_data} \tab Dataloader passed to the \code{valid_data} argument in \code{fit}. Modified to yield data in the selected device. \cr
    \code{epochs} \tab Total number of epochs the model will be trained on. \cr
    \code{epoch} \tab Current training epoch. \cr

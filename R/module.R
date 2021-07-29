@@ -186,7 +186,8 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
   ctx$model$ctx <- ctx
 
   ctx$optimizers <- optimizers
-  ctx$data <- data
+
+  ctx$train_data <- data
   ctx$valid_data <- valid_data
 
   ctx$epochs <- epochs
@@ -211,8 +212,10 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
       for (epoch in seq_len(ctx$epochs)) {
         ctx$epoch <- epoch
         ctx$iter <- 0L
-        ctx$call_callbacks("on_epoch_begin")
 
+        ctx$data <- ctx$train_data
+
+        ctx$call_callbacks("on_epoch_begin")
         ctx$call_callbacks("on_train_begin")
 
         coro::loop(for (batch in ctx$data) {
@@ -228,11 +231,12 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
 
         if (!is.null(ctx$valid_data)) {
 
+          ctx$data <- ctx$valid_data
           ctx$call_callbacks("on_valid_begin")
 
           ctx$iter <- 0L
           torch::with_no_grad({
-            coro::loop(for (batch in ctx$valid_data) {
+            coro::loop(for (batch in ctx$data) {
               bind_batch_to_ctx(ctx, batch)
               ctx$iter <- ctx$iter + 1L
 

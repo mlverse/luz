@@ -182,7 +182,7 @@ test_that("csv callback", {
       luz_callback_csv_logger(tmp)
     ))
 
-  x <- read.table(tmp, header = TRUE)
+  x <- read.table(tmp, header = TRUE, sep = ",")
   expect_equal(nrow(x), 5)
   expect_equal(names(x), c("epoch", "set", "loss"))
 
@@ -192,7 +192,7 @@ test_that("csv callback", {
       luz_callback_csv_logger(tmp)
     ))
 
-  x <- read.table(tmp, header = TRUE)
+  x <- read.table(tmp, header = TRUE, sep = ",")
 
   expect_equal(nrow(x), 10)
   expect_equal(names(x), c("epoch", "set", "loss"))
