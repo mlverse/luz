@@ -361,11 +361,11 @@ default_step <- function(ctx) {
 
 fit_one_batch <-function(ctx) {
   for (nm in names(ctx$optimizers)) {
-    ctx$pred <- do.call(ctx$model, list(ctx$input))
-    ctx$call_callbacks("on_train_batch_after_pred")
-
     ctx$opt <- ctx$optimizers[[nm]]
     ctx$opt_name <- nm
+
+    ctx$pred <- do.call(ctx$model, list(ctx$input))
+    ctx$call_callbacks("on_train_batch_after_pred")
 
     ctx$loss_grad <- ctx$model$loss(ctx$pred, ctx$target)
     ctx$loss[[ctx$opt_name]] <- ctx$loss_grad$detach()
