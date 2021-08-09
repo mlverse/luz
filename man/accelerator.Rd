@@ -4,13 +4,20 @@
 \alias{accelerator}
 \title{Create an accelerator}
 \usage{
-accelerator(device_placement = TRUE, cpu = FALSE)
+accelerator(
+  device_placement = TRUE,
+  cpu = FALSE,
+  cuda_index = torch::cuda_current_device()
+)
 }
 \arguments{
 \item{device_placement}{(logical) whether the \code{accelerator} object should
 handle device placement. Default: \code{TRUE}}
 
 \item{cpu}{(logical) whether the training procedure should run on the CPU.}
+
+\item{cuda_index}{(integer) index of the CUDA device to use if multiple GPUs
+are available. Default: the result of torch::cuda_current_device().}
 }
 \description{
 Create an accelerator
