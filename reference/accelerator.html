@@ -57,7 +57,11 @@
     </div>
 
     <div id="ref-usage" class="ref-usage section level2 sourceCode">
-    <pre class="sourceCode r"><code><span class="fu">accelerator</span><span class="op">(</span>device_placement <span class="op">=</span> <span class="cn">TRUE</span>, cpu <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre>
+    <pre class="sourceCode r"><code><span class="fu">accelerator</span><span class="op">(</span>
+  device_placement <span class="op">=</span> <span class="cn">TRUE</span>,
+  cpu <span class="op">=</span> <span class="cn">FALSE</span>,
+  cuda_index <span class="op">=</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/cuda_current_device.html">cuda_current_device</a></span><span class="op">(</span><span class="op">)</span>
+<span class="op">)</span></code></pre>
     </div>
 
     <h2>Arguments</h2>
@@ -66,6 +70,9 @@
 handle device placement. Default: <code>TRUE</code></p></dd>
     <dt class="col-sm-3 section level2" id="pkg-arg-cpu">cpu</dt>
       <dd class="col-sm-9" id="ref-arguments desc"><p>(logical) whether the training procedure should run on the CPU.</p></dd>
+    <dt class="col-sm-3 section level2" id="pkg-arg-cuda_index">cuda_index</dt>
+      <dd class="col-sm-9" id="ref-arguments desc"><p>(integer) index of the CUDA device to use if multiple GPUs
+are available. Default: the result of torch::cuda_current_device().</p></dd>
     </dl></div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="sticky-top">
