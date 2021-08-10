@@ -4,14 +4,7 @@
 \alias{lr_finder}
 \title{Learning Rate Finder}
 \usage{
-lr_finder(
-  object,
-  data,
-  steps = 100,
-  start_lr = 0.1,
-  end_lr = 1e-07,
-  plot = TRUE
-)
+lr_finder(object, data, steps = 100, start_lr = 0.1, end_lr = 1e-07)
 }
 \arguments{
 \item{object}{An nn_module that has been setup().}
@@ -23,8 +16,6 @@ lr_finder(
 \item{start_lr}{(float) The largest learning rate. Default: 1e-1.}
 
 \item{end_lr}{(float) The lowest learning rate. Default: 1e-7.}
-
-\item{plot}{(bool) A logical indicator whether to print a plot of learnign rate vs. loss.}
 }
 \value{
 A dataframe with two columns: learning rate and loss
