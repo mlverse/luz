@@ -10,7 +10,6 @@ lr_anneal <- torch::lr_scheduler(
 
     self$optimizer <- optimizer
     self$end_lr <- end_lr
-    self$pct <- pct
     self$base_lrs <- start_lr
     self$iters <- n_iters
 
@@ -34,7 +33,7 @@ lr_anneal <- torch::lr_scheduler(
 luz_callback_record_lr <- luz_callback(
   name = "luz_callback_profile_lr",
   on_train_batch_end = function() {
-    loss <- as_array(ctx$loss$opt$cpu())
+    loss <- ctx$loss$opt$cpu()$item()
     ctx$log("lr_finder", "lr", ctx$optimizers$opt$param_groups[[1]]$lr)
     ctx$log("lr_finder", "loss", loss)
   }
@@ -48,11 +47,11 @@ luz_callback_record_lr <- luz_callback(
 #' @param steps (integer) The number of steps to iterate over in the learning rate finder. Default: 100.
 #' @param start_lr (float) The largest learning rate. Default: 1e-1.
 #' @param end_lr (float) The lowest learning rate. Default: 1e-7.
-#' @param plot (bool) A logical indicator whether to print a plot of learnign rate vs. loss.
+#' @param ... Other arguments passed to `fit`.
 #'
 #' @return A dataframe with two columns: learning rate and loss
 #' @export
-lr_finder <- function(object, data, steps = 100, start_lr = 1e-1, end_lr = 1e-7, plot = TRUE) {
+lr_finder <- function(object, data, steps = 100, start_lr = 1e-1, end_lr = 1e-7, ...) {
   # adjust batch size so that the steps number adds to one batch
   new_bs <- data$dataset$.length() / steps
   data$batch_sampler$batch_size <- new_bs
@@ -70,23 +69,30 @@ lr_finder <- function(object, data, steps = 100, start_lr = 1e-1, end_lr = 1e-7,
 
   fitted <- object %>%
     set_opt_hparams(lr = start_lr) %>%
-    fit(data,
+    fit(...,
+        data = data,
         epochs = 1,
-        callbacks = list(scheduler, lr_profiler))
+        callbacks = list(scheduler, lr_profiler),
+    )
 
-  lr_records <- data.frame(sapply(fitted$ctx$records$lr_finder, c))
+  lr_records <- data.frame(sapply(fitted$ctx$records$lr_finder, as.numeric))
 
-  if (plot) {
-    p <- lr_records %>%
-      ggplot2::ggplot(aes(x = lr, y = loss)) +
-        ggplot2::geom_line() +
-        ggplot2::scale_x_log10() +
-        ggplot2::xlab("Learning Rate") +
-        ggplot2::ylab("Loss")
-
-    print(p)
-  }
-
+  class(lr_records) <- c("lr_records", class(lr_records))
   lr_records
+}
 
+#' @export
+print.lr_records <- function(x, ...) {
+  NextMethod()
+}
+
+#' @export
+plot.lr_records <- function(x, ...) {
+  rlang::check_installed("ggplot2")
+  x <- as.data.frame(x)
+  ggplot2::ggplot(x, ggplot2::aes_string(x = "lr", y = "loss")) +
+    ggplot2::geom_line() +
+    ggplot2::scale_x_log10() +
+    ggplot2::xlab("Learning Rate") +
+    ggplot2::ylab("Loss")
 }
