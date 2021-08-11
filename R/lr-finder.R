@@ -49,7 +49,21 @@ luz_callback_record_lr <- luz_callback(
 #' @param end_lr (float) The lowest learning rate. Default: 1e-7.
 #' @param ... Other arguments passed to `fit`.
 #'
-#' @return A dataframe with two columns: learning rate and loss
+#' @examples
+#' if (torch::torch_is_installed()) {
+#' library(torch)
+#' ds <- torch::tensor_dataset(x = torch_randn(100, 10), y = torch_randn(100, 1))
+#' dl <- torch::dataloader(ds, batch_size = 32)
+#' model <- torch::nn_linear
+#' model <- model %>% setup(
+#'   loss = torch::nn_mse_loss(),
+#'   optimizer = torch::optim_adam
+#' ) %>%
+#'   set_hparams(in_features = 10, out_features = 1)
+#' records <- lr_finder(model, dl, verbose = FALSE)
+#' plot(records)
+#' }
+#' @returns A dataframe with two columns: learning rate and loss
 #' @export
 lr_finder <- function(object, data, steps = 100, start_lr = 1e-1, end_lr = 1e-7, ...) {
   # adjust batch size so that the steps number adds to one batch

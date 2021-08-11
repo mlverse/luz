@@ -25,3 +25,18 @@ A dataframe with two columns: learning rate and loss
 \description{
 Learning Rate Finder
 }
+\examples{
+if (torch::torch_is_installed()) {
+library(torch)
+ds <- torch::tensor_dataset(x = torch_randn(100, 10), y = torch_randn(100, 1))
+dl <- torch::dataloader(ds, batch_size = 32)
+model <- torch::nn_linear
+model <- model \%>\% setup(
+  loss = torch::nn_mse_loss(),
+  optimizer = torch::optim_adam
+) \%>\%
+  set_hparams(in_features = 10, out_features = 1)
+records <- lr_finder(model, dl, verbose = FALSE)
+plot(records)
+}
+}
