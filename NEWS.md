@@ -6,6 +6,7 @@
 * Allow users to provide the minimum and maximum number of epochs when calling `fit.luz_module_generator()`. Removed `ctx$epochs` from context object and replaced it with `ctx$min_epochs` and `ctx$max_epochs` (#53, @mattwarkentin).
 * Early stopping will now only occur if the minimum number of training epochs has been met (#53, @mattwarkentin).
 * Added `cuda_index` argument to `accelerator` to allow selecting an specific GPU when multiple are present (#58, @cmcmaster1).
+* Implemented `lr_finder` (#59, @cmcmaster1).
 
 # luz 0.1.0
 

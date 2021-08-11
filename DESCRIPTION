@@ -50,6 +50,7 @@ Collate:
     'callbacks-interrupt.R'
     'callbacks-profile.R'
     'context.R'
+    'lr-finder.R'
     'metrics.R'
     'metrics-auc.R'
     'module-plot.R'
