@@ -1,3 +1,5 @@
+options("torch.old_seed_behavior" = TRUE)
+
 expect_equal_to_tensor <- function(object, expected, ...) {
   expect_tensor(object)
   expect_tensor(expected)
