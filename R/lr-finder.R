@@ -3,7 +3,7 @@ lr_anneal <- torch::lr_scheduler(
   initialize = function(
     optimizer,
     start_lr = 1e-7,
-    end_lr = 1e-4,
+    end_lr = 1e-1,
     n_iters = 100,
     last_epoch=-1,
     verbose=FALSE) {
@@ -45,8 +45,8 @@ luz_callback_record_lr <- luz_callback(
 #' @param object An nn_module that has been setup().
 #' @param data (dataloader) A dataloader created with torch::dataloader()  used for learning rate finding.
 #' @param steps (integer) The number of steps to iterate over in the learning rate finder. Default: 100.
-#' @param start_lr (float) The largest learning rate. Default: 1e-1.
-#' @param end_lr (float) The lowest learning rate. Default: 1e-7.
+#' @param start_lr (float) The smallest learning rate. Default: 1e-7.
+#' @param end_lr (float) The highest learning rate. Default: 1e-1.
 #' @param ... Other arguments passed to `fit`.
 #'
 #' @examples
@@ -65,9 +65,9 @@ luz_callback_record_lr <- luz_callback(
 #' }
 #' @returns A dataframe with two columns: learning rate and loss
 #' @export
-lr_finder <- function(object, data, steps = 100, start_lr = 1e-1, end_lr = 1e-7, ...) {
+lr_finder <- function(object, data, steps = 100, start_lr = 1e-7, end_lr = 1e-1, ...) {
   # adjust batch size so that the steps number adds to one batch
-  new_bs <- data$dataset$.length() / steps
+  new_bs <- floor(data$dataset$.length() / steps)
   data$batch_sampler$batch_size <- new_bs
 
   scheduler <- luz_callback_lr_scheduler(
