@@ -4,7 +4,7 @@
 \alias{lr_finder}
 \title{Learning Rate Finder}
 \usage{
-lr_finder(object, data, steps = 100, start_lr = 0.1, end_lr = 1e-07, ...)
+lr_finder(object, data, steps = 100, start_lr = 1e-07, end_lr = 0.1, ...)
 }
 \arguments{
 \item{object}{An nn_module that has been setup().}
@@ -13,9 +13,9 @@ lr_finder(object, data, steps = 100, start_lr = 0.1, end_lr = 1e-07, ...)
 
 \item{steps}{(integer) The number of steps to iterate over in the learning rate finder. Default: 100.}
 
-\item{start_lr}{(float) The largest learning rate. Default: 1e-1.}
+\item{start_lr}{(float) The smallest learning rate. Default: 1e-7.}
 
-\item{end_lr}{(float) The lowest learning rate. Default: 1e-7.}
+\item{end_lr}{(float) The highest learning rate. Default: 1e-1.}
 
 \item{...}{Other arguments passed to \code{fit}.}
 }
