@@ -74,46 +74,37 @@ x <- coro::collect(train_dl, 1)
 
 # Define the network ------------------------------------------------------
 
-net <- nn_module(
-  "Net",
-  initialize = function(embedding_dim) {
-    self$conv1 <- nn_conv2d(1, 32, 3, 1)
-    self$conv2 <- nn_conv2d(32, 64, 3, 1)
-    self$dropout1 <- nn_dropout2d(0.25)
-    self$dropout2 <- nn_dropout2d(0.5)
-    self$fc1 <- nn_linear(9216, 512)
-    self$fc2 <- nn_linear(512, embedding_dim)
+# We use a pre-trained mobile net encoder. we take intermediate features of
+# mobilenet.
+encoder <- torch::nn_module(
+  initialize = function(x) {
+    model <- model_mobilenet_v2(pretrained = TRUE)
+    self$stages <- nn_module_list(list(
+      nn_identity(),
+      # TODO: this can be improved once we implement subset for `nn_sequential`
+      # see https://github.com/mlverse/torch/issues/675
+      nn_sequential(!!!lapply(1:2, function(x) model$features[[x]])),
+      nn_sequential(!!!lapply(3:4, function(x) model$features[[x]])),
+      nn_sequential(!!!lapply(5:7, function(x) model$features[[x]])),
+      nn_sequential(!!!lapply(8:14, function(x) model$features[[x]])),
+      nn_sequential(!!!lapply(15:18, function(x) model$features[[x]]))
+    ))
+    
+    for (par in self$parameters) {
+      par$requires_grad_(FALSE)
+    }
+    
   },
   forward = function(x) {
-    x <- self$conv1(x)
-    x <- nnf_relu(x)
-    x <- self$conv2(x)
-    x <- nnf_relu(x)
-    x <- nnf_max_pool2d(x, 2)
-    x <- self$dropout1(x)
-    x <- torch_flatten(x, start_dim = 2)
-    x <- self$fc1(x)
-    x <- nnf_relu(x)
-    x <- self$dropout2(x)
-    x <- self$fc2(x)
-    x
+    features <- list()
+    for (i in 1:length(self$stages)) {
+      x <- self$stages[[i]](x)
+      features[[length(features) + 1]] <- x
+    }
+    features
   }
 )
 
-triplet_model <- torch::nn_module(
-  initialize = function(embedding_dim = 2, margin = 1) {
-    self$embedding <- net(embedding_dim = embedding_dim)
-    self$criterion <- nn_triplet_margin_loss(margin = margin)
-  },
-  loss = function(input, ...) {
-    embeds <- lapply(input, self$embedding)
-    self$criterion(
-      embeds$anchor,
-      embeds$positive,
-      embeds$negative
-    )
-  }
-)
 
 fitted <- triplet_model %>%
   setup(optimizer = optim_adam) %>%
