@@ -9,6 +9,9 @@ luz_metric_binary_accuracy_with_logits(threshold = 0.5)
 \arguments{
 \item{threshold}{value used to classifiy observations between 0 and 1.}
 }
+\value{
+Returns new Luz metric.
+}
 \description{
 Computes accuracy for binary classification problems where the model
 return logits. Commonly used together with \code{\link[torch:nn_bce_with_logits_loss]{torch::nn_bce_with_logits_loss()}}.
@@ -25,7 +28,6 @@ metric <- metric$new()
 metric$update(torch_randn(100), torch::torch_randint(0, 1, size = 100))
 metric$compute()
 }
-
 }
 \seealso{
 Other luz_metrics: 

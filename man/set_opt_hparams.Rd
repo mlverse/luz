@@ -14,6 +14,9 @@ For example, if your optimizer is \code{optim_adam} and you pass \code{lr=0.1}, 
 \code{optim_adam} function is called with \code{optim_adam(parameters, lr=0.1)} when fitting
 the model.}
 }
+\value{
+The same luz module
+}
 \description{
 This function is used to define hyper-parameters for the optimizer initialization
 method.

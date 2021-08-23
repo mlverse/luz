@@ -9,6 +9,9 @@ luz_metric_binary_accuracy(threshold = 0.5)
 \arguments{
 \item{threshold}{value used to classifiy observations between 0 and 1.}
 }
+\value{
+Returns new Luz metric.
+}
 \description{
 Computes the accuracy for binary classification problems where the
 model returns probabilities. Commonly used when the loss is \code{\link[torch:nn_bce_loss]{torch::nn_bce_loss()}}.
@@ -21,6 +24,7 @@ metric <- metric$new()
 metric$update(torch_rand(100), torch::torch_randint(0, 1, size = 100))
 metric$compute()
 }
+
 }
 \seealso{
 Other luz_metrics: 

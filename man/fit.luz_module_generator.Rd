@@ -19,29 +19,39 @@
 \item{object}{An \code{nn_module} that has been \code{\link[=setup]{setup()}}.}
 
 \item{data}{(dataloader) A dataloader created with \code{\link[torch:dataloader]{torch::dataloader()}} used
-for training the model. The dataloader must return a list with at most 2 items.
-The first item will be used as input for the module and the second will be used
-as target for the loss function.}
+for training the model. The dataloader must return a list with at most 2
+items. The first item will be used as input for the module and the second
+will be used as target for the loss function.}
 
-\item{epochs}{(int) The number of epochs for training the model.}
+\item{epochs}{(int) The maximum number of epochs for training the model.
+If a single value is provided, this is taken to be the \code{max_epochs} and
+\code{min_epochs} is set to 0. If a vector of two numbers is provided, the
+first value is \code{min_epochs} and the second value is \code{max_epochs}.
+The minimum and maximum number of epochs are included in the context
+object as \code{ctx$min_epochs} and \code{ctx$max_epochs}, respectively.}
 
-\item{callbacks}{(list, optional) A list of callbacks defined with \code{\link[=luz_callback]{luz_callback()}} that
-will be called during the training procedure. The callbacks \code{\link[=luz_callback_metrics]{luz_callback_metrics()}},
-\code{\link[=luz_callback_progress]{luz_callback_progress()}} and \code{\link[=luz_callback_train_valid]{luz_callback_train_valid()}} are always added by default.}
+\item{callbacks}{(list, optional) A list of callbacks defined with
+\code{\link[=luz_callback]{luz_callback()}} that will be called during the training procedure. The
+callbacks \code{\link[=luz_callback_metrics]{luz_callback_metrics()}}, \code{\link[=luz_callback_progress]{luz_callback_progress()}} and
+\code{\link[=luz_callback_train_valid]{luz_callback_train_valid()}} are always added by default.}
 
-\item{valid_data}{(dataloader, optional) A dataloader created with \code{\link[torch:dataloader]{torch::dataloader()}}
-that will be used during the validation procedure.}
+\item{valid_data}{(dataloader, optional) A dataloader created with
+\code{\link[torch:dataloader]{torch::dataloader()}} that will be used during the validation procedure.}
 
-\item{accelerator}{(accelerator, optional) An optional \code{\link[=accelerator]{accelerator()}} object used
-to configure device placement of the components like \link{nn_module}s, optimizers
-and batches of data.}
+\item{accelerator}{(accelerator, optional) An optional \code{\link[=accelerator]{accelerator()}} object
+used to configure device placement of the components like \link{nn_module}s,
+optimizers and batches of data.}
 
-\item{verbose}{(logical, optional) An optional boolean value indicating if the
-fitting procedure should emmit output to the console during training. By default,
-it will produce output if \code{\link[=interactive]{interactive()}} is \code{TRUE}, otherwise it won't print
-to the console.}
+\item{verbose}{(logical, optional) An optional boolean value indicating if
+the fitting procedure should emmit output to the console during training.
+By default, it will produce output if \code{\link[=interactive]{interactive()}} is \code{TRUE}, otherwise
+it won't print to the console.}
 
 \item{...}{Currently unused,}
+}
+\value{
+A fitted object that can be saved with \code{\link[=luz_save]{luz_save()}} and can be printed with
+\code{\link[=print]{print()}} and plotted with \code{\link[=plot]{plot()}}.
 }
 \description{
 Fit a \code{nn_module}

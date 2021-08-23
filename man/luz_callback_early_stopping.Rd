@@ -37,7 +37,7 @@ Stops training when a monitored metric stops improving
 }
 \note{
 This callback adds a \code{on_early_stopping} callback that can be used to
-call callbacks after as soon as the model stopped training.
+call callbacks as soon as the model stops training.
 
 If \code{verbose=TRUE} in \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}} a message is printed when
 early stopping.
@@ -53,6 +53,7 @@ Other luz_callbacks:
 \code{\link{luz_callback_lr_scheduler}()},
 \code{\link{luz_callback_metrics}()},
 \code{\link{luz_callback_model_checkpoint}()},
+\code{\link{luz_callback_profile}()},
 \code{\link{luz_callback_progress}()},
 \code{\link{luz_callback_train_valid}()},
 \code{\link{luz_callback}()}

@@ -3,19 +3,21 @@
 #' @param device_placement (logical) whether the `accelerator` object should
 #' handle device placement. Default: `TRUE`
 #' @param cpu (logical) whether the training procedure should run on the CPU.
+#' @param cuda_index (integer) index of the CUDA device to use if multiple GPUs
+#' are available. Default: the result of torch::cuda_current_device().
 #'
 #' @export
-accelerator <- function(device_placement = TRUE, cpu = FALSE) {
-  LuzAccelerator$new(device_placement = device_placement, cpu = cpu)
+accelerator <- function(device_placement = TRUE, cpu = FALSE, cuda_index = torch::cuda_current_device()) {
+  LuzAccelerator$new(device_placement = device_placement, cpu = cpu, cuda_index = cuda_index)
 }
 
 LuzAccelerator <- R6::R6Class(
   classname = "LuzAccelerator",
   lock_objects = FALSE,
   public = list(
-    initialize = function(device_placement = TRUE, cpu = FALSE) {
+    initialize = function(device_placement = TRUE, cpu = FALSE, cuda_index = torch::cuda_current_device()) {
       self$device_placement = device_placement
-      self$state <- LuzAcceleratorState$new(cpu = cpu)
+      self$state <- LuzAcceleratorState$new(cpu = cpu, index = cuda_index)
     },
     prepare = function(...) {
 
@@ -81,8 +83,8 @@ LuzAcceleratorState <- R6::R6Class(
   classname = "LuzAcceleratorState",
   lock_objects = FALSE,
   public = list(
-    initialize = function(cpu = FALSE) {
-      self$device <- if (torch::cuda_is_available() && !cpu) "cuda" else "cpu"
+    initialize = function(cpu = FALSE, index = torch::cuda_current_device()) {
+      self$device <- if (torch::cuda_is_available() && !cpu) paste0("cuda:", index) else "cpu"
     }
   )
 )
@@ -159,4 +161,3 @@ to_device <- function(batch, device) {
       x
   })
 }
-

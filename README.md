@@ -3,7 +3,9 @@
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/mlverse/luz/workflows/R-CMD-check/badge.svg)](https://github.com/mlverse/luz/actions)
 [![Codecov test coverage](https://codecov.io/gh/mlverse/luz/branch/master/graph/badge.svg)](https://codecov.io/gh/mlverse/luz?branch=master)
-[![Discord](https://img.shields.io/discord/837019024499277855?logo=discord)](https://discord.gg/s3D5cKhBkx)
+[![Discord](https://img.shields.io/discord/837019024499277855?logo=discord)](https://discord.com/invite/s3D5cKhBkx)
+[![CRAN status](https://www.r-pkg.org/badges/version/luz)](https://CRAN.R-project.org/package=luz)
+[![](https://cranlogs.r-pkg.org/badges/luz)](https://cran.r-project.org/package=luz)
 <!-- badges: end -->
 
 luz is a higher level API for torch providing abstractions to allow for much less verbose training loops.
@@ -22,7 +24,13 @@ It's heavily inspired in other higher level frameworks for deep learning, to cit
 
 ## Installation
 
-Luz is not yet available on CRAN. You can install the development version with:
+You can install the released version from CRAN with:
+
+```{.r}
+install.packages("luz")
+```
+
+or the development version with:
 
 ```{.r}
 remotes::install_github("mlverse/luz")

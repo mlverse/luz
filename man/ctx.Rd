@@ -17,9 +17,11 @@ could potentially modify these attributes or add new ones.\tabular{ll}{
    \code{accelerator} \tab Accelerator object used to query the correct device to place models, data, and etc. It assumes the value passed to the \code{accelerator} parameter in \code{fit}. \cr
    \code{model} \tab Initialized \code{nn_module} object that will be trained during the \code{fit} procedure. \cr
    \code{optimizers} \tab A named list of optimizers used during training. \cr
-   \code{data} \tab Dataloader passed to the \code{data} argument in \code{fit}. Modified to yield data in the selected device. \cr
+   \code{data} \tab Current in use dataloader. When training it’s \code{ctx$train_data}, when doing validation its \code{ctx$valid_data}. It can also be the prediction dataset when in \code{predict}. \cr
+   \code{train_data} \tab Dataloader passed to the \code{data} argument in \code{fit}. Modified to yield data in the selected device. \cr
    \code{valid_data} \tab Dataloader passed to the \code{valid_data} argument in \code{fit}. Modified to yield data in the selected device. \cr
-   \code{epochs} \tab Total number of epochs the model will be trained on. \cr
+   \code{min_epochs} \tab | Minimum number of epochs the model will be trained for. \cr
+   \code{max_epochs} \tab | Maximum number of epochs the model will be trained for. \cr
    \code{epoch} \tab Current training epoch. \cr
    \code{iter} \tab Current training iteration. It’s reset every epoch and when going from training to validation. \cr
    \code{training} \tab Whether the model is in training or validation mode. See also \code{help("luz_callback_train_valid")} \cr
@@ -34,7 +36,7 @@ could potentially modify these attributes or add new ones.\tabular{ll}{
    \code{opt} \tab Current optimizer, ie. optimizer that will be used to do the next \code{step} to update parameters. \cr
    \code{opt_nm} \tab Current optimizer name. By default it’s \code{opt} , but can change if your model uses more than one optimizer depending on the set of parameters being optimized. \cr
    \code{metrics} \tab \code{list()} with current metric object that are \code{update}d at every \code{on_train_batch_end()} or \code{on_valid_batch_end()}. See also \code{help("luz_callback_metrics")} \cr
-   \code{records} \tab \code{list()} recording metric values for training and validation for each epoch. See also \code{help("luz_callback_metrics")} \cr
+   \code{records} \tab \code{list()} recording metric values for training and validation for each epoch. See also \code{help("luz_callback_metrics")} . Also records profiling metrics. See \code{help("luz_callback_profile")} for more information. \cr
    \code{handlers} \tab A named \code{list()} of handlers that is passed to \code{rlang::with_handlers()} during the training loop and can be used to handle errors or conditions that might be raised by other callbacks. \cr
 }
 

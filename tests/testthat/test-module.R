@@ -140,6 +140,7 @@ test_that("predict can use a progress bar", {
 
   output <- mod %>%
     set_hparams(input_size = 10, output_size = 1) %>%
+    set_opt_hparams(lr = 0.001) %>%
     fit(dl, epochs = 1, verbose = FALSE)
 
   dl <- get_dl(len = 500)
@@ -155,4 +156,7 @@ test_that("predict can use a progress bar", {
     }
   )
 
+  expect_equal(output$ctx$hparams$input_size, 10)
+  expect_equal(output$ctx$opt_hparams$lr, 0.001)
 })
+

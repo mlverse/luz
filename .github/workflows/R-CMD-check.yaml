@@ -104,7 +104,7 @@ jobs:
 
       - run: |
           apt-get update -y
-          apt-get install -y sudo software-properties-common dialog apt-utils tzdata
+          apt-get install -y sudo software-properties-common dialog apt-utils tzdata libpng-dev
       - uses: r-lib/actions/setup-r@master
         with:
           r-version: 'release'

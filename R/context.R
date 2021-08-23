@@ -89,9 +89,9 @@ context <- R6::R6Class(
     },
     #' @description
     #' Get all metric given an epoch and set.
-    get_metrics = function(set, epoch) {
+    get_metrics = function(set, epoch = NULL) {
       if (is.null(epoch)) {
-        epoch <- length(private$.records[[what]][[set]])
+        epoch <- length(private$.records[["metrics"]][[set]])
       }
       self$get_log("metrics", set, epoch)
     },
@@ -99,6 +99,21 @@ context <- R6::R6Class(
     #' Get the value of a metric given its name, epoch and set.
     get_metric = function(name, set, epoch= NULL) {
       self$get_metrics(set, epoch)[[name]]
+    },
+    #' @description
+    #' Get formatted metrics values
+    get_formatted_metrics = function(set, epoch = NULL) {
+      values <- self$get_metrics(set, epoch)
+      for (i in seq_along(values)) {
+        values[[i]] <- self$model$metrics[[i]]$new()$format(values[[i]])
+      }
+      values
+    },
+    #' @description
+    #' Get a data.frame containing all metrics.
+    get_metrics_df = function() {
+      check_installed("dplyr")
+      purrr::imap_dfr(self$records$metrics, make_metrics_df)
     },
     #' @description Allows setting the `verbose` attribute.
     #' @param verbose boolean. If `TRUE` verbose mode is used. If `FALSE` non verbose.
@@ -138,3 +153,17 @@ context <- R6::R6Class(
     ))
   )
 )
+
+make_metrics_df <- function(metrics_list, set) {
+  purrr::imap_dfr(metrics_list, function(x, epoch) {
+    purrr::imap_dfr(x, function(value, metric_name) {
+      data.frame(
+        stringsAsFactors = FALSE,
+        set = set,
+        metric = metric_name,
+        epoch = epoch,
+        value = value
+      )
+    })
+  })
+}

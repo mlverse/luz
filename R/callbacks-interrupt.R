@@ -10,6 +10,12 @@ NULL
 #' @note In general you don't need to use these callback by yourself because it's always
 #'   included by default in [fit.luz_module_generator()].
 #'
+#' @examples
+#' interrupt_callback <- luz_callback_interrupt()
+#'
+#' @returns
+#' A `luz_callback`
+#'
 #' @family luz_callbacks
 #' @export
 luz_callback_interrupt <- luz_callback(

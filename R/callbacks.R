@@ -27,6 +27,7 @@ call_all_callbacks <- function(callbacks, name) {
 
 default_callbacks <- function() {
   list(
+    luz_callback_profile(),
     luz_callback_train_valid(),
     luz_callback_metrics(),
     luz_callback_progress(),
@@ -85,6 +86,10 @@ luz_callback <- function(name = NULL, ..., private = NULL, active = NULL, parent
 #' @note Printing can be disabled by passing `verbose=FALSE` to [fit.luz_module_generator()].
 #'
 #' @family luz_callbacks
+#'
+#' @returns
+#' A `luz_callback`
+#'
 #' @export
 luz_callback_progress <- luz_callback(
   "progress_callback",
@@ -92,7 +97,7 @@ luz_callback_progress <- luz_callback(
     inform(sprintf(
       "Epoch %d/%d",
       as.integer(ctx$epoch),
-      as.integer(ctx$epochs)
+      as.integer(ctx$max_epochs)
     ))
   },
   on_train_begin = function() {
@@ -171,11 +176,13 @@ luz_callback_progress <- luz_callback(
     show_after <- if (getOption("luz.force_progress_bar", FALSE)) 0 else 0.2
 
     format <- paste0(c(format, abbrevs), collapse = " - ")
+    total <- length(ctx$data) # ctx$data is the current dataset - can be the validation or training.
+
     self$pb <- progress::progress_bar$new(
       force = getOption("luz.force_progress_bar", FALSE),
       show_after = show_after,
       format = format,
-      total = length(ctx$data)
+      total = total
     )
   },
   tick_progress_bar = function(split) {
@@ -202,6 +209,10 @@ luz_callback_progress <- luz_callback(
 #' used by default in [fit.luz_module_generator()].
 #'
 #' @family luz_callbacks
+#'
+#' @returns
+#' A `luz_callback`
+#'
 #' @export
 luz_callback_metrics <- luz_callback(
   "metrics_callback",
@@ -270,6 +281,9 @@ luz_callback_metrics <- luz_callback(
 #'
 #' @note In general you won't need to explicitly use the metrics callback as it's
 #' used by default in [fit.luz_module_generator()].
+#'
+#' @returns
+#' A `luz_callback`
 #'
 #' @family luz_callbacks
 #' @export
@@ -342,7 +356,7 @@ monitor_metrics <- luz_callback(
 #'
 #' @note
 #' This callback adds a `on_early_stopping` callback that can be used to
-#' call callbacks after as soon as the model stopped training.
+#'   call callbacks as soon as the model stops training.
 #'
 #' @note
 #' If `verbose=TRUE` in [fit.luz_module_generator()] a message is printed when
@@ -395,13 +409,16 @@ luz_callback_early_stopping <- luz_callback(
       self$patience_counter <- self$patience_counter + 1L
     }
 
-    if (self$patience_counter >= self$patience) {
+    if (self$patience_counter >= self$patience &
+        ctx$epoch >= ctx$min_epochs) {
       rlang::signal("Early stopping", class = "early_stopping")
     }
 
   },
   on_early_stopping = function() {
-    inform(glue::glue("Early stopping at epoch {ctx$epoch} of {ctx$epochs}"))
+    inform(
+      glue::glue("Early stopping at epoch {ctx$epoch} of {ctx$max_epochs}")
+    )
   }
 )
 
@@ -446,9 +463,6 @@ luz_callback_model_checkpoint <- luz_callback(
     self$path <- path
     self$save_best_only <- save_best_only
 
-    if (self$save_best_only)
-      self$current_best <- 0
-
     super$initialize(monitor, mode, min_delta)
   },
   on_epoch_end = function() {
@@ -463,7 +477,7 @@ luz_callback_model_checkpoint <- luz_callback(
     path <- self$fmt_path(self$path)
 
     if (self$save_best_only) {
-      if (self$compare(qty, self$current_best)) {
+      if (self$compare(qty, self$current_best) || ctx$epoch == 1) {
         # means that new qty is better then previous
         self$current_best <- qty
         fs::dir_create(fs::path_dir(path), recurse = TRUE)
@@ -557,7 +571,8 @@ luz_callback_csv_logger <- luz_callback(
       file = self$path,
       append = self$append,
       col.names = !self$append,
-      row.names = FALSE
+      row.names = FALSE,
+      sep = ","
     )
 
     # now that we wrote for the first time it's ok to set append to TRUE

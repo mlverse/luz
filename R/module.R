@@ -16,6 +16,9 @@
 #' @param metrics (`list`, optional) A list of metrics to be tracked during
 #' the training procedure.
 #'
+#' @returns
+#' A luz module that can be trained with [fit()].
+#'
 #' @family training
 #'
 #' @export
@@ -68,6 +71,9 @@ setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
 #'
 #' @family set_hparam
 #'
+#' @returns
+#' The same luz module
+#'
 #' @export
 set_hparams <- function(module, ...) {
   hparams <- rlang::list2(...)
@@ -86,6 +92,9 @@ set_hparams <- function(module, ...) {
 #' For example, if your optimizer is `optim_adam` and you pass `lr=0.1`, then the
 #' `optim_adam` function is called with `optim_adam(parameters, lr=0.1)` when fitting
 #' the model.
+#'
+#' @returns
+#' The same luz module
 #'
 #' @family set_hparam
 #' @export
@@ -108,36 +117,52 @@ get_opt_hparams <- function(module) {
 #' @param object An `nn_module` that has been [setup()].
 #'
 #' @param data (dataloader) A dataloader created with [torch::dataloader()] used
-#' for training the model. The dataloader must return a list with at most 2 items.
-#' The first item will be used as input for the module and the second will be used
-#' as target for the loss function.
+#'   for training the model. The dataloader must return a list with at most 2
+#'   items. The first item will be used as input for the module and the second
+#'   will be used as target for the loss function.
 #'
-#' @param epochs (int) The number of epochs for training the model.
+#' @param epochs (int) The maximum number of epochs for training the model.
+#'   If a single value is provided, this is taken to be the `max_epochs` and
+#'   `min_epochs` is set to 0. If a vector of two numbers is provided, the
+#'   first value is `min_epochs` and the second value is `max_epochs`.
+#'   The minimum and maximum number of epochs are included in the context
+#'   object as `ctx$min_epochs` and `ctx$max_epochs`, respectively.
 #'
-#' @param callbacks (list, optional) A list of callbacks defined with [luz_callback()] that
-#' will be called during the training procedure. The callbacks [luz_callback_metrics()],
-#' [luz_callback_progress()] and [luz_callback_train_valid()] are always added by default.
+#' @param callbacks (list, optional) A list of callbacks defined with
+#'   [luz_callback()] that will be called during the training procedure. The
+#'   callbacks [luz_callback_metrics()], [luz_callback_progress()] and
+#'   [luz_callback_train_valid()] are always added by default.
 #'
-#' @param valid_data (dataloader, optional) A dataloader created with [torch::dataloader()]
-#' that will be used during the validation procedure.
+#' @param valid_data (dataloader, optional) A dataloader created with
+#'   [torch::dataloader()] that will be used during the validation procedure.
 #'
-#' @param accelerator (accelerator, optional) An optional [accelerator()] object used
-#' to configure device placement of the components like [nn_module]s, optimizers
-#' and batches of data.
+#' @param accelerator (accelerator, optional) An optional [accelerator()] object
+#'   used to configure device placement of the components like [nn_module]s,
+#'   optimizers and batches of data.
 #'
-#' @param verbose (logical, optional) An optional boolean value indicating if the
-#' fitting procedure should emmit output to the console during training. By default,
-#' it will produce output if [interactive()] is `TRUE`, otherwise it won't print
-#' to the console.
+#' @param verbose (logical, optional) An optional boolean value indicating if
+#'   the fitting procedure should emmit output to the console during training.
+#'   By default, it will produce output if [interactive()] is `TRUE`, otherwise
+#'   it won't print to the console.
 #'
 #' @param ... Currently unused,
 #'
+#' @returns
+#' A fitted object that can be saved with [luz_save()] and can be printed with
+#' [print()] and plotted with [plot()].
+#'
 #' @importFrom generics fit
 #' @export
-#'
-fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL,
-                                     valid_data = NULL, accelerator = NULL,
-                                     verbose = NULL, ...) {
+fit.luz_module_generator <- function(
+  object,
+  data,
+  epochs = 10,
+  callbacks = NULL,
+  valid_data = NULL,
+  accelerator = NULL,
+  verbose = NULL,
+  ...
+) {
 
   module <- object
   ellipsis::check_dots_empty()
@@ -150,11 +175,13 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
     accelerator <- accelerator()
 
   ctx$accelerator <- accelerator
+  ctx$hparams <- get_hparams(module) %||% list()
+  ctx$opt_hparams <- get_opt_hparams(module) %||% list()
 
-  model <- do.call(module, get_hparams(module) %||% list())
+  model <- do.call(module, ctx$hparams)
   bind_context(model, ctx)
 
-  optimizers <- do.call(model$set_optimizers, get_opt_hparams(module) %||% list())
+  optimizers <- do.call(model$set_optimizers, ctx$opt_hparams)
 
   if (!is.list(optimizers)) {
     optimizers <- list(opt = optimizers)
@@ -172,10 +199,14 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
   ctx$model$ctx <- ctx
 
   ctx$optimizers <- optimizers
-  ctx$data <- data
+
+  ctx$train_data <- data
   ctx$valid_data <- valid_data
 
-  ctx$epochs <- epochs
+  if (length(epochs) == 1) epochs <- c(0, epochs)
+  ctx$min_epochs <- epochs[[1]]
+  ctx$max_epochs <- epochs[[2]]
+
   callbacks <- append(default_callbacks(), callbacks)
   ctx$callbacks <- initialize_callbacks(callbacks, ctx)
 
@@ -194,11 +225,13 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
   rlang::with_handlers(
     !!! ctx$handlers,
     .expr = {
-      for (epoch in seq_len(ctx$epochs)) {
+      for (epoch in seq_len(ctx$max_epochs)) {
         ctx$epoch <- epoch
         ctx$iter <- 0L
-        ctx$call_callbacks("on_epoch_begin")
 
+        ctx$data <- ctx$train_data
+
+        ctx$call_callbacks("on_epoch_begin")
         ctx$call_callbacks("on_train_begin")
 
         coro::loop(for (batch in ctx$data) {
@@ -214,11 +247,12 @@ fit.luz_module_generator <- function(object, data, epochs = 10, callbacks = NULL
 
         if (!is.null(ctx$valid_data)) {
 
+          ctx$data <- ctx$valid_data
           ctx$call_callbacks("on_valid_begin")
 
           ctx$iter <- 0L
           torch::with_no_grad({
-            coro::loop(for (batch in ctx$valid_data) {
+            coro::loop(for (batch in ctx$data) {
               bind_batch_to_ctx(ctx, batch)
               ctx$iter <- ctx$iter + 1L
 

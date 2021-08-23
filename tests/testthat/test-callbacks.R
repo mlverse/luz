@@ -96,9 +96,35 @@ test_that("model checkpoint callback works", {
   files <- fs::dir_ls(tmp)
   expect_length(files, 5)
 
+  tmp <- tempfile(fileext = "/")
+
   output <- mod %>%
     set_hparams(input_size = 10, output_size = 1) %>%
     fit(dl, verbose = FALSE, epochs = 10, callbacks = list(
+      luz_callback_model_checkpoint(path = tmp, monitor = "train_loss",
+                                    save_best_only = TRUE)
+    ))
+
+  files <- fs::dir_ls(tmp)
+  expect_length(files, 10)
+
+  torch::torch_manual_seed(2)
+  set.seed(2)
+
+  model <- get_model()
+  dl <- get_dl()
+
+  mod <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam,
+    )
+
+  tmp <- tempfile(fileext = "/")
+
+  output <- mod %>%
+    set_hparams(input_size = 10, output_size = 1) %>%
+    fit(dl, verbose = FALSE, epochs = 5, callbacks = list(
       luz_callback_model_checkpoint(path = tmp, monitor = "train_loss",
                                     save_best_only = TRUE)
     ))
@@ -156,7 +182,7 @@ test_that("csv callback", {
       luz_callback_csv_logger(tmp)
     ))
 
-  x <- read.table(tmp, header = TRUE)
+  x <- read.table(tmp, header = TRUE, sep = ",")
   expect_equal(nrow(x), 5)
   expect_equal(names(x), c("epoch", "set", "loss"))
 
@@ -166,7 +192,7 @@ test_that("csv callback", {
       luz_callback_csv_logger(tmp)
     ))
 
-  x <- read.table(tmp, header = TRUE)
+  x <- read.table(tmp, header = TRUE, sep = ",")
 
   expect_equal(nrow(x), 10)
   expect_equal(names(x), c("epoch", "set", "loss"))

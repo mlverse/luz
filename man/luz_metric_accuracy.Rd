@@ -6,6 +6,9 @@
 \usage{
 luz_metric_accuracy()
 }
+\value{
+Returns new Luz metric.
+}
 \description{
 Computes accuracy for multi-class classification problems.
 }

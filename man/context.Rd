@@ -24,6 +24,8 @@ See also \link{ctx}.
 \item \href{#method-get_log}{\code{context$get_log()}}
 \item \href{#method-get_metrics}{\code{context$get_metrics()}}
 \item \href{#method-get_metric}{\code{context$get_metric()}}
+\item \href{#method-get_formatted_metrics}{\code{context$get_formatted_metrics()}}
+\item \href{#method-get_metrics_df}{\code{context$get_metrics_df()}}
 \item \href{#method-set_verbose}{\code{context$set_verbose()}}
 \item \href{#method-clone}{\code{context$clone()}}
 }
@@ -110,7 +112,7 @@ is added to the end of list, otherwise the index is used.}
 \subsection{Method \code{get_metrics()}}{
 Get all metric given an epoch and set.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{context$get_metrics(set, epoch)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{context$get_metrics(set, epoch = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -145,6 +147,36 @@ to lot to. But can be arbitrary info.}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_formatted_metrics"></a>}}
+\if{latex}{\out{\hypertarget{method-get_formatted_metrics}{}}}
+\subsection{Method \code{get_formatted_metrics()}}{
+Get formatted metrics values
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{context$get_formatted_metrics(set, epoch = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{set}}{(string) Usually 'train' or 'valid' indicating the set you want
+to lot to. But can be arbitrary info.}
+
+\item{\code{epoch}}{The epoch you want to extract metrics from.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-get_metrics_df"></a>}}
+\if{latex}{\out{\hypertarget{method-get_metrics_df}{}}}
+\subsection{Method \code{get_metrics_df()}}{
+Get a data.frame containing all metrics.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{context$get_metrics_df()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_verbose"></a>}}
