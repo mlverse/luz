@@ -73,3 +73,22 @@ as_dataloader.dataloader <- function(x, ...) {
   x
 }
 
+#' @describeIn as_dataloader Converts the matrix to a dataloader
+#' @export
+as_dataloader.matrix <- function(x, ...) {
+  as_dataloader(list(x))
+}
+
+#' @describeIn as_dataloader Converts the numeric vector to a dataloader
+#' @export
+as_dataloader.numeric <- as_dataloader.matrix
+
+#' @describeIn as_dataloader Converts the array to a dataloader
+#' @export
+as_dataloader.array <- as_dataloader.matrix
+
+#' @describeIn as_dataloader Converts the tensor to a dataloader
+#' @export
+as_dataloader.torch_tensor <- as_dataloader.matrix
+
+
