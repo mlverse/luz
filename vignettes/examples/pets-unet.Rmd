@@ -77,8 +77,8 @@ x <- coro::collect(train_dl, 1)
 
 # Define the network ------------------------------------------------------
 
-# We use a pre-trained mobile net encoder. we take intermediate features of
-# mobilenet.
+# We use a pre-trained mobile net encoder. We take intermediate layers to use
+# in the skip connections.
 encoder <- torch::nn_module(
   initialize = function() {
     model <- model_mobilenet_v2(pretrained = TRUE)
@@ -106,6 +106,8 @@ encoder <- torch::nn_module(
   }
 )
 
+# The decoder blocks are composed of a upsample layer + a convolution
+# with same padding.
 decoder_block <- nn_module(
   initialize = function(in_channels, skip_channels, out_channels) {
     self$upsample <- nn_conv_transpose2d(
@@ -135,6 +137,8 @@ decoder_block <- nn_module(
   }
 )
 
+# We build the decoder by making a sequence of `decoder_blocks` matching
+# the sizes to be compatible with the encoder sizes.
 decoder <- nn_module(
   initialize = function(
     decoder_channels = c(256, 128, 64, 32, 16),
@@ -167,6 +171,9 @@ decoder <- nn_module(
   }
 )
 
+# FInally the model is the composition of encoder and decoder + an output 
+# layer that will produce the distribution for each one of the possible 
+# classes.
 model <- nn_module(
   initialize = function() {
     self$encoder <- encoder()
@@ -183,6 +190,10 @@ model <- nn_module(
   }
 )
 
+# Train ---------------------------------------------
+
+# We train using the cross entropy loss. We could have used the dice loss
+# too, but it's harder to optimize.
 model <- model %>%
   setup(optimizer = optim_adam, loss = nn_cross_entropy_loss())
 
@@ -195,7 +206,7 @@ fitted <- model %>%
 
 plot(fitted)
 
-# Plot validation image ---------
+# Plot validation image ---------------------
 library(raster)
 
 preds <- predict(fitted, dataloader(dataset_subset(valid_ds, 2)))
