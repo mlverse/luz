@@ -4,6 +4,7 @@
 \alias{as_dataloader}
 \alias{as_dataloader.dataset}
 \alias{as_dataloader.list}
+\alias{as_dataloader.dataloader}
 \title{Creates a dataloader from its input}
 \usage{
 as_dataloader(x, ...)
@@ -11,6 +12,8 @@ as_dataloader(x, ...)
 \method{as_dataloader}{dataset}(x, ..., batch_size = 32)
 
 \method{as_dataloader}{list}(x, ...)
+
+\method{as_dataloader}{dataloader}(x, ...)
 }
 \arguments{
 \item{x}{the input object.}
@@ -39,6 +42,8 @@ experiments.
 
 \item \code{list}: Converts a list of tensors or arrays with the same
 size in the first dimension to a  \code{\link[torch:dataloader]{torch::dataloader()}}
+
+\item \code{dataloader}: Returns the same dataloader
 }}
 
 \section{Overriding}{

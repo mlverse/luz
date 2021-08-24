@@ -64,3 +64,9 @@ as_dataloader.list <- function(x, ...) {
   as_dataloader(dataset, ...)
 }
 
+#' @describeIn as_dataloader Returns the same dataloader
+#' @export
+as_dataloader.dataloader <- function(x, ...) {
+  x
+}
+
