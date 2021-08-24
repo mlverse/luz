@@ -2,24 +2,59 @@
 % Please edit documentation in R/as_dataloader.R
 \name{as_dataloader}
 \alias{as_dataloader}
+\alias{as_dataloader.dataset}
+\alias{as_dataloader.list}
 \title{Creates a dataloader from its input}
 \usage{
 as_dataloader(x, ...)
+
+\method{as_dataloader}{dataset}(x, ..., batch_size = 32)
+
+\method{as_dataloader}{list}(x, ...)
 }
 \arguments{
 \item{x}{the input object.}
 
-\item{...}{used by the specialized methods.}
+\item{...}{Passed to \code{\link[torch:dataloader]{torch::dataloader()}}.}
+
+\item{batch_size}{(int, optional): how many samples per batch to load
+(default: \code{1}).}
 }
 \description{
 \code{as_dataloader} is used internally by luz to convert input
-\code{data} and \code{valid_data} as passed to \link{fit} to a \link[torch:dataloader]{torch::dataloader}
+\code{data} and \code{valid_data} as passed to \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}} to a
+\link[torch:dataloader]{torch::dataloader}
 }
 \details{
 \code{as_dataloader} methods should have sensible defaults for batch_size,
 parallel workers, etc.
 
-It allows users to quickly experiment with \link{fit} by not requiring
+It allows users to quickly experiment with \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}} by not requiring
 to create a \link[torch:dataset]{torch::dataset} and a \link[torch:dataloader]{torch::dataloader} in simple
 experiments.
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{dataset}: Converts a \code{\link[torch:dataset]{torch::dataset()}} to a \code{\link[torch:dataloader]{torch::dataloader()}}.
+
+\item \code{list}: Converts a list of tensors or arrays with the same
+size in the first dimension to a  \code{\link[torch:dataloader]{torch::dataloader()}}
+}}
+
+\section{Overriding}{
+
+
+You can implement your own \code{as_dataloader} S3 method if you want your data
+structure to be automatically supported by luz's \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}}.
+The method must satisfy the following conditions:
+\itemize{
+\item The method should return a \code{\link[torch:dataloader]{torch::dataloader()}}.
+\item The only required argument is \code{x}. You have good default for all other
+arguments.
+}
+
+It's better to avoid implementing \code{as_dataloader} methods for common S3 classes
+like \code{data.frames}. In this case, its better to assign a different class to
+the inputs and implement \code{as_dataloader} for it.
+}
+
