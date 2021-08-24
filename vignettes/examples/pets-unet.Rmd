@@ -2,6 +2,8 @@
 title: "UNET implementation"
 desc: "Implements a UNET model to separate the background of images of cats and dogs."
 category: 'intermediate'
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, eval = FALSE}
@@ -82,13 +84,11 @@ encoder <- torch::nn_module(
     model <- model_mobilenet_v2(pretrained = TRUE)
     self$stages <- nn_module_list(list(
       nn_identity(),
-      # TODO: this can be improved once we implement subset for `nn_sequential`
-      # see https://github.com/mlverse/torch/issues/675
-      nn_sequential(!!!lapply(1:2, function(x) model$features[[x]])),
-      nn_sequential(!!!lapply(3:4, function(x) model$features[[x]])),
-      nn_sequential(!!!lapply(5:7, function(x) model$features[[x]])),
-      nn_sequential(!!!lapply(8:14, function(x) model$features[[x]])),
-      nn_sequential(!!!lapply(15:18, function(x) model$features[[x]]))
+      model$features[1:2]
+      model$features[3:4]
+      model$features[5:7]
+      model$features[8:14]
+      model$features[15:18]
     ))
     
     for (par in self$parameters) {
@@ -183,32 +183,27 @@ model <- nn_module(
   }
 )
 
-dice_loss <- nn_module(
-  initialize = function(eps = 1e-6) {self$eps <- eps},
-  forward = function(input, target) {
-    target <- nnf_one_hot(target)$permute(c(1,4,2,3))
-    input <- nnf_softmax(input, dim = 2)
-    
-    intersection <- torch_sum(input * target, dim = 2:4)
-    cardinality <- torch_sum(input + target, dim = 2:4)
-    
-    dice_score <- 2 * intersection / (cardinality + self$eps)
-    torch_mean(dice_score)
-  }
-)
+model <- model %>%
+  setup(optimizer = optim_adam, loss = nn_cross_entropy_loss())
+
+f <- lr_finder(model, train_dl)
+plot(f)
 
 fitted <- model %>%
-  setup(optimizer = optim_adam, loss = dice_loss()) %>%
+  set_opt_hparams(lr = 1e-3) %>% 
   fit(train_dl, epochs = 10, valid_data = valid_dl)
 
+plot(fitted)
 
-# Plot validation image
-preds <- predict(fitted, valid_dl)
+# Plot validation image ---------
+library(raster)
+
+preds <- predict(fitted, dataloader(dataset_subset(valid_ds, 2)))
 
 mask <- as.array(torch_argmax(preds[1,..], 1)$to(device = "cpu"))
 mask <- raster::ratify(raster::raster(mask))
 
-img <- raster::brick(as.array(valid_ds[1][[1]]$permute(c(2,3,1))))
+img <- raster::brick(as.array(valid_ds[2][[1]]$permute(c(2,3,1))))
 raster::plotRGB(img, scale = 1)
 plot(mask, alpha = 0.4, legend = FALSE, axes = FALSE, add = TRUE)
 ```
