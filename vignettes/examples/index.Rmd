@@ -6,7 +6,7 @@ This gallery of examples uses Luz to train a validate a range of common deep lea
 
 <div class="container">
 ```{r echo=FALSE, results = "asis"}
-examples <- list.files(".")
+examples <- list.files(".", pattern = ".Rmd")
 examples <- examples[examples != "index.Rmd"]
 examples <- lapply(examples, function(x) {
   out <- rmarkdown::yaml_front_matter(x)
@@ -43,7 +43,7 @@ row <- function(x) {
   paste0(
     '<div class="row mt-3">',
     x[[1]],
-    x[[2]],
+    if (length(x) == 2) x[[2]] else "",
     '</div>'
   )
 }
