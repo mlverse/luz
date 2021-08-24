@@ -35,6 +35,9 @@ as_dataloader <- function(x, ...) {
 
 #' @export
 as_dataloader.default <- function(x, ...) {
+  if (is.null(x))
+    return(x)
+
   rlang::abort(paste0(
     "Unsupported object with class '",
     class(x)[1],
