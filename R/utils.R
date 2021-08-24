@@ -148,4 +148,3 @@ check_installed <- function (pkg, fun) {
                                        pkg, "')`?")))
 }
 
-

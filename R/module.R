@@ -193,7 +193,7 @@ fit.luz_module_generator <- function(
   }
 
   c(model, optimizers, data, valid_data) %<-%
-    ctx$accelerator$prepare(model, optimizers, data, valid_data)
+    ctx$accelerator$prepare(model, optimizers, as_dataloader(data), as_dataloader(valid_data))
 
   ctx$model <- model
   ctx$model$ctx <- ctx
@@ -296,7 +296,7 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
 
   ctx$accelerator <- accelerator
   model <- NULL; data <- NULL
-  c(model, data) %<-% ctx$accelerator$prepare(ctx$model, newdata)
+  c(model, data) %<-% ctx$accelerator$prepare(ctx$model, as_dataloader(newdata))
 
   ctx$model <- model
   ctx$data <- data

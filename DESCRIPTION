@@ -45,6 +45,7 @@ VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
     'accelerator.R'
+    'as_dataloader.R'
     'utils.R'
     'callbacks.R'
     'callbacks-interrupt.R'

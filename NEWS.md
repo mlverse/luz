@@ -7,6 +7,7 @@
 * Early stopping will now only occur if the minimum number of training epochs has been met (#53, @mattwarkentin).
 * Added `cuda_index` argument to `accelerator` to allow selecting an specific GPU when multiple are present (#58, @cmcmaster1).
 * Implemented `lr_finder` (#59, @cmcmaster1).
+* We now handle different kinds of data arguments passed to `fit` using the `as_dataloader()` method (#66).
 
 # luz 0.1.0
 
