@@ -84,10 +84,10 @@ encoder <- torch::nn_module(
     model <- model_mobilenet_v2(pretrained = TRUE)
     self$stages <- nn_module_list(list(
       nn_identity(),
-      model$features[1:2]
-      model$features[3:4]
-      model$features[5:7]
-      model$features[8:14]
+      model$features[1:2],
+      model$features[3:4],
+      model$features[5:7],
+      model$features[8:14],
       model$features[15:18]
     ))
     
