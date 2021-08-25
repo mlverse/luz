@@ -202,7 +202,12 @@ fit.luz_module_generator <- function(
   }
 
   c(model, optimizers, data, valid_data) %<-%
-    ctx$accelerator$prepare(model, optimizers, as_dataloader(data), as_dataloader(valid_data))
+    ctx$accelerator$prepare(
+      model,
+      optimizers,
+      as_dataloader(data, shuffle = TRUE), # if already a datalaoder shuffle is ignored.
+      as_dataloader(valid_data)
+    )
 
   ctx$model <- model
   ctx$model$ctx <- ctx
