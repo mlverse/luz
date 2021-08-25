@@ -18,10 +18,11 @@
 \arguments{
 \item{object}{An \code{nn_module} that has been \code{\link[=setup]{setup()}}.}
 
-\item{data}{(dataloader) A dataloader created with \code{\link[torch:dataloader]{torch::dataloader()}} used
-for training the model. The dataloader must return a list with at most 2
-items. The first item will be used as input for the module and the second
-will be used as target for the loss function.}
+\item{data}{(dataloader, dataset or list) A dataloader created with
+\code{\link[torch:dataloader]{torch::dataloader()}} used for training the model, or a dataset created with
+\code{\link[torch:dataset]{torch::dataset()}} or a list. Dataloaders and datasets must return list with
+at most 2 items. The first item will be used as input for the module and the
+second will be used as target for the loss function.}
 
 \item{epochs}{(int) The maximum number of epochs for training the model.
 If a single value is provided, this is taken to be the \code{max_epochs} and
@@ -35,8 +36,12 @@ object as \code{ctx$min_epochs} and \code{ctx$max_epochs}, respectively.}
 callbacks \code{\link[=luz_callback_metrics]{luz_callback_metrics()}}, \code{\link[=luz_callback_progress]{luz_callback_progress()}} and
 \code{\link[=luz_callback_train_valid]{luz_callback_train_valid()}} are always added by default.}
 
-\item{valid_data}{(dataloader, optional) A dataloader created with
-\code{\link[torch:dataloader]{torch::dataloader()}} that will be used during the validation procedure.}
+\item{valid_data}{(dataloader, dataset, list or scalar value; optional) A dataloader
+created with \code{\link[torch:dataloader]{torch::dataloader()}} or a dataset created with \code{\link[torch:dataset]{torch::dataset()}}
+that will be used during the validation procedure. They must return a list with
+(input, target). If \code{data} is a torch dataset or a list, then you can also supply
+a numeric value between 0 and 1 - and in this case a random sample with size
+orresponding to that proportion from \code{data} will be used for validation.}
 
 \item{accelerator}{(accelerator, optional) An optional \code{\link[=accelerator]{accelerator()}} object
 used to configure device placement of the components like \link{nn_module}s,

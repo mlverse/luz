@@ -116,10 +116,11 @@ get_opt_hparams <- function(module) {
 #'
 #' @param object An `nn_module` that has been [setup()].
 #'
-#' @param data (dataloader) A dataloader created with [torch::dataloader()] used
-#'   for training the model. The dataloader must return a list with at most 2
-#'   items. The first item will be used as input for the module and the second
-#'   will be used as target for the loss function.
+#' @param data (dataloader, dataset or list) A dataloader created with
+#'   [torch::dataloader()] used for training the model, or a dataset created with
+#'   [torch::dataset()] or a list. Dataloaders and datasets must return list with
+#'   at most 2 items. The first item will be used as input for the module and the
+#'   second will be used as target for the loss function.
 #'
 #' @param epochs (int) The maximum number of epochs for training the model.
 #'   If a single value is provided, this is taken to be the `max_epochs` and
@@ -133,8 +134,12 @@ get_opt_hparams <- function(module) {
 #'   callbacks [luz_callback_metrics()], [luz_callback_progress()] and
 #'   [luz_callback_train_valid()] are always added by default.
 #'
-#' @param valid_data (dataloader, optional) A dataloader created with
-#'   [torch::dataloader()] that will be used during the validation procedure.
+#' @param valid_data (dataloader, dataset, list or scalar value; optional) A dataloader
+#'   created with [torch::dataloader()] or a dataset created with [torch::dataset()]
+#'   that will be used during the validation procedure. They must return a list with
+#'   (input, target). If `data` is a torch dataset or a list, then you can also supply
+#'   a numeric value between 0 and 1 - and in this case a random sample with size
+#'   orresponding to that proportion from `data` will be used for validation.
 #'
 #' @param accelerator (accelerator, optional) An optional [accelerator()] object
 #'   used to configure device placement of the components like [nn_module]s,
@@ -190,6 +195,10 @@ fit.luz_module_generator <- function(
   if (!rlang::is_named(optimizers)) {
     rlang::abort(c("List of optimizers is not named.",
                    "When returning a list of optimizers, the list must be named."))
+  }
+
+  if (rlang::is_scalar_double(valid_data)) {
+    c(data, valid_data) %<-% create_valid_data(data, valid_data)
   }
 
   c(model, optimizers, data, valid_data) %<-%
@@ -400,6 +409,27 @@ initialize_callbacks <- function(callbacks, ctx) {
     bind_context(cb, ctx)
     cb
   })
+}
+
+create_valid_data <- function(data, valid_data) {
+
+  if (valid_data >= 1 || valid_data < 0)
+    rlang::abort(sprintf("valid_data must be a value between 0 and 1, got %f", valid_data),
+                 class = "value_error")
+
+  if (torch::is_dataloader(data))
+    rlang::abort(c("Can't create a validation set from the training dataloader.",
+                   "Supply a torch dataset instead."), class = "value_error")
+
+  data <- as_dataset(data)
+  l <- length(data)
+
+  id_valid <- sample.int(l, size = l*valid_data)
+  id_train <- seq_len(length.out = l)[-id_valid]
+
+  valid_data <- torch::dataset_subset(data, id_valid)
+  data <- torch::dataset_subset(data, id_train)
+  list(data, valid_data)
 }
 
 clean_context <- function(ctx) {
