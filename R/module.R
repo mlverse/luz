@@ -470,7 +470,15 @@ apply_dataloader_options <- function(data, valid_data, dataloader_options) {
   }
 
   if (!torch::is_dataloader(valid_data)) {
-    valid_data <- rlang::exec(as_dataloader, x = valid_data, !!!dataloader_options)
+    valid_dl_options <- dataloader_options
+
+    # probably on `predict`.
+    if (is.null(data) && isTRUE(valid_dl_options$shuffle))
+      rlang::warn("`shuffle=TRUE` will be ignored for predictions.")
+
+    valid_dl_options$shuffle <- FALSE
+
+    valid_data <- rlang::exec(as_dataloader, x = valid_data, !!!valid_dl_options)
   }
 
   list(data, valid_data)
