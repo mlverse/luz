@@ -150,7 +150,11 @@ get_opt_hparams <- function(module) {
 #'   By default, it will produce output if [interactive()] is `TRUE`, otherwise
 #'   it won't print to the console.
 #'
-#' @param ... Currently unused,
+#' @param ... Currently unused.
+#'
+#' @param dataloader_options Options used when creating a dataloader. See [torch::dataloader()].
+#'  `shuffle=TRUE` by default for the training data and `batch_size=32` by
+#'   default.
 #'
 #' @returns
 #' A fitted object that can be saved with [luz_save()] and can be printed with
@@ -166,7 +170,8 @@ fit.luz_module_generator <- function(
   valid_data = NULL,
   accelerator = NULL,
   verbose = NULL,
-  ...
+  ...,
+  dataloader_options = NULL
 ) {
 
   module <- object
@@ -201,12 +206,14 @@ fit.luz_module_generator <- function(
     c(data, valid_data) %<-% create_valid_data(data, valid_data)
   }
 
+  c(data, valid_data) %<-% apply_dataloader_options(data, valid_data, dataloader_options)
+
   c(model, optimizers, data, valid_data) %<-%
     ctx$accelerator$prepare(
       model,
       optimizers,
-      as_dataloader(data, shuffle = TRUE), # if already a datalaoder shuffle is ignored.
-      as_dataloader(valid_data)
+      data,
+      valid_data
     )
 
   ctx$model <- model
@@ -300,7 +307,8 @@ fit.luz_module_generator <- function(
 #' @importFrom stats predict
 #' @export
 predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
-                                      accelerator = NULL, verbose = NULL) {
+                                      accelerator = NULL, verbose = NULL,
+                                      dataloader_options = NULL) {
 
   ctx <- object$ctx
   ctx$set_verbose(verbose)
@@ -310,6 +318,8 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
 
   ctx$accelerator <- accelerator
   model <- NULL; data <- NULL
+  c(., newdata) %<-% apply_dataloader_options(NULL, newdata, dataloader_options)
+
   c(model, data) %<-% ctx$accelerator$prepare(ctx$model, as_dataloader(newdata))
 
   ctx$model <- model
@@ -434,6 +444,35 @@ create_valid_data <- function(data, valid_data) {
 
   valid_data <- torch::dataset_subset(data, id_valid)
   data <- torch::dataset_subset(data, id_train)
+  list(data, valid_data)
+}
+
+apply_dataloader_options <- function(data, valid_data, dataloader_options) {
+
+  if (torch::is_dataloader(data) && !is.null(dataloader_options))
+    rlang::abort("`dataloader_options` won't be used because `data` is already a dataloader.")
+
+  if (torch::is_dataloader(valid_data) && !is.null(dataloader_options))
+    rlang::warn("`dataloader_options` will be ignored for `valid_data` since it's already a dataloader")
+
+  dataloader_options <- dataloader_options %||% list()
+
+  if (is.null(dataloader_options$batch_size))
+    dataloader_options$batch_size <- 32L
+
+  if (!torch::is_dataloader(data)) {
+
+    train_dl_options <- dataloader_options
+    if (is.null(train_dl_options$shuffle))
+      train_dl_options$shuffle <- TRUE
+
+    data <- rlang::exec(as_dataloader, x = data, !!!train_dl_options)
+  }
+
+  if (!torch::is_dataloader(valid_data)) {
+    valid_data <- rlang::exec(as_dataloader, x = valid_data, !!!dataloader_options)
+  }
+
   list(data, valid_data)
 }
 
