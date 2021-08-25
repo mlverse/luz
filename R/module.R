@@ -154,7 +154,7 @@ get_opt_hparams <- function(module) {
 #'
 #' @param dataloader_options Options used when creating a dataloader. See [torch::dataloader()].
 #'  `shuffle=TRUE` by default for the training data and `batch_size=32` by
-#'   default.
+#'   default. It will error if not `NULL` and `data` is already a dataloader.
 #'
 #' @returns
 #' A fitted object that can be saved with [luz_save()] and can be printed with
