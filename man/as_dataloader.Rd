@@ -5,6 +5,10 @@
 \alias{as_dataloader.dataset}
 \alias{as_dataloader.list}
 \alias{as_dataloader.dataloader}
+\alias{as_dataloader.matrix}
+\alias{as_dataloader.numeric}
+\alias{as_dataloader.array}
+\alias{as_dataloader.torch_tensor}
 \title{Creates a dataloader from its input}
 \usage{
 as_dataloader(x, ...)
@@ -14,6 +18,14 @@ as_dataloader(x, ...)
 \method{as_dataloader}{list}(x, ...)
 
 \method{as_dataloader}{dataloader}(x, ...)
+
+\method{as_dataloader}{matrix}(x, ...)
+
+\method{as_dataloader}{numeric}(x, ...)
+
+\method{as_dataloader}{array}(x, ...)
+
+\method{as_dataloader}{torch_tensor}(x, ...)
 }
 \arguments{
 \item{x}{the input object.}
@@ -44,6 +56,14 @@ experiments.
 size in the first dimension to a  \code{\link[torch:dataloader]{torch::dataloader()}}
 
 \item \code{dataloader}: Returns the same dataloader
+
+\item \code{matrix}: Converts the matrix to a dataloader
+
+\item \code{numeric}: Converts the numeric vector to a dataloader
+
+\item \code{array}: Converts the array to a dataloader
+
+\item \code{torch_tensor}: Converts the tensor to a dataloader
 }}
 
 \section{Overriding}{

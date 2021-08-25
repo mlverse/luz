@@ -51,3 +51,23 @@ test_that("works for lists of tensors", {
   expect_tensor_shape(x[[1]][[2]], c(32, 5))
 
 })
+
+test_that("works for nuemrics", {
+
+  x <- runif(100)
+  l <- as_dataloader(x)
+  expect_equal(length(l), 4)
+
+  x <- matrix(runif(1000), ncol = 10)
+  l <- as_dataloader(x)
+  expect_equal(length(l), 4)
+
+  x <- array(runif(1000), dim = c(100, 10, 10))
+  l <- as_dataloader(x)
+  expect_equal(length(l), 4)
+
+  x <- torch::torch_randn(100, 10)
+  l <- as_dataloader(x)
+  expect_equal(length(l), 4)
+
+})

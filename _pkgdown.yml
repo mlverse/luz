@@ -29,6 +29,7 @@ reference:
     - ctx
     - context
     - lr_finder
+    - as_dataloader
   - title: "Metrics"
   - contents:
     - starts_with("luz_metric")
