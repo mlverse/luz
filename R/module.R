@@ -160,6 +160,11 @@ get_opt_hparams <- function(module) {
 #' A fitted object that can be saved with [luz_save()] and can be printed with
 #' [print()] and plotted with [plot()].
 #'
+#' @seealso [predict.luz_module_fitted()] for how to create predictions. [setup()]
+#'   to find out how to create modules that can be trained with `fit`.
+#'
+#' @family training
+#'
 #' @importFrom generics fit
 #' @export
 fit.luz_module_generator <- function(
@@ -304,6 +309,16 @@ fit.luz_module_generator <- function(
   )
 }
 
+#' Create predictions for a fitted model
+#'
+#' @param object (fitted model) the fitted model object returned from [fit.luz_module_generator()]
+#' @param newdata (dataloader, dataset, list or array) returning a list with at
+#'   least 1 element. The other elements aren't used.
+#' @inheritParams fit.luz_module_generator
+#' @param ... Currently unused.
+#'
+#' @family training
+#'
 #' @importFrom stats predict
 #' @export
 predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),

@@ -66,3 +66,12 @@ A fitted object that can be saved with \code{\link[=luz_save]{luz_save()}} and c
 \description{
 Fit a \code{nn_module}
 }
+\seealso{
+\code{\link[=predict.luz_module_fitted]{predict.luz_module_fitted()}} for how to create predictions. \code{\link[=setup]{setup()}}
+to find out how to create modules that can be trained with \code{fit}.
+
+Other training: 
+\code{\link{predict.luz_module_fitted}()},
+\code{\link{setup}()}
+}
+\concept{training}
