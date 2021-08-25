@@ -57,13 +57,7 @@ as_dataloader.dataset <- function(x, ..., batch_size = 32) {
 #'   size in the first dimension to a  [torch::dataloader()]
 #' @export
 as_dataloader.list <- function(x, ...) {
-  tensors <- lapply(x, function(x) {
-    if (inherits(x, "torch_tensor"))
-      x
-    else
-      torch::torch_tensor(x)
-  })
-  dataset <- do.call(torch::tensor_dataset, tensors)
+  dataset <- as_dataset(x)
   as_dataloader(dataset, ...)
 }
 
@@ -91,4 +85,42 @@ as_dataloader.array <- as_dataloader.matrix
 #' @export
 as_dataloader.torch_tensor <- as_dataloader.matrix
 
+as_dataset <- function(x, ...) {
+  UseMethod("as_dataset")
+}
+
+#' @export
+as_dataset.default <- function(x, ...) {
+  rlang::abort(sprinf("Can't convert object with class '%s' to a torch dataset.", class(x)[1]))
+}
+
+#' @export
+as_dataset.dataset <- function(x, ...) {
+  x
+}
+
+#' @export
+as_dataset.list <- function(x, ...) {
+  tensors <- lapply(x, function(x) {
+    if (inherits(x, "torch_tensor"))
+      x
+    else
+      torch::torch_tensor(x)
+  })
+  do.call(torch::tensor_dataset, tensors)
+}
+
+#' @export
+as_dataset.matrix <- function(x, ...) {
+  as_dataset(list(x))
+}
+
+#' @export
+as_dataset.numeric <- as_dataset.matrix
+
+#' @export
+as_dataset.array <- as_dataset.matrix
+
+#' @export
+as_dataset.torch_tensor <- as_dataset.matrix
 

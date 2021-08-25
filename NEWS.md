@@ -8,6 +8,7 @@
 * Added `cuda_index` argument to `accelerator` to allow selecting an specific GPU when multiple are present (#58, @cmcmaster1).
 * Implemented `lr_finder` (#59, @cmcmaster1).
 * We now handle different kinds of data arguments passed to `fit` using the `as_dataloader()` method (#66).
+* `valid_data` can now be scalar value indicating the proportion of `data` that will be used for fitting. This only works if `data` is a torch dataset or a list. (#69)
 
 # luz 0.1.0
 

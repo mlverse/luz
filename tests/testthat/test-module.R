@@ -160,3 +160,53 @@ test_that("predict can use a progress bar", {
   expect_equal(output$ctx$opt_hparams$lr, 0.001)
 })
 
+test_that("valid_data works", {
+
+  model <- get_model()
+  model <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam
+    ) %>%
+    set_hparams(input_size = 10, output_size = 1) %>%
+    set_opt_hparams(lr = 0.001)
+
+  fitted <- model %>% fit(
+    list(torch::torch_randn(100,10), torch::torch_randn(100, 1)),
+    epochs = 10,
+    valid_data = 0.1,
+    verbose = FALSE
+  )
+
+  expect_true("valid" %in% fitted$ctx$get_metrics_df()$set)
+
+  expect_error(class= "value_error", regexp = "2", {
+    model %>% fit(
+      list(torch::torch_randn(100,10), torch::torch_randn(100, 1)),
+      epochs = 10,
+      valid_data = 2,
+      verbose = FALSE
+    )
+  })
+
+  expect_error(class= "value_error", regexp = "-1", {
+    model %>% fit(
+      list(torch::torch_randn(100,10), torch::torch_randn(100, 1)),
+      epochs = 10,
+      valid_data = -1,
+      verbose = FALSE
+    )
+  })
+
+  dl <- get_dl()
+  expect_error(class= "value_error", regexp = "dataloader", {
+    model %>% fit(
+      dl,
+      epochs = 10,
+      valid_data = 0.2,
+      verbose = FALSE
+    )
+  })
+
+})
+
