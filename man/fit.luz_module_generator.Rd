@@ -12,7 +12,8 @@
   valid_data = NULL,
   accelerator = NULL,
   verbose = NULL,
-  ...
+  ...,
+  dataloader_options = NULL
 )
 }
 \arguments{
@@ -52,7 +53,11 @@ the fitting procedure should emmit output to the console during training.
 By default, it will produce output if \code{\link[=interactive]{interactive()}} is \code{TRUE}, otherwise
 it won't print to the console.}
 
-\item{...}{Currently unused,}
+\item{...}{Currently unused.}
+
+\item{dataloader_options}{Options used when creating a dataloader. See \code{\link[torch:dataloader]{torch::dataloader()}}.
+\code{shuffle=TRUE} by default for the training data and \code{batch_size=32} by
+default. It will error if not \code{NULL} and \code{data} is already a dataloader.}
 }
 \value{
 A fitted object that can be saved with \code{\link[=luz_save]{luz_save()}} and can be printed with
@@ -61,3 +66,12 @@ A fitted object that can be saved with \code{\link[=luz_save]{luz_save()}} and c
 \description{
 Fit a \code{nn_module}
 }
+\seealso{
+\code{\link[=predict.luz_module_fitted]{predict.luz_module_fitted()}} for how to create predictions. \code{\link[=setup]{setup()}}
+to find out how to create modules that can be trained with \code{fit}.
+
+Other training: 
+\code{\link{predict.luz_module_fitted}()},
+\code{\link{setup}()}
+}
+\concept{training}

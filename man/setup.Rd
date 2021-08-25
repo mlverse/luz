@@ -30,4 +30,9 @@ to be used with Luz.
 \details{
 It makes sure the module have all the necessary ingredients in order to be fitted.
 }
+\seealso{
+Other training: 
+\code{\link{fit.luz_module_generator}()},
+\code{\link{predict.luz_module_fitted}()}
+}
 \concept{training}
