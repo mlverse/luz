@@ -34,8 +34,6 @@ context <- R6::R6Class(
   lock_objects = TRUE,
   public = list(
 
-    target = NULL,
-    batch = NULL,
     accelerator = NULL,
     pred = NULL,
     opt = NULL,
@@ -47,7 +45,6 @@ context <- R6::R6Class(
     min_epochs = NULL,
     max_epochs = NULL,
     loss = NULL,
-    input = NULL,
     call_callbacks = NULL,
     loss_grad = NULL,
     verbose = NULL,
@@ -203,6 +200,24 @@ context <- R6::R6Class(
         return(private$.iter)
       private$.iter <- ctx_check_iter(new)
       invisible(private$.iter)
+    },
+    batch = function(new) {
+      if (missing(new))
+        return(private$.batch)
+
+      private$.batch <- new
+    },
+    input = function(new) {
+      if (missing(new))
+        return(private$.batch[[1]])
+
+      private$.batch[[1]] <- new
+    },
+    target = function(new) {
+      if (missing(new))
+        return(private$.batch[[2]])
+
+      private$.batch[[2]] <- new
     }
   ),
   private = list(
@@ -211,7 +226,8 @@ context <- R6::R6Class(
       valid = list()
     )),
     .callbacks = NULL,
-    .iter = NULL
+    .iter = NULL,
+    .batch = NULL
   )
 )
 

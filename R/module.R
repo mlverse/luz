@@ -258,7 +258,8 @@ fit.luz_module_generator <- function(
         ctx$call_callbacks("on_train_begin")
 
         coro::loop(for (batch in ctx$data) {
-          bind_batch_to_ctx(ctx, batch)
+
+          ctx$batch <- batch
           ctx$iter <- ctx$iter + 1L
 
           ctx$call_callbacks("on_train_batch_begin")
@@ -342,7 +343,6 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
       .expr = {
         coro::loop(for(batch in ctx$data) {
           ctx$batch <- batch
-          ctx$input <- batch[[1]]
           ctx$call_callbacks("on_predict_batch_begin")
           ctx$pred[[length(ctx$pred) + 1]] <- do.call(predict_fn, list(ctx$input))
           ctx$call_callbacks("on_predict_batch_end")
@@ -373,7 +373,8 @@ valid_loop <- function(ctx, step) {
   ctx$iter <- 0L
   torch::with_no_grad({
     coro::loop(for (batch in ctx$data) {
-      bind_batch_to_ctx(ctx, batch)
+
+      ctx$batch <- batch
       ctx$iter <- ctx$iter + 1L
 
       ctx$call_callbacks("on_valid_batch_begin")
@@ -417,12 +418,6 @@ prepare_valid_ctx <- function(object, newdata, callbacks, accelerator, verbose,
   }
 
   ctx
-}
-
-bind_batch_to_ctx <- function(ctx, batch) {
-  ctx$batch <- batch
-  ctx$input <- ctx$batch[[1]]
-  ctx$target <- ctx$batch[[2]]
 }
 
 default_step <- function(ctx) {
