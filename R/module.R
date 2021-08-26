@@ -272,24 +272,8 @@ fit.luz_module_generator <- function(
         ctx$call_callbacks("on_train_end")
 
         if (!is.null(ctx$valid_data)) {
-
           ctx$data <- ctx$valid_data
-          ctx$call_callbacks("on_valid_begin")
-
-          ctx$iter <- 0L
-          torch::with_no_grad({
-            coro::loop(for (batch in ctx$data) {
-              bind_batch_to_ctx(ctx, batch)
-              ctx$iter <- ctx$iter + 1L
-
-              ctx$call_callbacks("on_valid_batch_begin")
-              step()
-              ctx$call_callbacks("on_valid_batch_end")
-            })
-          })
-
-          ctx$call_callbacks("on_valid_end")
-
+          valid_loop(ctx, step)
         }
 
         ctx$call_callbacks("on_epoch_end")
@@ -320,9 +304,15 @@ evaluate <- function(
   verbose = NULL,
   dataloader_options = NULL
 ) {
+  ctx <- prepare_valid_ctx(object, data, callbacks, accelerator, verbose,
+                           dataloader_options)
 
+  if (is.null(ctx$model$step))
+    step <- function() default_step(ctx)
+  else
+    step <- ctx$model$step
 
-
+  valid_loop(ctx, step)
 }
 
 #' Create predictions for a fitted model
@@ -374,6 +364,26 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
   }
 
   ctx$output
+}
+
+valid_loop <- function(ctx) {
+
+  ctx$call_callbacks("on_valid_begin")
+
+  ctx$iter <- 0L
+  torch::with_no_grad({
+    coro::loop(for (batch in ctx$data) {
+      bind_batch_to_ctx(ctx, batch)
+      ctx$iter <- ctx$iter + 1L
+
+      ctx$call_callbacks("on_valid_batch_begin")
+      step()
+      ctx$call_callbacks("on_valid_batch_end")
+    })
+  })
+
+  ctx$call_callbacks("on_valid_end")
+
 }
 
 prepare_valid_ctx <- function(object, newdata, callbacks, accelerator, verbose,
