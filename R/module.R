@@ -309,6 +309,22 @@ fit.luz_module_generator <- function(
   )
 }
 
+#' Evaluates a fitted model on a dataset
+#'
+evaluate <- function(
+  object,
+  data,
+  ...,
+  callbacks = list(),
+  accelerator = NULL,
+  verbose = NULL,
+  dataloader_options = NULL
+) {
+
+
+
+}
+
 #' Create predictions for a fitted model
 #'
 #' @param object (fitted model) the fitted model object returned from [fit.luz_module_generator()]
@@ -325,39 +341,14 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
                                       accelerator = NULL, verbose = NULL,
                                       dataloader_options = NULL) {
 
-  ctx <- object$ctx
-  ctx$set_verbose(verbose)
-
-  if (is.null(accelerator))
-    accelerator <- accelerator()
-
-  ctx$accelerator <- accelerator
-  model <- NULL; data <- NULL
-  c(., newdata) %<-% apply_dataloader_options(NULL, newdata, dataloader_options)
-
-  c(model, data) %<-% ctx$accelerator$prepare(ctx$model, as_dataloader(newdata))
-
-  ctx$model <- model
-  ctx$data <- data
-
-  ctx$model$eval()
-  ctx$training <- FALSE
+  ctx <- prepare_valid_ctx(object, newdata, callbacks, accelerator, verbose,
+                           dataloader_options)
 
   pars <- rlang::list2(...)
   if (is.null(pars$stack))
     stack <- TRUE
   else
     stack <- pars$stack
-
-  callbacks <- c(default_predict_callbacks(), callbacks)
-
-  ctx$handlers <- list()
-  ctx$output <- list()
-  ctx$callbacks <- initialize_callbacks(callbacks, ctx)
-
-  ctx$call_callbacks <- function(name) {
-    call_all_callbacks(ctx$callbacks, name)
-  }
 
   predict_fn <- if (is.null(ctx$model$predict)) ctx$model else ctx$model$predict
 
@@ -383,6 +374,40 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
   }
 
   ctx$output
+}
+
+prepare_valid_ctx <- function(object, newdata, callbacks, accelerator, verbose,
+                        dataloader_options) {
+
+  ctx <- object$ctx
+  ctx$set_verbose(verbose)
+
+  if (is.null(accelerator))
+    accelerator <- accelerator()
+
+  ctx$accelerator <- accelerator
+  model <- NULL; data <- NULL
+  c(., newdata) %<-% apply_dataloader_options(NULL, newdata, dataloader_options)
+
+  c(model, data) %<-% ctx$accelerator$prepare(ctx$model, as_dataloader(newdata))
+
+  ctx$model <- model
+  ctx$data <- data
+
+  ctx$model$eval()
+  ctx$training <- FALSE
+
+  callbacks <- c(default_predict_callbacks(), callbacks)
+
+  ctx$handlers <- list()
+  ctx$output <- list()
+  ctx$callbacks <- initialize_callbacks(callbacks, ctx)
+
+  ctx$call_callbacks <- function(name) {
+    call_all_callbacks(ctx$callbacks, name)
+  }
+
+  ctx
 }
 
 bind_batch_to_ctx <- function(ctx, batch) {
