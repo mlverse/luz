@@ -333,6 +333,7 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
     stack <- pars$stack
 
   predict_fn <- if (is.null(ctx$model$predict)) ctx$model else ctx$model$predict
+  ctx$pred <- list()
 
   torch::with_no_grad({
     ctx$call_callbacks("on_predict_begin")
@@ -343,7 +344,7 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
           ctx$batch <- batch
           ctx$input <- batch[[1]]
           ctx$call_callbacks("on_predict_batch_begin")
-          ctx$output[[length(ctx$output) + 1]] <- do.call(predict_fn, list(ctx$input))
+          ctx$pred[[length(ctx$pred) + 1]] <- do.call(predict_fn, list(ctx$input))
           ctx$call_callbacks("on_predict_batch_end")
         })
       }
@@ -352,10 +353,10 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
   })
 
   if (stack) {
-    ctx$output <- torch::torch_cat(ctx$output)
+    ctx$pred <- torch::torch_cat(ctx$pred)
   }
 
-  ctx$output
+  ctx$pred
 }
 
 get_step <- function(ctx) {
@@ -409,7 +410,6 @@ prepare_valid_ctx <- function(object, newdata, callbacks, accelerator, verbose,
   callbacks <- c(callbacks_default(), callbacks)
 
   ctx$handlers <- list()
-  ctx$output <- list()
   ctx$callbacks <- initialize_callbacks(callbacks, ctx)
 
   ctx$call_callbacks <- function(name) {

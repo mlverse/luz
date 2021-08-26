@@ -51,7 +51,7 @@ luz_load <- function(path) {
   bind_context(model, obj$ctx)
   obj$model <- model
   obj$ctx$model <- model
-  rm(envir = obj$ctx, list = ".serialized_model")
+  obj$ctx$.serialized_model <- NULL
   obj
 }
 

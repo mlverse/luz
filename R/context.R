@@ -31,8 +31,37 @@ NULL
 #'
 context <- R6::R6Class(
   "luz_context",
-  lock_objects = FALSE,
+  lock_objects = TRUE,
   public = list(
+
+    callbacks = NULL,
+    iter = NULL,
+    target = NULL,
+    batch = NULL,
+    accelerator = NULL,
+    pred = NULL,
+    opt = NULL,
+    opt_name = NULL,
+    data = NULL,
+    handlers = NULL,
+    train_data = NULL,
+    valid_data = NULL,
+    min_epochs = NULL,
+    max_epochs = NULL,
+    loss = NULL,
+    input = NULL,
+    call_callbacks = NULL,
+    loss_grad = NULL,
+    verbose = NULL,
+    hparams = NULL,
+    opt_hparams = NULL,
+    model = NULL,
+    optimizers = NULL,
+    metrics = NULL,
+    epoch = NULL,
+    training = NULL,
+    .serialized_model = NULL,
+
     #' @description
     #' Allows logging arbitrary information in the `ctx`.
     log = function(what, set, value, index = NULL, append = TRUE) {
@@ -127,7 +156,7 @@ context <- R6::R6Class(
     },
     #' @description Removes unecessary information from the context object.
     clean = function() {
-      rm(envir = self, list = c(
+      lapply(FUN = function(x) self[[x]] <- NULL, c(
         "callbacks",
         "metrics",
         "iter",
