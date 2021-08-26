@@ -37,7 +37,17 @@ default_callbacks <- function() {
 
 default_predict_callbacks <- function() {
   list(
-    luz_callback_progress()
+    luz_callback_progress(),
+    luz_callback_interrupt()
+  )
+}
+
+default_evaluate_callbacks <- function() {
+  list(
+    luz_callback_profile(),
+    luz_callback_metrics(),
+    luz_callback_progress(),
+    luz_callback_interrupt()
   )
 }
 

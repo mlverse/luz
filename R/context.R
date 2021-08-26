@@ -124,6 +124,27 @@ context <- R6::R6Class(
       } else {
         self$verbose <- verbose
       }
+    },
+    #' @description Removes unecessary information from the context object.
+    clean = function() {
+      rm(envir = self, list = c(
+        "callbacks",
+        "metrics",
+        "iter",
+        "target",
+        "batch",
+        "accelerator",
+        "pred",
+        "opt",
+        "opt_name",
+        "data",
+        "handlers",
+        "valid_data",
+        "loss",
+        "input",
+        "loss_grad",
+        "call_callbacks"
+      ))
     }
   ),
   active = list(

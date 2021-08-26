@@ -278,7 +278,7 @@ fit.luz_module_generator <- function(
     })
 
   ctx$call_callbacks("on_fit_end")
-  clean_context(ctx)
+  ctx$clean()
 
   structure(
     list(
@@ -302,8 +302,9 @@ evaluate <- function(
   dataloader_options = NULL
 ) {
   ctx <- prepare_valid_ctx(object, data, callbacks, accelerator, verbose,
-                           dataloader_options)
+                           dataloader_options, default_evaluate_callbacks)
   valid_loop(ctx, get_step(ctx))
+  ctx
 }
 
 #' Create predictions for a fitted model
@@ -323,7 +324,7 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
                                       dataloader_options = NULL) {
 
   ctx <- prepare_valid_ctx(object, newdata, callbacks, accelerator, verbose,
-                           dataloader_options)
+                           dataloader_options, default_predict_callbacks)
 
   pars <- rlang::list2(...)
   if (is.null(pars$stack))
@@ -385,7 +386,7 @@ valid_loop <- function(ctx, step) {
 }
 
 prepare_valid_ctx <- function(object, newdata, callbacks, accelerator, verbose,
-                        dataloader_options) {
+                        dataloader_options, callbacks_default) {
 
   ctx <- object$ctx
   ctx$set_verbose(verbose)
@@ -405,7 +406,7 @@ prepare_valid_ctx <- function(object, newdata, callbacks, accelerator, verbose,
   ctx$model$eval()
   ctx$training <- FALSE
 
-  callbacks <- c(default_predict_callbacks(), callbacks)
+  callbacks <- c(callbacks_default(), callbacks)
 
   ctx$handlers <- list()
   ctx$output <- list()
@@ -530,25 +531,4 @@ apply_dataloader_options <- function(data, valid_data, dataloader_options) {
   }
 
   list(data, valid_data)
-}
-
-clean_context <- function(ctx) {
-  rm(envir = ctx, list = c(
-    "callbacks",
-    "metrics",
-    "iter",
-    "target",
-    "batch",
-    "accelerator",
-    "pred",
-    "opt",
-    "opt_name",
-    "data",
-    "handlers",
-    "valid_data",
-    "loss",
-    "input",
-    "loss_grad",
-    "call_callbacks"
-  ))
 }
