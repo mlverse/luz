@@ -34,8 +34,6 @@ context <- R6::R6Class(
   lock_objects = TRUE,
   public = list(
 
-    callbacks = NULL,
-    iter = NULL,
     target = NULL,
     batch = NULL,
     accelerator = NULL,
@@ -159,7 +157,6 @@ context <- R6::R6Class(
       lapply(FUN = function(x) self[[x]] <- NULL, c(
         "callbacks",
         "metrics",
-        "iter",
         "target",
         "batch",
         "accelerator",
@@ -194,13 +191,27 @@ context <- R6::R6Class(
         rlang::abort("Context doesn't have an accelerator attached.")
 
       self$accelerator$device
+    },
+    callbacks = function(new) {
+      if(missing(new))
+        return(private$.callbacks)
+      private$.callbacks <- ctx_check_callbacks(new)
+      invisible(private$.callbacks)
+    },
+    iter = function(new) {
+      if (missing(new))
+        return(private$.iter)
+      private$.iter <- ctx_check_iter(new)
+      invisible(private$.iter)
     }
   ),
   private = list(
     .records = list(metrics = list(
       train = list(),
       valid = list()
-    ))
+    )),
+    .callbacks = NULL,
+    .iter = NULL
   )
 )
 
@@ -217,3 +228,23 @@ make_metrics_df <- function(metrics_list, set) {
     })
   })
 }
+
+ctx_check_callbacks <- function(x) {
+  for (i in seq_along(x)) {
+    cb <- x[[i]]
+    if (!inherits(cb, "LuzCallback")) {
+      message <- "Expected a LuzCallback but got an object with class '{class(cb)[1]}' at index {i}."
+      rlang::abort(glue::glue(message))
+    }
+  }
+  x
+}
+
+ctx_check_iter <- function(x) {
+  if (!rlang::is_scalar_integer(x)) {
+    message <- "Expected iter to be a scalar integer. Got {str(x)}."
+    rlang::abort(glue::glue(x))
+  }
+  x
+}
+
