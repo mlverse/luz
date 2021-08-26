@@ -236,10 +236,7 @@ fit.luz_module_generator <- function(
   callbacks <- append(default_callbacks(), callbacks)
   ctx$callbacks <- initialize_callbacks(callbacks, ctx)
 
-  if (is.null(ctx$model$step))
-    step <- function() default_step(ctx)
-  else
-    step <- ctx$model$step
+  step <- get_step(ctx)
 
   ctx$call_callbacks <- function(name) {
     call_all_callbacks(ctx$callbacks, name)
@@ -306,13 +303,7 @@ evaluate <- function(
 ) {
   ctx <- prepare_valid_ctx(object, data, callbacks, accelerator, verbose,
                            dataloader_options)
-
-  if (is.null(ctx$model$step))
-    step <- function() default_step(ctx)
-  else
-    step <- ctx$model$step
-
-  valid_loop(ctx, step)
+  valid_loop(ctx, get_step(ctx))
 }
 
 #' Create predictions for a fitted model
@@ -366,7 +357,14 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
   ctx$output
 }
 
-valid_loop <- function(ctx) {
+get_step <- function(ctx) {
+  if (is.null(ctx$model$step))
+    function() default_step(ctx)
+  else
+    ctx$model$step
+}
+
+valid_loop <- function(ctx, step) {
 
   ctx$call_callbacks("on_valid_begin")
 
