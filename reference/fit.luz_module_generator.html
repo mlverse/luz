@@ -66,7 +66,8 @@
   valid_data <span class="op">=</span> <span class="cn">NULL</span>,
   accelerator <span class="op">=</span> <span class="cn">NULL</span>,
   verbose <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
+  <span class="va">...</span>,
+  dataloader_options <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre>
     </div>
 
@@ -108,12 +109,25 @@ the fitting procedure should emmit output to the console during training.
 By default, it will produce output if <code><a href="https://rdrr.io/r/base/interactive.html">interactive()</a></code> is <code>TRUE</code>, otherwise
 it won't print to the console.</p></dd>
     <dt class="col-sm-3 section level2" id="pkg-arg-...">...</dt>
-      <dd class="col-sm-9" id="ref-arguments desc"><p>Currently unused,</p></dd>
+      <dd class="col-sm-9" id="ref-arguments desc"><p>Currently unused.</p></dd>
+    <dt class="col-sm-3 section level2" id="pkg-arg-dataloader_options">dataloader_options</dt>
+      <dd class="col-sm-9" id="ref-arguments desc"><p>Options used when creating a dataloader. See <code><a href="https://torch.mlverse.org/docs/reference/dataloader.html">torch::dataloader()</a></code>.
+<code>shuffle=TRUE</code> by default for the training data and <code>batch_size=32</code> by
+default. It will error if not <code>NULL</code> and <code>data</code> is already a dataloader.</p></dd>
     </dl><div class="ref-section section level2" id="section-value">
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value" aria-hidden="true"></a>Value</h2>
 
     <p>A fitted object that can be saved with <code><a href="luz_save.html">luz_save()</a></code> and can be printed with
 <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> and plotted with <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>.</p>
+    </div>
+    <div class="ref-section section level2" id="section-see-also">
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also" aria-hidden="true"></a>See also</h2>
+
+    <div class="dont-index"><p><code><a href="predict.luz_module_fitted.html">predict.luz_module_fitted()</a></code> for how to create predictions. <code><a href="setup.html">setup()</a></code>
+to find out how to create modules that can be trained with <code>fit</code>.</p>
+<p>Other training: 
+<code><a href="predict.luz_module_fitted.html">predict.luz_module_fitted</a>()</code>,
+<code><a href="setup.html">setup</a>()</code></p></div>
     </div>
 
   </div>
