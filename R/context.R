@@ -34,24 +34,28 @@ context <- R6::R6Class(
   lock_objects = TRUE,
   public = list(
 
+    hparams = NULL,
+    opt_hparams = NULL,
+
+    train_data = NULL,
+    valid_data = NULL,
+
     accelerator = NULL,
+
+    optimizers = NULL,
+
     pred = NULL,
     opt = NULL,
     opt_name = NULL,
     data = NULL,
     handlers = NULL,
-    train_data = NULL,
-    valid_data = NULL,
-    min_epochs = NULL,
-    max_epochs = NULL,
+
     loss = NULL,
     call_callbacks = NULL,
     loss_grad = NULL,
     verbose = NULL,
-    hparams = NULL,
-    opt_hparams = NULL,
+
     model = NULL,
-    optimizers = NULL,
     metrics = NULL,
     epoch = NULL,
     training = NULL,
@@ -218,6 +222,18 @@ context <- R6::R6Class(
         return(private$.batch[[2]])
 
       private$.batch[[2]] <- new
+    },
+    min_epochs = function(new) {
+      if (missing(new))
+        return(private$.epochs$min_epochs)
+      ctx_check_epochs(new, self$max_epochs)
+      private$.epochs$min_epochs <- new
+    },
+    max_epochs = function(new) {
+      if (missing(new))
+        return(private$.epochs$max_epochs)
+      ctx_check_epochs(self$min_epochs, new)
+      private$.epochs$max_epochs <- new
     }
   ),
   private = list(
@@ -227,7 +243,8 @@ context <- R6::R6Class(
     )),
     .callbacks = NULL,
     .iter = NULL,
-    .batch = NULL
+    .batch = NULL,
+    .epochs = list(min_epochs = 0, max_epochs = 999999999)
   )
 )
 
@@ -257,10 +274,23 @@ ctx_check_callbacks <- function(x) {
 }
 
 ctx_check_iter <- function(x) {
-  if (!rlang::is_scalar_integer(x)) {
+  if (!rlang::is_scalar_integerish(x)) {
     message <- "Expected iter to be a scalar integer. Got {str(x)}."
     rlang::abort(glue::glue(x))
   }
   x
+}
+
+ctx_check_epochs <- function(min, max) {
+  if (!rlang::is_scalar_integerish(min))
+    rlang::abort("Expected `min_epochs` to be a scalar integer, got {str(min)}.")
+
+  if (!rlang::is_scalar_integerish(max))
+    rlang::abort("Expected `max_epochs` to be a scalar integer, got {str(max)}.")
+
+  if (min > max)
+    rlang::abort("`min_epochs` is higher than `max_epochs` and that's not allowed.")
+
+  invisible(list(min, max))
 }
 
