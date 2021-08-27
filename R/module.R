@@ -198,15 +198,6 @@ fit.luz_module_generator <- function(
 
   optimizers <- do.call(model$set_optimizers, ctx$opt_hparams)
 
-  if (!is.list(optimizers)) {
-    optimizers <- list(opt = optimizers)
-  }
-
-  if (!rlang::is_named(optimizers)) {
-    rlang::abort(c("List of optimizers is not named.",
-                   "When returning a list of optimizers, the list must be named."))
-  }
-
   if (rlang::is_scalar_double(valid_data)) {
     c(data, valid_data) %<-% create_valid_data(data, valid_data)
   }
@@ -237,10 +228,6 @@ fit.luz_module_generator <- function(
   ctx$callbacks <- initialize_callbacks(callbacks, ctx)
 
   step <- get_step(ctx)
-
-  ctx$call_callbacks <- function(name) {
-    call_all_callbacks(ctx$callbacks, name)
-  }
 
   ctx$handlers <- list()
 
@@ -412,10 +399,6 @@ prepare_valid_ctx <- function(object, newdata, callbacks, accelerator, verbose,
 
   ctx$handlers <- list()
   ctx$callbacks <- initialize_callbacks(callbacks, ctx)
-
-  ctx$call_callbacks <- function(name) {
-    call_all_callbacks(ctx$callbacks, name)
-  }
 
   ctx
 }

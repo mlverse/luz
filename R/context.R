@@ -34,31 +34,9 @@ context <- R6::R6Class(
   lock_objects = TRUE,
   public = list(
 
-    hparams = NULL,
-    opt_hparams = NULL,
-
-    train_data = NULL,
-    valid_data = NULL,
-
-    accelerator = NULL,
-
-    optimizers = NULL,
-
-    pred = NULL,
-    opt = NULL,
-    opt_name = NULL,
-    data = NULL,
-    handlers = NULL,
-
-    loss = NULL,
-    call_callbacks = NULL,
-    loss_grad = NULL,
-    verbose = NULL,
-
-    model = NULL,
-    metrics = NULL,
-    epoch = NULL,
-    training = NULL,
+    #' @field This is a list of buffers that callbacks can use to write temporary
+    #'   information into `ctx`.
+    buffers = list(),
     .serialized_model = NULL,
 
     #' @description
@@ -148,19 +126,18 @@ context <- R6::R6Class(
     #'   if `NULL` we use the result of [interactive()].
     set_verbose = function(verbose = NULL) {
       if (is.null(verbose)) {
-        self$verbose <- interactive()
+        private$.verbose <- interactive()
       } else {
-        self$verbose <- verbose
+        private$.verbose <- verbose
       }
     },
     #' @description Removes unecessary information from the context object.
     clean = function() {
       lapply(FUN = function(x) self[[x]] <- NULL, c(
         "callbacks",
-        "metrics",
+        "accelerator",
         "target",
         "batch",
-        "accelerator",
         "pred",
         "opt",
         "opt_name",
@@ -169,9 +146,11 @@ context <- R6::R6Class(
         "valid_data",
         "loss",
         "input",
-        "loss_grad",
-        "call_callbacks"
+        "loss_grad"
       ))
+    },
+    call_callbacks = function(name) {
+      call_all_callbacks(self$callbacks, name)
     }
   ),
   active = list(
@@ -193,58 +172,184 @@ context <- R6::R6Class(
 
       self$accelerator$device
     },
+    #' @field list of callbacks that will be called.
     callbacks = function(new) {
       if(missing(new))
         return(private$.callbacks)
       private$.callbacks <- ctx_check_callbacks(new)
       invisible(private$.callbacks)
     },
+    #' @field current iteration
     iter = function(new) {
       if (missing(new))
         return(private$.iter)
       private$.iter <- ctx_check_iter(new)
       invisible(private$.iter)
     },
+    #' @field the current batch data. a list with input data and targets.
     batch = function(new) {
       if (missing(new))
         return(private$.batch)
 
       private$.batch <- new
     },
+    #' @field a shortcut for `ctx$batch[[1]]`
     input = function(new) {
       if (missing(new))
         return(private$.batch[[1]])
 
       private$.batch[[1]] <- new
     },
+    #' @field a shortcut for `ctx$batch[[2]]`
     target = function(new) {
       if (missing(new))
         return(private$.batch[[2]])
 
       private$.batch[[2]] <- new
     },
+    #' @field the minimum number of epochs that the model will run on.
     min_epochs = function(new) {
       if (missing(new))
         return(private$.epochs$min_epochs)
       ctx_check_epochs(new, self$max_epochs)
       private$.epochs$min_epochs <- new
     },
+    #' @field the maximum number of epochs that the model will run.
     max_epochs = function(new) {
       if (missing(new))
         return(private$.epochs$max_epochs)
       ctx_check_epochs(self$min_epochs, new)
       private$.epochs$max_epochs <- new
+    },
+    #' @field a list of hyperparameters that were used to initialize `ctx$model`.
+    hparams = function(new) {
+      if (missing(new))
+        return(private$.hparams)
+      private$.hparams <- new
+    },
+    #' @field a list of hyperparameters used to initialize the `ctx$optimizers`.
+    opt_hparams = function(new) {
+      if (missing(new))
+        return(private$.opt_hparams)
+      private$.opt_hparams <- new
+    },
+    #' @field a dataloader that is used for training the model
+    train_data = function(new) {
+      if (missing(new))
+        return(private$.train_data)
+      private$.train_data <- new
+    },
+    #' @field a dataloader using during model validation
+    valid_data = function(new) {
+      if (missing(new))
+        return(private$.valid_data)
+      private$.valid_data <- new
+    },
+    #' @field a [accelerator()] used to move data, model and etc the the correct
+    #'   device.
+    accelerator = function(new) {
+      if (missing(new))
+        return(private$.accelerator)
+      private$.accelerator <- new
+    },
+    #' @field a named list of optimizers that will be used during model training.
+    optimizers = function(new) {
+      if (missing(new))
+        return(private$.optimizers)
+      private$.optimizers <- ctx_check_optimizers(new)
+    },
+    #' @field bool wether the process is in verbose mode or not.
+    verbose = function(new) {
+      if (missing(new))
+        return(private$.verbose)
+      self$set_verbose(new)
+    },
+    handlers = function(new) {
+      if (missing(new))
+        return(private$.handlers)
+      private$.handlers <- new
+    },
+    training = function(new){
+      if (missing(new))
+        return(private$.training)
+      private$.training <- new
+    },
+    model = function(new) {
+      if (missing(new))
+        return(private$.model)
+      private$.model <- new
+    },
+    pred = function(new) {
+      if (missing(new))
+        return(private$.pred)
+      private$.pred <- new
+    },
+    opt = function(new) {
+      if (missing(new))
+        return(private$.opt)
+      private$.opt <- new
+    },
+    opt_name = function(new) {
+      if (missing(new))
+        return(private$.opt_name)
+      private$.opt_name <- new
+    },
+    data = function(new) {
+      if (missing(new))
+        return(private$.data)
+      private$.data <- new
+    },
+    loss = function(new) {
+      if (missing(new))
+        return(private$.loss)
+      private$.loss <- new
+    },
+    loss_grad = function(new) {
+      if (missing(new))
+        return(private$.loss_grad)
+      private$.loss_grad <- new
+    },
+    epoch = function(new) {
+      if (missing(new))
+        return(private$.epoch)
+      private$.epoch <- new
     }
   ),
   private = list(
+    # Fields that make sense to be kept after the model has been trained.
     .records = list(metrics = list(
       train = list(),
       valid = list()
     )),
+    .hparams = NULL,
+    .opt_hparams = NULL,
+    .epochs = list(min_epochs = 0, max_epochs = 999999999),
+    .model = NULL,
+
+    # These fields are used during training, prediction or evaluation, but they
+    # are not important after the process has finished. They are likely to be
+    # recreated for each process that happen on the model.
     .callbacks = NULL,
-    .iter = NULL,
+    .train_data = NULL,
+    .valid_data = NULL,
+    .accelerator = NULL,
+    .optimizers = NULL,
+    .verbose = NULL,
+    .handlers = NULL,
+
+    # Fields that are overwritten during model training. They are more or
+    # less transient, and their values don't make sense after the model
+    # has been trained.
+    .training = NULL,
     .batch = NULL,
-    .epochs = list(min_epochs = 0, max_epochs = 999999999)
+    .iter = NULL,
+    .pred = NULL,
+    .opt = NULL,
+    .opt_name = NULL,
+    .data = NULL,
+    .loss = NULL,
+    .loss_grad = NULL,
+    .epoch = NULL
   )
 )
 
@@ -294,3 +399,20 @@ ctx_check_epochs <- function(min, max) {
   invisible(list(min, max))
 }
 
+ctx_check_optimizers <- function(new) {
+  if (!is.list(new)) {
+    new <- list(opt = new)
+  }
+
+  if (!rlang::is_named(new)) {
+    rlang::abort(c("List of optimizers is not named.",
+                   "When returning a list of optimizers, the list must be named."))
+  }
+
+  for (i in new) {
+    if (!torch::is_optimizer(i))
+      rlang::abort("Expected a torch optimizer but got an object with class '{class(i)[1]}'.")
+  }
+
+  invisible(new)
+}

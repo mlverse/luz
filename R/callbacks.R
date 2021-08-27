@@ -137,7 +137,7 @@ luz_callback_progress <- luz_callback(
   },
   get_metrics = function(split) {
 
-    metrics <- ctx$metrics[[split]]
+    metrics <- ctx$buffers$metrics[[split]]
 
     if (length(metrics) == 0)
       return(list())
@@ -175,7 +175,7 @@ luz_callback_progress <- luz_callback(
       format <- paste0(format,  " - ETA: :eta")
     }
 
-    metrics <- ctx$metrics[[split]]
+    metrics <- ctx$buffers$metrics[[split]]
     if (length(metrics) > 0) {
       abbrevs <- self$get_abbrevs(metrics)
       abbrevs <- paste0(glue::glue("{abbrevs}: :{tolower(abbrevs)} "), collapse = " - ")
@@ -209,7 +209,7 @@ luz_callback_progress <- luz_callback(
 #' Tracks metrics passed to [setup()] during training and validation.
 #'
 #' @details This callback takes care of 2 [ctx] attributes:
-#' - `ctx$metrics`: stores the current metrics objects that are initialized once for epoch,
+#' - `ctx$buffers$metrics`: stores the current metrics objects that are initialized once for epoch,
 #'   and are further `update()`d and `compute()`d every batch. You will rarely need
 #'   to work with these metrics.
 #' - `ctx$records$metrics`: Stores metrics per training/validation and epoch. The
@@ -227,20 +227,20 @@ luz_callback_progress <- luz_callback(
 luz_callback_metrics <- luz_callback(
   "metrics_callback",
   on_fit_begin = function() {
-   ctx$metrics <- list(
+   ctx$buffers$metrics <- list(
      train = NULL,
      valid = NULL
    )
   },
   on_train_begin = function() {
-    ctx$metrics$train <- lapply(
+    ctx$buffers$metrics$train <- lapply(
       ctx$model$metrics %||% list(),
       self$initialize_metric
     )
   },
   on_train_batch_end = function() {
     lapply(
-      ctx$metrics$train,
+      ctx$buffers$metrics$train,
       function(x) x$update(ctx$pred, ctx$target)
     )
   },
@@ -248,14 +248,14 @@ luz_callback_metrics <- luz_callback(
     self$log_all_metrics("train")
   },
   on_valid_begin = function() {
-    ctx$metrics$valid <- lapply(
+    ctx$buffers$metrics$valid <- lapply(
       ctx$model$metrics %||% list(),
       self$initialize_metric
     )
   },
   on_valid_batch_end = function() {
     lapply(
-      ctx$metrics$valid,
+      ctx$buffers$metrics$valid,
       function(x) x$update(ctx$pred, ctx$target)
     )
   },
@@ -269,7 +269,7 @@ luz_callback_metrics <- luz_callback(
   },
   log_all_metrics = function(set) {
     lapply(
-      ctx$metrics[[set]],
+      ctx$buffers$metrics[[set]],
       function(x) {
         ctx$log_metric(tolower(x$abbrev), x$compute())
       }
