@@ -183,53 +183,18 @@ fit.luz_module_generator <- function(
   ellipsis::check_dots_empty()
 
   # Initialize context:
-  ctx <- context$new()
-  ctx$set_verbose(verbose)
-
-  if (is.null(accelerator))
-    accelerator <- accelerator()
-
-  ctx$accelerator <- accelerator
-  ctx$hparams <- get_hparams(module) %||% list()
-  ctx$opt_hparams <- get_opt_hparams(module) %||% list()
-
-  model <- do.call(module, ctx$hparams)
-  bind_context(model, ctx)
-
-  optimizers <- do.call(model$set_optimizers, ctx$opt_hparams)
-
-  if (rlang::is_scalar_double(valid_data)) {
-    c(data, valid_data) %<-% create_valid_data(data, valid_data)
-  }
-
-  c(data, valid_data) %<-% apply_dataloader_options(data, valid_data, dataloader_options)
-
-  c(model, optimizers, data, valid_data) %<-%
-    ctx$accelerator$prepare(
-      model,
-      optimizers,
-      data,
-      valid_data
-    )
-
-  ctx$model <- model
-  ctx$model$ctx <- ctx
-
-  ctx$optimizers <- optimizers
-
-  ctx$train_data <- data
-  ctx$valid_data <- valid_data
-
-  if (length(epochs) == 1) epochs <- c(0, epochs)
-  ctx$min_epochs <- epochs[[1]]
-  ctx$max_epochs <- epochs[[2]]
-
-  callbacks <- append(default_callbacks(), callbacks)
-  ctx$callbacks <- initialize_callbacks(callbacks, ctx)
+  ctx <- fit_context$new(
+    verbose = verbose,
+    accelerator = accelerator,
+    module = module,
+    data = data,
+    valid_data = valid_data,
+    epochs = epochs,
+    callbacks = callbacks,
+    dataloader_options = dataloader_options
+  )
 
   step <- get_step(ctx)
-
-  ctx$handlers <- list()
 
   ctx$call_callbacks("on_fit_begin")
   rlang::with_handlers(
@@ -289,8 +254,18 @@ evaluate <- function(
   verbose = NULL,
   dataloader_options = NULL
 ) {
-  ctx <- prepare_valid_ctx(object, data, callbacks, accelerator, verbose,
-                           dataloader_options, default_evaluate_callbacks)
+
+  ctx <- evaluate_context$new(
+    model = object$model,
+    newdata = data,
+    callbacks = callbacks,
+    accelerator = accelerator,
+    verbose = verbose,
+    dataloader_options = dataloader_options,
+    callbacks_default = default_evaluate_callbacks,
+    opt_hparams = object$ctx$opt_hparams
+  )
+
   valid_loop(ctx, get_step(ctx))
   ctx
 }
@@ -311,8 +286,15 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
                                       accelerator = NULL, verbose = NULL,
                                       dataloader_options = NULL) {
 
-  ctx <- prepare_valid_ctx(object, newdata, callbacks, accelerator, verbose,
-                           dataloader_options, default_predict_callbacks)
+  ctx <- predict_context$new(
+    model = object$model,
+    newdata = newdata,
+    callbacks = callbacks,
+    accelerator = accelerator,
+    verbose = verbose,
+    dataloader_options = dataloader_options,
+    callbacks_default = default_predict_callbacks
+  )
 
   pars <- rlang::list2(...)
   if (is.null(pars$stack))
@@ -321,7 +303,6 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
     stack <- pars$stack
 
   predict_fn <- if (is.null(ctx$model$predict)) ctx$model else ctx$model$predict
-  ctx$pred <- list()
 
   torch::with_no_grad({
     ctx$call_callbacks("on_predict_begin")
@@ -372,35 +353,6 @@ valid_loop <- function(ctx, step) {
 
   ctx$call_callbacks("on_valid_end")
 
-}
-
-prepare_valid_ctx <- function(object, newdata, callbacks, accelerator, verbose,
-                        dataloader_options, callbacks_default) {
-
-  ctx <- object$ctx
-  ctx$set_verbose(verbose)
-
-  if (is.null(accelerator))
-    accelerator <- accelerator()
-
-  ctx$accelerator <- accelerator
-  model <- NULL; data <- NULL
-  c(., newdata) %<-% apply_dataloader_options(NULL, newdata, dataloader_options)
-
-  c(model, data) %<-% ctx$accelerator$prepare(ctx$model, as_dataloader(newdata))
-
-  ctx$model <- model
-  ctx$data <- data
-
-  ctx$model$eval()
-  ctx$training <- FALSE
-
-  callbacks <- c(callbacks_default(), callbacks)
-
-  ctx$handlers <- list()
-  ctx$callbacks <- initialize_callbacks(callbacks, ctx)
-
-  ctx
 }
 
 default_step <- function(ctx) {

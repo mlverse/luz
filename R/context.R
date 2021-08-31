@@ -34,6 +34,13 @@ context <- R6::R6Class(
   lock_objects = TRUE,
   public = list(
 
+    initialize = function(verbose, accelerator, callbacks, training) {
+      self$set_verbose(verbose)
+      self$accelerator <- accelerator %||% accelerator()
+      self$callbacks <- initialize_callbacks(callbacks, self)
+      self$training <- training
+    },
+
     #' @field This is a list of buffers that callbacks can use to write temporary
     #'   information into `ctx`.
     buffers = list(),
@@ -278,6 +285,7 @@ context <- R6::R6Class(
       if (missing(new))
         return(private$.model)
       private$.model <- new
+      bind_context(private$.model, self)
     },
     pred = function(new) {
       if (missing(new))
@@ -340,7 +348,7 @@ context <- R6::R6Class(
     .accelerator = NULL,
     .optimizers = NULL,
     .verbose = NULL,
-    .handlers = NULL,
+    .handlers = list(),
     .metrics = NULL,
 
     # Fields that are overwritten during model training. They are more or
@@ -349,13 +357,101 @@ context <- R6::R6Class(
     .training = NULL,
     .batch = NULL,
     .iter = NULL,
-    .pred = NULL,
+    .pred = list(),
     .opt = NULL,
     .opt_name = NULL,
     .data = NULL,
     .loss = NULL,
     .loss_grad = NULL,
     .epoch = NULL
+  )
+)
+
+fit_context <- R6::R6Class(
+  classname = "luz_fit_context",
+  inherit = context,
+  public = list(
+    initialize = function (verbose, accelerator, callbacks, module, hparams,
+                           opt_hparams, data, valid_data, epochs, dataloader_options) {
+
+      super$initialize(
+        verbose = verbose,
+        accelerator = accelerator,
+        callbacks = append(default_callbacks(), callbacks),
+        training = TRUE
+      )
+
+      self$hparams <- get_hparams(module) %||% list()
+      self$opt_hparams <- get_opt_hparams(module) %||% list()
+
+      self$model <- do.call(module, self$hparams)
+      self$optimizers <- do.call(self$model$set_optimizers, self$opt_hparams)
+
+      if (rlang::is_scalar_double(valid_data)) {
+        c(data, valid_data) %<-% create_valid_data(data, valid_data)
+      }
+
+      c(data, valid_data) %<-% apply_dataloader_options(data, valid_data, dataloader_options)
+
+      c(model, optimizers, data, valid_data) %<-%
+        self$accelerator$prepare(
+          self$model,
+          self$optimizers,
+          data,
+          valid_data
+        )
+
+      self$model <- model
+      self$optimizers <- optimizers
+
+      self$data <- data
+      self$train_data <- data
+      self$valid_data <- valid_data
+
+      if (length(epochs) == 1) epochs <- c(0, epochs)
+      self$min_epochs <- epochs[[1]]
+      self$max_epochs <- epochs[[2]]
+
+    }
+  )
+)
+
+predict_context <- R6::R6Class(
+  classname = "luz_predict_context",
+  inherit = context,
+  public = list(
+    initialize = function(model, newdata, callbacks, accelerator, verbose,
+                          dataloader_options, callbacks_default) {
+
+      super$initialize(
+        verbose = verbose,
+        accelerator = accelerator,
+        callbacks = c(callbacks_default(), callbacks),
+        training = FALSE
+      )
+
+      c(., newdata) %<-% apply_dataloader_options(NULL, newdata, dataloader_options)
+      c(model, data) %<-% self$accelerator$prepare(model, newdata)
+
+      self$model <- model
+      self$model$eval()
+
+      self$data <- data
+    }
+  )
+)
+
+evaluate_context <- R6::R6Class(
+  classname = "luz_evaluate_context",
+  inherit = predict_context,
+  public = list(
+    initialize = function(..., opt_hparams) {
+      super$initialize(...)
+      self$epoch <- 1L
+      self$opt_hparams <- opt_hparams
+      # we actually only use the optimizer names ...
+      self$optimizers <- do.call(self$model$set_optimizers, self$opt_hparams)
+    }
   )
 )
 
