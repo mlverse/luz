@@ -313,6 +313,11 @@ context <- R6::R6Class(
       if (missing(new))
         return(private$.epoch)
       private$.epoch <- new
+    },
+    metrics = function(new) {
+      if (missing(new))
+        return(private$.metrics)
+      private$.metrics <- new
     }
   ),
   private = list(
@@ -336,6 +341,7 @@ context <- R6::R6Class(
     .optimizers = NULL,
     .verbose = NULL,
     .handlers = NULL,
+    .metrics = NULL,
 
     # Fields that are overwritten during model training. They are more or
     # less transient, and their values don't make sense after the model
