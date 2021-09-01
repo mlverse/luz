@@ -468,7 +468,7 @@ get_metrics <- function(object, ...) {
 }
 
 #' @export
-#' @describeIn get_metrics
+#' @describeIn get_metrics Extract metrics from a luz fitted model.
 get_metrics.luz_module_fitted <- function(object, ...) {
   rlang::check_installed("dplyr")
   purrr::imap_dfr(object$records$metrics, make_metrics_df)
