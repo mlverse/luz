@@ -95,9 +95,9 @@ luz_callback_profile <- luz_callback(
 )
 
 get_total_time <- function(x) {
-  unlist(x$ctx$records$profile$fit)
+  unlist(x$records$profile$fit)
 }
 
 get_average_time <- function(x, what) {
-  mean(unlist(x$ctx$records$profile[[what]]))
+  mean(unlist(x$records$profile[[what]]))
 }

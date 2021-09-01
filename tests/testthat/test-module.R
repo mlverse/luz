@@ -178,7 +178,7 @@ test_that("valid_data works", {
     verbose = FALSE
   )
 
-  expect_true("valid" %in% fitted$ctx$get_metrics_df()$set)
+  expect_true("valid" %in% get_metrics(fitted)$set)
 
   expect_error(class= "value_error", regexp = "2", {
     model %>% fit(
@@ -231,7 +231,7 @@ test_that("we can pass dataloader_options", {
     dataloader_options = list(batch_size = 2, shuffle = FALSE)
   )
 
-  expect_length(fitted$ctx$train_data, 45)
+  expect_length(fitted$records$profile$train_step, 45)
 
   dl <- get_dl()
   expect_error(regexp = "already a dataloader", {
@@ -263,6 +263,31 @@ test_that("we can pass dataloader_options", {
   expect_warning(regexp = "ignored for predictions", {
     predict(fitted, x, dataloader_options = list(shuffle = TRUE))
   })
+
+})
+
+test_that("evaluate works", {
+
+  model <- get_model()
+  model <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam
+    ) %>%
+    set_hparams(input_size = 10, output_size = 1) %>%
+    set_opt_hparams(lr = 0.001)
+
+  x <- list(torch::torch_randn(100,10), torch::torch_randn(100, 1))
+
+  fitted <- model %>% fit(
+    x,
+    epochs = 1,
+    valid_data = 0.1,
+    verbose = FALSE,
+    dataloader_options = list(batch_size = 2, shuffle = FALSE)
+  )
+
+  e <- evaluate(fitted, x)
 
 })
 

@@ -234,11 +234,7 @@ fit.luz_module_generator <- function(
   ctx$clean()
 
   structure(
-    list(
-      model  = ctx$model,
-      records = ctx$records,
-      ctx = ctx
-    ),
+    ctx$state_dict(),
     class = "luz_module_fitted"
   )
 }
@@ -462,3 +458,21 @@ apply_dataloader_options <- function(data, valid_data, dataloader_options) {
 
   list(data, valid_data)
 }
+
+#' Get metrics from the object
+#' @param object The object to query for metrics.
+#' @returns A data.frame containing the metric values.
+#' @export
+get_metrics <- function(object, ...) {
+  UseMethod("get_metrics")
+}
+
+#' @export
+#' @describeIn get_metrics
+get_metrics.luz_module_fitted <- function(object, ...) {
+  rlang::check_installed("dplyr")
+  purrr::imap_dfr(object$records$metrics, make_metrics_df)
+}
+
+#' @export
+get_metrics.luz_context <- get_metrics.luz_module_fitted

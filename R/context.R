@@ -89,44 +89,27 @@ context <- R6::R6Class(
     #' @description
     #' Get an specific value from the log.
     get_log = function(what, set, index = NULL) {
-      if (is.null(index)) {
-        index <- length(private$.records[[what]][[set]])
-      }
-
-      val <- private$.records[[what]][[set]]
-
-      if (length(val) < index)
-        return(NULL)
-
-      val[[index]]
+      get_log(self, what = what, set = set, index = index)
     },
     #' @description
     #' Get all metric given an epoch and set.
     get_metrics = function(set, epoch = NULL) {
-      if (is.null(epoch)) {
-        epoch <- length(private$.records[["metrics"]][[set]])
-      }
-      self$get_log("metrics", set, epoch)
+      get_all_metrics(self, set = set, epoch = epoch)
     },
     #' @description
     #' Get the value of a metric given its name, epoch and set.
     get_metric = function(name, set, epoch= NULL) {
-      self$get_metrics(set, epoch)[[name]]
+      get_metric(self, name = name, set = set, epoch = epoch)
     },
     #' @description
     #' Get formatted metrics values
     get_formatted_metrics = function(set, epoch = NULL) {
-      values <- self$get_metrics(set, epoch)
-      for (i in seq_along(values)) {
-        values[[i]] <- self$model$metrics[[i]]$new()$format(values[[i]])
-      }
-      values
+      get_formatted_metrics(self, set = set, epoch = epoch)
     },
     #' @description
     #' Get a data.frame containing all metrics.
     get_metrics_df = function() {
-      check_installed("dplyr")
-      purrr::imap_dfr(self$records$metrics, make_metrics_df)
+      get_metrics(self)
     },
     #' @description Allows setting the `verbose` attribute.
     #' @param verbose boolean. If `TRUE` verbose mode is used. If `FALSE` non verbose.
@@ -158,6 +141,18 @@ context <- R6::R6Class(
     },
     call_callbacks = function(name) {
       call_all_callbacks(self$callbacks, name)
+    },
+    state_dict = function() {
+      output <- list(
+        model = self$model,
+        records = self$records,
+        ctx = list(
+          hparams = self$hparams,
+          opt_hparams = self$opt_hparams
+        )
+      )
+      bind_context(output$model, NULL)
+      output
     }
   ),
   active = list(
