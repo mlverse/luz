@@ -129,21 +129,27 @@ context <- R6::R6Class(
     },
     #' @description Removes unecessary information from the context object.
     clean = function() {
-      lapply(FUN = function(x) self[[x]] <- NULL, c(
-        "callbacks",
-        "accelerator",
-        "target",
-        "batch",
-        "pred",
-        "opt",
-        "opt_name",
-        "data",
-        "handlers",
-        "valid_data",
-        "loss",
-        "input",
-        "loss_grad"
+      lapply(FUN = function(x) private[[x]] <- NULL, c(
+        ".callbacks",
+        ".train_data",
+        ".valid_data",
+        ".accelerator",
+        ".optimizers",
+        ".verbose",
+        ".handlers",
+        ".metrics",
+        ".training",
+        ".batch",
+        ".iter",
+        ".pred",
+        ".opt",
+        ".opt_name",
+        ".data",
+        ".loss",
+        ".loss_grad",
+        ".epoch"
       ))
+      self$buffers <- NULL
     },
     #' @description
     #' Call the selected callbacks. Where `name` is the callback types to call, eg
