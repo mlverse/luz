@@ -182,16 +182,25 @@ fit.luz_module_generator <- function(
   module <- object
   ellipsis::check_dots_empty()
 
+  hparams <- get_hparams(module) %||% list()
+  opt_hparams <- get_opt_hparams(module) %||% list()
+
+  model <- do.call(module, hparams)
+  optimizers <- do.call(model$set_optimizers, opt_hparams)
+
   # Initialize context:
   ctx <- fit_context$new(
     verbose = verbose,
     accelerator = accelerator,
-    module = module,
+    module = model,
     data = data,
     valid_data = valid_data,
     epochs = epochs,
     callbacks = callbacks,
-    dataloader_options = dataloader_options
+    dataloader_options = dataloader_options,
+    hparams = hparams,
+    opt_hparams = opt_hparams,
+    optimizers = optimizers
   )
 
   step <- get_step(ctx)
@@ -233,10 +242,48 @@ fit.luz_module_generator <- function(
   ctx$call_callbacks("on_fit_end")
   ctx$clean()
 
-  structure(
+  output <- structure(
     ctx$state_dict(),
     class = "luz_module_fitted"
   )
+
+  # For some reason this is necessary to make sure `ctx` is garbage
+  # collected after we leave `fit`. Not completely sure about why
+  # this is really needed.
+  # The problem could be that this frame is enclosed by something
+  reg.finalizer(
+    rlang::current_env(),
+    onexit = TRUE,
+    function(e) {message("deleting closure env"); print(rlang::obj_address(e));}
+  )
+
+  reg.finalizer(
+    ctx,
+    onexit = TRUE,
+    function(e) message("deleting context")
+  )
+
+  rm(list = c(
+  "batch",
+  "epoch",
+  "optimizers",
+  "model",
+  "opt_hparams",
+  "hparams",
+  "module",
+  "object",
+  "data",
+  "epochs",
+  "callbacks",
+  "valid_data",
+  "accelerator"))
+
+  rm(ctx); rm(step);
+  print(rlang::obj_address(rlang::current_env()))
+
+  hello <- sample(1:1e7)
+
+  output
 }
 
 #' Evaluates a fitted model on a dataset
