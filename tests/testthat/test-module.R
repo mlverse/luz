@@ -279,15 +279,17 @@ test_that("evaluate works", {
 
   x <- list(torch::torch_randn(100,10), torch::torch_randn(100, 1))
 
-  fitted <- model %>% fit(
+  fitted4 <- model %>% fit(
     x,
     epochs = 1,
-    valid_data = 0.1,
     verbose = FALSE,
     dataloader_options = list(batch_size = 2, shuffle = FALSE)
   )
 
-  e <- evaluate(fitted, x)
+  # gc()
+  #
+  #
+  # e <- evaluate(fitted, x)
 
 })
 

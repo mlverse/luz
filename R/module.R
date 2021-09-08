@@ -233,10 +233,18 @@ fit.luz_module_generator <- function(
   ctx$call_callbacks("on_fit_end")
   ctx$clean()
 
-  structure(
+  output <- structure(
     ctx$state_dict(),
     class = "luz_module_fitted"
   )
+
+  # The environment of this function is leaking due to unknown reason,
+  # so we make it as small as possiible my removing all bindings.
+  rm(list = c("accelerator", "batch", "callbacks", "ctx", "data",
+              "dataloader_options", "epoch", "epochs", "module", "object",
+              "step", "valid_data", "verbose"))
+
+  output
 }
 
 #' Evaluates a fitted model on a dataset
