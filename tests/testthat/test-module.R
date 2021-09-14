@@ -268,6 +268,9 @@ test_that("we can pass dataloader_options", {
 
 test_that("evaluate works", {
 
+  set.seed(1)
+  torch_manual_seed(1)
+
   model <- get_model()
   model <- model %>%
     setup(
@@ -295,5 +298,7 @@ test_that("evaluate works", {
 
   expect_equal(nrow(get_metrics(e)), 4)
   expect_equal(ncol(get_metrics(e)), 2)
+
+  expect_snapshot(print(e))
 })
 
