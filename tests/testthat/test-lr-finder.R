@@ -12,6 +12,7 @@ test_that("lr_finder works", {
   records <- lr_finder(model, dl, verbose = FALSE)
   expect_s3_class(records, "lr_records")
   expect_s3_class(records, "data.frame")
+  expect_equal(nrow(records), 100)
 
   expect_output(print(records))
 
