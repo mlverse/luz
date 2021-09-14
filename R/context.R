@@ -169,6 +169,8 @@ context <- R6::R6Class(
           opt_hparams = self$opt_hparams
         )
       )
+      # Remove the context reference so the context can be correctly
+      # deleted.
       bind_context(output$model, NULL)
       output
     }

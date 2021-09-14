@@ -196,6 +196,15 @@ fit.luz_module_generator <- function(
 
   step <- get_step(ctx)
 
+  # The environment of this function is leaking due to a bug
+  # see https://github.com/mlverse/luz/issues/74
+  # Until its fixed we clean up its environment so we don't keep
+  # large objects here more than necessary.
+  on.exit(add = TRUE, {
+    e <- rlang::current_env()
+    rm(list = rlang::env_names(e), envir = e)
+  })
+
   ctx$call_callbacks("on_fit_begin")
   rlang::with_handlers(
     !!! ctx$handlers,
@@ -233,18 +242,10 @@ fit.luz_module_generator <- function(
   ctx$call_callbacks("on_fit_end")
   ctx$clean()
 
-  output <- structure(
+  structure(
     ctx$state_dict(),
     class = "luz_module_fitted"
   )
-
-  # The environment of this function is leaking due to unknown reason,
-  # so we make it as small as possiible my removing all bindings.
-  rm(list = c("accelerator", "batch", "callbacks", "ctx", "data",
-              "dataloader_options", "epoch", "epochs", "module", "object",
-              "step", "valid_data", "verbose"))
-
-  output
 }
 
 #' Evaluates a fitted model on a dataset
@@ -277,7 +278,13 @@ evaluate <- function(
     opt_hparams = object$ctx$opt_hparams
   )
 
+  on.exit(add = TRUE, {
+    e <- rlang::current_env()
+    rm(list = rlang::env_names(e), envir = e)
+  })
+
   valid_loop(ctx, get_step(ctx))
+
   structure(
     ctx$state_dict(),
     class = "luz_module_evaluation"
@@ -317,6 +324,11 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
     stack <- pars$stack
 
   predict_fn <- if (is.null(ctx$model$predict)) ctx$model else ctx$model$predict
+
+  on.exit(add = TRUE, {
+    e <- rlang::current_env()
+    rm(list = rlang::env_names(e), envir = e)
+  })
 
   torch::with_no_grad({
     ctx$call_callbacks("on_predict_begin")
