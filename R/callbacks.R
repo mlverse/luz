@@ -545,7 +545,7 @@ luz_callback_lr_scheduler <- luz_callback(
     if (is.null(self$opt_name) && (length(ctx$optimizers) == 1))
       self$opt_name <- names(ctx$optimizers)
     else
-      rlang::abort("An optimizer name was not supported and your model has multiple optimizers")
+      rlang::abort("An optimizer name was not supplied and your model has multiple optimizers")
 
     if (!self$opt_name %in% names(ctx$optimizers))
       rlang::abort(glue::glue("opt_name '{self$opt_name}' not found in ctx$optimizers."))
