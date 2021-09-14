@@ -145,6 +145,11 @@ Luz provides implementations of a few of the most used metrics. If a metric is n
 ```{r, child='../man/rmd/metrics.Rmd'}
 ```
 
+## Evaluate
+
+```{r, child='../man/rmd/evaluate.Rmd'}
+```
+
 ## Customizing with callbacks
 
 Luz provides different ways to customize the training progress depending on the level of control you need in the training loop. The fastest way and the more 'reusable', in the sense that you can create training modification that can be used in many different situations is via **callbacks**.

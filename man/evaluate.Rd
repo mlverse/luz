@@ -46,6 +46,27 @@ default. It will error if not \code{NULL} and \code{data} is already a dataloade
 \description{
 Evaluates a fitted model on a dataset
 }
+\details{
+Once a model has been trained you might want to evaluate its performance
+in a different dataset. For that reason, luz provides the \code{?evaluate}
+function that takes a fitted model and a dataset and computes the
+metrics attached to the model.
+
+Evaluate returns a \code{luz_module_evaluation} object that you can query for
+metrics using the \code{get_metrics} function or simply \code{print} to see the
+results.
+
+For example:\if{html}{\out{<div class="r">}}\preformatted{evaluation <- fitted \%>\% evaluate(data = valid_dl)
+metrics <- get_metrics(evaluation)
+print(evaluation)
+}\if{html}{\out{</div>}}\preformatted{## A `luz_module_evaluation`
+## ── Results ─────────────────────────────────────────────────────────────────
+## loss: 1.3079
+## mae: 0.9136
+## mse: 1.2647
+## rmse: 1.1246
+}
+}
 \seealso{
 Other training: 
 \code{\link{fit.luz_module_generator}()},

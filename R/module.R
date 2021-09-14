@@ -252,6 +252,8 @@ fit.luz_module_generator <- function(
 #' @param object A fitted model to evaluate.
 #' @inheritParams fit.luz_module_generator
 #'
+#' @includeRmd man/rmd/evaluate.Rmd details
+#'
 #' @family training
 #' @export
 evaluate <- function(
