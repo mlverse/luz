@@ -272,24 +272,28 @@ test_that("evaluate works", {
   model <- model %>%
     setup(
       loss = torch::nn_mse_loss(),
-      optimizer = torch::optim_adam
+      optimizer = torch::optim_adam,
+      metrics = list(
+        luz_metric_mae(),
+        luz_metric_mse(),
+        luz_metric_rmse()
+      )
     ) %>%
     set_hparams(input_size = 10, output_size = 1) %>%
     set_opt_hparams(lr = 0.001)
 
   x <- list(torch::torch_randn(100,10), torch::torch_randn(100, 1))
 
-  fitted4 <- model %>% fit(
+  fitted <- model %>% fit(
     x,
     epochs = 1,
     verbose = FALSE,
     dataloader_options = list(batch_size = 2, shuffle = FALSE)
   )
 
-  # gc()
-  #
-  #
-  # e <- evaluate(fitted, x)
+  e <- evaluate(fitted, x)
 
+  expect_equal(nrow(get_metrics(e)), 4)
+  expect_equal(ncol(get_metrics(e)), 2)
 })
 

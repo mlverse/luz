@@ -271,7 +271,10 @@ evaluate <- function(
   )
 
   valid_loop(ctx, get_step(ctx))
-  ctx
+  structure(
+    ctx$state_dict(),
+    class = "luz_module_evaluation"
+  )
 }
 
 #' Create predictions for a fitted model
@@ -484,3 +487,9 @@ get_metrics.luz_module_fitted <- function(object, ...) {
 
 #' @export
 get_metrics.luz_context <- get_metrics.luz_module_fitted
+
+#' @export
+get_metrics.luz_module_evaluation <- function(object, ...) {
+  res <- get_metrics.luz_module_fitted(object)
+  res[, c("metric", "value")]
+}

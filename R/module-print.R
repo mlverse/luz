@@ -43,6 +43,15 @@ print.luz_module_fitted <- function(x, ...) {
   print(x$model)
 }
 
+#' @export
+print.luz_module_evaluation <- function(x, ...) {
+  cli::cat_line("A `luz_module_evaluation`")
+  cli::cat_rule("Results")
+  purrr::iwalk(get_formatted_metrics(x, "valid"), function(x, nm) {
+    cli::cat_line(nm, ": ", x)
+  })
+}
+
 
 get_log <- function(object, what, set, index = NULL) {
   if (is.null(index)) {
