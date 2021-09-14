@@ -91,7 +91,7 @@ as_dataset <- function(x, ...) {
 
 #' @export
 as_dataset.default <- function(x, ...) {
-  rlang::abort(sprinf("Can't convert object with class '%s' to a torch dataset.", class(x)[1]))
+  rlang::abort(sprintf("Can't convert object with class '%s' to a torch dataset.", class(x)[1]))
 }
 
 #' @export
