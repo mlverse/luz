@@ -71,6 +71,7 @@ Fit a \code{nn_module}
 to find out how to create modules that can be trained with \code{fit}.
 
 Other training: 
+\code{\link{evaluate}()},
 \code{\link{predict.luz_module_fitted}()},
 \code{\link{setup}()}
 }

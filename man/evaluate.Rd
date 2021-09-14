@@ -14,6 +14,42 @@ evaluate(
   dataloader_options = NULL
 )
 }
+\arguments{
+\item{object}{A fitted model to evaluate.}
+
+\item{data}{(dataloader, dataset or list) A dataloader created with
+\code{\link[torch:dataloader]{torch::dataloader()}} used for training the model, or a dataset created with
+\code{\link[torch:dataset]{torch::dataset()}} or a list. Dataloaders and datasets must return list with
+at most 2 items. The first item will be used as input for the module and the
+second will be used as target for the loss function.}
+
+\item{...}{Currently unused.}
+
+\item{callbacks}{(list, optional) A list of callbacks defined with
+\code{\link[=luz_callback]{luz_callback()}} that will be called during the training procedure. The
+callbacks \code{\link[=luz_callback_metrics]{luz_callback_metrics()}}, \code{\link[=luz_callback_progress]{luz_callback_progress()}} and
+\code{\link[=luz_callback_train_valid]{luz_callback_train_valid()}} are always added by default.}
+
+\item{accelerator}{(accelerator, optional) An optional \code{\link[=accelerator]{accelerator()}} object
+used to configure device placement of the components like \link{nn_module}s,
+optimizers and batches of data.}
+
+\item{verbose}{(logical, optional) An optional boolean value indicating if
+the fitting procedure should emmit output to the console during training.
+By default, it will produce output if \code{\link[=interactive]{interactive()}} is \code{TRUE}, otherwise
+it won't print to the console.}
+
+\item{dataloader_options}{Options used when creating a dataloader. See \code{\link[torch:dataloader]{torch::dataloader()}}.
+\code{shuffle=TRUE} by default for the training data and \code{batch_size=32} by
+default. It will error if not \code{NULL} and \code{data} is already a dataloader.}
+}
 \description{
 Evaluates a fitted model on a dataset
 }
+\seealso{
+Other training: 
+\code{\link{fit.luz_module_generator}()},
+\code{\link{predict.luz_module_fitted}()},
+\code{\link{setup}()}
+}
+\concept{training}

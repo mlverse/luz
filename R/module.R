@@ -249,6 +249,11 @@ fit.luz_module_generator <- function(
 
 #' Evaluates a fitted model on a dataset
 #'
+#' @param object A fitted model to evaluate.
+#' @inheritParams fit.luz_module_generator
+#'
+#' @family training
+#' @export
 evaluate <- function(
   object,
   data,

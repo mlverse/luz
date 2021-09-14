@@ -45,6 +45,7 @@ Create predictions for a fitted model
 }
 \seealso{
 Other training: 
+\code{\link{evaluate}()},
 \code{\link{fit.luz_module_generator}()},
 \code{\link{setup}()}
 }
