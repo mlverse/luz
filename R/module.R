@@ -477,6 +477,7 @@ apply_dataloader_options <- function(data, valid_data, dataloader_options) {
 
 #' Get metrics from the object
 #' @param object The object to query for metrics.
+#' @param ... Currently unused.
 #' @returns A data.frame containing the metric values.
 #' @export
 get_metrics <- function(object, ...) {

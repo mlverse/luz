@@ -11,6 +11,8 @@ get_metrics(object, ...)
 }
 \arguments{
 \item{object}{The object to query for metrics.}
+
+\item{...}{Currently unused.}
 }
 \value{
 A data.frame containing the metric values.
