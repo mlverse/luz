@@ -60,11 +60,11 @@ For example:\if{html}{\out{<div class="r">}}\preformatted{evaluation <- fitted \
 metrics <- get_metrics(evaluation)
 print(evaluation)
 }\if{html}{\out{</div>}}\preformatted{## A `luz_module_evaluation`
-## ── Results ─────────────────────────────────────────────────────────────────
-## loss: 1.3079
-## mae: 0.9136
-## mse: 1.2647
-## rmse: 1.1246
+## ── Results ──────────────────────────────────────────────────────────
+## loss: 1.3393
+## mae: 0.9558
+## mse: 1.5213
+## rmse: 1.2334
 }
 }
 \seealso{

@@ -44,7 +44,7 @@ information into \code{ctx}.}
 
 \item{\code{valid_data}}{a dataloader using during model validation}
 
-\item{\code{accelerator}}{a \code{\link[=accelerator]{accelerator()}} used to move data, model and etc the the correct
+\item{\code{accelerator}}{an \code{\link[=accelerator]{accelerator()}} used to move data, model and etc the the correct
 device.}
 
 \item{\code{optimizers}}{a named list of optimizers that will be used during model training.}
@@ -176,7 +176,7 @@ Metric values are indexed by epoch.
 \if{html}{\out{<a id="method-get_log"></a>}}
 \if{latex}{\out{\hypertarget{method-get_log}{}}}
 \subsection{Method \code{get_log()}}{
-Get an specific value from the log.
+Get a specific value from the log.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{context$get_log(what, set, index = NULL)}\if{html}{\out{</div>}}
 }
@@ -289,7 +289,7 @@ if \code{NULL} we use the result of \code{\link[=interactive]{interactive()}}.}
 \if{html}{\out{<a id="method-clean"></a>}}
 \if{latex}{\out{\hypertarget{method-clean}{}}}
 \subsection{Method \code{clean()}}{
-Removes unecessary information from the context object.
+Removes unnecessary information from the context object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{context$clean()}\if{html}{\out{</div>}}
 }

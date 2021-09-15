@@ -93,7 +93,7 @@ context <- R6::R6Class(
       invisible(self)
     },
     #' @description
-    #' Get an specific value from the log.
+    #' Get a specific value from the log.
     get_log = function(what, set, index = NULL) {
       get_log(self, what = what, set = set, index = index)
     },
@@ -127,7 +127,7 @@ context <- R6::R6Class(
         private$.verbose <- verbose
       }
     },
-    #' @description Removes unecessary information from the context object.
+    #' @description Removes unnecessary information from the context object.
     clean = function() {
       lapply(FUN = function(x) private[[x]] <- NULL, c(
         ".callbacks",
@@ -267,7 +267,7 @@ context <- R6::R6Class(
         return(private$.valid_data)
       private$.valid_data <- new
     },
-    #' @field accelerator a [accelerator()] used to move data, model and etc the the correct
+    #' @field accelerator an [accelerator()] used to move data, model and etc the the correct
     #'   device.
     accelerator = function(new) {
       if (missing(new))
