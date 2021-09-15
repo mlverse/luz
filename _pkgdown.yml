@@ -28,6 +28,7 @@ reference:
     - starts_with("evaluate")
     - set_hparams
     - set_opt_hparams
+    - get_metrics
     - ctx
     - context
     - lr_finder
