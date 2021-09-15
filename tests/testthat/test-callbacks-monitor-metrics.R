@@ -192,3 +192,31 @@ test_that("model checkpoint callback works", {
   expect_length(files, 5)
 
 })
+
+test_that("early stopping + csv logger", {
+
+  model <- get_model()
+  dl <- get_dl()
+
+  tmp <- tempfile(fileext = ".csv")
+
+  cb <- list(
+    luz_callback_early_stopping(min_delta = 100, monitor = "train_loss"),
+    luz_callback_csv_logger(tmp)
+  )
+
+  suppressMessages({
+    expect_message({
+      mod <- model %>%
+        setup(
+          loss = torch::nn_mse_loss(),
+          optimizer = torch::optim_adam,
+        ) %>%
+        set_hparams(input_size = 10, output_size = 1) %>%
+        fit(dl, verbose = TRUE, epochs = 25, callbacks = cb)
+    })
+  })
+
+  expect_equal(nrow(read.csv(tmp)), nrow(get_metrics(mod)))
+
+})

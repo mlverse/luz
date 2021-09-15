@@ -73,6 +73,7 @@ monitor_metrics <- luz_callback(
 luz_callback_early_stopping <- luz_callback(
   name = "early_stopping_callback",
   inherit = monitor_metrics,
+  weight = Inf,
   initialize = function(monitor = "valid_loss", min_delta = 0, patience = 0,
                         mode="min", baseline=NULL) {
 
