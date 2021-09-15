@@ -9,7 +9,7 @@
 <title>Get started with Luz • luz</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="../deps/bs3compat-0.2.5.1/tabs.js"></script><script src="../deps/bs3compat-0.2.5.1/bs3compat.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="../deps/bs3compat-0.3.0/transition.js"></script><script src="../deps/bs3compat-0.3.0/tabs.js"></script><script src="../deps/bs3compat-0.3.0/bs3compat.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <link href="../syntax-highlighting.css" rel="stylesheet">
@@ -225,6 +225,23 @@
 <span class="op">)</span></code></pre></div>
 <p><strong>Note</strong>: It’s good practice that the <code>compute</code> metric returns regular R values instead of torch tensors and other parts of luz will expect that.</p>
 </div>
+<div id="evaluate" class="section level2">
+<h2 class="hasAnchor">
+<a href="#evaluate" class="anchor" aria-hidden="true"></a>Evaluate</h2>
+<p>Once a model has been trained you might want to evaluate its performance in a different dataset. For that reason, luz provides the <code><a href="../reference/evaluate.html">?evaluate</a></code> function that takes a fitted model and a dataset and computes the metrics attached to the model.</p>
+<p>Evaluate returns a <code>luz_module_evaluation</code> object that you can query for metrics using the <code>get_metrics</code> function or simply <code>print</code> to see the results.</p>
+<p>For example:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">evaluation</span> <span class="op">&lt;-</span> <span class="va">fitted</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/evaluate.html">evaluate</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">valid_dl</span><span class="op">)</span>
+<span class="va">metrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="va">evaluation</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">evaluation</span><span class="op">)</span></code></pre></div>
+<pre><code>#&gt; A `luz_module_evaluation`
+#&gt; ── Results ─────────────────────────────────────────────────────────────────────
+#&gt; loss: 1.5967
+#&gt; mae: 0.908
+#&gt; mse: 1.147
+#&gt; rmse: 1.071</code></pre>
+</div>
 <div id="customizing-with-callbacks" class="section level2">
 <h2 class="hasAnchor">
 <a href="#customizing-with-callbacks" class="anchor" aria-hidden="true"></a>Customizing with callbacks</h2>
@@ -238,7 +255,7 @@
 </ul>
 <p>You can also implement custom callbacks that modify or act specifically for your training procedure. For example:</p>
 <p>Let’s implement a callback that prints ‘Iteration <code>n</code>’ (where <code>n</code> is the iteration number) for every batch in the training set and ‘Done’ when an epoch is finished. For that task we use the <code>luz_callback</code> function:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">print_callback</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback.html">luz_callback</a></span><span class="op">(</span>
   name <span class="op">=</span> <span class="st">"print_callback"</span>,
   initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">message</span><span class="op">)</span> <span class="op">{</span>
@@ -254,7 +271,7 @@
 <p><code><a href="../reference/luz_callback.html">luz_callback()</a></code> takes a named list of function as argument where the name indicate the moment at which the callback should be called. For instance <code>on_train_batch_end()</code> is called for every batch at the end of the training procedure and <code>on_epoch()</code> end is called at the end of every epoch.</p>
 <p>The returned value of <code><a href="../reference/luz_callback.html">luz_callback()</a></code> is a function that initializes an instance of the callback. Callbacks can have initialization parameters, like the name of a file you want to log the results, in this case, you can pass an <code>initialize</code> method when creating the callback definition and save these parameters to the <code>self</code> object. In the above example, the callback has a <code>message</code> parameter that is printed at the end of each epoch.</p>
 <p>Once a callback is defined it can be passed to the <code>fit</code> function via the <code>callbacks</code> parameter, eg:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">...</span>, callbacks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>

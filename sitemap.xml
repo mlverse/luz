@@ -67,7 +67,13 @@
     <loc>/reference/ctx.html</loc>
   </url>
   <url>
+    <loc>/reference/evaluate.html</loc>
+  </url>
+  <url>
     <loc>/reference/fit.luz_module_generator.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_metrics.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
