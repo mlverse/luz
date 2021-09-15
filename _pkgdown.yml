@@ -25,6 +25,7 @@ reference:
     - setup
     - starts_with("fit")
     - starts_with("predict")
+    - starts_with("evaluate")
     - set_hparams
     - set_opt_hparams
     - ctx
