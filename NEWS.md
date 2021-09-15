@@ -12,6 +12,7 @@
 * You can now supply `dataloader_options` to `fit` to pass additional information to `as_dataloader()`. (#71)
 * Refactored the `ctx` object to make it safer and avoid returing it in the output. (#73)
 * Implemented the `evaluate` function allowing users to get metrics from a model in a new datase. (#73)
+* Fixed bugs in early stopping callback related to them not working properly when `patience = 1` and when they are specified before other logging callbacks. (#76)
 
 # luz 0.1.0
 
