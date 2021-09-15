@@ -309,6 +309,7 @@ luz_metric_mse <- luz_metric(
 #' @export
 luz_metric_rmse <- luz_metric(
   inherit = luz_metric_mse,
+  abbrev = "RMSE",
   compute = function() {
     sqrt(super$compute())
   }

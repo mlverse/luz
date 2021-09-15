@@ -183,69 +183,27 @@ fit.luz_module_generator <- function(
   ellipsis::check_dots_empty()
 
   # Initialize context:
-  ctx <- context$new()
-  ctx$set_verbose(verbose)
+  ctx <- fit_context$new(
+    verbose = verbose,
+    accelerator = accelerator,
+    module = module,
+    data = data,
+    valid_data = valid_data,
+    epochs = epochs,
+    callbacks = callbacks,
+    dataloader_options = dataloader_options
+  )
 
-  if (is.null(accelerator))
-    accelerator <- accelerator()
+  step <- get_step(ctx)
 
-  ctx$accelerator <- accelerator
-  ctx$hparams <- get_hparams(module) %||% list()
-  ctx$opt_hparams <- get_opt_hparams(module) %||% list()
-
-  model <- do.call(module, ctx$hparams)
-  bind_context(model, ctx)
-
-  optimizers <- do.call(model$set_optimizers, ctx$opt_hparams)
-
-  if (!is.list(optimizers)) {
-    optimizers <- list(opt = optimizers)
-  }
-
-  if (!rlang::is_named(optimizers)) {
-    rlang::abort(c("List of optimizers is not named.",
-                   "When returning a list of optimizers, the list must be named."))
-  }
-
-  if (rlang::is_scalar_double(valid_data)) {
-    c(data, valid_data) %<-% create_valid_data(data, valid_data)
-  }
-
-  c(data, valid_data) %<-% apply_dataloader_options(data, valid_data, dataloader_options)
-
-  c(model, optimizers, data, valid_data) %<-%
-    ctx$accelerator$prepare(
-      model,
-      optimizers,
-      data,
-      valid_data
-    )
-
-  ctx$model <- model
-  ctx$model$ctx <- ctx
-
-  ctx$optimizers <- optimizers
-
-  ctx$train_data <- data
-  ctx$valid_data <- valid_data
-
-  if (length(epochs) == 1) epochs <- c(0, epochs)
-  ctx$min_epochs <- epochs[[1]]
-  ctx$max_epochs <- epochs[[2]]
-
-  callbacks <- append(default_callbacks(), callbacks)
-  ctx$callbacks <- initialize_callbacks(callbacks, ctx)
-
-  if (is.null(ctx$model$step))
-    step <- function() default_step(ctx)
-  else
-    step <- ctx$model$step
-
-  ctx$call_callbacks <- function(name) {
-    call_all_callbacks(ctx$callbacks, name)
-  }
-
-  ctx$handlers <- list()
+  # The environment of this function is leaking due to a bug
+  # see https://github.com/mlverse/luz/issues/74
+  # Until its fixed we clean up its environment so we don't keep
+  # large objects here more than necessary.
+  on.exit(add = TRUE, {
+    e <- rlang::current_env()
+    rm(list = rlang::env_names(e), envir = e)
+  })
 
   ctx$call_callbacks("on_fit_begin")
   rlang::with_handlers(
@@ -261,7 +219,8 @@ fit.luz_module_generator <- function(
         ctx$call_callbacks("on_train_begin")
 
         coro::loop(for (batch in ctx$data) {
-          bind_batch_to_ctx(ctx, batch)
+
+          ctx$batch <- batch
           ctx$iter <- ctx$iter + 1L
 
           ctx$call_callbacks("on_train_batch_begin")
@@ -272,24 +231,8 @@ fit.luz_module_generator <- function(
         ctx$call_callbacks("on_train_end")
 
         if (!is.null(ctx$valid_data)) {
-
           ctx$data <- ctx$valid_data
-          ctx$call_callbacks("on_valid_begin")
-
-          ctx$iter <- 0L
-          torch::with_no_grad({
-            coro::loop(for (batch in ctx$data) {
-              bind_batch_to_ctx(ctx, batch)
-              ctx$iter <- ctx$iter + 1L
-
-              ctx$call_callbacks("on_valid_batch_begin")
-              step()
-              ctx$call_callbacks("on_valid_batch_end")
-            })
-          })
-
-          ctx$call_callbacks("on_valid_end")
-
+          valid_loop(ctx, step)
         }
 
         ctx$call_callbacks("on_epoch_end")
@@ -297,15 +240,54 @@ fit.luz_module_generator <- function(
     })
 
   ctx$call_callbacks("on_fit_end")
-  clean_context(ctx)
+  ctx$clean()
 
   structure(
-    list(
-      model  = ctx$model,
-      records = ctx$records,
-      ctx = ctx
-    ),
+    ctx$state_dict(),
     class = "luz_module_fitted"
+  )
+}
+
+#' Evaluates a fitted model on a dataset
+#'
+#' @param object A fitted model to evaluate.
+#' @inheritParams fit.luz_module_generator
+#'
+#' @includeRmd man/rmd/evaluate.Rmd details
+#'
+#' @family training
+#' @export
+evaluate <- function(
+  object,
+  data,
+  ...,
+  callbacks = list(),
+  accelerator = NULL,
+  verbose = NULL,
+  dataloader_options = NULL
+) {
+
+  ctx <- evaluate_context$new(
+    model = object$model,
+    newdata = data,
+    callbacks = callbacks,
+    accelerator = accelerator,
+    verbose = verbose,
+    dataloader_options = dataloader_options,
+    callbacks_default = default_evaluate_callbacks,
+    opt_hparams = object$ctx$opt_hparams
+  )
+
+  on.exit(add = TRUE, {
+    e <- rlang::current_env()
+    rm(list = rlang::env_names(e), envir = e)
+  })
+
+  valid_loop(ctx, get_step(ctx))
+
+  structure(
+    ctx$state_dict(),
+    class = "luz_module_evaluation"
   )
 }
 
@@ -325,23 +307,15 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
                                       accelerator = NULL, verbose = NULL,
                                       dataloader_options = NULL) {
 
-  ctx <- object$ctx
-  ctx$set_verbose(verbose)
-
-  if (is.null(accelerator))
-    accelerator <- accelerator()
-
-  ctx$accelerator <- accelerator
-  model <- NULL; data <- NULL
-  c(., newdata) %<-% apply_dataloader_options(NULL, newdata, dataloader_options)
-
-  c(model, data) %<-% ctx$accelerator$prepare(ctx$model, as_dataloader(newdata))
-
-  ctx$model <- model
-  ctx$data <- data
-
-  ctx$model$eval()
-  ctx$training <- FALSE
+  ctx <- predict_context$new(
+    model = object$model,
+    newdata = newdata,
+    callbacks = callbacks,
+    accelerator = accelerator,
+    verbose = verbose,
+    dataloader_options = dataloader_options,
+    callbacks_default = default_predict_callbacks
+  )
 
   pars <- rlang::list2(...)
   if (is.null(pars$stack))
@@ -349,17 +323,12 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
   else
     stack <- pars$stack
 
-  callbacks <- c(default_predict_callbacks(), callbacks)
-
-  ctx$handlers <- list()
-  ctx$output <- list()
-  ctx$callbacks <- initialize_callbacks(callbacks, ctx)
-
-  ctx$call_callbacks <- function(name) {
-    call_all_callbacks(ctx$callbacks, name)
-  }
-
   predict_fn <- if (is.null(ctx$model$predict)) ctx$model else ctx$model$predict
+
+  on.exit(add = TRUE, {
+    e <- rlang::current_env()
+    rm(list = rlang::env_names(e), envir = e)
+  })
 
   torch::with_no_grad({
     ctx$call_callbacks("on_predict_begin")
@@ -368,9 +337,8 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
       .expr = {
         coro::loop(for(batch in ctx$data) {
           ctx$batch <- batch
-          ctx$input <- batch[[1]]
           ctx$call_callbacks("on_predict_batch_begin")
-          ctx$output[[length(ctx$output) + 1]] <- do.call(predict_fn, list(ctx$input))
+          ctx$pred[[length(ctx$pred) + 1]] <- do.call(predict_fn, list(ctx$input))
           ctx$call_callbacks("on_predict_batch_end")
         })
       }
@@ -379,16 +347,38 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
   })
 
   if (stack) {
-    ctx$output <- torch::torch_cat(ctx$output)
+    ctx$pred <- torch::torch_cat(ctx$pred)
   }
 
-  ctx$output
+  ctx$pred
 }
 
-bind_batch_to_ctx <- function(ctx, batch) {
-  ctx$batch <- batch
-  ctx$input <- ctx$batch[[1]]
-  ctx$target <- ctx$batch[[2]]
+get_step <- function(ctx) {
+  if (is.null(ctx$model$step))
+    function() default_step(ctx)
+  else
+    ctx$model$step
+}
+
+valid_loop <- function(ctx, step) {
+
+  ctx$call_callbacks("on_valid_begin")
+
+  ctx$iter <- 0L
+  torch::with_no_grad({
+    coro::loop(for (batch in ctx$data) {
+
+      ctx$batch <- batch
+      ctx$iter <- ctx$iter + 1L
+
+      ctx$call_callbacks("on_valid_batch_begin")
+      step()
+      ctx$call_callbacks("on_valid_batch_end")
+    })
+  })
+
+  ctx$call_callbacks("on_valid_end")
+
 }
 
 default_step <- function(ctx) {
@@ -499,23 +489,27 @@ apply_dataloader_options <- function(data, valid_data, dataloader_options) {
   list(data, valid_data)
 }
 
-clean_context <- function(ctx) {
-  rm(envir = ctx, list = c(
-    "callbacks",
-    "metrics",
-    "iter",
-    "target",
-    "batch",
-    "accelerator",
-    "pred",
-    "opt",
-    "opt_name",
-    "data",
-    "handlers",
-    "valid_data",
-    "loss",
-    "input",
-    "loss_grad",
-    "call_callbacks"
-  ))
+#' Get metrics from the object
+#' @param object The object to query for metrics.
+#' @param ... Currently unused.
+#' @returns A data.frame containing the metric values.
+#' @export
+get_metrics <- function(object, ...) {
+  UseMethod("get_metrics")
+}
+
+#' @export
+#' @describeIn get_metrics Extract metrics from a luz fitted model.
+get_metrics.luz_module_fitted <- function(object, ...) {
+  rlang::check_installed("dplyr")
+  purrr::imap_dfr(object$records$metrics, make_metrics_df)
+}
+
+#' @export
+get_metrics.luz_context <- get_metrics.luz_module_fitted
+
+#' @export
+get_metrics.luz_module_evaluation <- function(object, ...) {
+  res <- get_metrics.luz_module_fitted(object)
+  res[, c("metric", "value")]
 }

@@ -27,8 +27,9 @@ luz_save <- function(obj, path, ...) {
   # avoid warning because luz will always be available when reloading
   # because we reload with `luz_load()`.
   suppressWarnings({
-    serialized_model <- model_to_raw(obj$ctx$model)
+    serialized_model <- model_to_raw(obj$model)
     obj$ctx$.serialized_model <- serialized_model
+    obj$ctx$.serialization_version <- 2L
     o <- saveRDS(obj, path)
   })
 
@@ -46,6 +47,21 @@ luz_save <- function(obj, path, ...) {
 #' @family luz_save
 #' @export
 luz_load <- function(path) {
+  obj <- readRDS(file = path)
+
+  if (is.null(obj$ctx$.serialization_version))
+    return(legacy_luz_load(path))
+
+  model <- model_from_raw(obj$ctx$.serialized_model)
+
+  obj$model <- model
+  obj$ctx$.serialized_model <- NULL
+  obj$ctx$.serialization_version <- NULL
+
+  obj
+}
+
+legacy_luz_load <- function(path) {
   obj <- readRDS(file = path)
   model <- model_from_raw(obj$ctx$.serialized_model)
   bind_context(model, obj$ctx)

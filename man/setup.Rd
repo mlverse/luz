@@ -32,6 +32,7 @@ It makes sure the module have all the necessary ingredients in order to be fitte
 }
 \seealso{
 Other training: 
+\code{\link{evaluate}()},
 \code{\link{fit.luz_module_generator}()},
 \code{\link{predict.luz_module_fitted}()}
 }

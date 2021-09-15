@@ -7,18 +7,80 @@
 Context object storing information about the model training context.
 See also \link{ctx}.
 }
+\section{Public fields}{
+\if{html}{\out{<div class="r6-fields">}}
+\describe{
+\item{\code{buffers}}{This is a list of buffers that callbacks can use to write temporary
+information into \code{ctx}.}
+}
+\if{html}{\out{</div>}}
+}
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
 \item{\code{records}}{stores information about values logged with \code{self$log}.}
 
 \item{\code{device}}{allows querying the current accelerator device}
+
+\item{\code{callbacks}}{list of callbacks that will be called.}
+
+\item{\code{iter}}{current iteration}
+
+\item{\code{batch}}{the current batch data. a list with input data and targets.}
+
+\item{\code{input}}{a shortcut for \code{ctx$batch[[1]]}}
+
+\item{\code{target}}{a shortcut for \code{ctx$batch[[2]]}}
+
+\item{\code{min_epochs}}{the minimum number of epochs that the model will run on.}
+
+\item{\code{max_epochs}}{the maximum number of epochs that the model will run.}
+
+\item{\code{hparams}}{a list of hyperparameters that were used to initialize \code{ctx$model}.}
+
+\item{\code{opt_hparams}}{a list of hyperparameters used to initialize the \code{ctx$optimizers}.}
+
+\item{\code{train_data}}{a dataloader that is used for training the model}
+
+\item{\code{valid_data}}{a dataloader using during model validation}
+
+\item{\code{accelerator}}{an \code{\link[=accelerator]{accelerator()}} used to move data, model and etc the the correct
+device.}
+
+\item{\code{optimizers}}{a named list of optimizers that will be used during model training.}
+
+\item{\code{verbose}}{bool wether the process is in verbose mode or not.}
+
+\item{\code{handlers}}{List of error handlers that can be used. See \code{\link[rlang:with_handlers]{rlang::with_handlers()}}
+for more info.}
+
+\item{\code{training}}{A bool indicating if the model is in training or validation mode.}
+
+\item{\code{model}}{The model being trained.}
+
+\item{\code{pred}}{Last predicted values.}
+
+\item{\code{opt}}{Current optimizer.}
+
+\item{\code{opt_name}}{Current optimizer name.}
+
+\item{\code{data}}{Current dataloader in use.}
+
+\item{\code{loss}}{Last computed loss values. Detached from the graph.}
+
+\item{\code{loss_grad}}{Last computed loss value, not detached, so you can do additional
+tranformation.}
+
+\item{\code{epoch}}{Current epoch.}
+
+\item{\code{metrics}}{List of metrics that are tracked by the process.}
 }
 \if{html}{\out{</div>}}
 }
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
+\item \href{#method-new}{\code{context$new()}}
 \item \href{#method-log}{\code{context$log()}}
 \item \href{#method-log_metric}{\code{context$log_metric()}}
 \item \href{#method-get_log}{\code{context$get_log()}}
@@ -27,7 +89,34 @@ See also \link{ctx}.
 \item \href{#method-get_formatted_metrics}{\code{context$get_formatted_metrics()}}
 \item \href{#method-get_metrics_df}{\code{context$get_metrics_df()}}
 \item \href{#method-set_verbose}{\code{context$set_verbose()}}
+\item \href{#method-clean}{\code{context$clean()}}
+\item \href{#method-call_callbacks}{\code{context$call_callbacks()}}
+\item \href{#method-state_dict}{\code{context$state_dict()}}
 \item \href{#method-clone}{\code{context$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\if{latex}{\out{\hypertarget{method-new}{}}}
+\subsection{Method \code{new()}}{
+Initializes the context object with minimal necessary information.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{context$new(verbose, accelerator, callbacks, training)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{verbose}}{Whether the context should be in verbose mode or not.}
+
+\item{\code{accelerator}}{A luz \code{\link[=accelerator]{accelerator()}} that configures device placement and
+others.}
+
+\item{\code{callbacks}}{A list of callbacks used by the model. See \code{\link[=luz_callback]{luz_callback()}}.}
+
+\item{\code{training}}{A boolean that indicates if the context is in training mode or not.}
+}
+\if{html}{\out{</div>}}
 }
 }
 \if{html}{\out{<hr>}}
@@ -87,7 +176,7 @@ Metric values are indexed by epoch.
 \if{html}{\out{<a id="method-get_log"></a>}}
 \if{latex}{\out{\hypertarget{method-get_log}{}}}
 \subsection{Method \code{get_log()}}{
-Get an specific value from the log.
+Get a specific value from the log.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{context$get_log(what, set, index = NULL)}\if{html}{\out{</div>}}
 }
@@ -195,6 +284,45 @@ if \code{NULL} we use the result of \code{\link[=interactive]{interactive()}}.}
 }
 \if{html}{\out{</div>}}
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clean"></a>}}
+\if{latex}{\out{\hypertarget{method-clean}{}}}
+\subsection{Method \code{clean()}}{
+Removes unnecessary information from the context object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{context$clean()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-call_callbacks"></a>}}
+\if{latex}{\out{\hypertarget{method-call_callbacks}{}}}
+\subsection{Method \code{call_callbacks()}}{
+Call the selected callbacks. Where \code{name} is the callback types to call, eg
+'on_epoch_begin'.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{context$call_callbacks(name)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{name}}{name of the metric}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-state_dict"></a>}}
+\if{latex}{\out{\hypertarget{method-state_dict}{}}}
+\subsection{Method \code{state_dict()}}{
+Returns a list containing minimal information from the context. Used to
+create the returned values.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{context$state_dict()}\if{html}{\out{</div>}}
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-clone"></a>}}

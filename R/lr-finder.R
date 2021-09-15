@@ -89,7 +89,7 @@ lr_finder <- function(object, data, steps = 100, start_lr = 1e-7, end_lr = 1e-1,
         callbacks = list(scheduler, lr_profiler),
     )
 
-  lr_records <- data.frame(sapply(fitted$ctx$records$lr_finder, as.numeric))
+  lr_records <- data.frame(sapply(fitted$records$lr_finder, as.numeric))
 
   class(lr_records) <- c("lr_records", class(lr_records))
   lr_records
