@@ -95,10 +95,13 @@ luz_callback_early_stopping <- luz_callback(
     ))
   },
   on_epoch_end = function() {
-
     qty <- self$find_quantity()
-    if (is.null(self$current_best))
+
+    if (is.null(self$current_best)) {
       self$current_best <- qty
+      # in the first epoch we should just save the value as the current best.
+      return(invisible(NULL))
+    }
 
     if (self$compare(qty, self$current_best)) {
       # means that new qty is better then previous
@@ -109,7 +112,7 @@ luz_callback_early_stopping <- luz_callback(
       self$patience_counter <- self$patience_counter + 1L
     }
 
-    if (self$patience_counter >= self$patience &
+    if (self$patience_counter >= self$patience &&
         ctx$epoch >= ctx$min_epochs) {
       rlang::signal("Early stopping", class = "early_stopping")
     }
