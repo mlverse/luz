@@ -120,6 +120,16 @@ that is available for callbacks to be called.
 
 The other important part of callbacks is the \code{ctx} (context) object. See
 \code{help("ctx")} for details.
+
+By default, callbacks are called in the same order as they were passed
+to \code{fit} (\code{predict} or \code{evaluate}) but you can provide a \code{weight}
+attribute that will control the order that it will be called. For
+example if a callback has \code{weight = 10} and the other has \code{weigth = 1}
+then the first one is called after the second one. Callbacks that don’t
+specify a \code{weight} attribute are considered \code{weight = 0}. A few
+buillt-in callbacks in luz already provide a weith value, for example
+the \code{?luz_early_stopping_callback}, since in general we want to run it
+as the last thing in the loop.
 }
 \examples{
 print_callback <- luz_callback(
