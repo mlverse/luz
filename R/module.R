@@ -424,11 +424,14 @@ valid_one_batch <- function(ctx) {
 }
 
 initialize_callbacks <- function(callbacks, ctx) {
-  lapply(callbacks, function(cb) {
+  cbs <- lapply(callbacks, function(cb) {
     cb$set_ctx(ctx)
     bind_context(cb, ctx)
     cb
   })
+  # reorder callbacks according to their weights
+  weights <- sapply(cbs, function(x) x$weight %||% 0)
+  cbs[order(weights)]
 }
 
 create_valid_data <- function(data, valid_data) {

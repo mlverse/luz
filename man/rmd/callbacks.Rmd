@@ -73,3 +73,6 @@ Callbacks can be called in many different positions of the training loop, includ
 Every step market with a `on_*` is a point in the training procedure that is available for callbacks to be called.
 
 The other important part of callbacks is the `ctx` (context) object. See `help("ctx")` for details.
+
+By default, callbacks are called in the same order as they were passed to `fit` (`predict` or `evaluate`) but you can provide a `weight` attribute that will control the order that it will be called. For example if a callback has `weight = 10` and the other has `weigth = 1` then the first one is called after the second one.
+Callbacks that don't specify a `weight` attribute are considered `weight = 0`. A few buillt-in callbacks in luz already provide a weith value, for example the `?luz_early_stopping_callback`, since in general we want to run it as the last thing in the loop.

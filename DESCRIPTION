@@ -49,6 +49,7 @@ Collate:
     'utils.R'
     'callbacks.R'
     'callbacks-interrupt.R'
+    'callbacks-monitor-metrics.R'
     'callbacks-profile.R'
     'context.R'
     'lr-finder.R'

@@ -1,5 +1,6 @@
 ```{r include=FALSE}
 library(luz)
+torch::torch_manual_seed(1)
 get_model <- function() {
   torch::nn_module(
     initialize = function(input_size, output_size) {
