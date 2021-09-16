@@ -68,6 +68,7 @@
 <li>You can now supply <code>dataloader_options</code> to <code>fit</code> to pass additional information to <code><a href="../reference/as_dataloader.html">as_dataloader()</a></code>. (<a href="https://github.com/mlverse/luz/issues/71">#71</a>)</li>
 <li>Refactored the <code>ctx</code> object to make it safer and avoid returing it in the output. (<a href="https://github.com/mlverse/luz/issues/73">#73</a>)</li>
 <li>Implemented the <code>evaluate</code> function allowing users to get metrics from a model in a new datase. (<a href="https://github.com/mlverse/luz/issues/73">#73</a>)</li>
+<li>Fixed bugs in early stopping callback related to them not working properly when <code>patience = 1</code> and when they are specified before other logging callbacks. (<a href="https://github.com/mlverse/luz/issues/76">#76</a>)</li>
 </ul></div>
     <div id="luz-010" class="section level2">
 <h2 class="pb-2 mt-4 mb-2 border-bottom pkg-version" data-toc-text="0.1.0">

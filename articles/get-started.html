@@ -237,10 +237,10 @@
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">evaluation</span><span class="op">)</span></code></pre></div>
 <pre><code>#&gt; A `luz_module_evaluation`
 #&gt; ── Results ─────────────────────────────────────────────────────────────────────
-#&gt; loss: 1.5967
-#&gt; mae: 0.908
-#&gt; mse: 1.147
-#&gt; rmse: 1.071</code></pre>
+#&gt; loss: 1.8892
+#&gt; mae: 1.0522
+#&gt; mse: 1.645
+#&gt; rmse: 1.2826</code></pre>
 </div>
 <div id="customizing-with-callbacks" class="section level2">
 <h2 class="hasAnchor">
@@ -315,6 +315,7 @@
 End Fit</code></pre>
 <p>Every step market with a <code>on_*</code> is a point in the training procedure that is available for callbacks to be called.</p>
 <p>The other important part of callbacks is the <code>ctx</code> (context) object. See <code><a href="../reference/ctx.html">help("ctx")</a></code> for details.</p>
+<p>By default, callbacks are called in the same order as they were passed to <code>fit</code> (<code>predict</code> or <code>evaluate</code>) but you can provide a <code>weight</code> attribute that will control the order that it will be called. For example if a callback has <code>weight = 10</code> and the other has <code>weigth = 1</code> then the first one is called after the second one. Callbacks that don’t specify a <code>weight</code> attribute are considered <code>weight = 0</code>. A few buillt-in callbacks in luz already provide a weith value, for example the <code>?luz_early_stopping_callback</code>, since in general we want to run it as the last thing in the loop.</p>
 <p>The <code>ctx</code> object is used in luz to share information between the training loop and callbacks, model methods and metrics. The table below describes information available in the <code>ctx</code> by default. Other callbacks could potentially modify these attributes or add new ones.</p>
 <table class="table">
 <caption>Context attributes</caption>
