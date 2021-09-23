@@ -200,10 +200,10 @@ fit.luz_module_generator <- function(
   # see https://github.com/mlverse/luz/issues/74
   # Until its fixed we clean up its environment so we don't keep
   # large objects here more than necessary.
-  on.exit(add = TRUE, {
+  on.exit({
     e <- rlang::current_env()
     rm(list = rlang::env_names(e), envir = e)
-  })
+  }, add = TRUE)
 
   ctx$call_callbacks("on_fit_begin")
   rlang::with_handlers(
@@ -278,10 +278,10 @@ evaluate <- function(
     opt_hparams = object$ctx$opt_hparams
   )
 
-  on.exit(add = TRUE, {
+  on.exit({
     e <- rlang::current_env()
     rm(list = rlang::env_names(e), envir = e)
-  })
+  }, add = TRUE)
 
   valid_loop(ctx, get_step(ctx))
 
@@ -325,10 +325,10 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
 
   predict_fn <- if (is.null(ctx$model$predict)) ctx$model else ctx$model$predict
 
-  on.exit(add = TRUE, {
+  on.exit({
     e <- rlang::current_env()
     rm(list = rlang::env_names(e), envir = e)
-  })
+  }, add = TRUE)
 
   torch::with_no_grad({
     ctx$call_callbacks("on_predict_begin")
