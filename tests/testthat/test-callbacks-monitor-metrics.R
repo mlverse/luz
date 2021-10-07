@@ -6,7 +6,7 @@ test_that("early stopping with patience = 1", {
 
     suppressMessages({
       expect_message({
-        model %>%
+        mod <- model %>%
           setup(
             loss = torch::nn_mse_loss(),
             optimizer = torch::optim_adam,
@@ -15,6 +15,7 @@ test_that("early stopping with patience = 1", {
           fit(dl, verbose = TRUE, epochs = epochs, callbacks = list(cb))
       })
     })
+    mod
   }
 
   # since min_delta = 100 (large number) we expect that we will only train for
