@@ -17,7 +17,7 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
-    torch (>= 0.4.0),
+    torch (>= 0.6.0),
     magrittr,
     zeallot,
     rlang,
