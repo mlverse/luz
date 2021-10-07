@@ -1,4 +1,4 @@
-```{r include=FALSE}
+```{r include=FALSE, eval = torch::torch_is_installed()}
 library(luz)
 torch::torch_manual_seed(1)
 get_model <- function() {
@@ -57,7 +57,8 @@ metrics <- get_metrics(evaluation)
 print(evaluation)
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, eval=torch::torch_is_installed()}
+options(cli.unicode = FALSE)
 metrics <- get_metrics(evaluation)
 print(evaluation)
 ```
