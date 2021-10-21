@@ -41,6 +41,8 @@ Suggests:
     vdiffr,
     ggplot2,
     dplyr
+Remotes:
+  mlverse/torch/bugfix/view
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
