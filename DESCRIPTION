@@ -15,7 +15,7 @@ License: MIT + file LICENSE
 URL: https://mlverse.github.io/luz/, https://github.com/mlverse/luz
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Imports: 
     torch (>= 0.5.0),
     magrittr,
@@ -52,6 +52,7 @@ Collate:
     'callbacks-monitor-metrics.R'
     'callbacks-profile.R'
     'context.R'
+    'losses.R'
     'lr-finder.R'
     'metrics.R'
     'metrics-auc.R'
