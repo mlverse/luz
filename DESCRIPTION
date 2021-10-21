@@ -42,7 +42,7 @@ Suggests:
     ggplot2,
     dplyr
 Remotes:
-  mlverse/torch/bugfix/view
+  mlverse/torch/tree/bugfix/view
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
