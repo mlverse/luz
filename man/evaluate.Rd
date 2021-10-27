@@ -48,7 +48,7 @@ Evaluates a fitted model on a dataset
 }
 \details{
 Once a model has been trained you might want to evaluate its performance
-in a different dataset. For that reason, luz provides the \code{?evaluate}
+on a different dataset. For that reason, luz provides the \code{?evaluate}
 function that takes a fitted model and a dataset and computes the
 metrics attached to the model.
 
@@ -56,15 +56,15 @@ Evaluate returns a \code{luz_module_evaluation} object that you can query for
 metrics using the \code{get_metrics} function or simply \code{print} to see the
 results.
 
-For example:\if{html}{\out{<div class="r">}}\preformatted{evaluation <- fitted \%>\% evaluate(data = valid_dl)
+For example:\if{html}{\out{<div class="sourceCode r">}}\preformatted{evaluation <- fitted \%>\% evaluate(data = valid_dl)
 metrics <- get_metrics(evaluation)
 print(evaluation)
 }\if{html}{\out{</div>}}\preformatted{## A `luz_module_evaluation`
-## -- Results -----------------------------------------------------------------------------------------------------------------
-## loss: 1.5146
-## mae: 1.0251
-## mse: 1.5159
-## rmse: 1.2312
+## -- Results ---------------------------------------------------------------------
+## loss: 1.8892
+## mae: 1.0522
+## mse: 1.645
+## rmse: 1.2826
 }
 }
 \seealso{

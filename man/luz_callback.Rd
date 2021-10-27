@@ -40,7 +40,7 @@ Create a new callback
 \details{
 Let’s implement a callback that prints ‘Iteration \code{n}’ (where \code{n} is the
 iteration number) for every batch in the training set and ‘Done’ when an
-epoch is finished. For that task we use the \code{luz_callback} function:\if{html}{\out{<div class="r">}}\preformatted{print_callback <- luz_callback(
+epoch is finished. For that task we use the \code{luz_callback} function:\if{html}{\out{<div class="sourceCode r">}}\preformatted{print_callback <- luz_callback(
   name = "print_callback",
   initialize = function(message) \{
     self$message <- message
@@ -57,19 +57,19 @@ epoch is finished. For that task we use the \code{luz_callback} function:\if{htm
 \code{luz_callback()} takes a named list of function as argument where the
 name indicate the moment at which the callback should be called. For
 instance \code{on_train_batch_end()} is called for every batch at the end of
-the training procedure and \code{on_epoch()} end is called at the end of
+the training procedure and \code{on_epoch_end()} is called at the end of
 every epoch.
 
 The returned value of \code{luz_callback()} is a function that initializes an
 instance of the callback. Callbacks can have initialization parameters,
-like the name of a file you want to log the results, in this case, you
-can pass an \code{initialize} method when creating the callback definition
-and save these parameters to the \code{self} object. In the above example,
-the callback has a \code{message} parameter that is printed at the end of
-each epoch.
+like the name of a file where you want to log the results. In that case,
+you can pass an \code{initialize} method when creating the callback
+definition, and save these parameters to the \code{self} object. In the above
+example, the callback has a \code{message} parameter that is printed at the
+end of each epoch.
 
 Once a callback is defined it can be passed to the \code{fit} function via
-the \code{callbacks} parameter, eg:\if{html}{\out{<div class="r">}}\preformatted{fitted <- net \%>\%
+the \code{callbacks} parameter, eg:\if{html}{\out{<div class="sourceCode r">}}\preformatted{fitted <- net \%>\%
   setup(...) \%>\%
   fit(..., callbacks = list(
     print_callback(message = "Done!")
@@ -77,7 +77,7 @@ the \code{callbacks} parameter, eg:\if{html}{\out{<div class="r">}}\preformatted
 }\if{html}{\out{</div>}}
 
 Callbacks can be called in many different positions of the training
-loop, including a combinations of them. Here’s an overview of possible
+loop, including combinations of them. Here’s an overview of possible
 callback \emph{breakpoints}:\preformatted{Start Fit
    - on_fit_begin
   Start Epoch Loop
@@ -115,21 +115,21 @@ callback \emph{breakpoints}:\preformatted{Start Fit
 End Fit
 }
 
-Every step market with a \verb{on_*} is a point in the training procedure
-that is available for callbacks to be called.
+Every step market with \verb{on_*} is a point in the training procedure that
+is available for callbacks to be called.
 
 The other important part of callbacks is the \code{ctx} (context) object. See
 \code{help("ctx")} for details.
 
 By default, callbacks are called in the same order as they were passed
-to \code{fit} (\code{predict} or \code{evaluate}) but you can provide a \code{weight}
+to \code{fit} (\code{predict} or \code{evaluate}), but you can provide a \code{weight}
 attribute that will control the order that it will be called. For
-example if a callback has \code{weight = 10} and the other has \code{weigth = 1}
+example, if one callback has \code{weight = 10} and another has \code{weight = 1},
 then the first one is called after the second one. Callbacks that don’t
-specify a \code{weight} attribute are considered \code{weight = 0}. A few
-buillt-in callbacks in luz already provide a weith value, for example
-the \code{?luz_early_stopping_callback}, since in general we want to run it
-as the last thing in the loop.
+specify a \code{weight} attribute are considered \code{weight = 0}. A few built-in
+callbacks in luz already provide a weight value, for example the
+\code{?luz_callback_early_stopping}, since in general we want to run it as
+the last thing in the loop.
 }
 \examples{
 print_callback <- luz_callback(
