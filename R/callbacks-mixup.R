@@ -33,6 +33,7 @@ luz_callback_mixup <- luz_callback(
 
     batch_len <- ctx$batch$y$size(1)
     xdim <- length(ctx$batch$x$size())
+    xrep <- rep(1, xdim -1)
     device <- ctx$batch$y$device
 
     # draw mixing weights from a beta distribution with identical parameters
@@ -47,7 +48,7 @@ luz_callback_mixup <- luz_callback(
     x1 <- ctx$batch$x
     x2 <- ctx$batch$x[shuffle, ]
     # ... and replace the current batch input by this
-    ctx$batch$x <- torch::torch_lerp(x1, x2, weight$unsqueeze(xdim))
+    ctx$batch$x <- torch::torch_lerp(x1, x2, weight$view(list(batch_len, xrep) %>% unlist()))
 
     # replace current batch target with a list of:
     # 1) both targets stacked into a single tensor and
