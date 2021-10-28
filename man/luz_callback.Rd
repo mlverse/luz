@@ -40,7 +40,7 @@ Create a new callback
 \details{
 Let’s implement a callback that prints ‘Iteration \code{n}’ (where \code{n} is the
 iteration number) for every batch in the training set and ‘Done’ when an
-epoch is finished. For that task we use the \code{luz_callback} function:\if{html}{\out{<div class="r">}}\preformatted{print_callback <- luz_callback(
+epoch is finished. For that task we use the \code{luz_callback} function:\if{html}{\out{<div class="sourceCode r">}}\preformatted{print_callback <- luz_callback(
   name = "print_callback",
   initialize = function(message) \{
     self$message <- message
@@ -69,7 +69,7 @@ the callback has a \code{message} parameter that is printed at the end of
 each epoch.
 
 Once a callback is defined it can be passed to the \code{fit} function via
-the \code{callbacks} parameter, eg:\if{html}{\out{<div class="r">}}\preformatted{fitted <- net \%>\%
+the \code{callbacks} parameter, eg:\if{html}{\out{<div class="sourceCode r">}}\preformatted{fitted <- net \%>\%
   setup(...) \%>\%
   fit(..., callbacks = list(
     print_callback(message = "Done!")
@@ -149,6 +149,7 @@ Other luz_callbacks:
 \code{\link{luz_callback_interrupt}()},
 \code{\link{luz_callback_lr_scheduler}()},
 \code{\link{luz_callback_metrics}()},
+\code{\link{luz_callback_mixup}()},
 \code{\link{luz_callback_model_checkpoint}()},
 \code{\link{luz_callback_profile}()},
 \code{\link{luz_callback_progress}()},
