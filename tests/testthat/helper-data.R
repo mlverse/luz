@@ -33,12 +33,27 @@ get_binary_ds <- torch::dataset(
   }
 )
 
+get_categorical_ds <- torch::dataset(
+  inherit = get_ds,
+  initialize = function(num_classes = 10,...) {
+    super$initialize(...)
+    self$y <- torch::torch_randint(low = 1,high = num_classes + 1, size = self$y$shape,
+                                   dtype = torch::torch_long()) %>%
+      torch::torch_squeeze()
+
+  }
+)
+
 get_dl <- function(batch_size = 10, ...) {
   torch::dataloader(get_ds(...), batch_size = batch_size)
 }
 
 get_binary_dl <- function(batch_size = 10,...) {
   torch::dataloader(get_binary_ds(...), batch_size = batch_size)
+}
+
+get_categorical_dl<- function(batch_size = 10,...) {
+  torch::dataloader(get_categorical_ds(...), batch_size = batch_size)
 }
 
 get_test_dl <- function(batch_size = 10, ...) {
