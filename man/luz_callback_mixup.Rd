@@ -6,6 +6,9 @@
 \usage{
 luz_callback_mixup(alpha = 0.4)
 }
+\arguments{
+\item{alpha}{parameter for the beta distribution used to sample mixing coefficients}
+}
 \value{
 A \code{luz_callback}
 }

@@ -15,6 +15,8 @@
 #' - We draw different mixing coefficients for every pair.
 #' - We replace `weight` with `weight = max(weight, 1-weight)` to avoid duplicates.
 #'
+#' @param alpha parameter for the beta distribution used to sample mixing coefficients
+#'
 #' @examples
 #' mixup_callback <- luz_callback_mixup()
 #'
