@@ -1,8 +1,9 @@
 #' Mixup callback
 #'
-#' Implementation of https://arxiv.org/abs/1710.09412, restricted to categorical data.
-#' The targets are supposed to be integers, not one-hot encoded vectors.
-#' This callback is supposed to be used with `luz_mixup_cross_entropy` loss.
+#' Implementation of https://arxiv.org/abs/1710.09412.
+#' As of today, tested only for categorical data,
+#' where targets are expected to be integers, not one-hot encoded vectors.
+#' This callback is supposed to be used together with `nn_mixup_loss`.
 #'
 #' @details
 #' Overall, we follow the fastai implementation
@@ -57,7 +58,7 @@ luz_callback_mixup <- luz_callback(
     # 2) a tensor holding the mixing weights
     y1 <- ctx$batch$y
     y2 <- self$ctx$batch$y[shuffle]
-    ctx$batch$y <- list(torch::torch_stack(list(y1, y2), 2), weight)
+    ctx$batch$y <- list(list(y1, y2), weight)
   }
 )
 

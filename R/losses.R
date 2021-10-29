@@ -1,24 +1,40 @@
 #' Loss to be used with `callbacks_mixup()`.
 #'
-#' In training phase, computes individual cross entropy losses with regard to two targets, weights them item-wise,
+#' In the training phase, computes individual losses with regard to two targets, weights them item-wise,
 #' and averages the linear combinations to yield the mean batch loss.
-#' For validation end testing, defers to the usual cross entropy loss.
+#' For validation and testing, defers to the passed-in loss.
 #'
-#' @inheritParams torch::nnf_cross_entropy
+#' @param loss the underlying loss module to call
 #' @export
-luz_mixup_cross_entropy <- function(input, target, weight=NULL, ignore_index=-100, reduction=c("mean", "sum", "none")) {
+nn_mixup_loss <- torch::nn_module(
 
-  if (is.list(target) && dim(target[[1]])[2] == 2) {
-    l1 <- torch::nnf_cross_entropy(input, target[[1]][ , 1], weight, ignore_index, reduction = "none")
-    l2 <- torch::nnf_cross_entropy(input, target[[1]][ , 2], weight, ignore_index, reduction = "none")
-    weight <- target[[2]]
+  initialize = function(loss) {
+    self$loss <- loss
+  },
 
-    loss <- torch::torch_lerp(l1, l2, weight)
-    torch::torch_mean(loss)
+  forward = function(input, target) {
 
-  } else {
-    torch::nnf_cross_entropy(input, target, weight, ignore_index, reduction)
+    if (is.list(target)) {
+
+      self$loss$reduction <- "none"
+
+      targets <- target[[1]]
+      weight <- target[[2]]
+
+      l1 <- self$loss(input, targets[[1]])
+      l2 <- self$loss(input, targets[[2]])
+      loss <- torch::torch_lerp(l1, l2, weight)
+
+      self$loss$reduction <- "mean"
+
+      torch::torch_mean(loss)
+
+    } else {
+
+      self$loss(input, target)
+
+    }
   }
+)
 
 
-}

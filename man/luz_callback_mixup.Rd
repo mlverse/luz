@@ -13,9 +13,10 @@ luz_callback_mixup(alpha = 0.4)
 A \code{luz_callback}
 }
 \description{
-Implementation of https://arxiv.org/abs/1710.09412, restricted to categorical data.
-The targets are supposed to be integers, not one-hot encoded vectors.
-This callback is supposed to be used with \code{luz_mixup_cross_entropy} loss.
+Implementation of https://arxiv.org/abs/1710.09412.
+As of today, tested only for categorical data,
+where targets are expected to be integers, not one-hot encoded vectors.
+This callback is supposed to be used together with \code{nn_mixup_loss}.
 }
 \details{
 Overall, we follow the fastai implementation
