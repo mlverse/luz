@@ -13,10 +13,10 @@ luz_callback_mixup(alpha = 0.4)
 A \code{luz_callback}
 }
 \description{
-Implementation of https://arxiv.org/abs/1710.09412.
+Implementation of \href{https://arxiv.org/abs/1710.09412}{'mixup: Beyond Empirical Risk Minimization'}.
 As of today, tested only for categorical data,
 where targets are expected to be integers, not one-hot encoded vectors.
-This callback is supposed to be used together with \code{nn_mixup_loss}.
+This callback is supposed to be used together with \code{\link[=nn_mixup_loss]{nn_mixup_loss()}}.
 }
 \details{
 Overall, we follow the fastai implementation
@@ -36,6 +36,8 @@ mixup_callback <- luz_callback_mixup()
 
 }
 \seealso{
+\code{\link[=nn_mixup_loss]{nn_mixup_loss()}}
+
 Other luz_callbacks: 
 \code{\link{luz_callback_csv_logger}()},
 \code{\link{luz_callback_early_stopping}()},

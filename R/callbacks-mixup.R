@@ -1,9 +1,9 @@
 #' Mixup callback
 #'
-#' Implementation of https://arxiv.org/abs/1710.09412.
+#' Implementation of ['mixup: Beyond Empirical Risk Minimization'](https://arxiv.org/abs/1710.09412).
 #' As of today, tested only for categorical data,
 #' where targets are expected to be integers, not one-hot encoded vectors.
-#' This callback is supposed to be used together with `nn_mixup_loss`.
+#' This callback is supposed to be used together with [nn_mixup_loss()].
 #'
 #' @details
 #' Overall, we follow the fastai implementation
@@ -23,6 +23,8 @@
 #'
 #' @returns
 #' A `luz_callback`
+#'
+#' @seealso [nn_mixup_loss()]
 #'
 #' @family luz_callbacks
 #' @export

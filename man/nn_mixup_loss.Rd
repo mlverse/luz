@@ -20,3 +20,6 @@ For validation and testing, defers to the passed-in loss.
 \details{
 It should be used together with \code{\link[=luz_callback_mixup]{luz_callback_mixup()}}.
 }
+\seealso{
+\code{\link[=luz_callback_mixup]{luz_callback_mixup()}}
+}

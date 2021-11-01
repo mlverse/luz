@@ -11,6 +11,8 @@
 #'   `'none'` so we get the loss for individual observations. See for for example
 #'   documentation for the `reduction` argument in [torch::nn_cross_entropy_loss()].
 #'
+#' @seealso [luz_callback_mixup()]
+#'
 #' @export
 nn_mixup_loss <- torch::nn_module(
 
