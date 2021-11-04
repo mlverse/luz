@@ -24,7 +24,7 @@
 #' @returns
 #' A `luz_callback`
 #'
-#' @seealso [nn_mixup_loss()]
+#' @seealso [nn_mixup_loss()], [nnf_mixup()]
 #'
 #' @family luz_callbacks
 #' @export
@@ -54,7 +54,7 @@ luz_callback_mixup <- luz_callback(
     #     - (a) both targets stacked into a single tensor and
     #     - (b) a tensor holding the mixing weights,
     # (3) and replace the current batch with this
-    c(mixed_x, stacked_y_with_weights) %<-% mixup(
+    c(mixed_x, stacked_y_with_weights) %<-% nnf_mixup(
       ctx$batch$x,
       ctx$batch$y,
       shuffle,
@@ -65,8 +65,35 @@ luz_callback_mixup <- luz_callback(
   }
 )
 
+#' Mixup logic
+#'
+#' Logic underlying [luz_callback_mixup()].
+#'
+#' @param x an input batch
+#' @param y a target batch
+#' @param shuffle indices to be used to draw items to complement the "real batch"
+#' @param weight weighting coefficient to be used by `torch_lerp()`
+#'
+#' @examples
+#' batch_x <- torch::torch_randn(c(10, 768))
+#' batch_y <- torch::torch_randn(10)
+#' shuffle <- torch::torch_tensor(10:1)
+#' weight <- torch::torch_tensor(rep(0.9, 10))$view(c(10, 1))
+#' nnf_mixup(batch_x, batch_y, shuffle, weight)
+#'
+#' @returns
+#' A `list` of:
+#' - the new input batch, consisting of mixed `xs`
+#' - a `list` of:
+#'   - a `list` of:
+#'     - the original target `y1`
+#'     - the mixed-in target `y2`
+#'   - the mixing weights
+#'
+#' @seealso [luz_callback_mixup()]
+#'
 #' @export
-mixup <- function(x, y, shuffle, weight) {
+nnf_mixup <- function(x, y, shuffle, weight) {
 
   x1 <- x
   x2 <- x[shuffle, ]

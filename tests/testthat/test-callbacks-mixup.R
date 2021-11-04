@@ -3,7 +3,7 @@ test_that("mixup logic works", {
   dl <- get_categorical_dl(x_size = 768)
   first <- coro::collect(dl, 1)[[1]]
 
-  c(mixed_x, stacked_y_with_weights) %<-% mixup(
+  c(mixed_x, stacked_y_with_weights) %<-% nnf_mixup(
     first$x,
     first$y,
     torch::torch_tensor(1:10),

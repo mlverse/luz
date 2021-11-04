@@ -36,7 +36,7 @@ mixup_callback <- luz_callback_mixup()
 
 }
 \seealso{
-\code{\link[=nn_mixup_loss]{nn_mixup_loss()}}
+\code{\link[=nn_mixup_loss]{nn_mixup_loss()}}, \code{\link[=nnf_mixup]{nnf_mixup()}}
 
 Other luz_callbacks: 
 \code{\link{luz_callback_csv_logger}()},
