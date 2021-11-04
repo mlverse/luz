@@ -12,7 +12,7 @@ test_that("mixup logic works", {
   expect_equal_to_tensor(mixed_x[1, ] %>% torch::torch_mean(), first$x[1, ] %>% torch::torch_mean())
   expect_equal_to_tensor(stacked_y_with_weights[[1]][[1]], stacked_y_with_weights[[1]][[2]])
 
-  c(mixed_x, stacked_y_with_weights) %<-% mixup(
+  c(mixed_x, stacked_y_with_weights) %<-% nnf_mixup(
     first$x,
     first$y,
     torch::torch_tensor(10:1),
