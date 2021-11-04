@@ -10,13 +10,13 @@ test_that("nn_mixup_loss works when used with cross entropy", {
   mixup_loss <- nn_mixup_loss(torch::nn_cross_entropy_loss(ignore_index = 222))
   t1_loss <- torch::nnf_cross_entropy(input, target1, reduction = "none")
   t2_loss <- torch::nnf_cross_entropy(input, target2, reduction = "none")
-  expect_equal(as.numeric(mixup_loss(input, target)), as.numeric(torch::torch_mean(t1_loss + 0.9 * (t2_loss - t1_loss))), tolerance = 1e-4)
+  expect_equal_to_tensor(mixup_loss(input, target), torch::torch_mean(t1_loss + 0.9 * (t2_loss - t1_loss)))
 
   # 2: mixing weight of 1 yields same loss as using target2 only
   weight <- torch::torch_empty_like(target1, dtype = torch::torch_float())$fill_(1)
   target <- list(list(target1, target2), weight)
   mixup_loss <- nn_mixup_loss(torch::nn_cross_entropy_loss())
   t2_loss <- torch::nnf_cross_entropy(input, target2)
-  expect_equal(as.numeric(mixup_loss(input, target)), as.numeric(t2_loss), tolerance = 1e-6)
+  expect_equal_to_tensor(mixup_loss(input, target), t2_loss)
 
 })

@@ -1,4 +1,29 @@
-test_that("mixup works for 1d input", {
+test_that("mixup logic works", {
+
+  dl <- get_categorical_dl(x_size = 768)
+  first <- coro::collect(dl, 1)[[1]]
+
+  c(mixed_x, stacked_y_with_weights) %<-% mixup(
+    first$x,
+    first$y,
+    torch::torch_tensor(1:10),
+    torch::torch_tensor(rep(0.9, 10))$view(c(10, 1)))
+
+  expect_equal_to_tensor(mixed_x[1, ] %>% torch::torch_mean(), first$x[1, ] %>% torch::torch_mean())
+  expect_equal_to_tensor(stacked_y_with_weights[[1]][[1]], stacked_y_with_weights[[1]][[2]])
+
+  c(mixed_x, stacked_y_with_weights) %<-% mixup(
+    first$x,
+    first$y,
+    torch::torch_tensor(10:1),
+    torch::torch_tensor(rep(0.9, 10))$view(c(10, 1)))
+
+  expect_not_equal_to_tensor(mixed_x[1, ] %>% torch::torch_mean(), first$x[1, ] %>% torch::torch_mean())
+  expect_not_equal_to_tensor(stacked_y_with_weights[[1]][[1]], stacked_y_with_weights[[1]][[2]])
+
+})
+
+test_that("mixup callback successful for 1d input", {
 
   dl <- get_categorical_dl(x_size = 768)
 

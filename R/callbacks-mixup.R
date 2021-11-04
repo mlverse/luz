@@ -49,20 +49,36 @@ luz_callback_mixup <- luz_callback(
     # determine which observations to mix
     shuffle <- torch::torch_randperm(batch_len, dtype = torch::torch_long(), device = device) + 1L
 
-    # linearly combine the inputs according to the mixing weights ...
-    x1 <- ctx$batch$x
-    x2 <- ctx$batch$x[shuffle, ]
-    # ... and replace the current batch input by this
-    ctx$batch$x <- torch::torch_lerp(x1, x2, weight$view(list(batch_len, xrep) %>% unlist()))
+    # (1) linearly combine the inputs according to the mixing weights,
+    # (2) as new target, create a list of:
+    #     - (a) both targets stacked into a single tensor and
+    #     - (b) a tensor holding the mixing weights,
+    # (3) and replace the current batch with this
+    c(mixed_x, stacked_y_with_weights) %<-% mixup(
+      ctx$batch$x,
+      ctx$batch$y,
+      shuffle,
+      weight$view(list(batch_len, xrep) %>% unlist()))
 
-    # replace current batch target with a list of:
-    # 1) both targets stacked into a single tensor and
-    # 2) a tensor holding the mixing weights
-    y1 <- ctx$batch$y
-    y2 <- self$ctx$batch$y[shuffle]
-    ctx$batch$y <- list(list(y1, y2), weight)
+    ctx$batch$x <- mixed_x
+    ctx$batch$y <- stacked_y_with_weights
   }
 )
+
+#' @export
+mixup <- function(x, y, shuffle, weight) {
+
+  x1 <- x
+  x2 <- x[shuffle, ]
+  mixed_x <- torch::torch_lerp(x1, x2, weight)
+
+  y1 <- y
+  y2 <- y[shuffle]
+  stacked_y_with_weights <- list(list(y1, y2), weight)
+
+  list(mixed_x, stacked_y_with_weights)
+
+}
 
 
 
