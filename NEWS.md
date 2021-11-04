@@ -1,5 +1,7 @@
 # luz (development version)
 
+* Many wording improvements in the getting started guides (#81, @jonthegeek).
+
 # luz 0.2.0
 
 ## New features

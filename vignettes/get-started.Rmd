@@ -19,21 +19,21 @@ library(luz)
 library(torch)
 ```
 
-Luz is a high-level API for Torch that aims to encapsulate the **training loop** into a set of reusable pieces of code. Luz reduces the boilerplate code required to train a model with Torch and avoids the error prone `zero_grad()` - `backward()` - `step()` sequence of calls and moving data and models between CPU's and GPU's. Luz is designed to be highly flexible by providing a layered API that allows it to be useful no matter the level of control your need for your training loop.
+Luz is a high-level API for Torch that aims to encapsulate the **training loop** into a set of reusable pieces of code. Luz reduces the boilerplate code required to train a model with Torch and avoids the error prone `zero_grad()` - `backward()` - `step()` sequence of calls, and also simplifies the process of moving data and models between CPUs and GPUs. Luz is designed to be highly flexible by providing a layered API that allows it to be useful no matter the level of control you need for your training loop.
 
 Luz is heavily inspired by other higher level frameworks for deep learning, to cite a few:
 
--   [FastAI](https://docs.fast.ai/): we are heavily inspired in the FastAI library, specially the `Learner` object and the callbacks API.
+-   [FastAI](https://docs.fast.ai/): We are heavily inspired in the FastAI library, specially the `Learner` object and the callbacks API.
 
--   [Keras](https://keras.io/): We are also heavily inspired by Keras, specially callback names, the lightning module interface is similar to `compile` too.
+-   [Keras](https://keras.io/): We are also heavily inspired by Keras, especially callback names. The lightning module interface is similar to `compile` as well.
 
--   [PyTorch Lightning](https://www.pytorchlightning.ai/): The idea of the `luz_module` being a subclass of `nn_module` is inspired in the `LightningModule` object in lightning.
+-   [PyTorch Lightning](https://www.pytorchlightning.ai/): The idea of the `luz_module` being a subclass of `nn_module` is inspired by the `LightningModule` object in lightning.
 
--   [HuggingFace Accelerate](https://huggingface.co/docs/accelerate/): The internal device placement API is heavily inspired in Accelerate, but much more modest in features. Currenly only CPU and Single GPU are supported.
+-   [HuggingFace Accelerate](https://huggingface.co/docs/accelerate/): The internal device placement API is heavily inspired by Accelerate, but much more modest in features. Currently only CPU and single GPU are supported.
 
 ## Training a `nn_module`
 
-Luz tries to reuse as much as possible the existing structures in Torch. For example, a model in Luz is the defined identically as you would define if using raw Torch. For example, this is the definition of a feedforward CNN that can be used to classify digits from the MNIST dataset.
+As much as possible, Luz tries to reuse the existing structures from Torch. For example, a model in Luz is defined identically as you would define it if using raw Torch. For a specific example, this is the definition of a feedforward CNN that can be used to classify digits from the MNIST dataset:
 
 ```{r, eval = FALSE}
 net <- nn_module(
@@ -74,21 +74,20 @@ fitted <- net %>%
       luz_metric_accuracy
     )
   ) %>%
-  set_hprams(num_class = 10) %>% 
+  set_hparams(num_class = 10) %>% 
   set_opt_hparams(lr = 0.003) %>% 
   fit(train_dl, epochs = 10, valid_data = test_dl)
 ```
 
 Let's understand what happens in this chunk of code:
 
-1.  The `setup` function allows you to configure the loss (objective) function and the optimizer that you will use to train your model. Optionally you can pass a list of metrics that are tracked during the training procedure. **Note:** the loss function can be any function taking `input` and `target` tensors and returning a scalar tensor value and the optimizer can be any core Torch optimizer or custom ones created with the `torch::optimizer()` function.
+1.  The `setup` function allows you to configure the loss (objective) function and the optimizer that you will use to train your model. Optionally you can pass a list of metrics that are tracked during the training procedure. **Note:** the loss function can be any function taking `input` and `target` tensors and returning a scalar tensor value, and the optimizer can be any core Torch optimizer or custom ones created with the `torch::optimizer()` function.
 2.  The `set_hparams()` function allows you to set hyper-parameters that should be passed to the module `initialize()` method. For example in this case we pass `num_classes = 10`.
-3. The `set_opt_hparams()` function allows you to pass hyper-parameters that are used by the optimizer function.
-For example, `optim_adam()` can take the `lr` parameter specifying the learning rate and we specify it with `lr = 0.003`.
+3. The `set_opt_hparams()` function allows you to pass hyper-parameters that are used by the optimizer function. For example, `optim_adam()` can take the `lr` parameter specifying the learning rate and we specify it with `lr = 0.003`.
 4.  The `fit` method will take the model specification provided by `setup()` and run the training procedure using the specified training and validation `torch::dataloaders()` as well as the number of epochs. **Note:** we again reuse core Torch data structures, instead of providing our own data loading functionality.
-5.  The returned object `fitted` contains the trained model as well as the record of metrics and losses produced during training. It can also be used for producing predictions and for evaluating the trained model in other datasets.
+5.  The returned object `fitted` contains the trained model as well as the record of metrics and losses produced during training. It can also be used for producing predictions and for evaluating the trained model on other datasets.
 
-When fitting, Luz will use the fastest possible accelerator, ie. if a CUDA capable GPU is available it will be used otherwise we fallback to the CPU. It also automatically moves data, optimizers and models to the selected device so you don't need to handle it manually - which is in general very error prone.
+When fitting, Luz will use the fastest possible accelerator; if a CUDA-capable GPU is available it will be used, otherwise we fall back to the CPU. It also automatically moves data, optimizers, and models to the selected device so you don't need to handle it manually (which is in general very error prone).
 
 To create predictions from the trained model you can use the `predict` method:
 
@@ -109,14 +108,14 @@ for (epoch in 1:epochs) {
   # -> Training procedure
   for (batch in train_dl) {
     # -> Calculate model `forward` method.
-    # -> Calulate the loss
+    # -> Calculate the loss
     # -> Update weights
     # -> Update metrics and tracking loss
   }
   # -> Validation procedure
   for (batch in valid_dl) {
     # -> Calculate model `forward` method.
-    # -> Calulate the loss
+    # -> Calculate the loss
     # -> Update metrics and tracking loss
   }
 }
@@ -152,13 +151,13 @@ Luz provides implementations of a few of the most used metrics. If a metric is n
 
 ## Customizing with callbacks
 
-Luz provides different ways to customize the training progress depending on the level of control you need in the training loop. The fastest way and the more 'reusable', in the sense that you can create training modification that can be used in many different situations is via **callbacks**.
+Luz provides different ways to customize the training progress depending on the level of control you need in the training loop. The fastest way and the more 'reusable', in the sense that you can create training modification that can be used in many different situations, is via **callbacks**.
 
 The training loop in Luz has many *breakpoints* that can call arbitrary R functions. This functionality allows you to customize the training process without having to modify the general training logic.
 
 Luz implements 3 default callbacks that occur in every training procedure:
 
--   **train-eval callback**: Set's the model in `train()` and `eval()` depending on if the procedure is doing training or validation.
+-   **train-eval callback**: Sets the model to `train()` or `eval()` depending on if the procedure is doing training or validation.
 
 -   **metrics callback**: evaluate metrics during training and validation process.
 
