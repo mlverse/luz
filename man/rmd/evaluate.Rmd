@@ -42,7 +42,7 @@ fitted <- model %>% fit(
 evaluation <- fitted %>% evaluate(data = x)
 ```
 
-Once a model has been trained you might want to evaluate its performance in a 
+Once a model has been trained you might want to evaluate its performance on a 
 different dataset. For that reason, luz provides the `?evaluate` function that
 takes a fitted model and a dataset and computes the metrics attached to the model.
 
