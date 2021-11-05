@@ -83,12 +83,12 @@ luz_callback_mixup <- luz_callback(
 #'
 #' @returns
 #' A `list` of:
-#' - the new input batch, consisting of mixed `xs`
-#' - a `list` of:
-#'   - a `list` of:
-#'     - the original target `y1`
-#'     - the mixed-in target `y2`
-#'   - the mixing weights
+#' - `x`, the new, mixed-up input batch
+#' - `y`, a `list` of:
+#'   - `ys`, a `list` of:
+#'     - `y1`, the original target `y1`
+#'     - `y2`, the mixed-in target `y2`
+#'   - `weight`, the mixing weights
 #'
 #' @seealso [luz_callback_mixup()]
 #'
@@ -101,9 +101,9 @@ nnf_mixup <- function(x, y, shuffle, weight) {
 
   y1 <- y
   y2 <- y[shuffle]
-  stacked_y_with_weights <- list(list(y1, y2), weight)
+  stacked_y_with_weights <- list(ys = list(y1 = y1, y2 = y2), weight = weight)
 
-  list(mixed_x, stacked_y_with_weights)
+  list(x = mixed_x, y = stacked_y_with_weights)
 
 }
 
