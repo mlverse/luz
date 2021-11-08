@@ -33,7 +33,7 @@ nn_mixup_loss <- torch::nn_module(
 
       old_reduction <- self$loss$reduction
       self$loss$reduction <- "none"
-      # Prefer the `on.exit` because the code belowe might fail and we want
+      # Prefer the `on.exit` because the code below might fail and we want
       # to revert the change we made.
       on.exit({
         self$loss$reduction <- old_reduction
