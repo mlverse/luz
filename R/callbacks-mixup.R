@@ -6,9 +6,8 @@
 #' This callback is supposed to be used together with [nn_mixup_loss()].
 #'
 #' @details
-#' Overall, we follow the fastai implementation
-#' (https://github.com/fastai/fastai/blob/master/fastai/callback/mixup.py)
-#' described here: https://forums.fast.ai/t/mixup-data-augmentation/22764).
+#' Overall, we follow the [fastai implementation](https://github.com/fastai/fastai/blob/master/fastai/callback/mixup.py)
+#' described [here](https://forums.fast.ai/t/mixup-data-augmentation/22764).
 #' Namely,
 #' - We work with a single dataloader only, randomly mixing two observations from the same batch.
 #' - We linearly combine losses computed for both targets:
@@ -19,7 +18,9 @@
 #' @param alpha parameter for the beta distribution used to sample mixing coefficients
 #'
 #' @examples
+#' if (torch::torch_is_installed()) {
 #' mixup_callback <- luz_callback_mixup()
+#' }
 #'
 #' @returns
 #' A `luz_callback`
@@ -69,17 +70,27 @@ luz_callback_mixup <- luz_callback(
 #'
 #' Logic underlying [luz_callback_mixup()].
 #'
+#' @details
+#' Based on the passed-in (1) input and (2) target batches, (3) applicable mixing weights,
+#' and (4) indices to be used in selecting the complementing batch,
+#' we return new tensors intended to replace the current batch.
+#' The new input batch is a weighted linear combination of input batch items, while
+#' the new target batch bundles the original targets, as well as the mixing weights, in
+#' a nested list.
+#'
 #' @param x an input batch
 #' @param y a target batch
 #' @param shuffle indices to be used to draw items to complement the "real batch"
 #' @param weight weighting coefficient to be used by `torch_lerp()`
 #'
 #' @examples
+#' if (torch::torch_is_installed()) {
 #' batch_x <- torch::torch_randn(c(10, 768))
 #' batch_y <- torch::torch_randn(10)
 #' shuffle <- torch::torch_tensor(10:1)
 #' weight <- torch::torch_tensor(rep(0.9, 10))$view(c(10, 1))
 #' nnf_mixup(batch_x, batch_y, shuffle, weight)
+#' }
 #'
 #' @returns
 #' A `list` of:
