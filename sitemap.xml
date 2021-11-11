@@ -100,6 +100,9 @@
     <loc>/reference/luz_callback_metrics.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_callback_mixup.html</loc>
+  </url>
+  <url>
     <loc>/reference/luz_callback_model_checkpoint.html</loc>
   </url>
   <url>
@@ -146,6 +149,12 @@
   </url>
   <url>
     <loc>/reference/luz_save.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nn_mixup_loss.html</loc>
+  </url>
+  <url>
+    <loc>/reference/nnf_mixup.html</loc>
   </url>
   <url>
     <loc>/reference/pipe.html</loc>
