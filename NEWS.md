@@ -1,6 +1,7 @@
 # luz (development version)
 
 * Many wording improvements in the getting started guides (#81, @jonthegeek).
+* Added MixUp callback and helper loss function and functional logic. (#82, @skeydan).
 
 # luz 0.2.0
 
