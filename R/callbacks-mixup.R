@@ -47,9 +47,6 @@ luz_callback_mixup <- luz_callback(
     weight <- torch::torch_stack(list(weight, 1 - weight), 2)
     weight <- weight$max(2)[1][[1]]
 
-    # determine which observations to mix
-    shuffle <- torch::torch_randperm(batch_len, dtype = torch::torch_long(), device = device) + 1L
-
     # (1) linearly combine the inputs according to the mixing weights,
     # (2) as new target, create a list of:
     #     - (a) both targets stacked into a single tensor and
@@ -58,7 +55,6 @@ luz_callback_mixup <- luz_callback(
     c(mixed_x, stacked_y_with_weights) %<-% nnf_mixup(
       ctx$batch$x,
       ctx$batch$y,
-      shuffle,
       weight$view(list(batch_len, xrep) %>% unlist()))
 
     ctx$batch$x <- mixed_x
@@ -71,8 +67,7 @@ luz_callback_mixup <- luz_callback(
 #' Logic underlying [luz_callback_mixup()].
 #'
 #' @details
-#' Based on the passed-in (1) input and (2) target batches, (3) applicable mixing weights,
-#' and (4) indices to be used in selecting the complementing batch,
+#' Based on the passed-in input and target batches, as well as applicable mixing weights,
 #' we return new tensors intended to replace the current batch.
 #' The new input batch is a weighted linear combination of input batch items, while
 #' the new target batch bundles the original targets, as well as the mixing weights, in
@@ -80,16 +75,14 @@ luz_callback_mixup <- luz_callback(
 #'
 #' @param x an input batch
 #' @param y a target batch
-#' @param shuffle indices to be used to draw items to complement the "real batch"
 #' @param weight weighting coefficient to be used by `torch_lerp()`
 #'
 #' @examples
 #' if (torch::torch_is_installed()) {
 #' batch_x <- torch::torch_randn(c(10, 768))
 #' batch_y <- torch::torch_randn(10)
-#' shuffle <- torch::torch_tensor(10:1)
 #' weight <- torch::torch_tensor(rep(0.9, 10))$view(c(10, 1))
-#' nnf_mixup(batch_x, batch_y, shuffle, weight)
+#' nnf_mixup(batch_x, batch_y, weight)
 #' }
 #'
 #' @returns
@@ -104,7 +97,12 @@ luz_callback_mixup <- luz_callback(
 #' @seealso [luz_callback_mixup()]
 #'
 #' @export
-nnf_mixup <- function(x, y, shuffle, weight) {
+nnf_mixup <- function(x, y, weight) {
+
+  # determine which observations to mix
+  batch_len <- y$size(1)
+  device <- y$device
+  shuffle <- torch::torch_randperm(batch_len, dtype = torch::torch_long(), device = device) + 1L
 
   x1 <- x
   x2 <- x[shuffle, ]

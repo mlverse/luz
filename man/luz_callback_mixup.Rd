@@ -19,9 +19,8 @@ where targets are expected to be integers, not one-hot encoded vectors.
 This callback is supposed to be used together with \code{\link[=nn_mixup_loss]{nn_mixup_loss()}}.
 }
 \details{
-Overall, we follow the fastai implementation
-(https://github.com/fastai/fastai/blob/master/fastai/callback/mixup.py)
-described here: https://forums.fast.ai/t/mixup-data-augmentation/22764).
+Overall, we follow the \href{https://github.com/fastai/fastai/blob/master/fastai/callback/mixup.py}{fastai implementation}
+described \href{https://forums.fast.ai/t/mixup-data-augmentation/22764}{here}.
 Namely,
 \itemize{
 \item We work with a single dataloader only, randomly mixing two observations from the same batch.
@@ -32,7 +31,9 @@ Namely,
 }
 }
 \examples{
+if (torch::torch_is_installed()) {
 mixup_callback <- luz_callback_mixup()
+}
 
 }
 \seealso{

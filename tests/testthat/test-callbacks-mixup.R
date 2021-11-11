@@ -1,25 +1,15 @@
 test_that("mixup logic works", {
 
-  dl <- get_categorical_dl(x_size = 768)
-  first <- coro::collect(dl, 1)[[1]]
+  x <- torch::torch_ones(c(10, 768))
+  y <- torch::torch_ones(10)
 
   c(mixed_x, stacked_y_with_weights) %<-% nnf_mixup(
-    first$x,
-    first$y,
-    torch::torch_tensor(1:10),
+    x,
+    y,
     torch::torch_tensor(rep(0.9, 10))$view(c(10, 1)))
 
-  expect_equal_to_tensor(mixed_x[1, ] %>% torch::torch_mean(), first$x[1, ] %>% torch::torch_mean())
+  expect_equal_to_tensor(mixed_x[1, ] %>% torch::torch_mean(), x[1, ] %>% torch::torch_mean())
   expect_equal_to_tensor(stacked_y_with_weights[[1]][[1]], stacked_y_with_weights[[1]][[2]])
-
-  c(mixed_x, stacked_y_with_weights) %<-% nnf_mixup(
-    first$x,
-    first$y,
-    torch::torch_tensor(10:1),
-    torch::torch_tensor(rep(0.9, 10))$view(c(10, 1)))
-
-  expect_not_equal_to_tensor(mixed_x[1, ] %>% torch::torch_mean(), first$x[1, ] %>% torch::torch_mean())
-  expect_not_equal_to_tensor(stacked_y_with_weights[[1]][[1]], stacked_y_with_weights[[1]][[2]])
 
 })
 

@@ -4,41 +4,47 @@
 \alias{nnf_mixup}
 \title{Mixup logic}
 \usage{
-nnf_mixup(x, y, shuffle, weight)
+nnf_mixup(x, y, weight)
 }
 \arguments{
 \item{x}{an input batch}
 
 \item{y}{a target batch}
 
-\item{shuffle}{indices to be used to draw items to complement the "real batch"}
-
 \item{weight}{weighting coefficient to be used by \code{torch_lerp()}}
 }
 \value{
 A \code{list} of:
 \itemize{
-\item the new input batch, consisting of mixed \code{xs}
-\item a \code{list} of:
+\item \code{x}, the new, mixed-up input batch
+\item \code{y}, a \code{list} of:
 \itemize{
-\item a \code{list} of:
+\item \code{ys}, a \code{list} of:
 \itemize{
-\item the original target \code{y1}
-\item the mixed-in target \code{y2}
+\item \code{y1}, the original target \code{y1}
+\item \code{y2}, the mixed-in target \code{y2}
 }
-\item the mixing weights
+\item \code{weight}, the mixing weights
 }
 }
 }
 \description{
 Logic underlying \code{\link[=luz_callback_mixup]{luz_callback_mixup()}}.
 }
+\details{
+Based on the passed-in input and target batches, as well as applicable mixing weights,
+we return new tensors intended to replace the current batch.
+The new input batch is a weighted linear combination of input batch items, while
+the new target batch bundles the original targets, as well as the mixing weights, in
+a nested list.
+}
 \examples{
+if (torch::torch_is_installed()) {
 batch_x <- torch::torch_randn(c(10, 768))
 batch_y <- torch::torch_randn(10)
-shuffle <- torch::torch_tensor(10:1)
 weight <- torch::torch_tensor(rep(0.9, 10))$view(c(10, 1))
-nnf_mixup(batch_x, batch_y, shuffle, weight)
+nnf_mixup(batch_x, batch_y, weight)
+}
 
 }
 \seealso{
