@@ -112,7 +112,7 @@ nnf_mixup <- function(x, y, weight) {
   x2 <- x[shuffle, ]
   mixed_x <- torch::torch_lerp(x1, x2, weight)
 
-  #create new y
+  # create new y
   y1 <- y
   y2 <- y[shuffle]
   stacked_y_with_weights <- list(ys = list(y1 = y1, y2 = y2), weight = weight)
