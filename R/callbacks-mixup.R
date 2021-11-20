@@ -38,8 +38,6 @@ luz_callback_mixup <- luz_callback(
   on_train_batch_begin = function() {
 
     batch_len <- ctx$batch$y$size(1)
-    xdim <- length(ctx$batch$x$size())
-    xrep <- rep(1, xdim -1)
     device <- ctx$batch$y$device
 
     # draw mixing weights from a beta distribution with identical parameters
@@ -55,7 +53,7 @@ luz_callback_mixup <- luz_callback(
     c(mixed_x, stacked_y_with_weights) %<-% nnf_mixup(
       ctx$batch$x,
       ctx$batch$y,
-      weight$view(list(batch_len, xrep) %>% unlist()))
+      weight)
 
     ctx$batch$x <- mixed_x
     ctx$batch$y <- stacked_y_with_weights
@@ -104,10 +102,17 @@ nnf_mixup <- function(x, y, weight) {
   device <- y$device
   shuffle <- torch::torch_randperm(batch_len, dtype = torch::torch_long(), device = device) + 1L
 
+  # expand weight as needed
+  xdim <- length(x$size())
+  xrep <- rep(1, xdim -1)
+  weight <- weight$view(list(batch_len, xrep) %>% unlist())
+
+  # create new x
   x1 <- x
   x2 <- x[shuffle, ]
   mixed_x <- torch::torch_lerp(x1, x2, weight)
 
+  # create new y
   y1 <- y
   y2 <- y[shuffle]
   stacked_y_with_weights <- list(ys = list(y1 = y1, y2 = y2), weight = weight)
