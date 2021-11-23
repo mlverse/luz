@@ -101,9 +101,25 @@ print.lr_records <- function(x, ...) {
 }
 
 #' @export
-plot.lr_records <- function(x, ...) {
+plot.lr_records <- function(x, smoothed_loss = TRUE, beta = 0.98, ...) {
   rlang::check_installed("ggplot2")
-  x <- as.data.frame(x)
+
+  if(smoothed_loss) {
+
+    new_x <- data.frame(lr = x$lr, loss = rep(0, nrow(x)))
+    loss_exp_avg <- 0
+
+    for (i in 1:nrow(new_x)) {
+      loss_exp_avg <- beta * loss_exp_avg + (1 - beta) * x$loss[i]
+      new_x$loss[i] <- loss_exp_avg / (1 - beta^i)
+    }
+
+    x <- new_x
+
+  } else {
+    x <- as.data.frame(x)
+  }
+
   ggplot2::ggplot(x, ggplot2::aes_string(x = "lr", y = "loss")) +
     ggplot2::geom_line() +
     ggplot2::scale_x_log10() +
