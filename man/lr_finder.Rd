@@ -4,7 +4,15 @@
 \alias{lr_finder}
 \title{Learning Rate Finder}
 \usage{
-lr_finder(object, data, steps = 100, start_lr = 1e-07, end_lr = 0.1, ...)
+lr_finder(
+  object,
+  data,
+  steps = 100,
+  start_lr = 1e-07,
+  end_lr = 0.1,
+  log_spaced_intervals = TRUE,
+  ...
+)
 }
 \arguments{
 \item{object}{An nn_module that has been setup().}
@@ -16,6 +24,8 @@ lr_finder(object, data, steps = 100, start_lr = 1e-07, end_lr = 0.1, ...)
 \item{start_lr}{(float) The smallest learning rate. Default: 1e-7.}
 
 \item{end_lr}{(float) The highest learning rate. Default: 1e-1.}
+
+\item{log_spaced_intervals}{(logical) Whether to divide the range between start_lr and end_lr into log-spaced intervals (alternative: uniform intervals). Default: TRUE}
 
 \item{...}{Other arguments passed to \code{fit}.}
 }
