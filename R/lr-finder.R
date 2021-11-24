@@ -12,6 +12,7 @@ lr_anneal <- torch::lr_scheduler(
     self$end_lr <- end_lr
     self$base_lrs <- start_lr
     self$iters <- n_iters
+    self$multiplier <- (end_lr/start_lr)^(1/n_iters)
 
     super$initialize(optimizer, last_epoch, verbose)
 
@@ -20,7 +21,7 @@ lr_anneal <- torch::lr_scheduler(
     if (self$last_epoch > 0) {
       lrs <- numeric(length(self$optimizer$param_groups))
       for (i in seq_along(self$optimizer$param_groups)) {
-        lrs[i] <- self$optimizer$param_groups[[i]]$lr * (self$end_lr / self$optimizer$param_groups[[i]]$lr) ^ (self$last_epoch / self$iters)
+        lrs[i] <- self$optimizer$param_groups[[i]]$lr * self$multiplier
       }
     } else {
       lrs <- as.numeric(self$base_lrs)
