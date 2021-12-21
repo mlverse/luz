@@ -5,6 +5,7 @@ lr_anneal <- torch::lr_scheduler(
     start_lr = 1e-7,
     end_lr = 1e-1,
     n_iters = 100,
+    log_spaced_intervals = TRUE,
     last_epoch=-1,
     verbose=FALSE) {
 
@@ -12,6 +13,8 @@ lr_anneal <- torch::lr_scheduler(
     self$end_lr <- end_lr
     self$base_lrs <- start_lr
     self$iters <- n_iters
+    self$multiplier <- (end_lr/start_lr)^(1/n_iters)
+    self$log_spaced_intervals <- log_spaced_intervals
 
     super$initialize(optimizer, last_epoch, verbose)
 
@@ -20,7 +23,12 @@ lr_anneal <- torch::lr_scheduler(
     if (self$last_epoch > 0) {
       lrs <- numeric(length(self$optimizer$param_groups))
       for (i in seq_along(self$optimizer$param_groups)) {
-        lrs[i] <- self$optimizer$param_groups[[i]]$lr * (self$end_lr / self$optimizer$param_groups[[i]]$lr) ^ (self$last_epoch / self$iters)
+        if (self$log_spaced_intervals) {
+          lrs[i] <- self$optimizer$param_groups[[i]]$lr * self$multiplier
+        } else {
+          lrs[i] <- self$optimizer$param_groups[[i]]$lr * (self$end_lr / self$optimizer$param_groups[[i]]$lr) ^ (self$last_epoch / self$iters)
+        }
+
       }
     } else {
       lrs <- as.numeric(self$base_lrs)
@@ -47,6 +55,7 @@ luz_callback_record_lr <- luz_callback(
 #' @param steps (integer) The number of steps to iterate over in the learning rate finder. Default: 100.
 #' @param start_lr (float) The smallest learning rate. Default: 1e-7.
 #' @param end_lr (float) The highest learning rate. Default: 1e-1.
+#' @param log_spaced_intervals (logical) Whether to divide the range between start_lr and end_lr into log-spaced intervals (alternative: uniform intervals). Default: TRUE
 #' @param ... Other arguments passed to `fit`.
 #'
 #' @examples
@@ -65,7 +74,7 @@ luz_callback_record_lr <- luz_callback(
 #' }
 #' @returns A dataframe with two columns: learning rate and loss
 #' @export
-lr_finder <- function(object, data, steps = 100, start_lr = 1e-7, end_lr = 1e-1, ...) {
+lr_finder <- function(object, data, steps = 100, start_lr = 1e-7, end_lr = 1e-1, log_spaced_intervals = TRUE, ...) {
   # adjust batch size so that the steps number adds to one batch
   new_bs <- floor(data$dataset$.length() / steps)
   data$batch_sampler$batch_size <- new_bs
@@ -76,6 +85,7 @@ lr_finder <- function(object, data, steps = 100, start_lr = 1e-7, end_lr = 1e-1,
     start_lr = start_lr,
     end_lr = end_lr,
     n_iters = steps,
+    log_spaced_intervals = log_spaced_intervals,
     call_on="on_train_batch_begin"
   )
 
@@ -103,9 +113,20 @@ print.lr_records <- function(x, ...) {
 #' @export
 plot.lr_records <- function(x, ...) {
   rlang::check_installed("ggplot2")
+
   x <- as.data.frame(x)
-  ggplot2::ggplot(x, ggplot2::aes_string(x = "lr", y = "loss")) +
-    ggplot2::geom_line() +
+
+  loss_exp_avg <- 0
+  beta <- 0.9
+
+  for (i in 1:nrow(x)) {
+    loss_exp_avg <- beta * loss_exp_avg + (1 - beta) * x$loss[i]
+    x$smoothed_loss[i] <- loss_exp_avg / (1 - beta^i)
+  }
+
+  ggplot2::ggplot(x, ggplot2::aes_string(x = "lr")) +
+    ggplot2::geom_line(ggplot2::aes_string(y = "loss")) +
+    ggplot2::geom_line(ggplot2::aes_string(y = "smoothed_loss"), color="cyan", alpha = 0.3, size = 3) +
     ggplot2::scale_x_log10() +
     ggplot2::xlab("Learning Rate") +
     ggplot2::ylab("Loss")
