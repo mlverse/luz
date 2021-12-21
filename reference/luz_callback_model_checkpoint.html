@@ -5,14 +5,16 @@ behavior."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body>
-    <a href="#container" class="visually-hidden-focusable">Skip to contents</a>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
     <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    
     <a class="navbar-brand me-2" href="../index.html">luz</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -45,11 +47,12 @@ behavior."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
   </a>
 </li>
       </ul></div>
+
+    
   </div>
-</nav><div class="container template-reference-topic" id="container">
+</nav><div class="container template-reference-topic">
 <div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Checkpoints model weights</h1>
       <small class="dont-index">Source: <a href="https://github.com/mlverse/luz/blob/HEAD/R/callbacks-monitor-metrics.R" class="external-link"><code>R/callbacks-monitor-metrics.R</code></a></small>
       <div class="d-none name"><code>luz_callback_model_checkpoint.Rd</code></div>
@@ -60,18 +63,17 @@ behavior."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
 behavior.</p>
     </div>
 
-    <div class="ref-usage section level2 sourceCode">
-    <h2>Usage</h2>
-    <pre class="sourceCode r"><code><span class="fu">luz_callback_model_checkpoint</span><span class="op">(</span>
+    <div class="section level2">
+    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">luz_callback_model_checkpoint</span><span class="op">(</span>
   <span class="va">path</span>,
   monitor <span class="op">=</span> <span class="st">"valid_loss"</span>,
   save_best_only <span class="op">=</span> <span class="cn">FALSE</span>,
   mode <span class="op">=</span> <span class="st">"min"</span>,
   min_delta <span class="op">=</span> <span class="fl">0</span>
-<span class="op">)</span></code></pre>
+<span class="op">)</span></code></pre></div>
     </div>
 
-    <div id="ref-sections">
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>path</dt>
@@ -116,11 +118,10 @@ don't differentiate by epochs.</p>
 <code><a href="luz_callback_train_valid.html">luz_callback_train_valid</a>()</code>,
 <code><a href="luz_callback.html">luz_callback</a>()</code></p></div>
     </div>
-    </div>
 
-    <div id="examples">
-    <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">luz_callback_model_checkpoint</span><span class="op">(</span>path<span class="op">=</span> <span class="st">"path/to/dir"</span><span class="op">)</span></span>
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">luz_callback_model_checkpoint</span><span class="op">(</span>path<span class="op">=</span> <span class="st">"path/to/dir"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;model_checkpoint_callback&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Inherits from: &lt;monitor_metrics&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Public:</span>
@@ -174,11 +175,8 @@ don't differentiate by epochs.</p>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
-  </div>
-  <div class="col-md-3" id="pkgdown-sidebar">
-    <nav id="toc"><h2>On this page</h2>
-    </nav></div>
-</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
@@ -186,7 +184,7 @@ don't differentiate by epochs.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
 </div>
 
     </footer></div>

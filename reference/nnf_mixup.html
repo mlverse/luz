@@ -3,14 +3,16 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body>
-    <a href="#container" class="visually-hidden-focusable">Skip to contents</a>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
     <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    
     <a class="navbar-brand me-2" href="../index.html">luz</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0.9000</small>
 
+    
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -43,11 +45,12 @@
   </a>
 </li>
       </ul></div>
+
+    
   </div>
-</nav><div class="container template-reference-topic" id="container">
+</nav><div class="container template-reference-topic">
 <div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Mixup logic</h1>
       <small class="dont-index">Source: <a href="https://github.com/mlverse/luz/blob/HEAD/R/callbacks-mixup.R" class="external-link"><code>R/callbacks-mixup.R</code></a></small>
       <div class="d-none name"><code>nnf_mixup.Rd</code></div>
@@ -57,12 +60,11 @@
     <p>Logic underlying <code><a href="luz_callback_mixup.html">luz_callback_mixup()</a></code>.</p>
     </div>
 
-    <div class="ref-usage section level2 sourceCode">
-    <h2>Usage</h2>
-    <pre class="sourceCode r"><code><span class="fu">nnf_mixup</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">weight</span><span class="op">)</span></code></pre>
+    <div class="section level2">
+    <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">nnf_mixup</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">weight</span><span class="op">)</span></code></pre></div>
     </div>
 
-    <div id="ref-sections">
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
@@ -93,11 +95,10 @@ a nested list.</p>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="luz_callback_mixup.html">luz_callback_mixup()</a></code></p></div>
     </div>
-    </div>
 
-    <div id="examples">
-    <h2>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_is_installed.html" class="external-link">torch_is_installed</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_is_installed.html" class="external-link">torch_is_installed</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="va">batch_x</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_randn.html" class="external-link">torch_randn</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">768</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">batch_y</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_randn.html" class="external-link">torch_randn</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">weight</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_tensor.html" class="external-link">torch_tensor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="fu">view</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
@@ -105,36 +106,36 @@ a nested list.</p>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> torch_tensor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Columns 1 to 10-0.3851  1.5219 -0.9184  0.6196 -0.1012 -0.5261 -0.8837 -0.6506 -0.2008 -0.0904</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.6214 -0.5214  0.7306 -0.3995  0.5097 -0.9790  0.2016  0.2301  0.6046 -0.9127</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.5543 -2.9844 -0.4410  1.2187 -0.2201  1.2892 -1.3277 -0.2442 -0.4487  0.9587</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1.3590 -0.1936 -0.6599  0.2081 -0.4367 -0.6401 -2.4341  0.0029 -1.0597 -1.2968</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.4359 -0.5536 -0.1008 -0.4101 -0.3107 -1.1785 -0.1430  1.4475  1.1621 -0.5601</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.9222 -0.5574 -0.1988  2.1730 -0.2718 -0.1111 -0.3776  0.1430  0.5059  0.6844</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.2767  0.2386 -0.5891  1.8395 -0.9365 -0.5219 -0.6907 -1.5060 -1.1682 -0.1545</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.7841  0.1391 -0.0905 -0.2759 -0.4532 -1.6289  1.0145 -0.2351 -0.9076  1.1697</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1.6041 -2.8994 -0.4849  1.5116 -0.2652  0.9123 -0.8715  0.2720 -0.3333 -0.5197</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.4684  0.2335 -0.7403  1.3648  0.1696  1.4019  0.3187  0.2826 -0.5445  0.1425</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Columns 1 to 10 0.2048 -0.2939 -0.4795  0.7202 -1.9698 -0.5648 -0.5866 -0.6413  0.9305  1.9333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.9045 -0.9143 -0.2110  0.8027  0.7300  0.0773 -0.8567 -0.5894  0.3113  1.6430</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.6045 -0.3825  0.7626 -0.6181  0.4820 -0.8466 -0.3048 -0.9057  0.9136  0.2024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.3312  0.4599 -1.7967  0.0403  0.4394  0.7393 -1.6227  0.6240 -1.5762  0.1226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.5010 -2.0228 -1.6562  0.5454 -0.1313 -0.4892 -0.3192 -0.5671 -0.1744 -0.1895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.0461 -1.6718 -0.7552 -0.4499 -1.0773  0.9616  1.8802  0.1860  0.4674  0.5514</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.6868 -0.0697  1.1523 -0.9649 -0.3945  0.5363 -0.4977 -2.0084  0.6512 -0.2238</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.7669  0.8621 -0.1225  0.7797 -0.5376 -0.2825 -0.2409  0.9736  1.3590 -1.3354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1.4358 -0.7556  1.0264  1.2301 -0.1581  0.6879 -0.4055  0.3461  0.6769 -0.1283</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2.0706 -0.0046  0.0579 -1.2839  1.6485  0.6679  0.7761 -0.8188  0.3009 -0.0210</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Columns 11 to 20-0.5648  0.7195 -1.3127  0.3469 -0.4457 -0.7545  1.5942 -0.7418  0.9042 -0.3167</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.8014  0.4709  0.3001 -1.7000 -0.2099 -0.2111  1.0612  0.8295 -1.3065  1.5536</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2.1431  0.5859 -0.1704 -0.3552  0.6759 -0.3021  0.4214 -0.6249 -0.3953  0.7242</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.2479 -1.4141 -0.1670 -0.4337 -0.8735  0.1000 -0.7234 -0.6539  0.0829 -1.1979</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2.1049 -0.8303 -1.8021 -0.2634  0.6690  0.9945 -0.6582 -0.0463  0.3379  0.1006</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1.6299 -0.4782 -0.1860 -0.8626  0.6208  0.6187  0.3976 -1.1996 -0.2676 -0.5984</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1763 -0.0102  0.4232  0.1013 -0.6881  0.4248 -1.2868  0.4772 -0.2777 -1.1187</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.9138 -0.0582 -1.0304 -0.7609  0.5276 -0.0428  0.1173  1.8134  1.0568 -0.2449</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.8478 -0.3072 -0.8842  0.6739 -1.9979 -1.7262  0.6097  0.8727  0.1098  2.4355</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.8392  1.1671 -0.2430  0.8130 -0.3504 -0.4138  0.9033 -1.2036 -1.6019 -0.0240</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Columns 11 to 20 1.9280  0.6421  0.7008 -1.1458  0.3837  0.0864  0.0765 -0.1160 -0.3574  0.4574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1827 -0.3866  0.1401  0.4019 -0.6840  0.5145 -0.3349 -1.1971 -0.2077 -0.5337</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.2440  0.5585  0.7847  0.1803  0.1965  0.3832  0.3531  1.2150 -0.8197  1.2251</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -1.3122  0.0596 -0.7007  2.2918  0.1105 -0.4351 -0.6855  0.4967  0.2033 -2.1407</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.0857 -0.0749 -0.4728  0.1802 -0.0085 -0.5427 -0.7939  1.1635 -1.0073 -0.7733</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.2149  0.0528 -0.3490  0.4457 -1.0258  0.9238 -0.7917  0.3490 -1.1951 -1.2585</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1.0286 -0.8566 -0.8786 -0.0829  0.9796  1.5668 -0.0168 -0.5049 -1.3459  0.7173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.3963  0.2241 -0.2311 -0.2833  1.7688  0.4730  0.5866  0.0211  1.4454 -0.0584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.2412 -1.7240  0.1192 -0.8602  1.1761 -0.0433 -0.4662  1.5076 -0.5863 -1.1663</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.7777 -0.8199 -1.0757  0.6246  1.2080 -0.1261  0.3615 -0.7307  1.0115 -1.1734</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Columns 21 to 30-0.3340  0.0754  0.7157 -0.8999 -0.1430 -0.0167  0.9213  0.3801 -0.4000  0.4564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.3199  0.2601 -0.8069 -1.2122  0.5243 -0.4746  0.2992 -0.7467 -0.5347  0.8178</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.8970  0.6254 -1.1560  0.5015 -2.3630  0.2458  1.4790 -0.9210 -0.7368 -0.0445</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.8814 -1.9924  0.8176 -1.2193 -0.9326  1.3646  0.9815 -1.4619  0.5499 -0.4665</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.8356  1.0923 -0.4417  0.4824  0.2082 -0.9840  2.1992  0.3333  0.0282 -2.1276</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.1625  0.3499 -0.1091  1.1563 -1.1674  0.4803 -0.1988  0.2631  0.1797  0.3273</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.1436  0.3641  0.4966 -0.0453 -0.8134  0.8165  1.0071  0.9810 -1.2333  0.7224</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.0958 -0.0202 -0.3708  0.7309 -1.6195  0.5253 -1.8615  0.0796  0.5925  0.7401</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Columns 21 to 30-1.1169 -0.2876 -0.6757 -1.5989  0.4886 -1.5605 -0.5425 -0.8179 -0.1108  0.3376</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1162 -0.2143 -0.4168  0.9563 -0.3560 -1.8929  0.6506  0.6660 -1.1291  0.8782</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.8103 -1.6647 -0.7219 -1.1634 -0.9293  0.3484 -0.3272 -0.0585  0.0722  0.6267</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1.5560  0.1253 -1.0253 -1.0519  0.8381  1.3364 -2.2204  0.9114 -0.6021 -0.5660</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.7026 -1.6809 -0.0351 -0.4092 -0.1876  1.2005  0.5559 -0.1405 -0.6131  2.7969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.5357 -0.0759  0.7964  1.4892  1.5510 -0.9863  0.8020 -0.1832  0.3301 -0.6788</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -1.6506  0.8557 -1.1140  1.4475  0.2911 -1.5374  0.2496  0.4259 -0.7849  0.7098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.8960  1.2554 -0.5609  1.6191  0.5086 -1.1001  0.4482  0.5483 -1.3620 -1.6155</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ... [the output was truncated (use n=-1 to disable)]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [ CPUFloatType{10,768} ]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -142,30 +143,30 @@ a nested list.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $y$ys</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $y$ys$y1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> torch_tensor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.0029</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.7950</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.1347</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.5683</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -1.1740</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.4395</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.8149</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -1.1359</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.4710</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.7064</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.2055</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.1858</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.3353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.9608</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.4442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.7862</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1821</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1036</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.9173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.5370</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [ CPUFloatType{10} ]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $y$ys$y2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> torch_tensor</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.8149</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.4710</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.4395</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -1.1740</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.7950</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -1.1359</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.5683</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.1347</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.7064</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.0029</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.9173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.4442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.2055</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.9608</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.3353</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.1858</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.7862</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1036</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.5370</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1821</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [ CPUFloatType{10} ]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -187,11 +188,8 @@ a nested list.</p>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
-  </div>
-  <div class="col-md-3" id="pkgdown-sidebar">
-    <nav id="toc"><h2>On this page</h2>
-    </nav></div>
-</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
@@ -199,7 +197,7 @@ a nested list.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
 </div>
 
     </footer></div>
