@@ -408,4 +408,42 @@ luz_callback_csv_logger <- luz_callback(
   }
 )
 
+#' Gradient clipping callback
+#'
+#' By adding the GradientClip callback, the gradient `norm_type` (default:2) norm
+#' is clipped to at most `max_norm` (default:1) using [torch::nn_utils_clip_grad_norm_()],
+#' which can avoid loss divergence.
+#'
+#' @references
+#' See FastAI [documentation](https://docs.fast.ai/callback.training.html#GradientClip)
+#' for the GradientClip callback.
+#'
+#' @inheritParams torch::nn_utils_clip_grad_norm_
+luz_callback_gradient_clip <- luz_callback(
+  initialize = function(max_norm = 1, norm_type = 2) {
+
+    if (!rlang::is_scalar_double(max_norm))
+      cli::cli_abort(c(
+        "{.var max_norm} should be a numeric scalar value.",
+        "x" = "Got {.cls {class(max_norm)}} with length {length(max_norm)}"
+      ))
+
+    if (!rlang::is_scalar_double(norm_type))
+      cli::cli_abort(c(
+        "{.var norm_type} should be a numeric scalar value.",
+        "x" = "Got {.cls {class(norm_type)}} with length {length(norm_type)}"
+      ))
+
+    self$max_norm <- max_norm
+    self$norm_type <- norm_type
+  },
+  on_train_batch_before_step = function() {
+    torch::nn_utils_clip_grad_norm_(
+      parameters = ctx$model$parameters,
+      max_norm = self$max_norm,
+      norm_type = self$norm_type
+    )
+  }
+)
+
 

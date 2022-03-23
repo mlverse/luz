@@ -90,3 +90,28 @@ test_that("progressbar appears with training and validation", {
   })
 
 })
+
+test_that("gradient clip works correctly", {
+
+  model <- get_model()
+  dl <- get_test_dl(len = 500)
+
+  mod <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam,
+    )
+
+  output <- mod %>%
+    set_hparams(input_size = 10, output_size = 1) %>%
+    fit(dl, verbose = TRUE, epochs = 2, valid_data = dl,
+        callbacks = list(luz_callback_gradient_clip(max_norm = 0)))
+
+  # we expect that no learning happened thus the loss is identicall
+  # acrosss all metrics.
+  expect_length(unique(get_metrics(output)$value), 1)
+  expect_length(get_metrics(output)$value, 4)
+
+  expect_error(luz_callback_gradient_clip(max_norm = "a"), "max_norm")
+  expect_error(luz_callback_gradient_clip(norm_type = "a"), "norm_type")
+})
