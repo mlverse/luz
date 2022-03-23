@@ -15,7 +15,8 @@ test_that("binary auc works", {
 
   expect_equal(
     m$compute(),
-    Metrics::auc(actual, predicted)
+    Metrics::auc(actual, predicted),
+    tolerance = 1e-4
   )
 
 })
