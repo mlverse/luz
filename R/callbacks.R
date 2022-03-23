@@ -419,6 +419,7 @@ luz_callback_csv_logger <- luz_callback(
 #' for the GradientClip callback.
 #'
 #' @inheritParams torch::nn_utils_clip_grad_norm_
+#' @export
 luz_callback_gradient_clip <- luz_callback(
   initialize = function(max_norm = 1, norm_type = 2) {
 
