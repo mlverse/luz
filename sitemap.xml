@@ -91,6 +91,9 @@
     <loc>/reference/luz_callback_early_stopping.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_callback_gradient_clip.html</loc>
+  </url>
+  <url>
     <loc>/reference/luz_callback_interrupt.html</loc>
   </url>
   <url>

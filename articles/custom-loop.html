@@ -33,7 +33,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
@@ -70,6 +70,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="custom-loop_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Custom loops with luz</h1>
@@ -94,16 +97,16 @@
 </ul>
 <p>Let’s consider a simplified version of the <code>net</code> that we implemented in the getting started vignette:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
   <span class="st">"Net"</span>,
   initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">50</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">10</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">50</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">10</span><span class="op">)</span>
   <span class="op">}</span>,
   forward <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">x</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
       <span class="va">self</span><span class="op">$</span><span class="fu">fc1</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+      <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
       <span class="va">self</span><span class="op">$</span><span class="fu">fc2</span><span class="op">(</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">)</span></code></pre></div>
@@ -111,7 +114,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span>
-    loss <span class="op">=</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_cross_entropy_loss.html" class="external-link">nn_cross_entropy_loss</a></span><span class="op">(</span><span class="op">)</span>,
+    loss <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_cross_entropy_loss.html" class="external-link">nn_cross_entropy_loss</a></span><span class="op">(</span><span class="op">)</span>,
     optimizer <span class="op">=</span> <span class="va">optim_adam</span>,
     metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
       <span class="va">luz_metric_accuracy</span>
@@ -121,7 +124,7 @@
 <div class="section level2">
 <h2 id="multiple-optimizers">Multiple optimizers<a class="anchor" aria-label="anchor" href="#multiple-optimizers"></a>
 </h2>
-<p>Suppose we want to do an experiment where we train the first fully connected layer using a learning rate of 0.1 and the second one using learning rate of 0.01. Both minimizing the same <code><a href="https://torch.mlverse.org/docs/reference/nn_cross_entropy_loss.html" class="external-link">nn_cross_entropy_loss()</a></code> but for the first layer we want to add L1 regularization on the weights.</p>
+<p>Suppose we want to do an experiment where we train the first fully connected layer using a learning rate of 0.1 and the second one using learning rate of 0.01. Both minimizing the same <code><a href="https://rdrr.io/pkg/torch/man/nn_cross_entropy_loss.html" class="external-link">nn_cross_entropy_loss()</a></code> but for the first layer we want to add L1 regularization on the weights.</p>
 <p>In order to use luz for this we will implement two methods in the <code>net</code> module:</p>
 <ul>
 <li><p><code>set_optimizers</code>: returns a named list of optimizers depending on the <code>ctx</code>.</p></li>
@@ -129,31 +132,31 @@
 </ul>
 <p>Let’s go to the code:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
   <span class="st">"Net"</span>,
   initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">50</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">10</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">50</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">10</span><span class="op">)</span>
   <span class="op">}</span>,
   forward <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">x</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
       <span class="va">self</span><span class="op">$</span><span class="fu">fc1</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+      <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
       <span class="va">self</span><span class="op">$</span><span class="fu">fc2</span><span class="op">(</span><span class="op">)</span>
   <span class="op">}</span>,
   set_optimizers <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">lr_fc1</span> <span class="op">=</span> <span class="fl">0.1</span>, <span class="va">lr_fc2</span> <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-      opt_fc1 <span class="op">=</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/optim_adam.html" class="external-link">optim_adam</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">fc1</span><span class="op">$</span><span class="va">parameters</span>, lr <span class="op">=</span> <span class="va">lr_fc1</span><span class="op">)</span>,
-      opt_fc2 <span class="op">=</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/optim_adam.html" class="external-link">optim_adam</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">fc2</span><span class="op">$</span><span class="va">parameters</span>, lr <span class="op">=</span> <span class="va">lr_fc2</span><span class="op">)</span>
+      opt_fc1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/optim_adam.html" class="external-link">optim_adam</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">fc1</span><span class="op">$</span><span class="va">parameters</span>, lr <span class="op">=</span> <span class="va">lr_fc1</span><span class="op">)</span>,
+      opt_fc2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/optim_adam.html" class="external-link">optim_adam</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">fc2</span><span class="op">$</span><span class="va">parameters</span>, lr <span class="op">=</span> <span class="va">lr_fc2</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">}</span>,
   loss <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">target</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">pred</span> <span class="op">&lt;-</span> <span class="va">ctx</span><span class="op">$</span><span class="fu">model</span><span class="op">(</span><span class="va">input</span><span class="op">)</span>
   
     <span class="kw">if</span> <span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">opt_name</span> <span class="op">==</span> <span class="st">"opt_fc1"</span><span class="op">)</span> 
-      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nnf_cross_entropy.html" class="external-link">nnf_cross_entropy</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">target</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_norm.html" class="external-link">torch_norm</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">fc1</span><span class="op">$</span><span class="va">weight</span>, p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+      <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_cross_entropy.html" class="external-link">nnf_cross_entropy</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">target</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_norm.html" class="external-link">torch_norm</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">fc1</span><span class="op">$</span><span class="va">weight</span>, p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
     <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">opt_name</span> <span class="op">==</span> <span class="st">"opt_fc2"</span><span class="op">)</span>
-      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nnf_cross_entropy.html" class="external-link">nnf_cross_entropy</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">target</span><span class="op">)</span>
+      <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_cross_entropy.html" class="external-link">nnf_cross_entropy</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">target</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">)</span></code></pre></div>
 <p>Notice that model optimizers will be initialized according to the <code>set_optimizers()</code> method return value. In this case, we are initializing the optimizers using different model parameters and learning rates.</p>
@@ -173,22 +176,22 @@
 </h2>
 <p>Instead of implementing the <code>loss()</code> method we can implement the <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> method, this allows us to flexibly modify what happens when training and validating for each batch in the dataset. You are now responsible for updating the weights by stepping the optimizers and backpropagating the loss.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
   <span class="st">"Net"</span>,
   initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">50</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">10</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">50</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">10</span><span class="op">)</span>
   <span class="op">}</span>,
   forward <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">x</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
       <span class="va">self</span><span class="op">$</span><span class="fu">fc1</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+      <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
       <span class="va">self</span><span class="op">$</span><span class="fu">fc2</span><span class="op">(</span><span class="op">)</span>
   <span class="op">}</span>,
   set_optimizers <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">lr_fc1</span> <span class="op">=</span> <span class="fl">0.1</span>, <span class="va">lr_fc2</span> <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-      opt_fc1 <span class="op">=</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/optim_adam.html" class="external-link">optim_adam</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">fc1</span><span class="op">$</span><span class="va">parameters</span>, lr <span class="op">=</span> <span class="va">lr_fc1</span><span class="op">)</span>,
-      opt_fc2 <span class="op">=</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/optim_adam.html" class="external-link">optim_adam</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">fc2</span><span class="op">$</span><span class="va">parameters</span>, lr <span class="op">=</span> <span class="va">lr_fc2</span><span class="op">)</span>
+      opt_fc1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/optim_adam.html" class="external-link">optim_adam</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">fc1</span><span class="op">$</span><span class="va">parameters</span>, lr <span class="op">=</span> <span class="va">lr_fc1</span><span class="op">)</span>,
+      opt_fc2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/optim_adam.html" class="external-link">optim_adam</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">fc2</span><span class="op">$</span><span class="va">parameters</span>, lr <span class="op">=</span> <span class="va">lr_fc2</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">}</span>,
   step <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
@@ -197,12 +200,12 @@
     
       <span class="va">pred</span> <span class="op">&lt;-</span> <span class="va">ctx</span><span class="op">$</span><span class="fu">model</span><span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">input</span><span class="op">)</span>
       <span class="va">opt</span> <span class="op">&lt;-</span> <span class="va">ctx</span><span class="op">$</span><span class="va">optimizers</span><span class="op">[[</span><span class="va">opt_name</span><span class="op">]</span><span class="op">]</span>
-      <span class="va">loss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nnf_cross_entropy.html" class="external-link">nnf_cross_entropy</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">target</span><span class="op">)</span>
+      <span class="va">loss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_cross_entropy.html" class="external-link">nnf_cross_entropy</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">target</span><span class="op">)</span>
       
       <span class="kw">if</span> <span class="op">(</span><span class="va">opt_name</span> <span class="op">==</span> <span class="st">"opt_fc1"</span><span class="op">)</span> <span class="op">{</span>
         <span class="co"># we have L1 regularization in layer 1</span>
-        <span class="va">loss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nnf_cross_entropy.html" class="external-link">nnf_cross_entropy</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">target</span><span class="op">)</span> <span class="op">+</span> 
-          <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_norm.html" class="external-link">torch_norm</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">fc1</span><span class="op">$</span><span class="va">weight</span>, p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+        <span class="va">loss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_cross_entropy.html" class="external-link">nnf_cross_entropy</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">target</span><span class="op">)</span> <span class="op">+</span> 
+          <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_norm.html" class="external-link">torch_norm</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">fc1</span><span class="op">$</span><span class="va">weight</span>, p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
       <span class="op">}</span>
         
       <span class="kw">if</span> <span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">training</span><span class="op">)</span> <span class="op">{</span>
@@ -243,7 +246,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
     </footer>

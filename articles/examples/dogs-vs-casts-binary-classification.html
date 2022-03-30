@@ -33,7 +33,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
@@ -70,6 +70,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="dogs-vs-casts-binary-classification_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Binary classification</h1>
@@ -89,7 +92,7 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/luz/" class="external-link">luz</a></span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_manual_seed.html" class="external-link">torch_manual_seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_manual_seed.html" class="external-link">torch_manual_seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 
 <span class="co"># Datasets and loaders ----------------------------------------------------</span>
 
@@ -106,15 +109,15 @@
 <span class="op">)</span>
 
 <span class="va">train_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">0.7</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span><span class="op">)</span>
-<span class="va">train_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/dataset_subset.html" class="external-link">dataset_subset</a></span><span class="op">(</span><span class="va">ds</span>, indices <span class="op">=</span> <span class="va">train_id</span><span class="op">)</span>
-<span class="va">valid_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/dataset_subset.html" class="external-link">dataset_subset</a></span><span class="op">(</span><span class="va">ds</span>, indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">train_id</span><span class="op">)</span><span class="op">)</span>
+<span class="va">train_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataset_subset.html" class="external-link">dataset_subset</a></span><span class="op">(</span><span class="va">ds</span>, indices <span class="op">=</span> <span class="va">train_id</span><span class="op">)</span>
+<span class="va">valid_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataset_subset.html" class="external-link">dataset_subset</a></span><span class="op">(</span><span class="va">ds</span>, indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">train_id</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">train_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="va">train_ds</span>, batch_size <span class="op">=</span> <span class="fl">64</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span>, num_workers <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-<span class="va">valid_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="va">valid_ds</span>, batch_size <span class="op">=</span> <span class="fl">64</span>, num_workers <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+<span class="va">train_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="va">train_ds</span>, batch_size <span class="op">=</span> <span class="fl">64</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span>, num_workers <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+<span class="va">valid_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="va">valid_ds</span>, batch_size <span class="op">=</span> <span class="fl">64</span>, num_workers <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 
 <span class="co"># Buildifng the network ---------------------------------------------------</span>
 
-<span class="va">net</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
+<span class="va">net</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
   initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">num_classes</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">self</span><span class="op">$</span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">model_alexnet</span><span class="op">(</span>pretrained <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
@@ -122,13 +125,13 @@
       <span class="va">par</span><span class="op">$</span><span class="fu">requires_grad_</span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>
     <span class="op">}</span>
 
-    <span class="va">self</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">classifier</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_sequential.html" class="external-link">nn_sequential</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_dropout.html" class="external-link">nn_dropout</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>,
-      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">9216</span>, <span class="fl">512</span><span class="op">)</span>,
-      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_relu.html" class="external-link">nn_relu</a></span><span class="op">(</span><span class="op">)</span>,
-      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">512</span>, <span class="fl">256</span><span class="op">)</span>,
-      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_relu.html" class="external-link">nn_relu</a></span><span class="op">(</span><span class="op">)</span>,
-      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">256</span>, <span class="va">num_classes</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">classifier</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_sequential.html" class="external-link">nn_sequential</a></span><span class="op">(</span>
+      <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout.html" class="external-link">nn_dropout</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">9216</span>, <span class="fl">512</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_relu.html" class="external-link">nn_relu</a></span><span class="op">(</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">512</span>, <span class="fl">256</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_relu.html" class="external-link">nn_relu</a></span><span class="op">(</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">256</span>, <span class="va">num_classes</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">}</span>,
   forward <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
@@ -140,7 +143,7 @@
 
 <span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../../reference/setup.html">setup</a></span><span class="op">(</span>
-    loss <span class="op">=</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_bce_with_logits_loss.html" class="external-link">nn_bce_with_logits_loss</a></span><span class="op">(</span><span class="op">)</span>,
+    loss <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_bce_with_logits_loss.html" class="external-link">nn_bce_with_logits_loss</a></span><span class="op">(</span><span class="op">)</span>,
     optimizer <span class="op">=</span> <span class="fu">madgrad</span><span class="fu">::</span><span class="va">optim_madgrad</span>,
     metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
       <span class="fu"><a href="../../reference/luz_metric_binary_accuracy_with_logits.html">luz_metric_binary_accuracy_with_logits</a></span><span class="op">(</span><span class="op">)</span>
@@ -152,7 +155,7 @@
 
 <span class="co"># Make predictions --------------------------------------------------------</span>
 
-<span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_sigmoid.html" class="external-link">torch_sigmoid</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fitted</span>, <span class="va">valid_dl</span><span class="op">)</span><span class="op">)</span>
+<span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_sigmoid.html" class="external-link">torch_sigmoid</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fitted</span>, <span class="va">valid_dl</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Serialization -----------------------------------------------------------</span>
 <span class="fu"><a href="../../reference/luz_save.html">luz_save</a></span><span class="op">(</span><span class="va">fitted</span>, <span class="st">"model-dogs-and-cats.pt"</span><span class="op">)</span></code></pre></div>
@@ -168,7 +171,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
     </footer>

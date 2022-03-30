@@ -33,7 +33,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
@@ -70,6 +70,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="get-started_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Get started with Luz</h1>
@@ -97,26 +100,26 @@
 </h2>
 <p>As much as possible, Luz tries to reuse the existing structures from Torch. For example, a model in Luz is defined identically as you would define it if using raw Torch. For a specific example, this is the definition of a feedforward CNN that can be used to classify digits from the MNIST dataset:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
   <span class="st">"Net"</span>,
   initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">num_class</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">conv1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">32</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">conv2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">32</span>, <span class="fl">64</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">dropout1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_dropout2d.html" class="external-link">nn_dropout2d</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">dropout2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_dropout2d.html" class="external-link">nn_dropout2d</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">9216</span>, <span class="fl">128</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">fc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">128</span>, <span class="va">num_class</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">conv1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">32</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">conv2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">32</span>, <span class="fl">64</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">dropout1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout2d.html" class="external-link">nn_dropout2d</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">dropout2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout2d.html" class="external-link">nn_dropout2d</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">9216</span>, <span class="fl">128</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">fc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">128</span>, <span class="va">num_class</span><span class="op">)</span>
   <span class="op">}</span>,
   forward <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
     <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">conv1</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
+    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
     <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">conv2</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nnf_max_pool2d.html" class="external-link">nnf_max_pool2d</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">)</span>
+    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
+    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_max_pool2d.html" class="external-link">nnf_max_pool2d</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">)</span>
     <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">dropout1</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_flatten.html" class="external-link">torch_flatten</a></span><span class="op">(</span><span class="va">x</span>, start_dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_flatten.html" class="external-link">torch_flatten</a></span><span class="op">(</span><span class="va">x</span>, start_dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
     <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">fc1</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
+    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
     <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">dropout2</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
     <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">fc2</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
     <span class="va">x</span>
@@ -126,7 +129,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span>
-    loss <span class="op">=</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_cross_entropy_loss.html" class="external-link">nn_cross_entropy_loss</a></span><span class="op">(</span><span class="op">)</span>,
+    loss <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_cross_entropy_loss.html" class="external-link">nn_cross_entropy_loss</a></span><span class="op">(</span><span class="op">)</span>,
     optimizer <span class="op">=</span> <span class="va">optim_adam</span>,
     metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
       <span class="va">luz_metric_accuracy</span>
@@ -137,9 +140,9 @@
   <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">10</span>, valid_data <span class="op">=</span> <span class="va">test_dl</span><span class="op">)</span></code></pre></div>
 <p>Let’s understand what happens in this chunk of code:</p>
 <ol style="list-style-type: decimal">
-<li>The <code>setup</code> function allows you to configure the loss (objective) function and the optimizer that you will use to train your model. Optionally you can pass a list of metrics that are tracked during the training procedure. <strong>Note:</strong> the loss function can be any function taking <code>input</code> and <code>target</code> tensors and returning a scalar tensor value, and the optimizer can be any core Torch optimizer or custom ones created with the <code><a href="https://torch.mlverse.org/docs/reference/optimizer.html" class="external-link">torch::optimizer()</a></code> function.</li>
+<li>The <code>setup</code> function allows you to configure the loss (objective) function and the optimizer that you will use to train your model. Optionally you can pass a list of metrics that are tracked during the training procedure. <strong>Note:</strong> the loss function can be any function taking <code>input</code> and <code>target</code> tensors and returning a scalar tensor value, and the optimizer can be any core Torch optimizer or custom ones created with the <code><a href="https://rdrr.io/pkg/torch/man/optimizer.html" class="external-link">torch::optimizer()</a></code> function.</li>
 <li>The <code><a href="../reference/set_hparams.html">set_hparams()</a></code> function allows you to set hyper-parameters that should be passed to the module <code>initialize()</code> method. For example in this case we pass <code>num_classes = 10</code>.</li>
-<li>The <code><a href="../reference/set_opt_hparams.html">set_opt_hparams()</a></code> function allows you to pass hyper-parameters that are used by the optimizer function. For example, <code><a href="https://torch.mlverse.org/docs/reference/optim_adam.html" class="external-link">optim_adam()</a></code> can take the <code>lr</code> parameter specifying the learning rate and we specify it with <code>lr = 0.003</code>.</li>
+<li>The <code><a href="../reference/set_opt_hparams.html">set_opt_hparams()</a></code> function allows you to pass hyper-parameters that are used by the optimizer function. For example, <code><a href="https://rdrr.io/pkg/torch/man/optim_adam.html" class="external-link">optim_adam()</a></code> can take the <code>lr</code> parameter specifying the learning rate and we specify it with <code>lr = 0.003</code>.</li>
 <li>The <code>fit</code> method will take the model specification provided by <code><a href="../reference/setup.html">setup()</a></code> and run the training procedure using the specified training and validation <code>torch::dataloaders()</code> as well as the number of epochs. <strong>Note:</strong> we again reuse core Torch data structures, instead of providing our own data loading functionality.</li>
 <li>The returned object <code>fitted</code> contains the trained model as well as the record of metrics and losses produced during training. It can also be used for producing predictions and for evaluating the trained model on other datasets.</li>
 </ol>
@@ -211,9 +214,9 @@
   <span class="co"># the internal state. The update function takes `preds`</span>
   <span class="co"># and `target` as parameters.</span>
   update <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">preds</span>, <span class="va">target</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_argmax.html" class="external-link">torch_argmax</a></span><span class="op">(</span><span class="va">preds</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+    <span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_argmax.html" class="external-link">torch_argmax</a></span><span class="op">(</span><span class="va">preds</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
     <span class="va">self</span><span class="op">$</span><span class="va">correct</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="va">correct</span> <span class="op">+</span> <span class="op">(</span><span class="va">pred</span> <span class="op">==</span> <span class="va">target</span><span class="op">)</span><span class="op">$</span>
-      <span class="fu">to</span><span class="op">(</span>dtype <span class="op">=</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_dtype.html" class="external-link">torch_float</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span>
+      <span class="fu">to</span><span class="op">(</span>dtype <span class="op">=</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_dtype.html" class="external-link">torch_float</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span>
       <span class="fu">sum</span><span class="op">(</span><span class="op">)</span><span class="op">$</span>
       <span class="fu">item</span><span class="op">(</span><span class="op">)</span>
     <span class="va">self</span><span class="op">$</span><span class="va">total</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="va">total</span> <span class="op">+</span> <span class="va">pred</span><span class="op">$</span><span class="fu">numel</span><span class="op">(</span><span class="op">)</span>
@@ -456,7 +459,7 @@ End Fit</code></pre>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
     </footer>

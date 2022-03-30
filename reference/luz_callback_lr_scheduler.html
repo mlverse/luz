@@ -17,7 +17,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
@@ -57,7 +57,7 @@
     </div>
 
     <div class="ref-description section level2">
-    <p>Initializes and runs <code><a href="https://torch.mlverse.org/docs/reference/lr_scheduler.html" class="external-link">torch::lr_scheduler()</a></code>s.</p>
+    <p>Initializes and runs <code><a href="https://rdrr.io/pkg/torch/man/lr_scheduler.html" class="external-link">torch::lr_scheduler()</a></code>s.</p>
     </div>
 
     <div class="section level2">
@@ -73,7 +73,7 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>lr_scheduler</dt>
-<dd><p>A <code><a href="https://torch.mlverse.org/docs/reference/lr_scheduler.html" class="external-link">torch::lr_scheduler()</a></code> that will be initialized with
+<dd><p>A <code><a href="https://rdrr.io/pkg/torch/man/lr_scheduler.html" class="external-link">torch::lr_scheduler()</a></code> that will be initialized with
 the optimizer and the <code>...</code> parameters.</p></dd>
 <dt>...</dt>
 <dd><p>Additional arguments passed to <code>lr_scheduler</code> together with
@@ -107,8 +107,8 @@ optimizer, <code>opt_name</code> is not used.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_is_installed.html" class="external-link">torch_is_installed</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">cb</span> <span class="op">&lt;-</span> <span class="fu">luz_callback_lr_scheduler</span><span class="op">(</span><span class="fu">torch</span><span class="fu">::</span><span class="va"><a href="https://torch.mlverse.org/docs/reference/lr_step.html" class="external-link">lr_step</a></span>, step_size <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_is_installed.html" class="external-link">torch_is_installed</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="va">cb</span> <span class="op">&lt;-</span> <span class="fu">luz_callback_lr_scheduler</span><span class="op">(</span><span class="fu">torch</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/torch/man/lr_step.html" class="external-link">lr_step</a></span>, step_size <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
     </div>
@@ -121,7 +121,7 @@ optimizer, <code>opt_name</code> is not used.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
 </div>
 
     </footer></div>
