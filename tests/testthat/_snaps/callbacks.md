@@ -6,7 +6,7 @@
           verbose = FALSE, epochs = 5, callbacks = list(luz_callback_lr_scheduler(
             torch::lr_multiplicative, verbose = TRUE, lr_lambda = function(epoch) 0.5)))
       })
-    Message <message>
+    Message <rlang_message>
       Adjusting learning rate of group 1 to 0.0005
       Adjusting learning rate of group 1 to 0.0003
       Adjusting learning rate of group 1 to 0.0001
@@ -225,9 +225,11 @@
       50/50 [======================================================] - Loss: 1.5147 
                                                                                     
       
+    Message <rlang_message>
       Train metrics: Loss: 1.5753
       Valid metrics: Loss: 1.5147
       Epoch 2/2
+    Message <message>
       
       1/50 [>-------------------------------------------------------] - Loss: 3.058 
       
@@ -432,6 +434,7 @@
       50/50 [======================================================] - Loss: 1.4162 
                                                                                     
       
+    Message <rlang_message>
       Train metrics: Loss: 1.4667
       Valid metrics: Loss: 1.4162
 

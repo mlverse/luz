@@ -4,6 +4,7 @@
 * Added MixUp callback and helper loss function and functional logic. (#82, @skeydan).
 * `lr_finder()` now by default divides the range between `start_lr` and `end_lr` into log-spaced intervals, following the fast.ai implementation. Cf. Sylvain Gugger's post: https://sgugger.github.io/how-do-you-find-a-good-learning-rate.html. The previous behavior can be achieved passing `log_spaced_intervals=FALSE` to the function. (#82, @skeydan)
 * `plot.lr_records()` now in addition plots an exponentially weighted moving average of the loss (again, see Sylvain Gugger's post), with a weighting coefficient of `0.9` (which seems a reasonable value for the default setting of 100 learning-rate-incrementing intervals). (#82, @skeydan)
+* Added a `luz_callback_gradient_clip` inspired by FastAI's implementation. (#90)
 
 # luz 0.2.0
 
