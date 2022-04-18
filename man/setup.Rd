@@ -24,7 +24,8 @@ the training procedure.}
 it's parameter. It must call \verb{$backward()} or \code{\link[torch:autograd_backward]{torch::autograd_backward()}}.
 In general you don't need to set this parameter unless you need to customize
 how luz calls the \code{backward()}, for example, if you need to add additional
-arguments to the backward call.}
+arguments to the backward call. Note that this becomes a method of the \code{nn_module}
+thus can be used by your custom \code{step()} if you override it.}
 }
 \value{
 A luz module that can be trained with \code{\link[=fit]{fit()}}.

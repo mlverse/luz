@@ -19,7 +19,8 @@
 #' it's parameter. It must call `$backward()` or [torch::autograd_backward()].
 #' In general you don't need to set this parameter unless you need to customize
 #' how luz calls the `backward()`, for example, if you need to add additional
-#' arguments to the backward call.
+#' arguments to the backward call. Note that this becomes a method of the `nn_module`
+#' thus can be used by your custom `step()` if you override it.
 #'
 #' @returns
 #' A luz module that can be trained with [fit()].
