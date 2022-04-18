@@ -302,3 +302,29 @@ test_that("evaluate works", {
   expect_snapshot(print(e))
 })
 
+test_that("cutom backward", {
+
+  model <- get_model()
+  dl <- get_dl()
+
+  mod <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam,
+      backward = function(x) {
+        x$backward()
+        if (ctx$iter == 1 && ctx$epoch == 1) {
+          print("hello")
+        }
+      }
+    )
+
+  expect_s3_class(mod, "luz_module_generator")
+
+  expect_output(regexp = "hello", {
+    output <- mod %>%
+      set_hparams(input_size = 10, output_size = 1) %>%
+      fit(dl, valid_data = dl, verbose = FALSE)
+  })
+  expect_s3_class(output, "luz_module_fitted")
+})
