@@ -65,7 +65,7 @@ to be used with Luz.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">setup</span><span class="op">(</span><span class="va">module</span>, loss <span class="op">=</span> <span class="cn">NULL</span>, optimizer <span class="op">=</span> <span class="cn">NULL</span>, metrics <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">setup</span><span class="op">(</span><span class="va">module</span>, loss <span class="op">=</span> <span class="cn">NULL</span>, optimizer <span class="op">=</span> <span class="cn">NULL</span>, metrics <span class="op">=</span> <span class="cn">NULL</span>, backward <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -83,6 +83,13 @@ the model parameters.</p></dd>
 <dt>metrics</dt>
 <dd><p>(<code>list</code>, optional) A list of metrics to be tracked during
 the training procedure.</p></dd>
+<dt>backward</dt>
+<dd><p>(<code>function</code>) A functions that takes the loss scalar values as
+it's parameter. It must call <code>$backward()</code> or <code><a href="https://rdrr.io/pkg/torch/man/autograd_backward.html" class="external-link">torch::autograd_backward()</a></code>.
+In general you don't need to set this parameter unless you need to customize
+how luz calls the <code>backward()</code>, for example, if you need to add additional
+arguments to the backward call. Note that this becomes a method of the <code>nn_module</code>
+thus can be used by your custom <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> if you override it.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
