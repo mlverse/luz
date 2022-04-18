@@ -4,7 +4,7 @@
 \alias{setup}
 \title{Set's up a \code{nn_module} to use with luz}
 \usage{
-setup(module, loss = NULL, optimizer = NULL, metrics = NULL)
+setup(module, loss = NULL, optimizer = NULL, metrics = NULL, backward = NULL)
 }
 \arguments{
 \item{module}{(\code{nn_module}) The \code{nn_module} that you want set up.}
@@ -19,6 +19,12 @@ the model parameters.}
 
 \item{metrics}{(\code{list}, optional) A list of metrics to be tracked during
 the training procedure.}
+
+\item{backward}{(\code{function}) A functions that takes the loss scalar values as
+it's parameter. It must call \verb{$backward()} or \code{\link[torch:autograd_backward]{torch::autograd_backward()}}.
+In general you don't need to set this parameter unless you need to customize
+how luz calls the \code{backward()}, for example, if you need to add additional
+arguments to the backward call.}
 }
 \value{
 A luz module that can be trained with \code{\link[=fit]{fit()}}.

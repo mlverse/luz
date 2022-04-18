@@ -15,6 +15,11 @@
 #' the model parameters.
 #' @param metrics (`list`, optional) A list of metrics to be tracked during
 #' the training procedure.
+#' @param backward (`function`) A functions that takes the loss scalar values as
+#' it's parameter. It must call `$backward()` or [torch::autograd_backward()].
+#' In general you don't need to set this parameter unless you need to customize
+#' how luz calls the `backward()`, for example, if you need to add additional
+#' arguments to the backward call.
 #'
 #' @returns
 #' A luz module that can be trained with [fit()].
@@ -22,7 +27,8 @@
 #' @family training
 #'
 #' @export
-setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
+setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL,
+                  backward = NULL) {
 
   methods <- list()
 
@@ -44,6 +50,18 @@ setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL) {
     rlang::abort(c("No optimizer definition has been provided.",
                    "Use the optimizer argument or,",
                    "Implement the `set_optimizers` method in the `nn_module`."))
+
+
+  if (!is.null(backward)) {
+    if(!rlang::is_function(backward)) {
+      rlang::abort(c("backward should be a function with a single argument"))
+    }
+    methods$backward <- backward
+  } else {
+    methods$backward <- function(x) {
+      x$backward()
+    }
+  }
 
   metrics <- c(luz_metric_loss_average(), metrics)
   methods$metrics <- metrics
@@ -402,7 +420,7 @@ fit_one_batch <-function(ctx) {
     ctx$call_callbacks("on_train_batch_after_loss")
 
     ctx$call_callbacks("on_train_batch_before_backward")
-    ctx$loss_grad$backward()
+    ctx$model$backward(ctx$loss_grad)
 
     ctx$call_callbacks("on_train_batch_before_step")
     ctx$opt$step()
