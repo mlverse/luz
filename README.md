@@ -8,7 +8,7 @@
 [![](https://cranlogs.r-pkg.org/badges/luz)](https://cran.r-project.org/package=luz)
 <!-- badges: end -->
 
-luz is a higher level API for torch providing abstractions to allow for much less verbose training loops.
+Luz is a higher level API for torch providing abstractions to allow for much less verbose training loops.
 
 This package is still under development.
 
@@ -38,13 +38,13 @@ remotes::install_github("mlverse/luz")
 
 ## Example
 
-Luz lets you take your Torch `nn_module` definition and `fit` it to a dataloader, while
+Luz lets you take your torch `nn_module` definition and `fit` it to a dataloader, while
 handling the boring parts like moving data between devices, updating the weights, 
 showing progress bars and tracking metrics.
 
 Here's an example defining and training an Autoencoder for the MNIST dataset.
-We selected parts of the code to highlight Luz functionality. You can find the
-full example code [here](https://mlverse.github.io/luz/articles/examples/mnist-autoencoder.html).
+We selected parts of the code to highlight luz functionality. 
+You can find the full example code [here](https://mlverse.github.io/luz/articles/examples/mnist-autoencoder.html).
 
 ```{.r}
 net <- nn_module(
@@ -71,8 +71,7 @@ net <- nn_module(
 )
 ```
 
-Now that we have defined the Autoencoder architecture using `torch::nn_module()`,
-we can fit it using Luz:
+Now that we have defined the Autoencoder architecture using `torch::nn_module()`, we can fit it using luz:
 
 ```{.r}
 fitted <- net %>%

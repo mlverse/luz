@@ -2,7 +2,7 @@
 #' Set's up a `nn_module` to use with luz
 #'
 #' The setup function is used to set important attributes and method for `nn_modules`
-#' to be used with Luz.
+#' to be used with luz.
 #'
 #' It makes sure the module have all the necessary ingredients in order to be fitted.
 #'

@@ -1,4 +1,6 @@
-The `ctx` object is used in luz to share information between the training loop and callbacks, model methods, and metrics. The table below describes information available in the `ctx` by default. Other callbacks could potentially modify these attributes or add new ones.
+The `ctx` object is used in luz to share information between the training loop and callbacks, model methods, and metrics. 
+The table below describes information available in the `ctx` by default. 
+Other callbacks could potentially modify these attributes or add new ones.
 
 +------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Attribute        | Description                                                                                                                                                                                                     |

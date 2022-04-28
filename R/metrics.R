@@ -34,7 +34,7 @@ LuzMetric <- R6::R6Class(
 #'
 #' @includeRmd man/rmd/metrics.Rmd details
 #' @returns
-#' Returns new Luz metric.
+#' Returns new luz metric.
 #'
 #' @examples
 #' luz_metric_accuracy <- luz_metric(
@@ -99,7 +99,7 @@ luz_metric <- function(name = NULL, ..., private = NULL, active = NULL,
 #'
 #'
 #' @returns
-#' Returns new Luz metric.
+#' Returns new luz metric.
 #'
 #' @family luz_metrics
 luz_metric_accuracy <- luz_metric(
@@ -138,7 +138,7 @@ luz_metric_accuracy <- luz_metric(
 #' }
 #'
 #' @returns
-#' Returns new Luz metric.
+#' Returns new luz metric.
 #'
 #' @family luz_metrics
 #' @export
@@ -182,7 +182,7 @@ luz_metric_binary_accuracy <- luz_metric(
 #' metric$compute()
 #' }
 #' @returns
-#' Returns new Luz metric.
+#' Returns new luz metric.
 #'
 #' @family luz_metrics
 #' @export
@@ -252,7 +252,7 @@ luz_metric_loss_average <- luz_metric(
 #' metric$compute()
 #' }
 #' @returns
-#' Returns new Luz metric.
+#' Returns new luz metric.
 #'
 #' @family luz_metrics
 #' @export
@@ -304,7 +304,7 @@ luz_metric_mse <- luz_metric(
 #' @family luz_metrics
 #'
 #' @returns
-#' Returns new Luz metric.
+#' Returns new luz metric.
 #'
 #' @export
 luz_metric_rmse <- luz_metric(

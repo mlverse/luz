@@ -6,8 +6,7 @@ In order to implement a new `luz_metric` we need to implement 3 methods:
 
 -   `compute`: uses the internal state to compute metric values. This function is called whenever we need to obtain the current metric value. Eg, it's called every training step for metrics displayed in the progress bar, but only called once per epoch to record it's value when the progress bar is not displayed.
 
-Optionally, you can implement a `abbrev` field that gives the metric an abbreviation
-that will be used when displaying metric information in the console or tracking record.
+Optionally, you can implement an `abbrev` field that gives the metric an abbreviation that will be used when displaying metric information in the console or tracking record.
 If no `abbrev` is passed, the class name will be used.
 
 Let's take a look at the implementation of `luz_metric_accuracy` so you can see how to implement a new one:
@@ -41,5 +40,4 @@ luz_metric_accuracy <- luz_metric(
 )
 ```
 
-**Note**: It's good practice that the `compute` metric returns regular R values
-instead of torch tensors and other parts of luz will expect that.
+**Note**: It's good practice that the `compute` metric returns regular R values instead of torch tensors and other parts of luz will expect that.
