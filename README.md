@@ -10,9 +10,9 @@
 
 luz is a higher level API for torch providing abstractions to allow for much less verbose training loops.
 
-This package is in a very early stage of development. Don't use it for anything meaningful yet.
+This package is still under development.
 
-It's heavily inspired by other higher level frameworks for deep learning, to cite a few:
+It is heavily inspired by other higher level frameworks for deep learning, to cite a few:
 
 -   [FastAI](https://docs.fast.ai/): we are heavily inspired by the FastAI library, especially the `Learner` object and the callbacks API.
 
