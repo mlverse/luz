@@ -2,7 +2,8 @@
 title: "Examples"
 ---
 
-This gallery of examples uses Luz to train a validate a range of common deep learning architectures as well as demonstrates basic and advanced usage of Luz.
+This gallery of examples uses luz to train and validate a range of common deep learning architectures. 
+The gallery also demonstrates basic and advanced usage of luz.
 
 <div class="container">
 ```{r echo=FALSE, results = "asis"}

@@ -13,7 +13,7 @@ library(luz)
 
 # Datasets and loaders ----------------------------------------------------
 
-dir <- "~/Downloads/mnist" #caching directory
+dir <- "~/Downloads/mnist" # caching directory
 
 train_ds <- mnist_dataset(
   dir,
@@ -31,7 +31,7 @@ train_dl <- dataloader(train_ds, batch_size = 128, shuffle = TRUE)
 test_dl <- dataloader(test_ds, batch_size = 128)
 
 
-# Buildifng the network ---------------------------------------------------
+# Building the network ---------------------------------------------------
 
 net <- nn_module(
   "Net",

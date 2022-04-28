@@ -16,11 +16,12 @@ torch_manual_seed(1)
 
 # Datasets and loaders ----------------------------------------------------
 
-dir <- "~/Downloads/dogs-vs-cats" #caching directory
+dir <- "~/Downloads/dogs-vs-cats" # caching directory
+kaggle_token <- "~/Downloads/kaggle.json"
 
 ds <- torchdatasets::dogs_vs_cats_dataset(
   dir,
-  token = "~/Downloads/kaggle.json",
+  token = kaggle_token,
   transform = . %>%
     torchvision::transform_to_tensor() %>%
     torchvision::transform_resize(size = c(224, 224)) %>% 
@@ -35,7 +36,7 @@ valid_ds <- dataset_subset(ds, indices = which(!seq_along(ds) %in% train_id))
 train_dl <- dataloader(train_ds, batch_size = 64, shuffle = TRUE, num_workers = 4)
 valid_dl <- dataloader(valid_ds, batch_size = 64, num_workers = 4)
 
-# Buildifng the network ---------------------------------------------------
+# Building the network ---------------------------------------------------
 
 net <- torch::nn_module(
   initialize = function(num_classes) {

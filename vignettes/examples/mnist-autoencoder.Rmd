@@ -12,7 +12,7 @@ library(luz)
 
 # Datasets and loaders ----------------------------------------------------
 
-dir <- "~/Downloads/mnist" #caching directory
+dir <- "~/Downloads/mnist" # caching directory
 
 # Modify the MNIST dataset so the target is identical to the input.
 mnist_dataset2 <- torch::dataset(
@@ -39,7 +39,7 @@ test_ds <- mnist_dataset2(
 train_dl <- dataloader(train_ds, batch_size = 128, shuffle = TRUE)
 test_dl <- dataloader(test_ds, batch_size = 128)
 
-# Buildifng the network ---------------------------------------------------
+# Building the network ---------------------------------------------------
 
 net <- nn_module(
   "Net",

@@ -12,7 +12,7 @@ library(luz)
 
 # Datasets and loaders ----------------------------------------------------
 
-dir <- "~/Downloads/mnist" #caching directory
+dir <- "~/Downloads/mnist" # caching directory
 
 triplet_mnist_dataset <- dataset(
   inherit = mnist_dataset,
