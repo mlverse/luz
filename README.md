@@ -10,17 +10,17 @@
 
 luz is a higher level API for torch providing abstractions to allow for much less verbose training loops.
 
-This package is in very early stage of development. Don't use for anything meaningful yet.
+This package is in a very early stage of development. Don't use it for anything meaningful yet.
 
-It's heavily inspired in other higher level frameworks for deep learning, to cite a few:
+It's heavily inspired by other higher level frameworks for deep learning, to cite a few:
 
--   [FastAI](https://docs.fast.ai/): we are heavily inspired in the FastAI library, specially the `Learner` object and the callbacks API.
+-   [FastAI](https://docs.fast.ai/): we are heavily inspired by the FastAI library, especially the `Learner` object and the callbacks API.
 
--   [Keras](https://keras.io/): We are also heavily inspired by Keras, specially callback names, the lightning module interface is similar to `compile` too.
+-   [Keras](https://keras.io/): We are also heavily inspired by Keras, especially callback names. The lightning module interface is similar to `compile`, too.
 
--   [PyTorch Lightning](https://www.pytorchlightning.ai/): The idea of the `luz_module` being a subclass of `nn_module` is inspired in the **`LightningModule`** object in lightning.
+-   [PyTorch Lightning](https://www.pytorchlightning.ai/): The idea of the `luz_module` being a subclass of `nn_module` is inspired by the **`LightningModule`** object in lightning.
 
--   [HuggingFace Accelerate](https://huggingface.co/docs/accelerate/): The internal device placement API is heavily inspired in Accelerate, but much more modest in features. Currenly only CPU and Single GPU are supported.
+-   [HuggingFace Accelerate](https://huggingface.co/docs/accelerate/): The internal device placement API is heavily inspired by Accelerate, but is much more modest in features. Currently only CPU and Single GPU are supported.
 
 ## Installation
 
@@ -38,7 +38,7 @@ remotes::install_github("mlverse/luz")
 
 ## Example
 
-Luz let's you take your Torch `nn_module` definition and `fit` it to a dataloader, while
+Luz lets you take your Torch `nn_module` definition and `fit` it to a dataloader, while
 handling the boring parts like moving data between devices, updating the weights, 
 showing progress bars and tracking metrics.
 
@@ -71,7 +71,7 @@ net <- nn_module(
 )
 ```
 
-Now that we have defined the Autoencder architecture using `torch::nn_module()`,
+Now that we have defined the Autoencoder architecture using `torch::nn_module()`,
 we can fit it using Luz:
 
 ```{.r}
