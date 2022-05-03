@@ -10,7 +10,7 @@
     make the same code work on both the CPU and GPU. Its flexible enough to
     support expressing a large range of models. Its heavily inspired by fastai by 
     Howard et al. (2020) &lt;arXiv:2002.04688&gt;, Keras by Chollet et al. (2015) and 
-    Pytorch Lightning by Falcon et al. (2019) &lt;doi:10.5281/zenodo.3828935&gt;.">
+    PyTorch Lightning by Falcon et al. (2019) &lt;doi:10.5281/zenodo.3828935&gt;.">
 <title>Higher Level API for torch • luz</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
@@ -22,7 +22,7 @@
     make the same code work on both the CPU and GPU. Its flexible enough to
     support expressing a large range of models. Its heavily inspired by fastai by 
     Howard et al. (2020) &lt;arXiv:2002.04688&gt;, Keras by Chollet et al. (2015) and 
-    Pytorch Lightning by Falcon et al. (2019) &lt;doi:10.5281/zenodo.3828935&gt;.">
+    PyTorch Lightning by Falcon et al. (2019) &lt;doi:10.5281/zenodo.3828935&gt;.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -85,14 +85,14 @@
 <div class="page-header"><h1 id="luz">luz<a class="anchor" aria-label="anchor" href="#luz"></a>
 </h1></div>
 <!-- badges: start -->
-<p>luz is a higher level API for torch providing abstractions to allow for much less verbose training loops.</p>
-<p>This package is in very early stage of development. Don’t use for anything meaningful yet.</p>
-<p>It’s heavily inspired in other higher level frameworks for deep learning, to cite a few:</p>
+<p>Luz is a higher level API for torch providing abstractions to allow for much less verbose training loops.</p>
+<p>This package is still under development.</p>
+<p>It is heavily inspired by other higher level frameworks for deep learning, to cite a few:</p>
 <ul>
-<li><p><a href="https://docs.fast.ai/" class="external-link">FastAI</a>: we are heavily inspired in the FastAI library, specially the <code>Learner</code> object and the callbacks API.</p></li>
-<li><p><a href="https://keras.io/" class="external-link">Keras</a>: We are also heavily inspired by Keras, specially callback names, the lightning module interface is similar to <code>compile</code> too.</p></li>
-<li><p><a href="https://www.pytorchlightning.ai/" class="external-link">PyTorch Lightning</a>: The idea of the <code>luz_module</code> being a subclass of <code>nn_module</code> is inspired in the <strong><code>LightningModule</code></strong> object in lightning.</p></li>
-<li><p><a href="https://huggingface.co/docs/accelerate/" class="external-link">HuggingFace Accelerate</a>: The internal device placement API is heavily inspired in Accelerate, but much more modest in features. Currenly only CPU and Single GPU are supported.</p></li>
+<li><p><a href="https://docs.fast.ai/" class="external-link">FastAI</a>: we are heavily inspired by the FastAI library, especially the <code>Learner</code> object and the callbacks API.</p></li>
+<li><p><a href="https://keras.io/" class="external-link">Keras</a>: We are also heavily inspired by Keras, especially callback names. The lightning module interface is similar to <code>compile</code>, too.</p></li>
+<li><p><a href="https://www.pytorchlightning.ai/" class="external-link">PyTorch Lightning</a>: The idea of the <code>luz_module</code> being a subclass of <code>nn_module</code> is inspired by the <strong><code>LightningModule</code></strong> object in lightning.</p></li>
+<li><p><a href="https://huggingface.co/docs/accelerate/" class="external-link">HuggingFace Accelerate</a>: The internal device placement API is heavily inspired by Accelerate, but is much more modest in features. Currently only CPU and Single GPU are supported.</p></li>
 </ul>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -107,8 +107,8 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>Luz let’s you take your Torch <code>nn_module</code> definition and <code>fit</code> it to a dataloader, while handling the boring parts like moving data between devices, updating the weights, showing progress bars and tracking metrics.</p>
-<p>Here’s an example defining and training an Autoencoder for the MNIST dataset. We selected parts of the code to highlight Luz functionality. You can find the full example code <a href="https://mlverse.github.io/luz/articles/examples/mnist-autoencoder.html" class="external-link">here</a>.</p>
+<p>Luz lets you take your torch <code>nn_module</code> definition and <code>fit</code> it to a dataloader, while handling the boring parts like moving data between devices, updating the weights, showing progress bars and tracking metrics.</p>
+<p>Here’s an example defining and training an Autoencoder for the MNIST dataset. We selected parts of the code to highlight luz functionality. You can find the full example code <a href="https://mlverse.github.io/luz/articles/examples/mnist-autoencoder.html" class="external-link">here</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu">nn_module</span><span class="op">(</span>
   <span class="st">"Net"</span>,
@@ -132,7 +132,7 @@
       <span class="va">self</span><span class="op">$</span><span class="fu">decoder</span><span class="op">(</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">)</span></code></pre></div>
-<p>Now that we have defined the Autoencder architecture using <code><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">torch::nn_module()</a></code>, we can fit it using Luz:</p>
+<p>Now that we have defined the Autoencoder architecture using <code><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">torch::nn_module()</a></code>, we can fit it using luz:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="reference/setup.html">setup</a></span><span class="op">(</span>

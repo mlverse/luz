@@ -88,12 +88,12 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://torch.mlverse.org/docs" class="external-link">torch</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/luz/" class="external-link">luz</a></span><span class="op">)</span></code></pre></div>
 <p>Luz is a higher level API for torch that is designed to be highly flexible by providing a layered API that allows it to be useful no matter the level of control your need for your training loop.</p>
-<p>In the getting started vignette we have seen the basics of luz and how to quickly modify parts of the training loop using callbacks and custom metrics. In this document we will find describe how luz allows the user to get fine grained control of the training loop.</p>
-<p>A part from the use of callbacks there are three more ways that you can use luz depending on how much control you need:</p>
+<p>In the getting started vignette we have seen the basics of luz and how to quickly modify parts of the training loop using callbacks and custom metrics. In this document we will describe how luz allows the user to get fine-grained control of the training loop.</p>
+<p>Apart from the use of callbacks, there are three more ways that you can use luz (depending on how much control you need):</p>
 <ul>
-<li><p><strong>Multiple optimizers or losses</strong>: You might be optimizing two loss functions each with its own optimizer, but you still don’t want to modify the <code>backward()</code> - <code>zero_grad()</code> and <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> calls. This is common in models like GANs (Generative Adversarial Networks) when you have competing neural networks trained with different losses and optimizers.</p></li>
-<li><p><strong>Fully flexible step:</strong> You might want to be in control of how to call <code>backward()</code>, <code>zero_grad()</code>and <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> as well as maybe having more control of gradient computation. For example, you might want to use ‘virtual batch sizes’, ie. you accumulate the gradients for a few steps before updating the weights.</p></li>
-<li><p><strong>Completely flexible loop</strong>: Your training loop can be anything you want but you still want to use luz to handle device placement of the dataloaders, optimizers and models. See the accelerator vignette.</p></li>
+<li><p><strong>Multiple optimizers or losses:</strong> You might be optimizing two loss functions each with its own optimizer, but you still don’t want to modify the <code>backward()</code> - <code>zero_grad()</code> and <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> calls. This is common in models like GANs (Generative Adversarial Networks) when you have competing neural networks trained with different losses and optimizers.</p></li>
+<li><p><strong>Fully flexible steps:</strong> You might want to be in control of how to call <code>backward()</code>, <code>zero_grad()</code>and <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code>. You might also want to have more control of gradient computation. For example, you might want to use ‘virtual batch sizes’, where you accumulate the gradients for a few steps before updating the weights.</p></li>
+<li><p><strong>Completely flexible loops:</strong> Your training loop can be anything you want but you still want to use luz to handle device placement of the dataloaders, optimizers and models. See <code><a href="../articles/accelerator.html">vignette("accelerator")</a></code>.</p></li>
 </ul>
 <p>Let’s consider a simplified version of the <code>net</code> that we implemented in the getting started vignette:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -124,8 +124,8 @@
 <div class="section level2">
 <h2 id="multiple-optimizers">Multiple optimizers<a class="anchor" aria-label="anchor" href="#multiple-optimizers"></a>
 </h2>
-<p>Suppose we want to do an experiment where we train the first fully connected layer using a learning rate of 0.1 and the second one using learning rate of 0.01. Both minimizing the same <code><a href="https://rdrr.io/pkg/torch/man/nn_cross_entropy_loss.html" class="external-link">nn_cross_entropy_loss()</a></code> but for the first layer we want to add L1 regularization on the weights.</p>
-<p>In order to use luz for this we will implement two methods in the <code>net</code> module:</p>
+<p>Suppose we want to do an experiment where we train the first fully connected layer using a learning rate of 0.1 and the second one using a learning rate of 0.01. We will minimize the same <code><a href="https://rdrr.io/pkg/torch/man/nn_cross_entropy_loss.html" class="external-link">nn_cross_entropy_loss()</a></code> for both, but for the first layer we want to add L1 regularization on the weights.</p>
+<p>In order to use luz for this, we will implement two methods in the <code>net</code> module:</p>
 <ul>
 <li><p><code>set_optimizers</code>: returns a named list of optimizers depending on the <code>ctx</code>.</p></li>
 <li><p><code>loss</code>: computes the loss depending on the selected optimizer.</p></li>
@@ -159,22 +159,19 @@
       <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_cross_entropy.html" class="external-link">nnf_cross_entropy</a></span><span class="op">(</span><span class="va">pred</span>, <span class="va">target</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">)</span></code></pre></div>
-<p>Notice that model optimizers will be initialized according to the <code>set_optimizers()</code> method return value. In this case, we are initializing the optimizers using different model parameters and learning rates.</p>
-<p>The <code>loss()</code> method is responsible for computing the loss that will be then backpropagated to compute gradients and update the weights. This <code>loss()</code> method can access the <code>ctx</code> object that will contain a <code>opt_name</code> field, describing which optimizer is currently being used. Note that this function will be called once for each optimizer for each training and validation step. See <code><a href="../reference/ctx.html">help("ctx")</a></code> for complete information about the context object.</p>
+<p>Notice that the model optimizers will be initialized according to the <code>set_optimizers()</code> method’s return value (a list). In this case, we are initializing the optimizers using different model parameters and learning rates.</p>
+<p>The <code>loss()</code> method is responsible for computing the loss that will then be back-propagated to compute gradients and update the weights. This <code>loss()</code> method can access the <code>ctx</code> object that will contain an <code>opt_name</code> field, describing which optimizer is currently being used. Note that this function will be called once for each optimizer for each training and validation step. See <code><a href="../reference/ctx.html">help("ctx")</a></code> for complete information about the context object.</p>
 <p>We can finally <code>setup</code> and <code>fit</code> this module, however we no longer need to specify optimizers and loss functions.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span>metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-      <span class="va">luz_metric_accuracy</span>
-  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span>metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">luz_metric_accuracy</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">10</span>, valid_data <span class="op">=</span> <span class="va">test_dl</span><span class="op">)</span></code></pre></div>
-<p>Now let’s re-implement this same model using the slightly more flexible approach of consisting in overriding the training and validation step.</p>
+<p>Now let’s re-implement this same model using the slightly more flexible approach of overriding the training and validation step.</p>
 </div>
 <div class="section level2">
-<h2 id="fully-flexible-step">
-<strong>Fully flexible step</strong><a class="anchor" aria-label="anchor" href="#fully-flexible-step"></a>
+<h2 id="fully-flexible-step">Fully flexible step<a class="anchor" aria-label="anchor" href="#fully-flexible-step"></a>
 </h2>
-<p>Instead of implementing the <code>loss()</code> method we can implement the <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> method, this allows us to flexibly modify what happens when training and validating for each batch in the dataset. You are now responsible for updating the weights by stepping the optimizers and backpropagating the loss.</p>
+<p>Instead of implementing the <code>loss()</code> method, we can implement the <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> method. This allows us to flexibly modify what happens when training and validating for each batch in the dataset. You are now responsible for updating the weights by stepping the optimizers and back-propagating the loss.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
   <span class="st">"Net"</span>,
@@ -220,17 +217,17 @@
 <span class="op">)</span></code></pre></div>
 <p>The important things to notice here are:</p>
 <ul>
-<li><p>The <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> method is used for both training and validation. You need to be careful only modify the weights when training. Again, you can get complete information regarding the context object using <code><a href="../reference/ctx.html">help("ctx")</a></code>.</p></li>
+<li><p>The <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> method is used for both training and validation. You need to be careful to only modify the weights when training. Again, you can get complete information regarding the context object using <code><a href="../reference/ctx.html">help("ctx")</a></code>.</p></li>
 <li><p><code>ctx$optimizers</code> is a named list holding each optimizer that was created when the <code>set_optimizers()</code> method was called.</p></li>
-<li><p>You need to manually track the losses by saving saving them in a named list in <code>ctx$loss</code>. By convention, we use the same name as the optimizer it refers to. It’s good practice to <code><a href="https://rdrr.io/r/base/detach.html" class="external-link">detach()</a></code> them before saving to reduce memory usage.</p></li>
-<li><p>Callbacks that would be called inside the default <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> method like <code>on_train_batch_after_pred</code>, <code>on_train_batch_after_loss</code> , etc won’t be automatically called. You can still cal them manually by adding <code>ctx$call_callbacks("&lt;callback name&gt;")</code> inside you training step. See the code for <code>fit_one_batch()</code> and <code>valid_one_batch</code> to find all the callbacks that won’t be called.</p></li>
+<li><p>You need to manually track the losses by saving saving them in a named list in <code>ctx$loss</code>. By convention, we use the same name as the optimizer it refers to. It is good practice to <code><a href="https://rdrr.io/r/base/detach.html" class="external-link">detach()</a></code> them before saving to reduce memory usage.</p></li>
+<li><p>Callbacks that would be called inside the default <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> method like <code>on_train_batch_after_pred</code>, <code>on_train_batch_after_loss</code>, etc, won’t be automatically called. You can still cal them manually by adding <code>ctx$call_callbacks("&lt;callback name&gt;")</code> inside your training step. See the code for <code>fit_one_batch()</code> and <code>valid_one_batch</code> to find all the callbacks that won’t be called.</p></li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="next-steps">Next steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
 </h2>
 <p>In this article you learned how to customize the <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> of your training loop using luz layered functionality.</p>
-<p>Luz also allows more flexible modifications of the training loop described in the Accelerator vignette.</p>
+<p>Luz also allows more flexible modifications of the training loop described in the Accelerator vignette (<code><a href="../articles/accelerator.html">vignette("accelerator")</a></code>).</p>
 <p>You should now be able to follow the examples marked with the ‘intermediate’ and ‘advanced’ category in the <a href="https://mlverse.github.io/luz/articles/examples/index.html" class="external-link">examples gallery</a>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

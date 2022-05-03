@@ -112,10 +112,10 @@ epoch is finished. For that task we use the <code>luz_callback</code> function:<
     <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">message</span>, <span class="st">"\n"</span><span class="op">)</span>
   <span class="op">}</span>
 <span class="op">)</span></code></pre><p></p></div>
-<p><code>luz_callback()</code> takes a named list of function as argument where the
-name indicate the moment at which the callback should be called. For
+<p><code>luz_callback()</code> takes named functions as <code>...</code> arguments, where the
+name indicates the moment at which the callback should be called. For
 instance <code>on_train_batch_end()</code> is called for every batch at the end of
-the training procedure and <code>on_epoch_end()</code> is called at the end of
+the training procedure, and <code>on_epoch_end()</code> is called at the end of
 every epoch.</p>
 <p>The returned value of <code>luz_callback()</code> is a function that initializes an
 instance of the callback. Callbacks can have initialization parameters,
@@ -125,7 +125,7 @@ definition, and save these parameters to the <code>self</code> object. In the ab
 example, the callback has a <code>message</code> parameter that is printed at the
 end of each epoch.</p>
 <p>Once a callback is defined it can be passed to the <code>fit</code> function via
-the <code>callbacks</code> parameter, eg:</p><div class="sourceCode r"><pre><code><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+the <code>callbacks</code> parameter:</p><div class="sourceCode r"><pre><code><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">...</span>, callbacks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
     <span class="fu">print_callback</span><span class="op">(</span>message <span class="op">=</span> <span class="st">"Done!"</span><span class="op">)</span>
@@ -174,14 +174,14 @@ is available for callbacks to be called.</p>
 <p>The other important part of callbacks is the <code>ctx</code> (context) object. See
 <code><a href="ctx.html">help("ctx")</a></code> for details.</p>
 <p>By default, callbacks are called in the same order as they were passed
-to <code>fit</code> (<code>predict</code> or <code>evaluate</code>), but you can provide a <code>weight</code>
-attribute that will control the order that it will be called. For
+to <code>fit</code> (or <code>predict</code> or <code>evaluate</code>), but you can provide a <code>weight</code>
+attribute that will control the order in which it will be called. For
 example, if one callback has <code>weight = 10</code> and another has <code>weight = 1</code>,
 then the first one is called after the second one. Callbacks that don’t
 specify a <code>weight</code> attribute are considered <code>weight = 0</code>. A few built-in
-callbacks in luz already provide a weight value, for example the
-<code><a href="luz_callback_early_stopping.html">?luz_callback_early_stopping</a></code>, since in general we want to run it as
-the last thing in the loop.</p>
+callbacks in luz already provide a weight value. For example, the
+<code><a href="luz_callback_early_stopping.html">?luz_callback_early_stopping</a></code> has a weight of <code>Inf</code>, since in general
+we want to run it as the last thing in the loop.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

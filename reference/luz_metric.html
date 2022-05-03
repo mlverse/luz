@@ -95,7 +95,7 @@ evaluated in <code>parent_env</code> each time an object is instantiated.</p></d
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>Returns new Luz metric.</p>
+    <p>Returns new luz metric.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -109,7 +109,7 @@ function is called whenever we need to obtain the current metric
 value. Eg, it’s called every training step for metrics displayed in
 the progress bar, but only called once per epoch to record it’s
 value when the progress bar is not displayed.</p></li>
-</ul><p>Optionally, you can implement a <code>abbrev</code> field that gives the metric an
+</ul><p>Optionally, you can implement an <code>abbrev</code> field that gives the metric an
 abbreviation that will be used when displaying metric information in the
 console or tracking record. If no <code>abbrev</code> is passed, the class name
 will be used.</p>

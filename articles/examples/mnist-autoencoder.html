@@ -92,7 +92,7 @@
 
 <span class="co"># Datasets and loaders ----------------------------------------------------</span>
 
-<span class="va">dir</span> <span class="op">&lt;-</span> <span class="st">"~/Downloads/mnist"</span> <span class="co">#caching directory</span>
+<span class="va">dir</span> <span class="op">&lt;-</span> <span class="st">"~/Downloads/mnist"</span> <span class="co"># caching directory</span>
 
 <span class="co"># Modify the MNIST dataset so the target is identical to the input.</span>
 <span class="va">mnist_dataset2</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span>
@@ -119,7 +119,7 @@
 <span class="va">train_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="va">train_ds</span>, batch_size <span class="op">=</span> <span class="fl">128</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">test_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="va">test_ds</span>, batch_size <span class="op">=</span> <span class="fl">128</span><span class="op">)</span>
 
-<span class="co"># Buildifng the network ---------------------------------------------------</span>
+<span class="co"># Building the network ---------------------------------------------------</span>
 
 <span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
   <span class="st">"Net"</span>,
