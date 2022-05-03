@@ -198,3 +198,35 @@ luz_callback_model_checkpoint <- luz_callback(
     glue::glue(path, .transformer = sprintf_transformer, .envir = rlang::caller_env())
   }
 )
+
+#' Keep the best model
+#'
+#' Each epoch, if there's improvement in the monitored metric we serialize the
+#' model weights to a temp file. When training is done, we reload weights from
+#' the best model.
+#'
+#' @inheritParams luz_callback_early_stopping
+#'
+#' @examples
+#' cb <- luz_callback_keep_best_model()
+#'
+#' @family luz_callbacks
+#' @export
+luz_callback_keep_best_model <- luz_callback(
+  "keep_best_model_callback",
+  inherit = luz_callback_model_checkpoint,
+  initialize = function(monitor = "valid_loss", mode="min", min_delta = 0) {
+    self$path <- tempfile(fileext = "pt")
+    super$initialize(
+      self$path, monitor = monitor, mode = mode, min_delta = min_delta,
+      save_best_only = TRUE
+    )
+  },
+  on_fit_end = function() {
+    weights <- torch::torch_load(self$path)$state_dict()
+    ctx$model$load_state_dict(weights)
+  },
+  finalize = function() {
+    unlink(self$path)
+  }
+)
