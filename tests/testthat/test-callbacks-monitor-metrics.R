@@ -243,7 +243,7 @@ test_that("use_best_model_callback", {
     ) %>%
     set_opt_hparams(lr = 1) %>%
     fit(list(x, y), verbose = FALSE, callbacks = list(
-      luz_callback_use_best_model("train_loss", mode = "max")
+      luz_callback_keep_best_model("train_loss", mode = "max")
     ))
 
   expect_true(model$model$w$item() > 90)

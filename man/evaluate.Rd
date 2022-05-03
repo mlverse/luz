@@ -60,7 +60,7 @@ For example:\if{html}{\out{<div class="sourceCode r">}}\preformatted{evaluation 
 metrics <- get_metrics(evaluation)
 print(evaluation)
 }\if{html}{\out{</div>}}\preformatted{## A `luz_module_evaluation`
-## -- Results --------------------------------------------------------------------
+## -- Results --------------------------------------------------------------------------------------------
 ## loss: 1.5146
 ## mae: 1.0251
 ## mse: 1.5159

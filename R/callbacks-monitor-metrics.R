@@ -199,7 +199,7 @@ luz_callback_model_checkpoint <- luz_callback(
   }
 )
 
-#' Use best model
+#' Keep the best model
 #'
 #' Each epoch, if there's improvement in the monitored metric we serialize the
 #' model weights to a temp file. When training is done, we reload weights from
@@ -208,12 +208,12 @@ luz_callback_model_checkpoint <- luz_callback(
 #' @inheritParams luz_callback_early_stopping
 #'
 #' @examples
-#' cb <- luz_callback_use_best_model()
+#' cb <- luz_callback_keep_best_model()
 #'
 #' @family luz_callbacks
 #' @export
-luz_callback_use_best_model <- luz_callback(
-  "use_best_model_callback",
+luz_callback_keep_best_model <- luz_callback(
+  "keep_best_model_callback",
   inherit = luz_callback_model_checkpoint,
   initialize = function(monitor = "valid_loss", mode="min", min_delta = 0) {
     self$path <- tempfile(fileext = "pt")
