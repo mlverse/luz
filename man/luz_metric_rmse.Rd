@@ -7,7 +7,7 @@
 luz_metric_rmse()
 }
 \value{
-Returns new Luz metric.
+Returns new luz metric.
 }
 \description{
 Computes the root mean squared error.

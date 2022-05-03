@@ -18,20 +18,16 @@ knitr::opts_chunk$set(
 library(luz)
 ```
 
-The Accelerator API is a simplified port of the Hugging Face [Accelerate library](https://github.com/huggingface/accelerate). Currently it only handles CPU and
-single GPU usage but allows users avoid the boilerplate code necessary to write 
-training loops that works correctly on both devices.
+The Accelerator API is a simplified port of the Hugging Face [Accelerate library](https://github.com/huggingface/accelerate).
+It allows users to avoid the boilerplate code necessary to write training loops that work correctly on both devices.
+Currently it only handles CPU and single-GPU usage. 
 
-This API is meant to be the most flexible way you can use the luz package. With
-the Accelerator API, you write the raw torch training loop and with a few code
-changes you handle device placement of model, optimizers and dataloaders so you
-don't need to add many `$to(device="cuda")` in your code or think about the order
-to create model and optimizers.
+This API is meant to be the most flexible way you can use the luz package. 
+With the Accelerator API, you write the raw torch training loop and, with a few code changes, you automatically handle device placement of the model, optimizers and dataloaders, so you don't need to add many `$to(device="cuda")` calls in your code or think about the order in which to create the model and optimizers.
 
 ## Example
 
-The Accelerator API is best explained by showing an example diff in a raw torch
-training loop.
+The Accelerator API is best explained by showing an example diff in a raw torch training loop.
 
 ```diff
 library(torch)
@@ -68,9 +64,6 @@ coro::loop(for (batch in dl) {
 })
 ```
 
-With the following changes to your code you no longer need to manually move
-data and parameters between devices which makes your code easier to read and
-less error prone.
+With the code changes shown, you no longer need to manually move data and parameters between devices, which makes your code easier to read and less error prone.
 
 You can find additional documentation using `help(accelerator)`.
-

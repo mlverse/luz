@@ -1,4 +1,5 @@
-Let's implement a callback that prints 'Iteration `n`' (where `n` is the iteration number) for every batch in the training set and 'Done' when an epoch is finished. For that task we use the `luz_callback` function:
+Let's implement a callback that prints 'Iteration `n`' (where `n` is the iteration number) for every batch in the training set and 'Done' when an epoch is finished. 
+For that task we use the `luz_callback` function:
 
 ```{r, eval = FALSE}
 print_callback <- luz_callback(
@@ -15,14 +16,15 @@ print_callback <- luz_callback(
 )
 ```
 
-`luz_callback()` takes a named list of function as argument where the name indicate the moment at which the callback should be called. For instance `on_train_batch_end()` is called for every batch at the end of the training procedure and `on_epoch_end()` is called at the end of every epoch.
+`luz_callback()` takes named functions as `...` arguments, where the name indicates the moment at which the callback should be called. 
+For instance `on_train_batch_end()` is called for every batch at the end of the training procedure, and `on_epoch_end()` is called at the end of every epoch.
 
-The returned value of `luz_callback()` is a function that initializes an instance
-of the callback. Callbacks can have initialization parameters, like the name of a file
-where you want to log the results. In that case, you can pass an `initialize` method when
-creating the callback definition, and save these parameters to the `self` object. In the above example, the callback has a `message` parameter that is printed at the end of each epoch.
+The returned value of `luz_callback()` is a function that initializes an instance of the callback. 
+Callbacks can have initialization parameters, like the name of a file where you want to log the results. 
+In that case, you can pass an `initialize` method when creating the callback definition, and save these parameters to the `self` object. 
+In the above example, the callback has a `message` parameter that is printed at the end of each epoch.
 
-Once a callback is defined it can be passed to the `fit` function via the `callbacks` parameter, eg:
+Once a callback is defined it can be passed to the `fit` function via the `callbacks` parameter:
 
 ```{r, eval = FALSE}
 fitted <- net %>%
@@ -32,7 +34,8 @@ fitted <- net %>%
   ))
 ```
 
-Callbacks can be called in many different positions of the training loop, including combinations of them. Here's an overview of possible callback *breakpoints*:
+Callbacks can be called in many different positions of the training loop, including combinations of them. 
+Here's an overview of possible callback *breakpoints*:
 
     Start Fit
        - on_fit_begin
@@ -72,7 +75,11 @@ Callbacks can be called in many different positions of the training loop, includ
 
 Every step market with `on_*` is a point in the training procedure that is available for callbacks to be called.
 
-The other important part of callbacks is the `ctx` (context) object. See `help("ctx")` for details.
+The other important part of callbacks is the `ctx` (context) object. 
+See `help("ctx")` for details.
 
-By default, callbacks are called in the same order as they were passed to `fit` (`predict` or `evaluate`), but you can provide a `weight` attribute that will control the order that it will be called. For example, if one callback has `weight = 10` and another has `weight = 1`, then the first one is called after the second one.
-Callbacks that don't specify a `weight` attribute are considered `weight = 0`. A few built-in callbacks in luz already provide a weight value, for example the `?luz_callback_early_stopping`, since in general we want to run it as the last thing in the loop.
+By default, callbacks are called in the same order as they were passed to `fit` (or `predict` or `evaluate`), but you can provide a `weight` attribute that will control the order in which it will be called. 
+For example, if one callback has `weight = 10` and another has `weight = 1`, then the first one is called after the second one.
+Callbacks that don't specify a `weight` attribute are considered `weight = 0`. 
+A few built-in callbacks in luz already provide a weight value. 
+For example, the `?luz_callback_early_stopping` has a weight of `Inf`, since in general we want to run it as the last thing in the loop.

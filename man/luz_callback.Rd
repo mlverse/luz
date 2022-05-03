@@ -54,10 +54,10 @@ epoch is finished. For that task we use the \code{luz_callback} function:\if{htm
 )
 }\if{html}{\out{</div>}}
 
-\code{luz_callback()} takes a named list of function as argument where the
-name indicate the moment at which the callback should be called. For
+\code{luz_callback()} takes named functions as \code{...} arguments, where the
+name indicates the moment at which the callback should be called. For
 instance \code{on_train_batch_end()} is called for every batch at the end of
-the training procedure and \code{on_epoch_end()} is called at the end of
+the training procedure, and \code{on_epoch_end()} is called at the end of
 every epoch.
 
 The returned value of \code{luz_callback()} is a function that initializes an
@@ -69,7 +69,7 @@ example, the callback has a \code{message} parameter that is printed at the
 end of each epoch.
 
 Once a callback is defined it can be passed to the \code{fit} function via
-the \code{callbacks} parameter, eg:\if{html}{\out{<div class="sourceCode r">}}\preformatted{fitted <- net \%>\%
+the \code{callbacks} parameter:\if{html}{\out{<div class="sourceCode r">}}\preformatted{fitted <- net \%>\%
   setup(...) \%>\%
   fit(..., callbacks = list(
     print_callback(message = "Done!")
@@ -122,14 +122,14 @@ The other important part of callbacks is the \code{ctx} (context) object. See
 \code{help("ctx")} for details.
 
 By default, callbacks are called in the same order as they were passed
-to \code{fit} (\code{predict} or \code{evaluate}), but you can provide a \code{weight}
-attribute that will control the order that it will be called. For
+to \code{fit} (or \code{predict} or \code{evaluate}), but you can provide a \code{weight}
+attribute that will control the order in which it will be called. For
 example, if one callback has \code{weight = 10} and another has \code{weight = 1},
 then the first one is called after the second one. Callbacks that don’t
 specify a \code{weight} attribute are considered \code{weight = 0}. A few built-in
-callbacks in luz already provide a weight value, for example the
-\code{?luz_callback_early_stopping}, since in general we want to run it as
-the last thing in the loop.
+callbacks in luz already provide a weight value. For example, the
+\code{?luz_callback_early_stopping} has a weight of \code{Inf}, since in general
+we want to run it as the last thing in the loop.
 }
 \examples{
 print_callback <- luz_callback(

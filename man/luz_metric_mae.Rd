@@ -7,7 +7,7 @@
 luz_metric_mae()
 }
 \value{
-Returns new Luz metric.
+Returns new luz metric.
 }
 \description{
 Computes the mean absolute error.

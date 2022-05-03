@@ -32,7 +32,7 @@ A luz module that can be trained with \code{\link[=fit]{fit()}}.
 }
 \description{
 The setup function is used to set important attributes and method for \code{nn_modules}
-to be used with Luz.
+to be used with luz.
 }
 \details{
 It makes sure the module have all the necessary ingredients in order to be fitted.

@@ -8,7 +8,7 @@ category: 'intermediate'
 ```{r, eval = FALSE}
 # Packages ----------------------------------------------------------------
 
-devtools::load_all()
+library(luz)
 library(torch)
 library(torchvision)
 
@@ -34,7 +34,7 @@ plot_callback <- luz_callback(
 
 # Datasets and loaders ----------------------------------------------------
 
-dir <- "~/Downloads/mnist" #caching directory
+dir <- "~/Downloads/mnist" # caching directory
 
 train_ds <- mnist_dataset(
   dir,
