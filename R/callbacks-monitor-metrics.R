@@ -225,5 +225,8 @@ luz_callback_use_best_model <- luz_callback(
   on_fit_end = function() {
     weights <- torch::torch_load(self$path)$state_dict()
     ctx$model$load_state_dict(weights)
+  },
+  finalize = function() {
+    unlink(self$path)
   }
 )
