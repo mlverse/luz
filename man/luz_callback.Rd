@@ -153,6 +153,7 @@ Other luz_callbacks:
 \code{\link{luz_callback_model_checkpoint}()},
 \code{\link{luz_callback_profile}()},
 \code{\link{luz_callback_progress}()},
-\code{\link{luz_callback_train_valid}()}
+\code{\link{luz_callback_train_valid}()},
+\code{\link{luz_callback_use_best_model}()}
 }
 \concept{luz_callbacks}
