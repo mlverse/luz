@@ -97,6 +97,9 @@
     <loc>/reference/luz_callback_interrupt.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_callback_keep_best_model.html</loc>
+  </url>
+  <url>
     <loc>/reference/luz_callback_lr_scheduler.html</loc>
   </url>
   <url>
