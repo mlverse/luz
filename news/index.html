@@ -65,6 +65,7 @@
 <code>plot.lr_records()</code> now in addition plots an exponentially weighted moving average of the loss (again, see Sylvain Gugger’s post), with a weighting coefficient of <code>0.9</code> (which seems a reasonable value for the default setting of 100 learning-rate-incrementing intervals). (<a href="https://github.com/mlverse/luz/issues/82" class="external-link">#82</a>, <a href="https://github.com/skeydan" class="external-link">@skeydan</a>)</li>
 <li>Added a <code>luz_callback_gradient_clip</code> inspired by FastAI’s implementation. (<a href="https://github.com/mlverse/luz/issues/90" class="external-link">#90</a>)</li>
 <li>Added a <code>backward</code> argument to <code>setup</code> allowing one to customize how <code>backward</code> is called for the loss scalar value. (<a href="https://github.com/mlverse/luz/issues/93" class="external-link">#93</a>)</li>
+<li>Added the <code><a href="../reference/luz_callback_keep_best_model.html">luz_callback_keep_best_model()</a></code> to reload the weights from the best model after training is finished. (<a href="https://github.com/mlverse/luz/issues/95" class="external-link">#95</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="luz-020">luz 0.2.0<a class="anchor" aria-label="anchor" href="#luz-020"></a></h2><p class="text-muted">CRAN release: 2021-10-07</p>
