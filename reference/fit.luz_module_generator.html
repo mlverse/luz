@@ -82,54 +82,56 @@
 <dd><p>An <code>nn_module</code> that has been <code><a href="setup.html">setup()</a></code>.</p></dd>
 <dt>data</dt>
 <dd><p>(dataloader, dataset or list) A dataloader created with
-<code><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">torch::dataloader()</a></code> used for training the model, or a dataset created with
-<code><a href="https://rdrr.io/pkg/torch/man/dataset.html" class="external-link">torch::dataset()</a></code> or a list. Dataloaders and datasets must return list with
-at most 2 items. The first item will be used as input for the module and the
-second will be used as target for the loss function.</p></dd>
+<code><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">torch::dataloader()</a></code> used for training the model, or a dataset created
+with <code><a href="https://rdrr.io/pkg/torch/man/dataset.html" class="external-link">torch::dataset()</a></code> or a list. Dataloaders and datasets must return a
+list with at most 2 items. The first item will be used as input for the
+module and the second will be used as a target for the loss function.</p></dd>
 <dt>epochs</dt>
-<dd><p>(int) The maximum number of epochs for training the model.
-If a single value is provided, this is taken to be the <code>max_epochs</code> and
-<code>min_epochs</code> is set to 0. If a vector of two numbers is provided, the
-first value is <code>min_epochs</code> and the second value is <code>max_epochs</code>.
-The minimum and maximum number of epochs are included in the context
-object as <code>ctx$min_epochs</code> and <code>ctx$max_epochs</code>, respectively.</p></dd>
+<dd><p>(int) The maximum number of epochs for training the model. If a
+single value is provided, this is taken to be the <code>max_epochs</code> and
+<code>min_epochs</code> is set to 0. If a vector of two numbers is provided, the first
+value is <code>min_epochs</code> and the second value is <code>max_epochs</code>. The minimum and
+maximum number of epochs are included in the context object as
+<code>ctx$min_epochs</code> and <code>ctx$max_epochs</code>, respectively.</p></dd>
 <dt>callbacks</dt>
 <dd><p>(list, optional) A list of callbacks defined with
 <code><a href="luz_callback.html">luz_callback()</a></code> that will be called during the training procedure. The
 callbacks <code><a href="luz_callback_metrics.html">luz_callback_metrics()</a></code>, <code><a href="luz_callback_progress.html">luz_callback_progress()</a></code> and
 <code><a href="luz_callback_train_valid.html">luz_callback_train_valid()</a></code> are always added by default.</p></dd>
 <dt>valid_data</dt>
-<dd><p>(dataloader, dataset, list or scalar value; optional) A dataloader
-created with <code><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">torch::dataloader()</a></code> or a dataset created with <code><a href="https://rdrr.io/pkg/torch/man/dataset.html" class="external-link">torch::dataset()</a></code>
-that will be used during the validation procedure. They must return a list with
-(input, target). If <code>data</code> is a torch dataset or a list, then you can also supply
-a numeric value between 0 and 1 - and in this case a random sample with size
-orresponding to that proportion from <code>data</code> will be used for validation.</p></dd>
+<dd><p>(dataloader, dataset, list or scalar value; optional) A
+dataloader created with <code><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">torch::dataloader()</a></code> or a dataset created with
+<code><a href="https://rdrr.io/pkg/torch/man/dataset.html" class="external-link">torch::dataset()</a></code> that will be used during the validation procedure. They
+must return a list with (input, target). If <code>data</code> is a torch dataset or a
+list, then you can also supply a numeric value between 0 and 1 - and in
+this case a random sample with size corresponding to that proportion from
+<code>data</code> will be used for validation.</p></dd>
 <dt>accelerator</dt>
 <dd><p>(accelerator, optional) An optional <code><a href="accelerator.html">accelerator()</a></code> object
 used to configure device placement of the components like nn_modules,
 optimizers and batches of data.</p></dd>
 <dt>verbose</dt>
 <dd><p>(logical, optional) An optional boolean value indicating if
-the fitting procedure should emmit output to the console during training.
+the fitting procedure should emit output to the console during training.
 By default, it will produce output if <code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code> is <code>TRUE</code>, otherwise
 it won't print to the console.</p></dd>
 <dt>...</dt>
 <dd><p>Currently unused.</p></dd>
 <dt>dataloader_options</dt>
-<dd><p>Options used when creating a dataloader. See <code><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">torch::dataloader()</a></code>.
-<code>shuffle=TRUE</code> by default for the training data and <code>batch_size=32</code> by
-default. It will error if not <code>NULL</code> and <code>data</code> is already a dataloader.</p></dd>
+<dd><p>Options used when creating a dataloader. See
+<code><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">torch::dataloader()</a></code>. <code>shuffle=TRUE</code> by default for the training data and
+<code>batch_size=32</code> by default. It will error if not <code>NULL</code> and <code>data</code> is
+already a dataloader.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A fitted object that can be saved with <code><a href="luz_save.html">luz_save()</a></code> and can be printed with
-<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and plotted with <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>.</p>
+    <p>A fitted object that can be saved with <code><a href="luz_save.html">luz_save()</a></code> and can be
+printed with <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and plotted with <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="predict.luz_module_fitted.html">predict.luz_module_fitted()</a></code> for how to create predictions. <code><a href="setup.html">setup()</a></code>
-to find out how to create modules that can be trained with <code>fit</code>.</p>
+    <div class="dont-index"><p><code><a href="predict.luz_module_fitted.html">predict.luz_module_fitted()</a></code> for how to create predictions.
+<code><a href="setup.html">setup()</a></code> to find out how to create modules that can be trained with <code>fit</code>.</p>
 <p>Other training: 
 <code><a href="evaluate.html">evaluate</a>()</code>,
 <code><a href="predict.luz_module_fitted.html">predict.luz_module_fitted</a>()</code>,

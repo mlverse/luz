@@ -79,10 +79,10 @@
 <dd><p>A fitted model to evaluate.</p></dd>
 <dt>data</dt>
 <dd><p>(dataloader, dataset or list) A dataloader created with
-<code><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">torch::dataloader()</a></code> used for training the model, or a dataset created with
-<code><a href="https://rdrr.io/pkg/torch/man/dataset.html" class="external-link">torch::dataset()</a></code> or a list. Dataloaders and datasets must return list with
-at most 2 items. The first item will be used as input for the module and the
-second will be used as target for the loss function.</p></dd>
+<code><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">torch::dataloader()</a></code> used for training the model, or a dataset created
+with <code><a href="https://rdrr.io/pkg/torch/man/dataset.html" class="external-link">torch::dataset()</a></code> or a list. Dataloaders and datasets must return a
+list with at most 2 items. The first item will be used as input for the
+module and the second will be used as a target for the loss function.</p></dd>
 <dt>...</dt>
 <dd><p>Currently unused.</p></dd>
 <dt>callbacks</dt>
@@ -96,13 +96,14 @@ used to configure device placement of the components like nn_modules,
 optimizers and batches of data.</p></dd>
 <dt>verbose</dt>
 <dd><p>(logical, optional) An optional boolean value indicating if
-the fitting procedure should emmit output to the console during training.
+the fitting procedure should emit output to the console during training.
 By default, it will produce output if <code><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive()</a></code> is <code>TRUE</code>, otherwise
 it won't print to the console.</p></dd>
 <dt>dataloader_options</dt>
-<dd><p>Options used when creating a dataloader. See <code><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">torch::dataloader()</a></code>.
-<code>shuffle=TRUE</code> by default for the training data and <code>batch_size=32</code> by
-default. It will error if not <code>NULL</code> and <code>data</code> is already a dataloader.</p></dd>
+<dd><p>Options used when creating a dataloader. See
+<code><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">torch::dataloader()</a></code>. <code>shuffle=TRUE</code> by default for the training data and
+<code>batch_size=32</code> by default. It will error if not <code>NULL</code> and <code>data</code> is
+already a dataloader.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -116,11 +117,11 @@ results.</p>
 <p>For example:</p><div class="sourceCode r"><pre><code><span class="va">evaluation</span> <span class="op">&lt;-</span> <span class="va">fitted</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/evaluate.html">evaluate</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">valid_dl</span><span class="op">)</span>
 <span class="va">metrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="va">evaluation</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">evaluation</span><span class="op">)</span></code></pre><p></p></div><div class="sourceCode"><pre><code><span class="co">## A `luz_module_evaluation`</span>
-<span class="co">## -- Results --------------------------------------------------------------------------------------------</span>
-<span class="co">## loss: 1.5146</span>
-<span class="co">## mae: 1.0251</span>
-<span class="co">## mse: 1.5159</span>
-<span class="co">## rmse: 1.2312</span></code></pre></div>
+<span class="co">## -- Results ---------------------------------------------------------------------</span>
+<span class="co">## loss: 1.8892</span>
+<span class="co">## mae: 1.0522</span>
+<span class="co">## mse: 1.645</span>
+<span class="co">## rmse: 1.2826</span></code></pre></div>
 
     </div>
     <div class="section level2">
