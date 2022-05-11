@@ -32,13 +32,14 @@ used to configure device placement of the components like \link{nn_module}s,
 optimizers and batches of data.}
 
 \item{verbose}{(logical, optional) An optional boolean value indicating if
-the fitting procedure should emmit output to the console during training.
+the fitting procedure should emit output to the console during training.
 By default, it will produce output if \code{\link[=interactive]{interactive()}} is \code{TRUE}, otherwise
 it won't print to the console.}
 
-\item{dataloader_options}{Options used when creating a dataloader. See \code{\link[torch:dataloader]{torch::dataloader()}}.
-\code{shuffle=TRUE} by default for the training data and \code{batch_size=32} by
-default. It will error if not \code{NULL} and \code{data} is already a dataloader.}
+\item{dataloader_options}{Options used when creating a dataloader. See
+\code{\link[torch:dataloader]{torch::dataloader()}}. \code{shuffle=TRUE} by default for the training data and
+\code{batch_size=32} by default. It will error if not \code{NULL} and \code{data} is
+already a dataloader.}
 }
 \description{
 Create predictions for a fitted model

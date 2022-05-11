@@ -18,10 +18,10 @@ evaluate(
 \item{object}{A fitted model to evaluate.}
 
 \item{data}{(dataloader, dataset or list) A dataloader created with
-\code{\link[torch:dataloader]{torch::dataloader()}} used for training the model, or a dataset created with
-\code{\link[torch:dataset]{torch::dataset()}} or a list. Dataloaders and datasets must return list with
-at most 2 items. The first item will be used as input for the module and the
-second will be used as target for the loss function.}
+\code{\link[torch:dataloader]{torch::dataloader()}} used for training the model, or a dataset created
+with \code{\link[torch:dataset]{torch::dataset()}} or a list. Dataloaders and datasets must return a
+list with at most 2 items. The first item will be used as input for the
+module and the second will be used as a target for the loss function.}
 
 \item{...}{Currently unused.}
 
@@ -35,13 +35,14 @@ used to configure device placement of the components like \link{nn_module}s,
 optimizers and batches of data.}
 
 \item{verbose}{(logical, optional) An optional boolean value indicating if
-the fitting procedure should emmit output to the console during training.
+the fitting procedure should emit output to the console during training.
 By default, it will produce output if \code{\link[=interactive]{interactive()}} is \code{TRUE}, otherwise
 it won't print to the console.}
 
-\item{dataloader_options}{Options used when creating a dataloader. See \code{\link[torch:dataloader]{torch::dataloader()}}.
-\code{shuffle=TRUE} by default for the training data and \code{batch_size=32} by
-default. It will error if not \code{NULL} and \code{data} is already a dataloader.}
+\item{dataloader_options}{Options used when creating a dataloader. See
+\code{\link[torch:dataloader]{torch::dataloader()}}. \code{shuffle=TRUE} by default for the training data and
+\code{batch_size=32} by default. It will error if not \code{NULL} and \code{data} is
+already a dataloader.}
 }
 \description{
 Evaluates a fitted model on a dataset
@@ -60,11 +61,11 @@ For example:\if{html}{\out{<div class="sourceCode r">}}\preformatted{evaluation 
 metrics <- get_metrics(evaluation)
 print(evaluation)
 }\if{html}{\out{</div>}}\preformatted{## A `luz_module_evaluation`
-## -- Results --------------------------------------------------------------------------------------------
-## loss: 1.5146
-## mae: 1.0251
-## mse: 1.5159
-## rmse: 1.2312
+## -- Results ---------------------------------------------------------------------
+## loss: 1.8892
+## mae: 1.0522
+## mse: 1.645
+## rmse: 1.2826
 }
 }
 \seealso{
