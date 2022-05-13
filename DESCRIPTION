@@ -40,7 +40,8 @@ Suggests:
     withr,
     vdiffr,
     ggplot2,
-    dplyr
+    dplyr,
+    torchvision
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
