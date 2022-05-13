@@ -1,5 +1,5 @@
 template:
-  bootstrap: 4
+  bootstrap: 5
 
 navbar:
  structure:
@@ -9,12 +9,16 @@ navbar:
   articles:
     text: Articles
     menu:
+      - text: "Using luz"
       - text: Get started
         href: articles/get-started.html
       - text: Custom loops
         href: articles/custom-loop.html
       - text: Accelerator API
         href: articles/accelerator.html
+      - text: "Guides"
+      - text: "Using the lr_finder"
+        href: articles/lr-finder.html
   examples:
     text: Examples
     href: articles/examples/index.html
