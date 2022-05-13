@@ -103,7 +103,7 @@ str(records)
 ```
 
 The result is a data frame with the losses and the learning rate in each step.
-You can use the built in plot method to display the results along with a exponentially
+You can use the built-in plot method to display the exact results, along with a exponentially
 smoothed value of the loss.
 
 ```{r}
