@@ -48,7 +48,7 @@ train_ds <- mnist_dataset(
 )
 ```
 
-We can now define our model. We are going to use a small primitive CNN in the LeNet
+We can now define our model. We are going to use a small, straightforward CNN in the LeNet
 style.
 
 ```{r}
