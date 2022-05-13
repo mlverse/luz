@@ -33,7 +33,7 @@ This [article](https://arxiv.org/abs/1506.01186) by Leslie Smith that became pop
 once their approach had been implemented in the popular FastAI framework, proposes
 that we should start with a very small learning rate and slowly increase it until 
 we reach a high learning rate. At each iteration we record the loss value and in
-the end we plot it against the learning rate. We can then use this results to decide
+the end we plot it against the learning rate. We can then use these results to decide
 a good learning rate. That's what `lr_finder` does and we will show how to use it.
 
 First let's download and prepare the MNIST dataset:
