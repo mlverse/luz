@@ -104,7 +104,7 @@ test_that("gradient clip works correctly", {
 
   output <- mod %>%
     set_hparams(input_size = 10, output_size = 1) %>%
-    fit(dl, verbose = TRUE, epochs = 2, valid_data = dl,
+    fit(dl, verbose = FALSE, epochs = 2, valid_data = dl,
         callbacks = list(luz_callback_gradient_clip(max_norm = 0)))
 
   # we expect that no learning happened thus the loss is identicall
