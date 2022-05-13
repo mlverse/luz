@@ -40,10 +40,18 @@ lr_anneal <- torch::lr_scheduler(
 
 luz_callback_record_lr <- luz_callback(
   name = "luz_callback_profile_lr",
+  initialize = function(steps) {
+    self$total_steps <- steps
+    self$steps <- 0
+  },
   on_train_batch_end = function() {
     loss <- ctx$loss$opt$cpu()$item()
     ctx$log("lr_finder", "lr", ctx$optimizers$opt$param_groups[[1]]$lr)
     ctx$log("lr_finder", "loss", loss)
+    self$steps <- self$steps + 1
+    if (self$steps >= self$total_steps) {
+      rlang::interrupt()
+    }
   }
 )
 
@@ -74,10 +82,8 @@ luz_callback_record_lr <- luz_callback(
 #' }
 #' @returns A dataframe with two columns: learning rate and loss
 #' @export
-lr_finder <- function(object, data, steps = 100, start_lr = 1e-7, end_lr = 1e-1, log_spaced_intervals = TRUE, ...) {
-  # adjust batch size so that the steps number adds to one batch
-  new_bs <- floor(data$dataset$.length() / steps)
-  data$batch_sampler$batch_size <- new_bs
+lr_finder <- function(object, data, steps = 100, start_lr = 1e-7, end_lr = 1e-1,
+                      log_spaced_intervals = TRUE, ...) {
 
   scheduler <- luz_callback_lr_scheduler(
     lr_anneal,
@@ -89,14 +95,14 @@ lr_finder <- function(object, data, steps = 100, start_lr = 1e-7, end_lr = 1e-1,
     call_on="on_train_batch_begin"
   )
 
-  lr_profiler <- luz_callback_record_lr()
+  lr_profiler <- luz_callback_record_lr(steps)
 
   fitted <- object %>%
     set_opt_hparams(lr = start_lr) %>%
     fit(...,
         data = data,
-        epochs = 1,
-        callbacks = list(scheduler, lr_profiler),
+        epochs = 999999, # the callback will be responsible for interrupting
+        callbacks = list(scheduler, lr_profiler)
     )
 
   lr_records <- data.frame(sapply(fitted$records$lr_finder, as.numeric))
@@ -125,8 +131,8 @@ plot.lr_records <- function(x, ...) {
   }
 
   ggplot2::ggplot(x, ggplot2::aes_string(x = "lr")) +
-    ggplot2::geom_line(ggplot2::aes_string(y = "loss")) +
-    ggplot2::geom_line(ggplot2::aes_string(y = "smoothed_loss"), color="cyan", alpha = 0.3, size = 3) +
+    ggplot2::geom_line(ggplot2::aes_string(y = "loss"), linetype="dotted", size = 0.7) +
+    ggplot2::geom_line(ggplot2::aes_string(y = "smoothed_loss"), color="cyan", size = 1) +
     ggplot2::scale_x_log10() +
     ggplot2::xlab("Learning Rate") +
     ggplot2::ylab("Loss")
