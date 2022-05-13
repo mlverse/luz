@@ -30,7 +30,7 @@ fitting many models with different learning rates and then choosing the one with
 better results. 
 
 This [article](https://arxiv.org/abs/1506.01186) by Leslie Smith that became popular
-after their approach being implemented in the popular FastAI framework, proposes
+once their approach had been implemented in the popular FastAI framework, proposes
 that we should start with a very small learning rate and slowly increase it until 
 we reach a high learnig rate. At each iteration we record the loss value and in
 the end we plot it against the learning rate. We can then use this results to decide
