@@ -38,9 +38,12 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>Using luz</h6>
     <a class="dropdown-item" href="../../articles/get-started.html">Get started</a>
     <a class="dropdown-item" href="../../articles/custom-loop.html">Custom loops</a>
     <a class="dropdown-item" href="../../articles/accelerator.html">Accelerator API</a>
+    <h6 class="dropdown-header" data-toc-skip>Guides</h6>
+    <a class="dropdown-item" href="../../articles/lr-finder.html">Using the lr_finder</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -103,9 +106,9 @@
   <span class="va">dir</span>,
   token <span class="op">=</span> <span class="va">kaggle_token</span>,
   transform <span class="op">=</span> <span class="va">.</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu">torchvision</span><span class="fu">::</span><span class="fu">transform_to_tensor</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span>
-    <span class="fu">torchvision</span><span class="fu">::</span><span class="fu">transform_resize</span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">224</span>, <span class="fl">224</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span> 
-    <span class="fu">torchvision</span><span class="fu">::</span><span class="fu">transform_normalize</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>,
+    <span class="fu">torchvision</span><span class="fu">::</span><span class="fu"><a href="https://torchvision.mlverse.org/reference/transform_to_tensor.html" class="external-link">transform_to_tensor</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span>
+    <span class="fu">torchvision</span><span class="fu">::</span><span class="fu"><a href="https://torchvision.mlverse.org/reference/transform_resize.html" class="external-link">transform_resize</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">224</span>, <span class="fl">224</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span> 
+    <span class="fu">torchvision</span><span class="fu">::</span><span class="fu"><a href="https://torchvision.mlverse.org/reference/transform_normalize.html" class="external-link">transform_normalize</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>,
   target_transform <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>
 <span class="op">)</span>
 
@@ -120,7 +123,7 @@
 
 <span class="va">net</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
   initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">num_classes</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">model_alexnet</span><span class="op">(</span>pretrained <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+    <span class="va">self</span><span class="op">$</span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torchvision.mlverse.org/reference/model_alexnet.html" class="external-link">model_alexnet</a></span><span class="op">(</span>pretrained <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
     <span class="kw">for</span> <span class="op">(</span><span class="va">par</span> <span class="kw">in</span> <span class="va">self</span><span class="op">$</span><span class="va">parameters</span><span class="op">)</span> <span class="op">{</span>
       <span class="va">par</span><span class="op">$</span><span class="fu">requires_grad_</span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>

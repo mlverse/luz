@@ -38,9 +38,12 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>Using luz</h6>
     <a class="dropdown-item" href="../../articles/get-started.html">Get started</a>
     <a class="dropdown-item" href="../../articles/custom-loop.html">Custom loops</a>
     <a class="dropdown-item" href="../../articles/accelerator.html">Accelerator API</a>
+    <h6 class="dropdown-header" data-toc-skip>Guides</h6>
+    <a class="dropdown-item" href="../../articles/lr-finder.html">Using the lr_finder</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -115,13 +118,13 @@
 
 <span class="va">dir</span> <span class="op">&lt;-</span> <span class="st">"~/Downloads/mnist"</span> <span class="co"># caching directory</span>
 
-<span class="va">train_ds</span> <span class="op">&lt;-</span> <span class="fu">mnist_dataset</span><span class="op">(</span>
+<span class="va">train_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torchvision.mlverse.org/reference/mnist_dataset.html" class="external-link">mnist_dataset</a></span><span class="op">(</span>
   <span class="va">dir</span>,
   download <span class="op">=</span> <span class="cn">TRUE</span>,
   transform <span class="op">=</span> <span class="va">transform_to_tensor</span>
 <span class="op">)</span>
 
-<span class="va">test_ds</span> <span class="op">&lt;-</span> <span class="fu">mnist_dataset</span><span class="op">(</span>
+<span class="va">test_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torchvision.mlverse.org/reference/mnist_dataset.html" class="external-link">mnist_dataset</a></span><span class="op">(</span>
   <span class="va">dir</span>,
   train <span class="op">=</span> <span class="cn">FALSE</span>,
   transform <span class="op">=</span> <span class="va">transform_to_tensor</span>

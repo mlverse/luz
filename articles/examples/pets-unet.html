@@ -38,9 +38,12 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <h6 class="dropdown-header" data-toc-skip>Using luz</h6>
     <a class="dropdown-item" href="../../articles/get-started.html">Get started</a>
     <a class="dropdown-item" href="../../articles/custom-loop.html">Custom loops</a>
     <a class="dropdown-item" href="../../articles/accelerator.html">Accelerator API</a>
+    <h6 class="dropdown-header" data-toc-skip>Guides</h6>
+    <a class="dropdown-item" href="../../articles/lr-finder.html">Using the lr_finder</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -105,14 +108,14 @@
     
     <span class="va">input_transform</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
       <span class="va">x</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span> 
-        <span class="fu">transform_to_tensor</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span> 
-        <span class="fu">transform_resize</span><span class="op">(</span><span class="va">size</span><span class="op">)</span>
+        <span class="fu"><a href="https://torchvision.mlverse.org/reference/transform_to_tensor.html" class="external-link">transform_to_tensor</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span> 
+        <span class="fu"><a href="https://torchvision.mlverse.org/reference/transform_resize.html" class="external-link">transform_resize</a></span><span class="op">(</span><span class="va">size</span><span class="op">)</span>
     <span class="op">}</span>
     
     <span class="va">target_transform</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
       <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_tensor.html" class="external-link">torch_tensor</a></span><span class="op">(</span><span class="va">x</span>, dtype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_dtype.html" class="external-link">torch_long</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
       <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">[</span><span class="va">newaxis</span>,<span class="va">..</span><span class="op">]</span>
-      <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">transform_resize</span><span class="op">(</span><span class="va">x</span>, <span class="va">size</span>, interpolation <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+      <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torchvision.mlverse.org/reference/transform_resize.html" class="external-link">transform_resize</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">size</span>, interpolation <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
       <span class="va">x</span><span class="op">[</span><span class="fl">1</span>,<span class="va">..</span><span class="op">]</span>
     <span class="op">}</span>
     
@@ -159,7 +162,7 @@
 <span class="co"># in the skip connections.</span>
 <span class="va">encoder</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
   initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">model_mobilenet_v2</span><span class="op">(</span>pretrained <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+    <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torchvision.mlverse.org/reference/model_mobilenet_v2.html" class="external-link">model_mobilenet_v2</a></span><span class="op">(</span>pretrained <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
     <span class="va">self</span><span class="op">$</span><span class="va">stages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module_list.html" class="external-link">nn_module_list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
       <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_identity.html" class="external-link">nn_identity</a></span><span class="op">(</span><span class="op">)</span>,
       <span class="va">model</span><span class="op">$</span><span class="va">features</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>,
