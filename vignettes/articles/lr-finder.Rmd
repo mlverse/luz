@@ -96,7 +96,7 @@ records <- lr_finder(
   verbose = FALSE,
   dataloader_options = list(batch_size = 32),
   start_lr = 1e-6, # the smallest value that will be tried
-  end_lr = 1 # the largest value to be experimented
+  end_lr = 1 # the largest value to be experimented with
 )
 
 str(records)
