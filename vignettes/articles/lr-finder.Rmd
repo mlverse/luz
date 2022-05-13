@@ -111,7 +111,7 @@ plot(records) +
   ggplot2::coord_cartesian(ylim = c(NA, 5))
 ```
 We can see that with small learning rates the loss doesn't decrease. At some point
-the loss starts decreasing until it reaches a point where the loss starts increasing
+the loss starts decreasing until it reaches a point where it starts increasing
 and explodes.
 
 And how do we choose the learning rate using this plot? Sylvain Gugger asked the same question
