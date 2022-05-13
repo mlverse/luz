@@ -80,7 +80,7 @@ net <- nn_module(
 ```
 
 We can now use the `lr_finder` function to record the loss with different learning rates.
-It's important use the learning rate process with all other hyperparameters of the
+It's important to use the learning rate finder with all other hyperparameters of the
 model fixed because they can influence the choice of the learning rate. For example,
 depending on the batch size, you might want to choose different learning rates.
 
