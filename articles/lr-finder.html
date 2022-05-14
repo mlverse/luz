@@ -158,7 +158,8 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">records</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="lr-finder_files/figure-html/unnamed-chunk-5-1.png" width="700"> We can see that with small learning rates the loss doesn’t decrease. At some point the loss starts decreasing until it reaches a point where it starts increasing and explodes.</p>
+<p><img src="lr-finder_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p>We can see that with small learning rates the loss doesn’t decrease. At some point the loss starts decreasing until it reaches a point where it starts increasing and explodes.</p>
 <p>And how do we choose the learning rate using this plot? Sylvain Gugger asked the same question in this <a href="https://sgugger.github.io/how-do-you-find-a-good-learning-rate.html" class="external-link">blog post</a> and we are quoting his answer:</p>
 <blockquote>
 <p>Not the one corresponding to the minimum. Why? Well the learning rate that corresponds to the minimum value is already a bit too high, since we are at the edge between improving and getting all over the place. We want to go one order of magnitude before, a value that’s still aggressive (so that we train quickly) but still on the safe side from an explosion.</p>
