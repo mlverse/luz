@@ -11,7 +11,8 @@ lr_finder(
   start_lr = 1e-07,
   end_lr = 0.1,
   log_spaced_intervals = TRUE,
-  ...
+  ...,
+  verbose = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ lr_finder(
 \item{log_spaced_intervals}{(logical) Whether to divide the range between start_lr and end_lr into log-spaced intervals (alternative: uniform intervals). Default: TRUE}
 
 \item{...}{Other arguments passed to \code{fit}.}
+
+\item{verbose}{Wether to show a progress bar during the process.}
 }
 \value{
 A dataframe with two columns: learning rate and loss

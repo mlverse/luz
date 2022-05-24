@@ -76,6 +76,7 @@ luz_callback_record_lr <- luz_callback(
 #' @param end_lr (float) The highest learning rate. Default: 1e-1.
 #' @param log_spaced_intervals (logical) Whether to divide the range between start_lr and end_lr into log-spaced intervals (alternative: uniform intervals). Default: TRUE
 #' @param ... Other arguments passed to `fit`.
+#' @param verbose Wether to show a progress bar during the process.
 #'
 #' @examples
 #' if (torch::torch_is_installed()) {
