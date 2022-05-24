@@ -40,16 +40,27 @@ lr_anneal <- torch::lr_scheduler(
 
 luz_callback_record_lr <- luz_callback(
   name = "luz_callback_profile_lr",
-  initialize = function(steps) {
+  initialize = function(steps, verbose) {
     self$total_steps <- steps
     self$steps <- 0
+    self$verbose <- if (is.null(verbose)) interactive() else verbose
+    if (self$verbose) {
+      self$pb <- cli::cli_progress_bar(
+        name = "Finding the learning rate",
+        total = self$total_steps,
+        type = "iterator",
+        .envir = self
+      )
+    }
   },
   on_train_batch_end = function() {
     loss <- ctx$loss$opt$cpu()$item()
     ctx$log("lr_finder", "lr", ctx$optimizers$opt$param_groups[[1]]$lr)
     ctx$log("lr_finder", "loss", loss)
     self$steps <- self$steps + 1
+    if (self$verbose) cli::cli_progress_update(id = self$pb)
     if (self$steps >= self$total_steps) {
+      if (self$verbose) cli::cli_progress_done(id = self$pb)
       rlang::interrupt()
     }
   }
@@ -83,7 +94,7 @@ luz_callback_record_lr <- luz_callback(
 #' @returns A dataframe with two columns: learning rate and loss
 #' @export
 lr_finder <- function(object, data, steps = 100, start_lr = 1e-7, end_lr = 1e-1,
-                      log_spaced_intervals = TRUE, ...) {
+                      log_spaced_intervals = TRUE, ..., verbose = NULL) {
 
   scheduler <- luz_callback_lr_scheduler(
     lr_anneal,
@@ -95,14 +106,15 @@ lr_finder <- function(object, data, steps = 100, start_lr = 1e-7, end_lr = 1e-1,
     call_on="on_train_batch_begin"
   )
 
-  lr_profiler <- luz_callback_record_lr(steps)
+  lr_profiler <- luz_callback_record_lr(steps, verbose)
 
   fitted <- object %>%
     set_opt_hparams(lr = start_lr) %>%
     fit(...,
         data = data,
         epochs = 999999, # the callback will be responsible for interrupting
-        callbacks = list(scheduler, lr_profiler)
+        callbacks = list(scheduler, lr_profiler),
+        verbose = FALSE
     )
 
   lr_records <- data.frame(sapply(fitted$records$lr_finder, as.numeric))
