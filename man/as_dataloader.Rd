@@ -50,22 +50,22 @@ experiments.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{dataset}: Converts a \code{\link[torch:dataset]{torch::dataset()}} to a \code{\link[torch:dataloader]{torch::dataloader()}}.
+\item \code{as_dataloader(dataset)}: Converts a \code{\link[torch:dataset]{torch::dataset()}} to a \code{\link[torch:dataloader]{torch::dataloader()}}.
 
-\item \code{list}: Converts a list of tensors or arrays with the same
+\item \code{as_dataloader(list)}: Converts a list of tensors or arrays with the same
 size in the first dimension to a  \code{\link[torch:dataloader]{torch::dataloader()}}
 
-\item \code{dataloader}: Returns the same dataloader
+\item \code{as_dataloader(dataloader)}: Returns the same dataloader
 
-\item \code{matrix}: Converts the matrix to a dataloader
+\item \code{as_dataloader(matrix)}: Converts the matrix to a dataloader
 
-\item \code{numeric}: Converts the numeric vector to a dataloader
+\item \code{as_dataloader(numeric)}: Converts the numeric vector to a dataloader
 
-\item \code{array}: Converts the array to a dataloader
+\item \code{as_dataloader(array)}: Converts the array to a dataloader
 
-\item \code{torch_tensor}: Converts the tensor to a dataloader
+\item \code{as_dataloader(torch_tensor)}: Converts the tensor to a dataloader
+
 }}
-
 \section{Overriding}{
 
 

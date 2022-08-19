@@ -40,7 +40,9 @@ Create a new callback
 \details{
 Let’s implement a callback that prints ‘Iteration \code{n}’ (where \code{n} is the
 iteration number) for every batch in the training set and ‘Done’ when an
-epoch is finished. For that task we use the \code{luz_callback} function:\if{html}{\out{<div class="sourceCode r">}}\preformatted{print_callback <- luz_callback(
+epoch is finished. For that task we use the \code{luz_callback} function:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{print_callback <- luz_callback(
   name = "print_callback",
   initialize = function(message) \{
     self$message <- message
@@ -69,7 +71,9 @@ example, the callback has a \code{message} parameter that is printed at the
 end of each epoch.
 
 Once a callback is defined it can be passed to the \code{fit} function via
-the \code{callbacks} parameter:\if{html}{\out{<div class="sourceCode r">}}\preformatted{fitted <- net \%>\%
+the \code{callbacks} parameter:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{fitted <- net \%>\%
   setup(...) \%>\%
   fit(..., callbacks = list(
     print_callback(message = "Done!")
@@ -78,7 +82,9 @@ the \code{callbacks} parameter:\if{html}{\out{<div class="sourceCode r">}}\prefo
 
 Callbacks can be called in many different positions of the training
 loop, including combinations of them. Here’s an overview of possible
-callback \emph{breakpoints}:\preformatted{Start Fit
+callback \emph{breakpoints}:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Start Fit
    - on_fit_begin
   Start Epoch Loop
      - on_epoch_begin
@@ -113,7 +119,7 @@ callback \emph{breakpoints}:\preformatted{Start Fit
   End Epoch Loop
    - on_fit_end
 End Fit
-}
+}\if{html}{\out{</div>}}
 
 Every step market with \verb{on_*} is a point in the training procedure that
 is available for callbacks to be called.

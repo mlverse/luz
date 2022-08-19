@@ -211,6 +211,8 @@ luz_callback_model_checkpoint <- luz_callback(
 #' cb <- luz_callback_keep_best_model()
 #'
 #' @family luz_callbacks
+#'
+#' @importFrom fs dir_ls
 #' @export
 luz_callback_keep_best_model <- luz_callback(
   "keep_best_model_callback",

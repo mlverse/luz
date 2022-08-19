@@ -72,6 +72,8 @@ default_evaluate_callbacks <- function() {
 #' @returns
 #' A `luz_callback` that can be passed to [fit.luz_module_generator()].
 #' @family luz_callbacks
+#'
+#' @importFrom progress progress_bar
 #' @export
 luz_callback <- function(name = NULL, ..., private = NULL, active = NULL, parent_env = parent.frame(),
                          inherit = NULL) {

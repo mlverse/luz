@@ -80,24 +80,24 @@ tranformation.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{context$new()}}
-\item \href{#method-log}{\code{context$log()}}
-\item \href{#method-log_metric}{\code{context$log_metric()}}
-\item \href{#method-get_log}{\code{context$get_log()}}
-\item \href{#method-get_metrics}{\code{context$get_metrics()}}
-\item \href{#method-get_metric}{\code{context$get_metric()}}
-\item \href{#method-get_formatted_metrics}{\code{context$get_formatted_metrics()}}
-\item \href{#method-get_metrics_df}{\code{context$get_metrics_df()}}
-\item \href{#method-set_verbose}{\code{context$set_verbose()}}
-\item \href{#method-clean}{\code{context$clean()}}
-\item \href{#method-call_callbacks}{\code{context$call_callbacks()}}
-\item \href{#method-state_dict}{\code{context$state_dict()}}
-\item \href{#method-clone}{\code{context$clone()}}
+\item \href{#method-luz_context-new}{\code{context$new()}}
+\item \href{#method-luz_context-log}{\code{context$log()}}
+\item \href{#method-luz_context-log_metric}{\code{context$log_metric()}}
+\item \href{#method-luz_context-get_log}{\code{context$get_log()}}
+\item \href{#method-luz_context-get_metrics}{\code{context$get_metrics()}}
+\item \href{#method-luz_context-get_metric}{\code{context$get_metric()}}
+\item \href{#method-luz_context-get_formatted_metrics}{\code{context$get_formatted_metrics()}}
+\item \href{#method-luz_context-get_metrics_df}{\code{context$get_metrics_df()}}
+\item \href{#method-luz_context-set_verbose}{\code{context$set_verbose()}}
+\item \href{#method-luz_context-clean}{\code{context$clean()}}
+\item \href{#method-luz_context-call_callbacks}{\code{context$call_callbacks()}}
+\item \href{#method-luz_context-state_dict}{\code{context$state_dict()}}
+\item \href{#method-luz_context-clone}{\code{context$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-luz_context-new"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-new}{}}}
 \subsection{Method \code{new()}}{
 Initializes the context object with minimal necessary information.
 \subsection{Usage}{
@@ -120,8 +120,8 @@ others.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-log"></a>}}
-\if{latex}{\out{\hypertarget{method-log}{}}}
+\if{html}{\out{<a id="method-luz_context-log"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-log}{}}}
 \subsection{Method \code{log()}}{
 Allows logging arbitrary information in the \code{ctx}.
 \subsection{Usage}{
@@ -151,8 +151,8 @@ is overwritten in favor of the new value.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-log_metric"></a>}}
-\if{latex}{\out{\hypertarget{method-log_metric}{}}}
+\if{html}{\out{<a id="method-luz_context-log_metric"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-log_metric}{}}}
 \subsection{Method \code{log_metric()}}{
 Log a metric gen its name and value.
 Metric values are indexed by epoch.
@@ -173,8 +173,8 @@ Metric values are indexed by epoch.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_log"></a>}}
-\if{latex}{\out{\hypertarget{method-get_log}{}}}
+\if{html}{\out{<a id="method-luz_context-get_log"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-get_log}{}}}
 \subsection{Method \code{get_log()}}{
 Get a specific value from the log.
 \subsection{Usage}{
@@ -196,8 +196,8 @@ is added to the end of list, otherwise the index is used.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_metrics"></a>}}
-\if{latex}{\out{\hypertarget{method-get_metrics}{}}}
+\if{html}{\out{<a id="method-luz_context-get_metrics"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-get_metrics}{}}}
 \subsection{Method \code{get_metrics()}}{
 Get all metric given an epoch and set.
 \subsection{Usage}{
@@ -216,8 +216,8 @@ to lot to. But can be arbitrary info.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_metric"></a>}}
-\if{latex}{\out{\hypertarget{method-get_metric}{}}}
+\if{html}{\out{<a id="method-luz_context-get_metric"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-get_metric}{}}}
 \subsection{Method \code{get_metric()}}{
 Get the value of a metric given its name, epoch and set.
 \subsection{Usage}{
@@ -238,8 +238,8 @@ to lot to. But can be arbitrary info.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_formatted_metrics"></a>}}
-\if{latex}{\out{\hypertarget{method-get_formatted_metrics}{}}}
+\if{html}{\out{<a id="method-luz_context-get_formatted_metrics"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-get_formatted_metrics}{}}}
 \subsection{Method \code{get_formatted_metrics()}}{
 Get formatted metrics values
 \subsection{Usage}{
@@ -258,8 +258,8 @@ to lot to. But can be arbitrary info.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-get_metrics_df"></a>}}
-\if{latex}{\out{\hypertarget{method-get_metrics_df}{}}}
+\if{html}{\out{<a id="method-luz_context-get_metrics_df"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-get_metrics_df}{}}}
 \subsection{Method \code{get_metrics_df()}}{
 Get a data.frame containing all metrics.
 \subsection{Usage}{
@@ -268,8 +268,8 @@ Get a data.frame containing all metrics.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-set_verbose"></a>}}
-\if{latex}{\out{\hypertarget{method-set_verbose}{}}}
+\if{html}{\out{<a id="method-luz_context-set_verbose"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-set_verbose}{}}}
 \subsection{Method \code{set_verbose()}}{
 Allows setting the \code{verbose} attribute.
 \subsection{Usage}{
@@ -286,8 +286,8 @@ if \code{NULL} we use the result of \code{\link[=interactive]{interactive()}}.}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clean"></a>}}
-\if{latex}{\out{\hypertarget{method-clean}{}}}
+\if{html}{\out{<a id="method-luz_context-clean"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-clean}{}}}
 \subsection{Method \code{clean()}}{
 Removes unnecessary information from the context object.
 \subsection{Usage}{
@@ -296,8 +296,8 @@ Removes unnecessary information from the context object.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-call_callbacks"></a>}}
-\if{latex}{\out{\hypertarget{method-call_callbacks}{}}}
+\if{html}{\out{<a id="method-luz_context-call_callbacks"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-call_callbacks}{}}}
 \subsection{Method \code{call_callbacks()}}{
 Call the selected callbacks. Where \code{name} is the callback types to call, eg
 'on_epoch_begin'.
@@ -314,8 +314,8 @@ Call the selected callbacks. Where \code{name} is the callback types to call, eg
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-state_dict"></a>}}
-\if{latex}{\out{\hypertarget{method-state_dict}{}}}
+\if{html}{\out{<a id="method-luz_context-state_dict"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-state_dict}{}}}
 \subsection{Method \code{state_dict()}}{
 Returns a list containing minimal information from the context. Used to
 create the returned values.
@@ -325,8 +325,8 @@ create the returned values.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-luz_context-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

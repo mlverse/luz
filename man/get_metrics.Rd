@@ -22,6 +22,6 @@ Get metrics from the object
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{luz_module_fitted}: Extract metrics from a luz fitted model.
-}}
+\item \code{get_metrics(luz_module_fitted)}: Extract metrics from a luz fitted model.
 
+}}
