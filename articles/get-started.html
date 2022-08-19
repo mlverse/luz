@@ -8,8 +8,8 @@
 <meta name="description" content="luz">
 <title>Get started with luz • luz</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get started with luz">
 <meta property="og:description" content="luz">
@@ -77,7 +77,7 @@
 
 
 <script src="get-started_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Get started with luz</h1>
             
       
@@ -88,8 +88,8 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/luz/" class="external-link">luz</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://torch.mlverse.org/docs" class="external-link">torch</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/luz/" class="external-link">luz</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://torch.mlverse.org/docs" class="external-link">torch</a></span><span class="op">)</span></span></code></pre></div>
 <p>Luz is a high-level API for torch that aims to encapsulate the <strong>training loop</strong> into a set of reusable pieces of code. Luz reduces the boilerplate code required to train a model with torch and avoids the error prone <code>zero_grad()</code> - <code>backward()</code> - <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> sequence of calls, and also simplifies the process of moving data and models between CPUs and GPUs. Luz is designed to be highly flexible by providing a layered API that allows it to be useful no matter the level of control you need for your training loop.</p>
 <p>Luz is heavily inspired by other higher level frameworks for deep learning, to cite a few:</p>
 <ul>
@@ -103,44 +103,44 @@
 </h2>
 <p>As much as possible, luz tries to reuse the existing structures from torch. A model in luz is defined identically as you would define it if using raw torch. For a specific example, this is the definition of a feed-forward CNN that can be used to classify digits from the MNIST dataset:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span>
-  <span class="st">"Net"</span>,
-  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">num_class</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">conv1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">32</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">conv2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">32</span>, <span class="fl">64</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">dropout1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout2d.html" class="external-link">nn_dropout2d</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">dropout2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout2d.html" class="external-link">nn_dropout2d</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">9216</span>, <span class="fl">128</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">fc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">128</span>, <span class="va">num_class</span><span class="op">)</span>
-  <span class="op">}</span>,
-  forward <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">conv1</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">conv2</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_max_pool2d.html" class="external-link">nnf_max_pool2d</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">dropout1</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_flatten.html" class="external-link">torch_flatten</a></span><span class="op">(</span><span class="va">x</span>, start_dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">fc1</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">dropout2</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">fc2</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-    <span class="va">x</span>
-  <span class="op">}</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Net"</span>,</span>
+<span>  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">num_class</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">conv1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">32</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">conv2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">32</span>, <span class="fl">64</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">dropout1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout2d.html" class="external-link">nn_dropout2d</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">dropout2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout2d.html" class="external-link">nn_dropout2d</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">9216</span>, <span class="fl">128</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">fc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">128</span>, <span class="va">num_class</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  forward <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">conv1</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">conv2</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_max_pool2d.html" class="external-link">nnf_max_pool2d</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">dropout1</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_flatten.html" class="external-link">torch_flatten</a></span><span class="op">(</span><span class="va">x</span>, start_dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">fc1</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nnf_relu.html" class="external-link">nnf_relu</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">dropout2</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">fc2</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>    <span class="va">x</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>We can now train this model in the <code>train_dl</code> and validate it in the <code>test_dl</code> <code>torch::dataloaders()</code> with:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span>
-    loss <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_cross_entropy_loss.html" class="external-link">nn_cross_entropy_loss</a></span><span class="op">(</span><span class="op">)</span>,
-    optimizer <span class="op">=</span> <span class="va">optim_adam</span>,
-    metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-      <span class="va">luz_metric_accuracy</span>
-    <span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/set_hparams.html">set_hparams</a></span><span class="op">(</span>num_class <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/set_opt_hparams.html">set_opt_hparams</a></span><span class="op">(</span>lr <span class="op">=</span> <span class="fl">0.003</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">10</span>, valid_data <span class="op">=</span> <span class="va">test_dl</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span></span>
+<span>    loss <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_cross_entropy_loss.html" class="external-link">nn_cross_entropy_loss</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    optimizer <span class="op">=</span> <span class="va">optim_adam</span>,</span>
+<span>    metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      <span class="va">luz_metric_accuracy</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/set_hparams.html">set_hparams</a></span><span class="op">(</span>num_class <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/set_opt_hparams.html">set_opt_hparams</a></span><span class="op">(</span>lr <span class="op">=</span> <span class="fl">0.003</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">10</span>, valid_data <span class="op">=</span> <span class="va">test_dl</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s understand what happens in this chunk of code:</p>
 <ol style="list-style-type: decimal">
 <li>The <code>setup</code> function allows you to configure the loss (objective) function and the optimizer that you will use to train your model. Optionally you can pass a list of metrics that are tracked during the training procedure. <strong>Note:</strong> the loss function can be any function taking <code>input</code> and <code>target</code> tensors and returning a scalar tensor value, and the optimizer can be any core torch optimizer or custom ones created with the <code><a href="https://rdrr.io/pkg/torch/man/optimizer.html" class="external-link">torch::optimizer()</a></code> function.</li>
@@ -152,33 +152,33 @@
 <p>When fitting, luz will use the fastest possible accelerator; if a CUDA-capable GPU is available it will be used, otherwise we fall back to the CPU. It also automatically moves data, optimizers, and models to the selected device so you don’t need to handle it manually (which is in general very error prone).</p>
 <p>To create predictions from the trained model you can use the <code>predict</code> method:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fitted</span>, <span class="va">test_dl</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fitted</span>, <span class="va">test_dl</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="the-training-loop">The training loop<a class="anchor" aria-label="anchor" href="#the-training-loop"></a>
 </h2>
 <p>You now have a general idea of how to use the <code>fit</code> function and now it’s important to have an overview of what’s happening inside it. In pseudocode, here’s what <code>fit</code> does. This is not fully detailed but should help you to build your intuition:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># -&gt; Initialize objects: model, optimizers.</span>
-<span class="co"># -&gt; Select fitting device.</span>
-<span class="co"># -&gt; Move data, model, optimizers to the selected device.</span>
-<span class="co"># -&gt; Start training</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">epoch</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">epochs</span><span class="op">)</span> <span class="op">{</span>
-  <span class="co"># -&gt; Training procedure</span>
-  <span class="kw">for</span> <span class="op">(</span><span class="va">batch</span> <span class="kw">in</span> <span class="va">train_dl</span><span class="op">)</span> <span class="op">{</span>
-    <span class="co"># -&gt; Calculate model `forward` method.</span>
-    <span class="co"># -&gt; Calculate the loss</span>
-    <span class="co"># -&gt; Update weights</span>
-    <span class="co"># -&gt; Update metrics and tracking loss</span>
-  <span class="op">}</span>
-  <span class="co"># -&gt; Validation procedure</span>
-  <span class="kw">for</span> <span class="op">(</span><span class="va">batch</span> <span class="kw">in</span> <span class="va">valid_dl</span><span class="op">)</span> <span class="op">{</span>
-    <span class="co"># -&gt; Calculate model `forward` method.</span>
-    <span class="co"># -&gt; Calculate the loss</span>
-    <span class="co"># -&gt; Update metrics and tracking loss</span>
-  <span class="op">}</span>
-<span class="op">}</span>
-<span class="co"># -&gt; End training</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># -&gt; Initialize objects: model, optimizers.</span></span>
+<span><span class="co"># -&gt; Select fitting device.</span></span>
+<span><span class="co"># -&gt; Move data, model, optimizers to the selected device.</span></span>
+<span><span class="co"># -&gt; Start training</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">epoch</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">epochs</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># -&gt; Training procedure</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">batch</span> <span class="kw">in</span> <span class="va">train_dl</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># -&gt; Calculate model `forward` method.</span></span>
+<span>    <span class="co"># -&gt; Calculate the loss</span></span>
+<span>    <span class="co"># -&gt; Update weights</span></span>
+<span>    <span class="co"># -&gt; Update metrics and tracking loss</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="co"># -&gt; Validation procedure</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">batch</span> <span class="kw">in</span> <span class="va">valid_dl</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># -&gt; Calculate model `forward` method.</span></span>
+<span>    <span class="co"># -&gt; Calculate the loss</span></span>
+<span>    <span class="co"># -&gt; Update metrics and tracking loss</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co"># -&gt; End training</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="metrics">Metrics<a class="anchor" aria-label="anchor" href="#metrics"></a>
@@ -203,32 +203,32 @@
 <p>Optionally, you can implement an <code>abbrev</code> field that gives the metric an abbreviation that will be used when displaying metric information in the console or tracking record. If no <code>abbrev</code> is passed, the class name will be used.</p>
 <p>Let’s take a look at the implementation of <code>luz_metric_accuracy</code> so you can see how to implement a new one:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">luz_metric_accuracy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_metric.html">luz_metric</a></span><span class="op">(</span>
-  <span class="co"># An abbreviation to be shown in progress bars, or </span>
-  <span class="co"># when printing progress</span>
-  abbrev <span class="op">=</span> <span class="st">"Acc"</span>, 
-  <span class="co"># Initial setup for the metric. Metrics are initialized</span>
-  <span class="co"># every epoch, for both training and validation</span>
-  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">correct</span> <span class="op">&lt;-</span> <span class="fl">0</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">total</span> <span class="op">&lt;-</span> <span class="fl">0</span>
-  <span class="op">}</span>,
-  <span class="co"># Run at every training or validation step and updates</span>
-  <span class="co"># the internal state. The update function takes `preds`</span>
-  <span class="co"># and `target` as parameters.</span>
-  update <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">preds</span>, <span class="va">target</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_argmax.html" class="external-link">torch_argmax</a></span><span class="op">(</span><span class="va">preds</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">correct</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="va">correct</span> <span class="op">+</span> <span class="op">(</span><span class="va">pred</span> <span class="op">==</span> <span class="va">target</span><span class="op">)</span><span class="op">$</span>
-      <span class="fu">to</span><span class="op">(</span>dtype <span class="op">=</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_dtype.html" class="external-link">torch_float</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span>
-      <span class="fu">sum</span><span class="op">(</span><span class="op">)</span><span class="op">$</span>
-      <span class="fu">item</span><span class="op">(</span><span class="op">)</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">total</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="va">total</span> <span class="op">+</span> <span class="va">pred</span><span class="op">$</span><span class="fu">numel</span><span class="op">(</span><span class="op">)</span>
-  <span class="op">}</span>,
-  <span class="co"># Use the internal state to query the metric value</span>
-  compute <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">correct</span><span class="op">/</span><span class="va">self</span><span class="op">$</span><span class="va">total</span>
-  <span class="op">}</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">luz_metric_accuracy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_metric.html">luz_metric</a></span><span class="op">(</span></span>
+<span>  <span class="co"># An abbreviation to be shown in progress bars, or </span></span>
+<span>  <span class="co"># when printing progress</span></span>
+<span>  abbrev <span class="op">=</span> <span class="st">"Acc"</span>, </span>
+<span>  <span class="co"># Initial setup for the metric. Metrics are initialized</span></span>
+<span>  <span class="co"># every epoch, for both training and validation</span></span>
+<span>  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">correct</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">total</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  <span class="co"># Run at every training or validation step and updates</span></span>
+<span>  <span class="co"># the internal state. The update function takes `preds`</span></span>
+<span>  <span class="co"># and `target` as parameters.</span></span>
+<span>  update <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">preds</span>, <span class="va">target</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_argmax.html" class="external-link">torch_argmax</a></span><span class="op">(</span><span class="va">preds</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">correct</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="va">correct</span> <span class="op">+</span> <span class="op">(</span><span class="va">pred</span> <span class="op">==</span> <span class="va">target</span><span class="op">)</span><span class="op">$</span></span>
+<span>      <span class="fu">to</span><span class="op">(</span>dtype <span class="op">=</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_dtype.html" class="external-link">torch_float</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span></span>
+<span>      <span class="fu">sum</span><span class="op">(</span><span class="op">)</span><span class="op">$</span></span>
+<span>      <span class="fu">item</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">total</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="va">total</span> <span class="op">+</span> <span class="va">pred</span><span class="op">$</span><span class="fu">numel</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  <span class="co"># Use the internal state to query the metric value</span></span>
+<span>  compute <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">correct</span><span class="op">/</span><span class="va">self</span><span class="op">$</span><span class="va">total</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><strong>Note</strong>: It’s good practice that the <code>compute</code> metric returns regular R values instead of torch tensors and other parts of luz will expect that.</p>
 </div>
 <div class="section level2">
@@ -238,15 +238,15 @@
 <p>Evaluate returns a <code>luz_module_evaluation</code> object that you can query for metrics using the <code>get_metrics</code> function or simply <code>print</code> to see the results.</p>
 <p>For example:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">evaluation</span> <span class="op">&lt;-</span> <span class="va">fitted</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/evaluate.html">evaluate</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">valid_dl</span><span class="op">)</span>
-<span class="va">metrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="va">evaluation</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">evaluation</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">#&gt; A `luz_module_evaluation`</span>
-<span class="co">#&gt; -- Results ---------------------------------------------------------------------</span>
-<span class="co">#&gt; loss: 1.8892</span>
-<span class="co">#&gt; mae: 1.0522</span>
-<span class="co">#&gt; mse: 1.645</span>
-<span class="co">#&gt; rmse: 1.2826</span></code></pre>
+<code class="sourceCode R"><span><span class="va">evaluation</span> <span class="op">&lt;-</span> <span class="va">fitted</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/evaluate.html">evaluate</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">valid_dl</span><span class="op">)</span></span>
+<span><span class="va">metrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_metrics.html">get_metrics</a></span><span class="op">(</span><span class="va">evaluation</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">evaluation</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; A `luz_module_evaluation`</span></span>
+<span><span class="co">#&gt; -- Results ---------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; loss: 1.8892</span></span>
+<span><span class="co">#&gt; mae: 1.0522</span></span>
+<span><span class="co">#&gt; mse: 1.645</span></span>
+<span><span class="co">#&gt; rmse: 1.2826</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="customizing-with-callbacks">Customizing with callbacks<a class="anchor" aria-label="anchor" href="#customizing-with-callbacks"></a>
@@ -262,27 +262,27 @@
 <p>You can also implement custom callbacks that modify or act specifically for your training procedure. For example:</p>
 <p>Let’s implement a callback that prints ‘Iteration <code>n</code>’ (where <code>n</code> is the iteration number) for every batch in the training set and ‘Done’ when an epoch is finished. For that task we use the <code>luz_callback</code> function:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">print_callback</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback.html">luz_callback</a></span><span class="op">(</span>
-  name <span class="op">=</span> <span class="st">"print_callback"</span>,
-  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">message</span><span class="op">)</span> <span class="op">{</span>
-    <span class="va">self</span><span class="op">$</span><span class="va">message</span> <span class="op">&lt;-</span> <span class="va">message</span>
-  <span class="op">}</span>,
-  on_train_batch_end <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Iteration "</span>, <span class="va">ctx</span><span class="op">$</span><span class="va">iter</span>, <span class="st">"\n"</span><span class="op">)</span>
-  <span class="op">}</span>,
-  on_epoch_end <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">message</span>, <span class="st">"\n"</span><span class="op">)</span>
-  <span class="op">}</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">print_callback</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback.html">luz_callback</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"print_callback"</span>,</span>
+<span>  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">message</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">message</span> <span class="op">&lt;-</span> <span class="va">message</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  on_train_batch_end <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Iteration "</span>, <span class="va">ctx</span><span class="op">$</span><span class="va">iter</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  on_epoch_end <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">message</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/luz_callback.html">luz_callback()</a></code> takes named functions as <code>...</code> arguments, where the name indicates the moment at which the callback should be called. For instance <code>on_train_batch_end()</code> is called for every batch at the end of the training procedure, and <code>on_epoch_end()</code> is called at the end of every epoch.</p>
 <p>The returned value of <code><a href="../reference/luz_callback.html">luz_callback()</a></code> is a function that initializes an instance of the callback. Callbacks can have initialization parameters, like the name of a file where you want to log the results. In that case, you can pass an <code>initialize</code> method when creating the callback definition, and save these parameters to the <code>self</code> object. In the above example, the callback has a <code>message</code> parameter that is printed at the end of each epoch.</p>
 <p>Once a callback is defined it can be passed to the <code>fit</code> function via the <code>callbacks</code> parameter:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">...</span>, callbacks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>
-    <span class="fu">print_callback</span><span class="op">(</span>message <span class="op">=</span> <span class="st">"Done!"</span><span class="op">)</span>
-  <span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">...</span>, callbacks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    <span class="fu">print_callback</span><span class="op">(</span>message <span class="op">=</span> <span class="st">"Done!"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Callbacks can be called in many different positions of the training loop, including combinations of them. Here’s an overview of possible callback <em>breakpoints</em>:</p>
 <pre><code>Start Fit
    - on_fit_begin
@@ -462,7 +462,7 @@ End Fit</code></pre>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.9000.</p>
 </div>
 
     </footer>
