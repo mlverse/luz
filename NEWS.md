@@ -1,4 +1,6 @@
-# luz (development version)
+# luz 0.3.1
+
+* Re-submission to fix vignette rendering.
 
 # luz 0.3.0
 
