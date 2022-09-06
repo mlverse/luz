@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">luz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -323,11 +323,12 @@ End Fit</code></pre>
 <p>The other important part of callbacks is the <code>ctx</code> (context) object. See <code><a href="../reference/ctx.html">help("ctx")</a></code> for details.</p>
 <p>By default, callbacks are called in the same order as they were passed to <code>fit</code> (or <code>predict</code> or <code>evaluate</code>), but you can provide a <code>weight</code> attribute that will control the order in which it will be called. For example, if one callback has <code>weight = 10</code> and another has <code>weight = 1</code>, then the first one is called after the second one. Callbacks that don’t specify a <code>weight</code> attribute are considered <code>weight = 0</code>. A few built-in callbacks in luz already provide a weight value. For example, the <code><a href="../reference/luz_callback_early_stopping.html">?luz_callback_early_stopping</a></code> has a weight of <code>Inf</code>, since in general we want to run it as the last thing in the loop.</p>
 <p>The <code>ctx</code> object is used in luz to share information between the training loop and callbacks, model methods, and metrics. The table below describes information available in the <code>ctx</code> by default. Other callbacks could potentially modify these attributes or add new ones.</p>
+<!-- It's recommended to use the RStudio Visual editor to edit this table. -->
 <table class="table">
 <caption>Context attributes</caption>
 <colgroup>
-<col width="8%">
-<col width="91%">
+<col width="7%">
+<col width="92%">
 </colgroup>
 <thead><tr class="header">
 <th>Attribute</th>
@@ -364,11 +365,11 @@ End Fit</code></pre>
 </tr>
 <tr class="even">
 <td><code>min_epochs</code></td>
-<td>| Minimum number of epochs the model will be trained for.</td>
+<td>Minimum number of epochs the model will be trained for.</td>
 </tr>
 <tr class="odd">
 <td><code>max_epochs</code></td>
-<td>| Maximum number of epochs the model will be trained for.</td>
+<td>Maximum number of epochs the model will be trained for.</td>
 </tr>
 <tr class="even">
 <td><code>epoch</code></td>
