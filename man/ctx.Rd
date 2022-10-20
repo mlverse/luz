@@ -11,7 +11,10 @@ metrics and callbacks.
 The \code{ctx} object is used in luz to share information between the
 training loop and callbacks, model methods, and metrics. The table below
 describes information available in the \code{ctx} by default. Other callbacks
-could potentially modify these attributes or add new ones.\tabular{ll}{
+could potentially modify these attributes or add new ones.\if{html}{\out{
+<!-- It's recommended to use the RStudio Visual editor to edit this table. -->
+}}
+\tabular{ll}{
    Attribute \tab Description \cr
    \code{verbose} \tab The value (\code{TRUE} or \code{FALSE}) attributed to the \code{verbose} argument in \code{fit} . \cr
    \code{accelerator} \tab Accelerator object used to query the correct device to place models, data, etc. It assumes the value passed to the \code{accelerator} parameter in \code{fit}. \cr
@@ -20,8 +23,8 @@ could potentially modify these attributes or add new ones.\tabular{ll}{
    \code{data} \tab The currently in-use dataloader. When training it’s \code{ctx$train_data}, when doing validation its \code{ctx$valid_data}. It can also be the prediction dataset when in \code{predict}. \cr
    \code{train_data} \tab Dataloader passed to the \code{data} argument in \code{fit}. Modified to yield data in the selected device. \cr
    \code{valid_data} \tab Dataloader passed to the \code{valid_data} argument in \code{fit}. Modified to yield data in the selected device. \cr
-   \code{min_epochs} \tab | Minimum number of epochs the model will be trained for. \cr
-   \code{max_epochs} \tab | Maximum number of epochs the model will be trained for. \cr
+   \code{min_epochs} \tab Minimum number of epochs the model will be trained for. \cr
+   \code{max_epochs} \tab Maximum number of epochs the model will be trained for. \cr
    \code{epoch} \tab Current training epoch. \cr
    \code{iter} \tab Current training iteration. It’s reset every epoch and when going from training to validation. \cr
    \code{training} \tab Whether the model is in training or validation mode. See also \code{help("luz_callback_train_valid")} \cr
