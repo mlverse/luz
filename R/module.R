@@ -547,20 +547,19 @@ enable_mps_fallback <- function() {
   fallback <- Sys.getenv("PYTORCH_ENABLE_MPS_FALLBACK", unset = "")
   if (fallback == "") {
     if (!identical(Sys.getenv("TESTTHAT"), "true")) {
-      cli::cli_warn(c(i = paste0(
-        "Some torch operators might not yet be implemented for the MPS device and ",
-        "will fall back to run on the CPU. This may have performance implications. ",
-        "Set the {.var PYTORCH_ENABLE_MPS_FALLBACK} env var to 0 to error instead ",
-        "of falling back. You can also run entirely on the CPU by passing ",
-        "{.var accelerator(cpu = TRUE)} to the {.var accelerator} argument of {.fn fit}/",
-        "{.fn evaluate}/{.fn predict}. Set the {.var PYTORCH_ENABLE_MPS_FALLBACK=1} to disable this ",
-        "warning."
-      )))
+      cli::cli_warn(c(
+        paste0(
+          "Some torch operators might not yet be implemented for the MPS device. ",
+          "A temporary fix is to set the {.var PYTORCH_ENABLE_MPS_FALLBACK=1} to ",
+          "use the CPU as a fall back for those operators:"),
+        i = paste0(
+          "Add {.var PYTORCH_ENABLE_MPS_FALLBACK=1} to your {.var .Renviron} file, ",
+          "for example use {.fn usethis::edit_r_environ}."),
+        x = paste0(
+          "Using {.var Sys.setenv()} doesn't work because the env var must be ",
+          "set before R starts.")
+      ))
     }
-    Sys.setenv(PYTORCH_ENABLE_MPS_FALLBACK=1)
-    rlang::eval_bare({
-      on.exit(Sys.unsetenv("PYTORCH_ENABLE_MPS_FALLBACK"), add = TRUE)
-    }, env = rlang::caller_env())
   }
   invisible(NULL)
 }

@@ -34,6 +34,7 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       TORCH_INSTALL: 1
       TORCH_TEST: 1
+      PYTORCH_ENABLE_MPS_FALLBACK: 1
 
     steps:
       - uses: actions/checkout@v2
