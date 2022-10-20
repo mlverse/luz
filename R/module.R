@@ -199,6 +199,7 @@ fit.luz_module_generator <- function(
   dataloader_options = NULL
 ) {
 
+  enable_mps_fallback()
   module <- object
   ellipsis::check_dots_empty()
 
@@ -287,6 +288,7 @@ evaluate <- function(
   dataloader_options = NULL
 ) {
 
+  enable_mps_fallback()
   ctx <- evaluate_context$new(
     model = object$model,
     newdata = data,
@@ -327,6 +329,7 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
                                       accelerator = NULL, verbose = NULL,
                                       dataloader_options = NULL) {
 
+  enable_mps_fallback()
   ctx <- predict_context$new(
     model = object$model,
     newdata = newdata,
@@ -535,4 +538,29 @@ get_metrics.luz_context <- get_metrics.luz_module_fitted
 get_metrics.luz_module_evaluation <- function(object, ...) {
   res <- get_metrics.luz_module_fitted(object)
   res[, c("metric", "value")]
+}
+
+enable_mps_fallback <- function() {
+  if (!torch::backends_mps_is_available())
+    return(invisible(NULL))
+
+  fallback <- Sys.getenv("PYTORCH_ENABLE_MPS_FALLBACK", unset = "")
+  if (fallback == "") {
+    if (!identical(Sys.getenv("TESTTHAT"), "true")) {
+      cli::cli_warn(c(i = paste0(
+        "Some torch operators might not yet be implemented for the MPS device and ",
+        "will fall back to run on the CPU. This may have performance implications. ",
+        "Set the {.var PYTORCH_ENABLE_MPS_FALLBACK} env var to 0 to error instead ",
+        "of falling back. You can also run entirely on the CPU by passing ",
+        "{.var accelerator(cpu = TRUE)} to the {.var accelerator} argument of {.fn fit}/",
+        "{.fn evaluate}/{.fn predict}. Set the {.var PYTORCH_ENABLE_MPS_FALLBACK=1} to disable this ",
+        "warning."
+      )))
+    }
+    Sys.setenv(PYTORCH_ENABLE_MPS_FALLBACK=1)
+    rlang::eval_bare({
+      on.exit(Sys.unsetenv("PYTORCH_ENABLE_MPS_FALLBACK"), add = TRUE)
+    }, env = rlang::caller_env())
+  }
+  invisible(NULL)
 }
