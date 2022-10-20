@@ -1,5 +1,7 @@
 # luz (development version)
 
+* Added support for arm Mac's and the MPS device. (#104)
+
 # luz 0.3.1
 
 * Re-submission to fix vignette rendering.
