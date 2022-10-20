@@ -199,6 +199,7 @@ fit.luz_module_generator <- function(
   dataloader_options = NULL
 ) {
 
+  enable_mps_fallback()
   module <- object
   ellipsis::check_dots_empty()
 
@@ -287,6 +288,7 @@ evaluate <- function(
   dataloader_options = NULL
 ) {
 
+  enable_mps_fallback()
   ctx <- evaluate_context$new(
     model = object$model,
     newdata = data,
@@ -327,6 +329,7 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
                                       accelerator = NULL, verbose = NULL,
                                       dataloader_options = NULL) {
 
+  enable_mps_fallback()
   ctx <- predict_context$new(
     model = object$model,
     newdata = newdata,
@@ -535,4 +538,28 @@ get_metrics.luz_context <- get_metrics.luz_module_fitted
 get_metrics.luz_module_evaluation <- function(object, ...) {
   res <- get_metrics.luz_module_fitted(object)
   res[, c("metric", "value")]
+}
+
+enable_mps_fallback <- function() {
+  if (!torch::backends_mps_is_available())
+    return(invisible(NULL))
+
+  fallback <- Sys.getenv("PYTORCH_ENABLE_MPS_FALLBACK", unset = "")
+  if (fallback == "") {
+    if (!identical(Sys.getenv("TESTTHAT"), "true")) {
+      cli::cli_warn(c(
+        paste0(
+          "Some torch operators might not yet be implemented for the MPS device. ",
+          "A temporary fix is to set the {.var PYTORCH_ENABLE_MPS_FALLBACK=1} to ",
+          "use the CPU as a fall back for those operators:"),
+        i = paste0(
+          "Add {.var PYTORCH_ENABLE_MPS_FALLBACK=1} to your {.var .Renviron} file, ",
+          "for example use {.fn usethis::edit_r_environ}."),
+        x = paste0(
+          "Using {.var Sys.setenv()} doesn't work because the env var must be ",
+          "set before R starts.")
+      ))
+    }
+  }
+  invisible(NULL)
 }

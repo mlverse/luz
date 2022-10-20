@@ -16,8 +16,12 @@ LuzMetric <- R6::R6Class(
     to = function(device) {
       # move tensors to the correct device
       for (nm in names(self)) {
-        if (inherits(self[[nm]], "torch_tensor"))
+        if (inherits(self[[nm]], "torch_tensor")) {
+          if (device == "mps" && self[[nm]]$dtype == torch::torch_float64())
+            self[[nm]] <- self[[nm]]$to(dtype = torch::torch_float32())
+
           self[[nm]] <- self[[nm]]$to(device = device)
+        }
       }
       invisible(self)
     }
@@ -264,7 +268,7 @@ luz_metric_mae <- luz_metric(
   },
   update = function(preds, targets) {
     self$sum_abs_error <- self$sum_abs_error + torch::torch_sum(torch::torch_abs(preds - targets))$
-      to(device = "cpu", dtype = torch::torch_float64())
+      to(device = "cpu")
     self$n <- self$n + targets$numel()
   },
   compute = function() {
@@ -288,8 +292,7 @@ luz_metric_mse <- luz_metric(
     self$n <- torch::torch_tensor(0, dtype = torch::torch_int64())
   },
   update = function(preds, targets) {
-    self$sum_error <- self$sum_error + torch::torch_sum(torch::torch_pow(exponent = 2, preds - targets))$
-      to(device = "cpu", dtype = torch::torch_float64())
+    self$sum_error <- self$sum_error + torch::torch_sum(torch::torch_pow(exponent = 2, preds - targets))
     self$n <- self$n + targets$numel()
   },
   compute = function() {
