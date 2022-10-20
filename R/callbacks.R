@@ -59,6 +59,43 @@ default_evaluate_callbacks <- function() {
 #' @inheritParams R6::R6Class
 #'
 #' @includeRmd man/rmd/callbacks.Rmd details
+#'
+#' @section Prediction callbacks:
+#'
+#' You can also use callbacks when using [predict()]. In this case the supported
+#' callback methods are detailed above.
+#'
+#' ```
+#' Start predict
+#'  - on_predict_begin
+#'  Start prediction loop
+#'   - on_predict_batch_begin
+#'   - on_predict_batch_end
+#'  End prediction loop
+#'  - on_predict_end
+#' End predict
+#' ```
+#'
+#' @section Evaluate callbacks:
+#'
+#' Callbacks can also be used with [evaluate()], in this case, the callbacks that
+#' are used are equivalent to those of the validation loop when using [fit()]:
+#'
+#' ```
+#' Start Valid
+#'  - on_valid_begin
+#'  Start Batch Loop
+#'   - on_valid_batch_begin
+#'   Start Default Validation Step
+#'    - on_valid_batch_after_pred
+#'    - on_valid_batch_after_loss
+#'   End Default Validation Step
+#'   - on_valid_batch_end
+#'  End Batch Loop
+#'  - on_valid_end
+#' End Valid
+#' ```
+#'
 #' @examples
 #' print_callback <- luz_callback(
 #'  name = "print_callback",

@@ -137,6 +137,44 @@ callbacks in luz already provide a weight value. For example, the
 \code{?luz_callback_early_stopping} has a weight of \code{Inf}, since in general
 we want to run it as the last thing in the loop.
 }
+\section{Prediction callbacks}{
+
+
+You can also use callbacks when using \code{\link[=predict]{predict()}}. In this case the supported
+callback methods are detailed above.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Start predict
+ - on_predict_begin
+ Start prediction loop
+  - on_predict_batch_begin
+  - on_predict_batch_end
+ End prediction loop
+ - on_predict_end
+End predict
+}\if{html}{\out{</div>}}
+}
+
+\section{Evaluate callbacks}{
+
+
+Callbacks can also be used with \code{\link[=evaluate]{evaluate()}}, in this case, the callbacks that
+are used are equivalent to those of the validation loop when using \code{\link[=fit]{fit()}}:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{Start Valid
+ - on_valid_begin
+ Start Batch Loop
+  - on_valid_batch_begin
+  Start Default Validation Step
+   - on_valid_batch_after_pred
+   - on_valid_batch_after_loss
+  End Default Validation Step
+  - on_valid_batch_end
+ End Batch Loop
+ - on_valid_end
+End Valid
+}\if{html}{\out{</div>}}
+}
+
 \examples{
 print_callback <- luz_callback(
  name = "print_callback",
