@@ -115,3 +115,21 @@ test_that("gradient clip works correctly", {
   expect_error(luz_callback_gradient_clip(max_norm = "a"), "max_norm")
   expect_error(luz_callback_gradient_clip(norm_type = "a"), "norm_type")
 })
+
+test_that("improve error message when you provide a unitinitilized callback", {
+
+  skip_on_os("windows")
+
+  x <- torch_randn(1000, 10)
+  y <- torch_randn(1000, 1)
+
+  model <- nn_linear %>%
+    setup(optimizer = optim_sgd, loss = nnf_mse_loss) %>%
+    set_hparams(in_features = 10, out_features = 1) %>%
+    set_opt_hparams(lr = 0.01)
+
+  expect_snapshot_error({
+    model %>% fit(list(x, y), callbacks = list(luz_callback_auto_resume))
+  })
+
+})

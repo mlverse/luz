@@ -438,3 +438,8 @@
       Train metrics: Loss: 1.4667
       Valid metrics: Loss: 1.4162
 
+# improve error message when you provide a unitinitilized callback
+
+    x Callbacks must have class <LuzCallback> but got <function>
+    i Perhaps you forgot to initialize the callback?
+

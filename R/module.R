@@ -27,6 +27,7 @@
 #'
 #' @family training
 #'
+#' @import torch
 #' @export
 setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL,
                   backward = NULL) {
@@ -448,6 +449,7 @@ valid_one_batch <- function(ctx) {
 
 initialize_callbacks <- function(callbacks, ctx) {
   cbs <- lapply(callbacks, function(cb) {
+    assert_is_callback(cb)
     cb$set_ctx(ctx)
     bind_context(cb, ctx)
     cb
