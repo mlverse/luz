@@ -148,3 +148,13 @@ check_installed <- function (pkg, fun) {
                                        pkg, "')`?")))
 }
 
+map2 <- function(x, y, f) {
+  if (length(x) != length(y)) rlang::abort("Objects must have the same length.")
+  out <- vector(mode = "list", length = length(x))
+  for(i in seq_along(x)) {
+    out[[i]] <- f(x[[i]], y[[i]])
+  }
+  names(out) <- names(x)
+  out
+}
+

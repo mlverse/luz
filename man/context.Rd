@@ -51,7 +51,10 @@ device.}
 
 \item{\code{verbose}}{bool wether the process is in verbose mode or not.}
 
-\item{\code{handlers}}{List of error handlers that can be used. See \code{\link[rlang:with_handlers]{rlang::with_handlers()}}
+\item{\code{handlers}}{List of error handlers that can be used. See \code{\link[rlang:try_fetch]{rlang::try_fetch()}}
+for more info.}
+
+\item{\code{epoch_handlers}}{List of error handlers that can be used. See \code{\link[rlang:try_fetch]{rlang::try_fetch()}}
 for more info.}
 
 \item{\code{training}}{A bool indicating if the model is in training or validation mode.}
@@ -92,6 +95,7 @@ tranformation.}
 \item \href{#method-luz_context-clean}{\code{context$clean()}}
 \item \href{#method-luz_context-call_callbacks}{\code{context$call_callbacks()}}
 \item \href{#method-luz_context-state_dict}{\code{context$state_dict()}}
+\item \href{#method-luz_context-unsafe_set_records}{\code{context$unsafe_set_records()}}
 \item \href{#method-luz_context-clone}{\code{context$clone()}}
 }
 }
@@ -323,6 +327,23 @@ create the returned values.
 \if{html}{\out{<div class="r">}}\preformatted{context$state_dict()}\if{html}{\out{</div>}}
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-luz_context-unsafe_set_records"></a>}}
+\if{latex}{\out{\hypertarget{method-luz_context-unsafe_set_records}{}}}
+\subsection{Method \code{unsafe_set_records()}}{
+Are you sure you know what you are doing?
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{context$unsafe_set_records(records)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{records}}{New set of records to be set.}
+}
+\if{html}{\out{</div>}}
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-luz_context-clone"></a>}}

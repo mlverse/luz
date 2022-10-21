@@ -1,0 +1,92 @@
+test_that("resume a simple model", {
+  interrupt <- luz_callback(
+    "interrupt",
+    on_epoch_end = function() {
+      if (ctx$epoch == 5) {
+        self$metrics <- ctx$get_metrics_df()
+        stop("Error on epoch 5")
+      }
+    }
+  )
+
+  track_weights <- luz_callback(
+    "track_weights",
+    weights = list(),
+    opt = list(),
+    on_epoch_begin = function() {
+      self$weights[[ctx$epoch]] <- lapply(ctx$model$state_dict(), function(x) x$clone())
+      self$opt[[ctx$epoch]] <- ctx$optimizers$opt$state_dict()
+    },
+    on_epoch_end = function() {
+      # this actually is only called when no saved model exists, otherwise
+      # the epoch is skipped by the autoresume callback.
+      self$on_epoch_begin()
+    }
+  )
+
+  x <- torch_randn(1000, 10)
+  y <- torch_randn(1000, 1)
+
+  model <- nn_linear %>%
+    setup(optimizer = optim_sgd, loss = nnf_mse_loss) %>%
+    set_hparams(in_features = 10, out_features = 1) %>%
+    set_opt_hparams(lr = 0.01)
+
+  temp <- tempfile()
+  autoresume <- luz_callback_auto_resume(path = temp)
+  inter <- interrupt()
+  tr_w <- track_weights()
+
+  # simulate an error during training
+  expect_error(regexp = "Error on", {
+    results <- model %>% fit(
+      list(x, y),
+      callbacks = list(tr_w, autoresume, inter),
+      verbose = FALSE
+    )
+  })
+
+  tr_w_resume <- track_weights()
+  # reruning, now making sure no error will happen
+  results_resume <- model %>% fit(
+    list(x, y),
+    callbacks = list(tr_w_resume, autoresume),
+    verbose = FALSE
+  )
+
+  metrics <- get_metrics(results_resume)
+
+  expect_true(nrow(metrics) == 10)
+  expect_true(all.equal(metrics[1:5,], inter$metrics))
+
+  # expect that the first five weights are identical to the last one from
+  # the first run.
+  for(i in 1:5) {
+    expect_true(torch_allclose(tr_w$weights[[5]]$weight, tr_w_resume$weights[[i]]$weight))
+    expect_true(torch_allclose(tr_w$weights[[5]]$bias, tr_w_resume$weights[[i]]$bias))
+
+    expect_identical(tr_w$opt[[i]], tr_w_resume$opt[[i]])
+  }
+
+  # Now that the run is complete, rerunning will trigger a completely new run.
+  results_resume2 <- model %>% fit(
+    list(x, y),
+    callbacks = list(autoresume),
+    verbose = FALSE
+  )
+
+  # we expect no identical metrics at all.
+  expect_true(!identical(get_metrics(results_resume2), metrics))
+})
+
+test_that("resume a model with more than one optimizer", {
+
+})
+
+test_that("resume a model with learning rate scheduler", {
+
+})
+
+test_that("resume works when model has been explicitly interrupted", {
+
+})
