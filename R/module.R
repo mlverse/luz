@@ -228,9 +228,9 @@ fit.luz_module_generator <- function(
   }, add = TRUE)
 
   ctx$call_callbacks("on_fit_begin")
-  rlang::with_handlers(
+  rlang::try_fetch(
     !!! ctx$handlers,
-    .expr = {
+    expr = {
       for (epoch in seq_len(ctx$max_epochs)) {
         ctx$epoch <- epoch
         ctx$iter <- 0L
