@@ -33,6 +33,7 @@ NULL
 #'   others.
 #' @param callbacks A list of callbacks used by the model. See [luz_callback()].
 #' @param training A boolean that indicates if the context is in training mode or not.
+#' @param records New set of records to be set.
 #'
 context <- R6::R6Class(
   "luz_context",
@@ -137,6 +138,7 @@ context <- R6::R6Class(
         ".optimizers",
         ".verbose",
         ".handlers",
+        ".epoch_handlers",
         ".metrics",
         ".training",
         ".batch",
@@ -173,6 +175,14 @@ context <- R6::R6Class(
       # deleted.
       bind_context(output$model, NULL)
       output
+    },
+    #' @description
+    #' Are you sure you know what you are doing?
+    unsafe_set_records = function(records) {
+      if (!length(private$.records$metrics$train) == 0) {
+        rlang::warn("You are unsafe setting records and it's overriding current data.")
+      }
+      private$.records <- records
     }
   ),
   active = list(
@@ -286,12 +296,19 @@ context <- R6::R6Class(
         return(private$.verbose)
       self$set_verbose(new)
     },
-    #' @field handlers List of error handlers that can be used. See [rlang::with_handlers()]
+    #' @field handlers List of error handlers that can be used. See [rlang::try_fetch()]
     #'   for more info.
     handlers = function(new) {
       if (missing(new))
         return(private$.handlers)
       private$.handlers <- new
+    },
+    #' @field epoch_handlers List of error handlers that can be used. See [rlang::try_fetch()]
+    #'   for more info.
+    epoch_handlers = function(new) {
+      if (missing(new))
+        return(private$.epoch_handlers)
+      private$.epoch_handlers <- new
     },
     #' @field training A bool indicating if the model is in training or validation mode.
     training = function(new){
@@ -377,6 +394,7 @@ context <- R6::R6Class(
     .optimizers = NULL,
     .verbose = NULL,
     .handlers = list(),
+    .epoch_handlers = list(),
     .metrics = NULL,
 
     # Fields that are overwritten during model training. They are more or
