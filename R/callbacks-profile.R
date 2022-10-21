@@ -81,8 +81,6 @@ luz_callback_profile <- luz_callback(
   },
 
   tic = function(name) {
-    if (!is.null(self$tics[[name]]))
-      abort("Ticking twice with the same name is not allowed.")
     self$tics[[name]] <- Sys.time()
   },
   toc = function(name) {
