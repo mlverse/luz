@@ -38,7 +38,7 @@ luz_callback_auto_resume <- luz_callback(
     }
 
     # load state dicts if they are available
-    state <- torch_load(self$path)
+    state <- torch_load(self$path, device = ctx$device)
 
     # load objects to their place.
     ctx$model$load_state_dict(state$model)
