@@ -1,28 +1,38 @@
-test_that("resume a simple model", {
-  interrupt <- luz_callback(
-    "interrupt",
-    on_epoch_end = function() {
-      if (ctx$epoch == 5) {
-        self$metrics <- ctx$get_metrics_df()
-        stop("Error on epoch 5")
-      }
+interrupt <- luz_callback(
+  "interrupt",
+  on_epoch_end = function() {
+    if (ctx$epoch == 5) {
+      self$metrics <- ctx$get_metrics_df()
+      stop("Error on epoch 5")
     }
-  )
+  }
+)
 
-  track_weights <- luz_callback(
-    "track_weights",
-    weights = list(),
-    opt = list(),
-    on_epoch_begin = function() {
-      self$weights[[ctx$epoch]] <- lapply(ctx$model$state_dict(), function(x) x$clone())
-      self$opt[[ctx$epoch]] <- ctx$optimizers$opt$state_dict()
-    },
-    on_epoch_end = function() {
-      # this actually is only called when no saved model exists, otherwise
-      # the epoch is skipped by the autoresume callback.
-      self$on_epoch_begin()
-    }
-  )
+clone_tensors <- function(x) {
+  if (is.list(x))
+    lapply(x, clone_tensors)
+  else if (inherits(x, "torch_tensor"))
+    x$clone()
+  else
+    x
+}
+
+track_weights <- luz_callback(
+  "track_weights",
+  weights = list(),
+  opt = list(),
+  on_epoch_begin = function() {
+    self$weights[[ctx$epoch]] <- lapply(ctx$model$state_dict(), function(x) x$clone())
+    self$opt[[ctx$epoch]] <- clone_tensors(lapply(ctx$optimizers, function(opt) opt$state_dict()))
+  },
+  on_epoch_end = function() {
+    # this actually is only called when no saved model exists, otherwise
+    # the epoch is skipped by the autoresume callback.
+    self$on_epoch_begin()
+  }
+)
+
+test_that("resume a simple model", {
 
   x <- torch_randn(1000, 10)
   y <- torch_randn(1000, 1)
@@ -80,6 +90,48 @@ test_that("resume a simple model", {
 })
 
 test_that("resume a model with more than one optimizer", {
+
+  x <- torch_randn(1000, 10)
+  y <- torch_randn(1000, 1)
+
+  module <- nn_module(
+    inherit = nn_linear,
+    set_optimizers = function(lr = 2*1e-4, betas = c(0.5, 0.999)) {
+      list(
+        weight = optim_adam(list(super$parameters$weight), lr = lr, betas = betas),
+        bias = optim_adam(list(super$parameters$bias), lr = lr, betas = betas)
+      )
+    }
+  )
+
+  model <- module %>%
+    setup(loss = nnf_mse_loss) %>%
+    set_hparams(in_features = 10, out_features = 1) %>%
+    set_opt_hparams(lr = 1e-4)
+
+  autoresume <- luz_callback_auto_resume(path = temp)
+  tr_w <- track_weights()
+  inter <- interrupt()
+
+  # simulate an error during training
+  expect_error(regexp = "Error on", {
+    results <- model %>% fit(
+      list(x, y),
+      callbacks = list(tr_w, autoresume, inter),
+      verbose = FALSE
+    )
+  })
+
+  tr_w_resume <- track_weights()
+  results_resume <- model %>% fit(
+    list(x, y),
+    callbacks = list(tr_w_resume, autoresume),
+    verbose = FALSE
+  )
+
+  for (i in 1:5) {
+    expect_recursive_equal(tr_w$opt[[5]], tr_w_resume$opt[[1]])
+  }
 
 })
 
