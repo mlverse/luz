@@ -109,6 +109,7 @@ test_that("resume a model with more than one optimizer", {
     set_hparams(in_features = 10, out_features = 1) %>%
     set_opt_hparams(lr = 1e-4)
 
+  temp <- tempfile()
   autoresume <- luz_callback_auto_resume(path = temp)
   tr_w <- track_weights()
   inter <- interrupt()
