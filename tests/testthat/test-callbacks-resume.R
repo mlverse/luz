@@ -161,6 +161,7 @@ test_that("resume a model with learning rate scheduler", {
     set_hparams(in_features = 10, out_features = 1) %>%
     set_opt_hparams(lr = 0.01)
 
+  temp <- tempfile()
   autoresume <- luz_callback_auto_resume(path = temp)
   inter <- interrupt()
   cb_state <- cb_with_state()
