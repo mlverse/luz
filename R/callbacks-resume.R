@@ -100,37 +100,13 @@ luz_callback_auto_resume <- luz_callback(
       ))
     }
 
-    # load state dicts if they are available
-    state <- to_device(torch_load(self$path), ctx$device)
-
-    # load objects to their place.
-    ctx$model$load_state_dict(state$model)
-    map2(ctx$optimizers, state$optimizers, function(x, y) {
-      x$load_state_dict(y)
-    })
-
-
-    ctx$unsafe_set_records(state$records)
-
-    # reload callbacks state_dicts
-    map2(state$callbacks, ctx$callbacks, function(st, cb) {
-      if (is.null(st)) return()
-
-      if (is.null(cb$load_state_dict) && !is.null(st)) {
-        cli::cli_abort(c(
-          x = "Failed resuming the model.",
-          i = paste0(
-            "A callback with class {.cls {class(cb)} has state attached ",
-            "to it, but doesn't implement the {.fn load_state_dict} method."
-          )
-        ))
-      }
-
-      cb$load_state_dict(st)
-    })
-
-    self$current_epoch <- state$epoch
-
+    luz_load_checkpoint(ctx, self$path)
+  },
+  state_dict = function() {
+    list(current_epoch = ctx$epoch)
+  },
+  load_state_dict = function(dict) {
+    self$current_epoch <- dict$current_epoch
   },
   on_epoch_begin = function() {
     if (is.null(self$current_epoch)) return(invisible(NULL))
@@ -139,27 +115,7 @@ luz_callback_auto_resume <- luz_callback(
     }
   },
   on_epoch_end = function() {
-    state <- list()
-
-    #grab epoch
-    state[["epoch"]] <- ctx$epoch
-    state[["records"]] <- ctx$records
-
-    # grab model state
-    state[["model"]] <- ctx$model$state_dict()
-
-    # grab optimizer state
-    state[["optimizers"]] <- lapply(ctx$optimizers, function(x) x$state_dict())
-
-    # traverse callbacks looking for the `state_dict()` method.
-    state[["callbacks"]] <- lapply(ctx$callbacks, function(x) {
-      if (is.null(x$state_dict))
-        NULL
-      else
-        x$state_dict()
-    })
-
-    torch_save(state, self$path)
+    luz_checkpoint(ctx, self$path)
   },
   on_fit_end = function() {
     fs::file_delete(self$path)
