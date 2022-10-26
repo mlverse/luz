@@ -36,6 +36,9 @@ each epoch and \code{load_state_dict()} is called when the model is resumed.
 
 \examples{
 if (torch::torch_is_installed()) {
+library(torch)
+library(luz)
+
 x <- torch_randn(1000, 10)
 y <- torch_randn(1000, 1)
 

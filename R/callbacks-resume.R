@@ -24,6 +24,9 @@
 #'
 #' @examples
 #' if (torch::torch_is_installed()) {
+#' library(torch)
+#' library(luz)
+#'
 #' x <- torch_randn(1000, 10)
 #' y <- torch_randn(1000, 1)
 #'
