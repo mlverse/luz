@@ -1,19 +1,78 @@
 #' Resume training callback
 #'
-#' This callback allows you to resume training a model from a specified
-#' directory.
+#' This callback allows you to resume training a model.
 #'
-#' When using it, model weights, optimizer state and learning rate schedulers
-#' state is serialized each epoch. If something fails during training simply
-#' re-running the same script will restart the model training from where it
-#' stopped.
+#' When using it, model weights, optimizer state are serialized at the end of
+#' each epoch. If something fails during training simply re-running the same
+#' script will restart the model training from the epoch right after the last
+#' epoch that was serialized.
+#'
+#' @note In general you will want to add this callback as the last in the callbacks
+#' list, this way, the serialized state is likely to contain all possible changes
+#' that other callbacks could have made at `'on_epoch_end'`. The default `weight`
+#' attribute of this callback is `Inf`.
+#'
+#' @section Customizing serialization:
+#'
+#' By default model, optimizer state and records are serialized. Callbacks can
+#' be used to customize serialization by implementing the `state_dict()` and
+#' `load_state_dict()` methods.
+#' If those methods are implemented, then `state_dict()` is called at the end of
+#' each epoch and `load_state_dict()` is called when the model is resumed.
 #'
 #' @param path Path to save state files for the model.
 #'
+#' @examples
+#' if (torch::torch_is_installed()) {
+#' x <- torch_randn(1000, 10)
+#' y <- torch_randn(1000, 1)
+#'
+#' model <- nn_linear %>%
+#'   setup(optimizer = optim_sgd, loss = nnf_mse_loss) %>%
+#'   set_hparams(in_features = 10, out_features = 1) %>%
+#'   set_opt_hparams(lr = 0.01)
+#'
+#'
+#' # simulate a failure in the middle of epoch 5 happening only once.
+#' callback_stop <- luz_callback(
+#'   "interrupt",
+#'   failed = FALSE,
+#'   on_epoch_end = function() {
+#'     if (ctx$epoch == 5 && !self$failed) {
+#'       self$failed <- TRUE
+#'       stop("Error on epoch 5")
+#'     }
+#'   }
+#' )
+#'
+#' path <- tempfile()
+#' autoresume <- luz_callback_auto_resume(path = path)
+#' interrupt <- callback_stop()
+#'
+#' # try once and the model fails
+#' try({
+#'   results <- model %>% fit(
+#'     list(x, y),
+#'     callbacks = list(autoresume, interrupt),
+#'     verbose = FALSE
+#'   )
+#' })
+#'
+#' # model resumes and completes
+#' results <- model %>% fit(
+#'   list(x, y),
+#'   callbacks = list(autoresume, interrupt),
+#'   verbose = FALSE
+#' )
+#'
+#' get_metrics(results)
+#'
+#' }
 #' @export
 luz_callback_auto_resume <- luz_callback(
   "auto_resume_callback",
-  initialize = function(path = "./state") {
+  weight = Inf,
+  initialize = function(path = "./state.pt") {
     self$path <- file.path(path)
     fs::dir_create(fs::path_dir(self$path), recurse = TRUE)
   },

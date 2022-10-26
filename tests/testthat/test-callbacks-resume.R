@@ -2,7 +2,6 @@ interrupt <- luz_callback(
   "interrupt",
   on_epoch_end = function() {
     if (ctx$epoch == 5) {
-      self$metrics <- ctx$get_metrics_df()
       stop("Error on epoch 5")
     }
   }
@@ -138,6 +137,7 @@ test_that("resume a model with more than one optimizer", {
 
 test_that("resume a model with learning rate scheduler", {
   cb_with_state <- luz_callback(
+    weight = Inf,
     initialize = function() {
       self$i <- 1
     },
