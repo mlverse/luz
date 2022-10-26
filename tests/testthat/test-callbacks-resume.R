@@ -1,7 +1,11 @@
 interrupt <- luz_callback(
   "interrupt",
+  weight = Inf,
+  failed = FALSE,
   on_epoch_end = function() {
-    if (ctx$epoch == 5) {
+    if (ctx$epoch == 5 && !self$failed) {
+      self$failed <- TRUE
+      self$metrics <- ctx$get_metrics_df()
       stop("Error on epoch 5")
     }
   }
