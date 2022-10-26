@@ -187,6 +187,37 @@ test_that("resume a model with learning rate scheduler", {
   expect_equal(cb_state$i, 6)
 })
 
-test_that("resume works when model has been explicitly interrupted", {
 
+test_that("resume works when model has been explicitly interrupted", {
+  # sometimes we want to early stop, in this case we need to make sure that
+  # this interruptions doesn't count as 'not finished training'.
+
+  x <- torch_randn(1000, 10)
+  y <- torch_randn(1000, 1)
+
+  model <- nn_linear %>%
+    setup(optimizer = optim_sgd, loss = nnf_mse_loss) %>%
+    set_hparams(in_features = 10, out_features = 1) %>%
+    set_opt_hparams(lr = 0.01)
+
+  temp <- tempfile()
+  autoresume <- luz_callback_auto_resume(path = temp)
+  early_stop <- luz_callback_early_stopping(monitor = "train_loss", patience = 1)
+
+  results <- model %>% fit(
+    list(x, y),
+    callbacks = list(autoresume, early_stop),
+    verbose = FALSE,
+    epochs = 100
+  )
+
+  results2 <- model %>% fit(
+    list(x, y),
+    callbacks = list(autoresume, early_stop),
+    verbose = FALSE,
+    epochs = 100
+  )
+
+  # values would be identical if results2 was resumed from results1
+  expect_true(get_metrics(results2)$value[1] != get_metrics(results)$value[1])
 })
