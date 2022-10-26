@@ -23,6 +23,9 @@ In general you will want to add this callback as the last in the callbacks
 list, this way, the serialized state is likely to contain all possible changes
 that other callbacks could have made at \code{'on_epoch_end'}. The default \code{weight}
 attribute of this callback is \code{Inf}.
+
+Read the checkpointing article in the pkgdown website for more
+information.
 }
 \section{Customizing serialization}{
 
@@ -84,3 +87,20 @@ get_metrics(results)
 
 }
 }
+\seealso{
+Other luz_callbacks: 
+\code{\link{luz_callback_csv_logger}()},
+\code{\link{luz_callback_early_stopping}()},
+\code{\link{luz_callback_interrupt}()},
+\code{\link{luz_callback_keep_best_model}()},
+\code{\link{luz_callback_lr_scheduler}()},
+\code{\link{luz_callback_metrics}()},
+\code{\link{luz_callback_mixup}()},
+\code{\link{luz_callback_model_checkpoint}()},
+\code{\link{luz_callback_profile}()},
+\code{\link{luz_callback_progress}()},
+\code{\link{luz_callback_resume_from_checkpoint}()},
+\code{\link{luz_callback_train_valid}()},
+\code{\link{luz_callback}()}
+}
+\concept{luz_callbacks}

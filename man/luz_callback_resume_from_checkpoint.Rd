@@ -29,6 +29,26 @@ checkpoint.}
 \description{
 Allow resume model training from a specific checkpoint
 }
+\note{
+Read the checkpointing article in the pkgdown website for more
+information.
+}
 \seealso{
 \code{\link[=luz_callback_model_checkpoint]{luz_callback_model_checkpoint()}}
+
+Other luz_callbacks: 
+\code{\link{luz_callback_auto_resume}()},
+\code{\link{luz_callback_csv_logger}()},
+\code{\link{luz_callback_early_stopping}()},
+\code{\link{luz_callback_interrupt}()},
+\code{\link{luz_callback_keep_best_model}()},
+\code{\link{luz_callback_lr_scheduler}()},
+\code{\link{luz_callback_metrics}()},
+\code{\link{luz_callback_mixup}()},
+\code{\link{luz_callback_model_checkpoint}()},
+\code{\link{luz_callback_profile}()},
+\code{\link{luz_callback_progress}()},
+\code{\link{luz_callback_train_valid}()},
+\code{\link{luz_callback}()}
 }
+\concept{luz_callbacks}

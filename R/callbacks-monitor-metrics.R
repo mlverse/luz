@@ -152,6 +152,9 @@ luz_callback_early_stopping <- luz_callback(
 #' luz_callback_model_checkpoint(path= "path/to/dir/epoch-{epoch:02d}/model.pt")
 #' luz_callback_model_checkpoint(path= "path/to/dir/epoch-{epoch:02d}/model-{monitor:.2f}.pt")
 #'
+#' @note Read the checkpointing article in the pkgdown website for more
+#'  information.
+#'
 #' @family luz_callbacks
 #' @export
 luz_callback_model_checkpoint <- luz_callback(

@@ -20,7 +20,12 @@
 #' If those methods are implemented, then `state_dict()` is called at the end of
 #' each epoch and `load_state_dict()` is called when the model is resumed.
 #'
+#' @note Read the checkpointing article in the pkgdown website for more
+#'  information.
+#'
 #' @param path Path to save state files for the model.
+#'
+#' @family luz_callbacks
 #'
 #' @examples
 #' if (torch::torch_is_installed()) {
@@ -133,7 +138,11 @@ luz_callback_auto_resume <- luz_callback(
 #' @param restore_callback_state Wether to restore the callbacks state from the
 #'   checkpoint.
 #'
+#' @note Read the checkpointing article in the pkgdown website for more
+#'  information.
+#'
 #' @seealso [luz_callback_model_checkpoint()]
+#' @family luz_callbacks
 #'
 #' @export
 luz_callback_resume_from_checkpoint <- luz_callback(
@@ -172,7 +181,7 @@ luz_callback_resume_from_checkpoint <- luz_callback(
   },
   on_fit_begin = function() {
     if (self$path_exists) {
-      rlang::call2(luz_load_checkpoint, ctx, !!!self$params)
+      rlang::exec(luz_load_checkpoint, obj = ctx, path = self$path, !!!self$params)
     }
   }
 )

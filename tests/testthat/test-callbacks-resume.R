@@ -24,6 +24,9 @@ track_weights <- luz_callback(
   "track_weights",
   weights = list(),
   opt = list(),
+  initialize = function(on_end = TRUE) {
+    self$on_end <- on_end
+  },
   on_epoch_begin = function() {
     self$weights[[ctx$epoch]] <- lapply(ctx$model$state_dict(), function(x) x$clone())
     self$opt[[ctx$epoch]] <- clone_tensors(lapply(ctx$optimizers, function(opt) opt$state_dict()))
@@ -31,7 +34,9 @@ track_weights <- luz_callback(
   on_epoch_end = function() {
     # this actually is only called when no saved model exists, otherwise
     # the epoch is skipped by the autoresume callback.
-    self$on_epoch_begin()
+    if (self$on_end) {
+      self$on_epoch_begin()
+    }
   }
 )
 
@@ -224,4 +229,41 @@ test_that("resume works when model has been explicitly interrupted", {
 
   # values would be identical if results2 was resumed from results1
   expect_true(get_metrics(results2)$value[1] != get_metrics(results)$value[1])
+})
+
+test_that("can use the resume_from callback", {
+
+  x <- torch_randn(1000, 10)
+  y <- torch_randn(1000, 1)
+
+  model <- nn_linear %>%
+    setup(optimizer = optim_sgd, loss = nnf_mse_loss) %>%
+    set_hparams(in_features = 10, out_features = 1) %>%
+    set_opt_hparams(lr = 0.01)
+
+  temp <- tempfile()
+  checkpoint <- luz_callback_model_checkpoint(
+    path = temp,
+    monitor = "train_loss"
+  )
+
+  tr <- track_weights()
+  result <- model %>% fit(
+    list(x, y),
+    callbacks = list(tr, checkpoint),
+    verbose = FALSE
+  )
+
+  tr2 <- track_weights(on_end = FALSE)
+  resume_from <- luz_callback_resume_from_checkpoint(path = temp)
+  result2 <- model %>% fit(
+    list(x, y),
+    callbacks = list(tr2, resume_from),
+    verbose = FALSE
+  )
+
+  expect_recursive_equal(
+    tr$weights[[10]],
+    tr2$weights[[1]]
+  )
 })
