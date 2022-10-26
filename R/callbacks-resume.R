@@ -135,8 +135,9 @@ luz_callback_auto_resume <- luz_callback(
 #' @param restore_records Wether to restore records from the checkpoint.
 #' @param restore_optimizer_state Wether to restore the optimizer state from the
 #'   checkpoint.
-#' @param restore_callback_state Wether to restore the callbacks state from the
+#' @param restore_callbacks_state Wether to restore the callbacks state from the
 #'   checkpoint.
+#' @param ... currently unused.
 #'
 #' @note Read the checkpointing article in the pkgdown website for more
 #'  information.

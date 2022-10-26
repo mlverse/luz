@@ -10,6 +10,8 @@ luz_load_checkpoint(obj, path, ...)
 \item{obj}{Object to which we want to laod the checkpoint.}
 
 \item{path}{Path of the checkpoint on disk.}
+
+\item{...}{unused. Is there to allow future extensions.}
 }
 \description{
 Works with checkpoints created typically with \code{\link[=luz_callback_model_checkpoint]{luz_callback_model_checkpoint()}}.

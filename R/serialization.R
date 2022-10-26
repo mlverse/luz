@@ -135,6 +135,7 @@ luz_checkpoint <- function(ctx, path) {
 #'
 #' @param obj Object to which we want to laod the checkpoint.
 #' @param path Path of the checkpoint on disk.
+#' @param ... unused. Is there to allow future extensions.
 #'
 #' @export
 luz_load_checkpoint <- function(obj, path, ...) {
@@ -150,6 +151,7 @@ luz_load_checkpoint.luz_module_fitted <- function(obj, path, ...) {
   invisible(NULL)
 }
 
+#' @inheritParams luz_callback_resume_from_checkpoint
 #' @export
 luz_load_checkpoint.luz_fit_context <- function(obj, path, ...,
                                                 restore_records = TRUE,

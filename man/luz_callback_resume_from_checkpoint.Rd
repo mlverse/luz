@@ -16,6 +16,8 @@ luz_callback_resume_from_checkpoint(
 \arguments{
 \item{path}{Path to the checkpoint that you want to resume.}
 
+\item{...}{currently unused.}
+
 \item{restore_model_state}{Wether to restore the model state from the callback.}
 
 \item{restore_records}{Wether to restore records from the checkpoint.}
@@ -23,7 +25,7 @@ luz_callback_resume_from_checkpoint(
 \item{restore_optimizer_state}{Wether to restore the optimizer state from the
 checkpoint.}
 
-\item{restore_callback_state}{Wether to restore the callbacks state from the
+\item{restore_callbacks_state}{Wether to restore the callbacks state from the
 checkpoint.}
 }
 \description{
