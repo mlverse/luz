@@ -45,7 +45,26 @@ luz_callback_auto_resume <- luz_callback(
     map2(ctx$optimizers, state$optimizers, function(x, y) {
       x$load_state_dict(y)
     })
+
+
     ctx$unsafe_set_records(state$records)
+
+    # reload callbacks state_dicts
+    map2(state$callbacks, ctx$callbacks, function(st, cb) {
+      if (is.null(st)) return()
+
+      if (is.null(cb$load_state_dict) && !is.null(st)) {
+        cli::cli_abort(c(
+          x = "Failed resuming the model.",
+          i = paste0(
+            "A callback with class {.cls {class(cb)} has state attached ",
+            "to it, but doesn't implement the {.fn load_state_dict} method."
+          )
+        ))
+      }
+
+      cb$load_state_dict(st)
+    })
 
     self$current_epoch <- state$epoch
 
@@ -69,9 +88,13 @@ luz_callback_auto_resume <- luz_callback(
     # grab optimizer state
     state[["optimizers"]] <- lapply(ctx$optimizers, function(x) x$state_dict())
 
-    # others?
-    # TODO think of a way to allowusers to save other stuff here? maybe traverse
-    # the callbacks looking for a state_dict method?
+    # traverse callbacks looking for the `state_dict()` method.
+    state[["callbacks"]] <- lapply(ctx$callbacks, function(x) {
+      if (is.null(x$state_dict))
+        NULL
+      else
+        x$state_dict()
+    })
 
     torch_save(state, self$path)
   },

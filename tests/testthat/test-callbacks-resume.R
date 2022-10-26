@@ -60,7 +60,7 @@ test_that("resume a simple model", {
   # reruning, now making sure no error will happen
   results_resume <- model %>% fit(
     list(x, y),
-    callbacks = list(tr_w_resume, autoresume),
+    callbacks = list(tr_w_resume, autoresume, inter),
     verbose = FALSE
   )
 
@@ -126,7 +126,7 @@ test_that("resume a model with more than one optimizer", {
   tr_w_resume <- track_weights()
   results_resume <- model %>% fit(
     list(x, y),
-    callbacks = list(tr_w_resume, autoresume),
+    callbacks = list(tr_w_resume, autoresume, inter),
     verbose = FALSE
   )
 
@@ -137,7 +137,53 @@ test_that("resume a model with more than one optimizer", {
 })
 
 test_that("resume a model with learning rate scheduler", {
+  cb_with_state <- luz_callback(
+    initialize = function() {
+      self$i <- 1
+    },
+    on_epoch_end = function() {
+      self$i <- self$i + 1
+    },
+    state_dict = function() {
+      list(i = self$i)
+    },
+    load_state_dict = function(d) {
+      self$i <- d$i
+    }
+  )
 
+
+  x <- torch_randn(1000, 10)
+  y <- torch_randn(1000, 1)
+
+  model <- nn_linear %>%
+    setup(optimizer = optim_sgd, loss = nnf_mse_loss) %>%
+    set_hparams(in_features = 10, out_features = 1) %>%
+    set_opt_hparams(lr = 0.01)
+
+  autoresume <- luz_callback_auto_resume(path = temp)
+  inter <- interrupt()
+  cb_state <- cb_with_state()
+
+  # simulate an error during training
+  expect_error(regexp = "Error on", {
+    results <- model %>% fit(
+      list(x, y),
+      callbacks = list(autoresume, cb_state, inter),
+      verbose = FALSE
+    )
+  })
+
+  cb_state2 <- cb_with_state()
+  results_resume <- model %>% fit(
+    list(x, y),
+    callbacks = list(autoresume, cb_state2, inter),
+    verbose = FALSE
+  )
+
+  # we would expect a larger number if the state is not correctly recovered
+  expect_equal(cb_state2$i, 10)
+  expect_equal(cb_state$i, 6)
 })
 
 test_that("resume works when model has been explicitly interrupted", {
