@@ -14,7 +14,7 @@
 luz_callback_auto_resume <- luz_callback(
   "auto_resume_callback",
   initialize = function(path = "./state") {
-    self$path <- file.path(path, "state.pt")
+    self$path <- file.path(path)
     fs::dir_create(fs::path_dir(self$path), recurse = TRUE)
   },
   on_fit_begin = function() {
@@ -23,6 +23,7 @@ luz_callback_auto_resume <- luz_callback(
       # this condition will only break the epoch execution and go to the next epoch
       list(break_epoch = function(e) {})
     )
+
     # we make no assertion that the model is the same when reloading stuff.
     # it's user's responsability to make sure that files contained in `self$path`
     # are compatible with the model.
