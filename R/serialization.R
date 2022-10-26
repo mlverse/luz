@@ -151,38 +151,50 @@ luz_load_checkpoint.luz_module_fitted <- function(obj, path, ...) {
 }
 
 #' @export
-luz_load_checkpoint.luz_fit_context <- function(obj, path, ..., restore_records = TRUE) {
+luz_load_checkpoint.luz_fit_context <- function(obj, path, ...,
+                                                restore_records = TRUE,
+                                                restore_optimizer_state = TRUE,
+                                                restore_callbacks_state = TRUE,
+                                                restore_model_state = TRUE
+                                                ) {
   ctx <- obj # nicer name as we refer to fields in the ctx object.
 
   # load state dicts if they are available
   state <- to_device(torch_load(path), ctx$device)
 
   # load objects to their place.
-  ctx$model$load_state_dict(state$model)
-  map2(ctx$optimizers, state$optimizers, function(x, y) {
-    x$load_state_dict(y)
-  })
+  if (restore_model_state) {
+    ctx$model$load_state_dict(state$model)
+  }
+
+  if (restore_optimizer_state) {
+    map2(ctx$optimizers, state$optimizers, function(x, y) {
+      x$load_state_dict(y)
+    })
+  }
 
   if (restore_records) {
     ctx$unsafe_set_records(state$records)
   }
 
-  # reload callbacks state_dicts
-  map2(state$callbacks, ctx$callbacks, function(st, cb) {
-    if (is.null(st)) return()
+  if (restore_callbacks_state) {
+    map2(state$callbacks, ctx$callbacks, function(st, cb) {
+      if (is.null(st)) return()
 
-    if (is.null(cb$load_state_dict) && !is.null(st)) {
-      cli::cli_abort(c(
-        x = "Failed resuming the model.",
-        i = paste0(
-          "A callback with class {.cls {class(cb)} has state attached ",
-          "to it, but doesn't implement the {.fn load_state_dict} method."
-        )
-      ))
-    }
+      if (is.null(cb$load_state_dict) && !is.null(st)) {
+        cli::cli_abort(c(
+          x = "Failed resuming the model.",
+          i = paste0(
+            "A callback with class {.cls {class(cb)} has state attached ",
+            "to it, but doesn't implement the {.fn load_state_dict} method."
+          )
+        ))
+      }
 
-    cb$load_state_dict(st)
-  })
+      cb$load_state_dict(st)
+    })
+  }
+
   invisible(NULL)
 }
 

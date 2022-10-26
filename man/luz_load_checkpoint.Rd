@@ -4,7 +4,7 @@
 \alias{luz_load_checkpoint}
 \title{Loads a checkpoint}
 \usage{
-luz_load_checkpoint(obj, path)
+luz_load_checkpoint(obj, path, ...)
 }
 \arguments{
 \item{obj}{Object to which we want to laod the checkpoint.}
@@ -12,5 +12,5 @@ luz_load_checkpoint(obj, path)
 \item{path}{Path of the checkpoint on disk.}
 }
 \description{
-Works with checkpoints created typically with \code{\link[=luz_callback_checkpoint]{luz_callback_checkpoint()}}.
+Works with checkpoints created typically with \code{\link[=luz_callback_model_checkpoint]{luz_callback_model_checkpoint()}}.
 }

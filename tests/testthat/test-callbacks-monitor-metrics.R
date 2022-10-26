@@ -192,6 +192,17 @@ test_that("model checkpoint callback works", {
   files <- fs::dir_ls(tmp)
   expect_length(files, 5)
 
+  x <- torch_randn(10, 10)
+  preds1 <- predict(output, x)
+
+  luz_load_checkpoint(output, files[1])
+  preds2 <- predict(output, x)
+
+  luz_load_checkpoint(output, files[5])
+  preds3 <- predict(output, x)
+
+  expect_equal_to_tensor(preds1, preds3)
+  expect_true(!torch_allclose(preds1, preds2))
 })
 
 test_that("early stopping + csv logger", {

@@ -122,3 +122,57 @@ luz_callback_auto_resume <- luz_callback(
     self$current_epoch <- NULL
   }
 )
+
+#' Allow resume model training from a specific checkpoint
+#'
+#' @param path Path to the checkpoint that you want to resume.
+#' @param restore_model_state Wether to restore the model state from the callback.
+#' @param restore_records Wether to restore records from the checkpoint.
+#' @param restore_optimizer_state Wether to restore the optimizer state from the
+#'   checkpoint.
+#' @param restore_callback_state Wether to restore the callbacks state from the
+#'   checkpoint.
+#'
+#' @seealso [luz_callback_model_checkpoint()]
+#'
+#' @export
+luz_callback_resume_from_checkpoint <- luz_callback(
+  "resume_from_checkpoint_callback",
+  initialize = function(path, ...,
+                        restore_model_state = TRUE,
+                        restore_records = FALSE,
+                        restore_optimizer_state = FALSE,
+                        restore_callbacks_state = FALSE) {
+
+    ellipsis::check_dots_empty()
+
+    # if path is a directory, grab the last file returned by dir_ls
+    if (fs::is_dir(path)) {
+      path <- tail(fs::dir_ls(path), 1)
+    }
+
+    self$path <- path
+
+    if ((length(self$path) == 0) || (!fs::file_exists(self$path))) {
+      cli::cli_warn(c(
+        "The checkpoint path {.file {self$path}} does not exist.",
+        i = "Will start with state initialized with default methods."
+      ))
+      self$path_exists <- FALSE
+    } else {
+      self$path_exists <- TRUE
+    }
+
+    self$params <- list(
+      restore_records = restore_records,
+      restore_optimizer_state = restore_optimizer_state,
+      restore_callbacks_state = restore_callbacks_state,
+      restore_model_state = restore_model_state
+    )
+  },
+  on_fit_begin = function() {
+    if (self$path_exists) {
+      rlang::call2(luz_load_checkpoint, ctx, !!!self$params)
+    }
+  }
+)
