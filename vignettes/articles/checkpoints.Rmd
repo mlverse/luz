@@ -105,6 +105,17 @@ so you can have the full results:
 plot(results)
 ```
 
+### Custom callbacks state
+
+Sometimes callbacks also need to keep their internal state in order to allow
+continuing training exactly from where it stopped. In this case, callbacks can
+implement the `state_dict()` and the `load_state_dict()` methods that are 
+automatically called when saving and reloading checkpoints.
+
+The `state_dict()` method must return a named list of objects that compose
+the state of the callback. `load_state_dict()` takes the same named list returned
+by `state_dict()` and restores the callback state.
+
 ## Checkpointing 
 
 Sometimes you want to have more control over how checkpoints are handled. 
