@@ -206,7 +206,7 @@ luz_metric_loss_average <- luz_metric(
     self$values <- list()
   },
   update = function(preds, targets) {
-    if (length(ctx$loss) == 1)
+    if (length(ctx$loss) == 1 && is.list(ctx$loss))
       loss <- ctx$loss[[1]]
     else
       loss <- ctx$loss
