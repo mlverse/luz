@@ -96,7 +96,7 @@
 <span></span>
 <span><span class="co"># Datasets and loaders ----------------------------------------------------</span></span>
 <span></span>
-<span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="st">"~/Downloads/mnist"</span> <span class="co"># caching directory</span></span>
+<span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="st">"./mnist"</span> <span class="co"># caching directory</span></span>
 <span></span>
 <span><span class="va">train_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torchvision.mlverse.org/reference/mnist_dataset.html" class="external-link">mnist_dataset</a></span><span class="op">(</span></span>
 <span>  <span class="va">dir</span>,</span>
@@ -121,8 +121,8 @@
 <span>  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">accumulate_batches</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">self</span><span class="op">$</span><span class="va">conv1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">32</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span>    <span class="va">self</span><span class="op">$</span><span class="va">conv2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">32</span>, <span class="fl">64</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>    <span class="va">self</span><span class="op">$</span><span class="va">dropout1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout2d.html" class="external-link">nn_dropout2d</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span></span>
-<span>    <span class="va">self</span><span class="op">$</span><span class="va">dropout2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout2d.html" class="external-link">nn_dropout2d</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">dropout1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout.html" class="external-link">nn_dropout</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">dropout2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout.html" class="external-link">nn_dropout</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span></span>
 <span>    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">9216</span>, <span class="fl">128</span><span class="op">)</span></span>
 <span>    <span class="va">self</span><span class="op">$</span><span class="va">fc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span></span>
@@ -143,14 +143,25 @@
 <span>    <span class="va">x</span></span>
 <span>  <span class="op">}</span>,</span>
 <span>  step <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">ctx</span><span class="op">$</span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="va">ctx</span><span class="op">$</span><span class="fu">model</span><span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">input</span><span class="op">)</span></span>
-<span>    <span class="va">loss</span> <span class="op">&lt;-</span> <span class="va">ctx</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="fu">loss</span><span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">pred</span>, <span class="va">ctx</span><span class="op">$</span><span class="va">target</span><span class="op">)</span></span>
+<span>    <span class="co"># we implement a custom step method that runs for every </span></span>
+<span>    <span class="co"># batch in training and validation.</span></span>
+<span>    </span>
+<span>    <span class="co"># calculate predictions. we save them in `ctx$pred` so other parts of luz</span></span>
+<span>    <span class="co"># can use it.</span></span>
+<span>    <span class="va">ctx</span><span class="op">$</span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="va">ctx</span><span class="op">$</span><span class="fu">model</span><span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">input</span><span class="op">)</span> </span>
+<span>    </span>
+<span>    <span class="co"># we now calculate the loss. also save it in `ctx$loss` so, for example,</span></span>
+<span>    <span class="co"># it's correctly logged.</span></span>
+<span>    <span class="va">ctx</span><span class="op">$</span><span class="va">loss</span> <span class="op">&lt;-</span> <span class="va">ctx</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="fu">loss</span><span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">pred</span>, <span class="va">ctx</span><span class="op">$</span><span class="va">target</span><span class="op">)</span></span>
 <span></span>
+<span>    <span class="co"># `ctx$training` is set automatically to `TRUE` during the training phase</span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">training</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="va">loss</span> <span class="op">&lt;-</span> <span class="va">loss</span><span class="op">/</span><span class="va">self</span><span class="op">$</span><span class="va">accumulate_batches</span></span>
-<span>      <span class="va">loss</span><span class="op">$</span><span class="fu">backward</span><span class="op">(</span><span class="op">)</span></span>
+<span>      <span class="va">ctx</span><span class="op">$</span><span class="va">loss</span> <span class="op">&lt;-</span> <span class="va">ctx</span><span class="op">$</span><span class="va">loss</span><span class="op">/</span><span class="va">self</span><span class="op">$</span><span class="va">accumulate_batches</span></span>
+<span>      <span class="va">ctx</span><span class="op">$</span><span class="va">loss</span><span class="op">$</span><span class="fu">backward</span><span class="op">(</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span></span>
+<span>    <span class="co"># only after `accumulate_batches` that we do a optimizer step, so we use </span></span>
+<span>    <span class="co"># the virtual batch_size.</span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">training</span> <span class="op">&amp;&amp;</span> <span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">iter</span> <span class="op"><a href="https://rdrr.io/r/base/Arithmetic.html" class="external-link">%%</a></span> <span class="va">self</span><span class="op">$</span><span class="va">accumulate_batches</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">opt</span> <span class="op">&lt;-</span> <span class="va">ctx</span><span class="op">$</span><span class="va">optimizers</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span>      <span class="va">opt</span><span class="op">$</span><span class="fu">step</span><span class="op">(</span><span class="op">)</span></span>
@@ -170,7 +181,7 @@
 <span>      <span class="fu"><a href="../../reference/luz_metric_accuracy.html">luz_metric_accuracy</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">10</span>, valid_data <span class="op">=</span> <span class="va">test_dl</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">train_dl</span>, valid_data <span class="op">=</span> <span class="va">test_dl</span>, epochs <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span></span>
 <span><span class="co"># Serialization -----------------------------------------------------------</span></span>

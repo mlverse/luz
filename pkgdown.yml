@@ -1,6 +1,6 @@
 pandoc: 2.7.3
 pkgdown: 2.0.6.9000
-pkgdown_sha: 0183403320bf81d68a14ab062e746de87fe24ebc
+pkgdown_sha: 5bb671b1a8bac8e926479868681936f7c9ee41b3
 articles:
   accelerator: accelerator.html
   checkpoints: checkpoints.html
@@ -12,8 +12,9 @@ articles:
   mnist-cnn-virtual-batch-size: examples/mnist-cnn-virtual-batch-size.html
   mnist-cnn: examples/mnist-cnn.html
   mnist-dcgan: examples/mnist-dcgan.html
+  mnist-mixup: examples/mnist-mixup.html
   mnist-triplet: examples/mnist-triplet.html
   pets-unet: examples/pets-unet.html
   get-started: get-started.html
-last_built: 2022-10-27T13:58Z
+last_built: 2022-10-27T23:07Z
 

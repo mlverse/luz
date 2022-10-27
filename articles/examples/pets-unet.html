@@ -97,7 +97,7 @@
 <span></span>
 <span><span class="co"># Datasets and loaders ----------------------------------------------------</span></span>
 <span></span>
-<span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="st">"~/Downloads/"</span> <span class="co">#caching directory</span></span>
+<span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="st">"./pets"</span> <span class="co">#caching directory</span></span>
 <span></span>
 <span><span class="co"># A light wrapper around the `oxford_pet_dataset` that resizes and transforms </span></span>
 <span><span class="co"># input images and masks to the specified `size` and introduces the `augmentation`</span></span>
@@ -154,8 +154,6 @@
 <span></span>
 <span><span class="va">train_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="va">train_ds</span>, batch_size <span class="op">=</span> <span class="fl">32</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">valid_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="va">valid_ds</span>, batch_size <span class="op">=</span> <span class="fl">32</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">coro</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/coro/man/collect.html" class="external-link">collect</a></span><span class="op">(</span><span class="va">train_dl</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Define the network ------------------------------------------------------</span></span>
 <span></span>

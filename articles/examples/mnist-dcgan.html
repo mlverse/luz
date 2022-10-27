@@ -117,7 +117,7 @@
 <span></span>
 <span><span class="co"># Datasets and loaders ----------------------------------------------------</span></span>
 <span></span>
-<span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="st">"~/Downloads/mnist"</span> <span class="co"># caching directory</span></span>
+<span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="st">"./mnist"</span> <span class="co"># caching directory</span></span>
 <span></span>
 <span><span class="va">train_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torchvision.mlverse.org/reference/mnist_dataset.html" class="external-link">mnist_dataset</a></span><span class="op">(</span></span>
 <span>  <span class="va">dir</span>,</span>
@@ -236,9 +236,8 @@
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dcgan</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/setup.html">setup</a></span><span class="op">(</span><span class="va">dcgan</span><span class="op">)</span></span>
-<span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="va">dcgan</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../../reference/setup.html">setup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../../reference/set_hparams.html">set_hparams</a></span><span class="op">(</span>latent_dim <span class="op">=</span> <span class="fl">100</span>, channels <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">10</span>, valid_data <span class="op">=</span> <span class="va">test_dl</span>, callbacks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">plot_callback</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>

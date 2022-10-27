@@ -96,7 +96,7 @@
 <span></span>
 <span><span class="co"># Datasets and loaders ----------------------------------------------------</span></span>
 <span></span>
-<span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="st">"~/Downloads/mnist"</span> <span class="co"># caching directory</span></span>
+<span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="st">"./mnist"</span> <span class="co"># caching directory</span></span>
 <span></span>
 <span><span class="va">triplet_mnist_dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span></span>
 <span>  inherit <span class="op">=</span> <span class="va">mnist_dataset</span>,</span>
@@ -140,8 +140,8 @@
 <span>  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">embedding_dim</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">self</span><span class="op">$</span><span class="va">conv1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">32</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span>    <span class="va">self</span><span class="op">$</span><span class="va">conv2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">32</span>, <span class="fl">64</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span>    <span class="va">self</span><span class="op">$</span><span class="va">dropout1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout2d.html" class="external-link">nn_dropout2d</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span></span>
-<span>    <span class="va">self</span><span class="op">$</span><span class="va">dropout2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout2d.html" class="external-link">nn_dropout2d</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">dropout1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout.html" class="external-link">nn_dropout</a></span><span class="op">(</span><span class="fl">0.25</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">dropout2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_dropout.html" class="external-link">nn_dropout</a></span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span></span>
 <span>    <span class="va">self</span><span class="op">$</span><span class="va">fc1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">9216</span>, <span class="fl">512</span><span class="op">)</span></span>
 <span>    <span class="va">self</span><span class="op">$</span><span class="va">fc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_linear.html" class="external-link">nn_linear</a></span><span class="op">(</span><span class="fl">512</span>, <span class="va">embedding_dim</span><span class="op">)</span></span>
 <span>  <span class="op">}</span>,</span>

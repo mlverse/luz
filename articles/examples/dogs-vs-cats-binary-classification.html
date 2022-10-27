@@ -100,12 +100,11 @@
 <span></span>
 <span><span class="co"># Datasets and loaders ----------------------------------------------------</span></span>
 <span></span>
-<span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="st">"~/Downloads/dogs-vs-cats"</span> <span class="co"># caching directory</span></span>
-<span><span class="va">kaggle_token</span> <span class="op">&lt;-</span> <span class="st">"~/Downloads/kaggle.json"</span></span>
+<span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="st">"./dogs-vs-cats"</span> <span class="co"># caching directory</span></span>
 <span></span>
 <span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu">torchdatasets</span><span class="fu">::</span><span class="fu">dogs_vs_cats_dataset</span><span class="op">(</span></span>
 <span>  <span class="va">dir</span>,</span>
-<span>  token <span class="op">=</span> <span class="va">kaggle_token</span>,</span>
+<span>  download <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  transform <span class="op">=</span> <span class="va">.</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu">torchvision</span><span class="fu">::</span><span class="fu"><a href="https://torchvision.mlverse.org/reference/transform_to_tensor.html" class="external-link">transform_to_tensor</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span></span>
 <span>    <span class="fu">torchvision</span><span class="fu">::</span><span class="fu"><a href="https://torchvision.mlverse.org/reference/transform_resize.html" class="external-link">transform_resize</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">224</span>, <span class="fl">224</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span> </span>
@@ -149,7 +148,7 @@
 <span><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../../reference/setup.html">setup</a></span><span class="op">(</span></span>
 <span>    loss <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_bce_with_logits_loss.html" class="external-link">nn_bce_with_logits_loss</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    optimizer <span class="op">=</span> <span class="fu">madgrad</span><span class="fu">::</span><span class="va">optim_madgrad</span>,</span>
+<span>    optimizer <span class="op">=</span> <span class="va">optim_adam</span>,</span>
 <span>    metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="../../reference/luz_metric_binary_accuracy_with_logits.html">luz_metric_binary_accuracy_with_logits</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
