@@ -5,3 +5,4 @@ mnist-virtual-batch_size.pt
 mnist-autoencoder.pt
 model-dogs-and-cats.pt
 dogs-vs-cats
+mnist

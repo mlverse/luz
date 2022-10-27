@@ -12,7 +12,7 @@ library(luz)
 
 # Datasets and loaders ----------------------------------------------------
 
-dir <- "~/Downloads/mnist" # caching directory
+dir <- "./mnist" # caching directory
 
 # Modify the MNIST dataset so the target is identical to the input.
 mnist_dataset2 <- torch::dataset(
