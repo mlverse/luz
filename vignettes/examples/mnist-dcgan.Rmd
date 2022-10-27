@@ -34,7 +34,7 @@ plot_callback <- luz_callback(
 
 # Datasets and loaders ----------------------------------------------------
 
-dir <- "~/Downloads/mnist" # caching directory
+dir <- "./mnist" # caching directory
 
 train_ds <- mnist_dataset(
   dir,
@@ -153,9 +153,8 @@ dcgan <- torch::nn_module(
   }
 )
 
-dcgan <- setup(dcgan)
-
 res <- dcgan %>%
+  setup() %>% 
   set_hparams(latent_dim = 100, channels = 1) %>%
   fit(train_dl, epochs = 10, valid_data = test_dl, callbacks = list(plot_callback()))
 
@@ -172,6 +171,5 @@ plot(img)
 # Serialization ----------------------------------------------------
 
 luz_save(res, "mnist-dcgan.pt")
-
 ```
 

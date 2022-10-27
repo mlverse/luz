@@ -15,7 +15,7 @@ library(luz)
 
 # Datasets and loaders ----------------------------------------------------
 
-dir <- "~/Downloads/" #caching directory
+dir <- "./pets" #caching directory
 
 # A light wrapper around the `oxford_pet_dataset` that resizes and transforms 
 # input images and masks to the specified `size` and introduces the `augmentation`
@@ -72,8 +72,6 @@ valid_ds <- pet_dataset(
 
 train_dl <- dataloader(train_ds, batch_size = 32, shuffle = TRUE)
 valid_dl <- dataloader(valid_ds, batch_size = 32)
-
-x <- coro::collect(train_dl, 1)
 
 # Define the network ------------------------------------------------------
 

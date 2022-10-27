@@ -1,9 +1,8 @@
 ---
-title: "Simple CNN"
-desc: "Trains an AlexNet-like CNN to classify digits of the MNIST dataset"
-category: 'basic'
+title: 'MixUp augmentation'
+desc: 'Demonstrates using the MixUp callback'
+category: 'intermediate'
 ---
-
 
 ```{r, eval = FALSE}
 # Packages ----------------------------------------------------------------
@@ -66,22 +65,25 @@ net <- nn_module(
 
 fitted <- net %>%
   setup(
-    loss = nn_cross_entropy_loss(),
-    optimizer = optim_adam,
-    metrics = list(
-      luz_metric_accuracy()
-    )
+    loss = nn_mixup_loss(nn_cross_entropy_loss()),
+    optimizer = optim_adam
   ) %>%
-  fit(train_dl, epochs = 10, valid_data = test_dl)
+  fit(
+    train_dl, epochs = 10, valid_data = test_dl, 
+    callbacks = list(
+      luz_callback_mixup(alpha = 0.4)
+    )
+  )
 
 # Making predictions ------------------------------------------------------
 
 preds <- predict(fitted, test_dl)
 preds$shape
 
+
 # Serialization -----------------------------------------------------------
 
-luz_save(fitted, "mnist-cnn.pt")
+luz_save(fitted, "mnist-mixup.pt")
 ```
 
 
