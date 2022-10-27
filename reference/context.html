@@ -29,6 +29,7 @@ See also ctx."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
     <a class="dropdown-item" href="../articles/accelerator.html">Accelerator API</a>
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/lr-finder.html">Using the lr_finder</a>
+    <a class="dropdown-item" href="../articles/checkpoints.html">Checkpoints models</a>
   </div>
 </li>
 <li class="nav-item">
@@ -144,7 +145,12 @@ device.</p></dd>
 
 
 <dt><code>handlers</code></dt>
-<dd><p>List of error handlers that can be used. See <code><a href="https://rlang.r-lib.org/reference/with_handlers.html" class="external-link">rlang::with_handlers()</a></code>
+<dd><p>List of error handlers that can be used. See <code><a href="https://rlang.r-lib.org/reference/try_fetch.html" class="external-link">rlang::try_fetch()</a></code>
+for more info.</p></dd>
+
+
+<dt><code>epoch_handlers</code></dt>
+<dd><p>List of error handlers that can be used. See <code><a href="https://rlang.r-lib.org/reference/try_fetch.html" class="external-link">rlang::try_fetch()</a></code>
 for more info.</p></dd>
 
 
@@ -209,6 +215,7 @@ tranformation.</p></dd>
 <li><p><a href="#method-luz_context-clean"><code>context$clean()</code></a></p></li>
 <li><p><a href="#method-luz_context-call_callbacks"><code>context$call_callbacks()</code></a></p></li>
 <li><p><a href="#method-luz_context-state_dict"><code>context$state_dict()</code></a></p></li>
+<li><p><a href="#method-luz_context-unsafe_set_records"><code>context$unsafe_set_records()</code></a></p></li>
 <li><p><a href="#method-luz_context-clone"><code>context$clone()</code></a></p></li>
 </ul></div><p></p><hr><a id="method-luz_context-new"></a><div class="section">
 <h3 id="method-new-">Method <code>new()</code><a class="anchor" aria-label="anchor" href="#method-new-"></a></h3>
@@ -456,15 +463,31 @@ create the returned values.</p><div class="section">
 </div>
 
 
-</div><p></p><hr><a id="method-luz_context-clone"></a><div class="section">
-<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
-<p>The objects of this class are cloneable with this method.</p><div class="section">
+</div><p></p><hr><a id="method-luz_context-unsafe_set_records"></a><div class="section">
+<h3 id="method-unsafe-set-records-">Method <code>unsafe_set_records()</code><a class="anchor" aria-label="anchor" href="#method-unsafe-set-records-"></a></h3>
+<p>Are you sure you know what you are doing?</p><div class="section">
 <h4 id="usage-12">Usage<a class="anchor" aria-label="anchor" href="#usage-12"></a></h4>
-<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">context</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">context</span><span class="op">$</span><span class="fu">unsafe_set_records</span><span class="op">(</span><span class="va">records</span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments-9">Arguments<a class="anchor" aria-label="anchor" href="#arguments-9"></a></h4>
+<p></p><div class="arguments"><dl><dt><code>records</code></dt>
+<dd><p>New set of records to be set.</p></dd>
+
+
+</dl><p></p></div>
+</div>
+
+</div><p></p><hr><a id="method-luz_context-clone"></a><div class="section">
+<h3 id="method-clone-">Method <code>clone()</code><a class="anchor" aria-label="anchor" href="#method-clone-"></a></h3>
+<p>The objects of this class are cloneable with this method.</p><div class="section">
+<h4 id="usage-13">Usage<a class="anchor" aria-label="anchor" href="#usage-13"></a></h4>
+<p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va">context</span><span class="op">$</span><span class="fu">clone</span><span class="op">(</span>deep <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div><p></p></div>
+</div>
+
+<div class="section">
+<h4 id="arguments-10">Arguments<a class="anchor" aria-label="anchor" href="#arguments-10"></a></h4>
 <p></p><div class="arguments"><dl><dt><code>deep</code></dt>
 <dd><p>Whether to make a deep clone.</p></dd>
 

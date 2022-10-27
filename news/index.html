@@ -27,6 +27,7 @@
     <a class="dropdown-item" href="../articles/accelerator.html">Accelerator API</a>
     <h6 class="dropdown-header" data-toc-skip>Guides</h6>
     <a class="dropdown-item" href="../articles/lr-finder.html">Using the lr_finder</a>
+    <a class="dropdown-item" href="../articles/checkpoints.html">Checkpoints models</a>
   </div>
 </li>
 <li class="nav-item">
@@ -60,7 +61,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="luz-development-version">luz (development version)<a class="anchor" aria-label="anchor" href="#luz-development-version"></a></h2>
-<ul><li>Added support for arm Mac’s and the MPS device. (<a href="https://github.com/mlverse/luz/issues/104" class="external-link">#104</a>)</li></ul></div>
+<ul><li>Added support for arm Mac’s and the MPS device. (<a href="https://github.com/mlverse/luz/issues/104" class="external-link">#104</a>)</li>
+<li>Refactor checkpointing in luz - we now also serialize optimizer state and callbacks state. (<a href="https://github.com/mlverse/luz/issues/107" class="external-link">#107</a>)</li>
+<li>Added a <code>luz_callback_autoresume()</code> allowing to easily resume trainining runs that might have crashed. (<a href="https://github.com/mlverse/luz/issues/107" class="external-link">#107</a>)</li>
+<li>Added th <code><a href="../reference/luz_callback_resume_from_checkpoint.html">luz_callback_resume_from_checkpoint()</a></code> allowing one to resume a training run from a checkpoint file. (<a href="https://github.com/mlverse/luz/issues/107" class="external-link">#107</a>)</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.1" id="luz-031">luz 0.3.1<a class="anchor" aria-label="anchor" href="#luz-031"></a></h2><p class="text-muted">CRAN release: 2022-09-06</p>
 <ul><li>Re-submission to fix vignette rendering.</li></ul></div>

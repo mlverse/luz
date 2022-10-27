@@ -13,6 +13,9 @@
     <loc>/articles/accelerator.html</loc>
   </url>
   <url>
+    <loc>/articles/checkpoints.html</loc>
+  </url>
+  <url>
     <loc>/articles/custom-loop.html</loc>
   </url>
   <url>
@@ -88,6 +91,9 @@
     <loc>/reference/luz_callback.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_callback_auto_resume.html</loc>
+  </url>
+  <url>
     <loc>/reference/luz_callback_csv_logger.html</loc>
   </url>
   <url>
@@ -121,10 +127,16 @@
     <loc>/reference/luz_callback_progress.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_callback_resume_from_checkpoint.html</loc>
+  </url>
+  <url>
     <loc>/reference/luz_callback_train_valid.html</loc>
   </url>
   <url>
     <loc>/reference/luz_load.html</loc>
+  </url>
+  <url>
+    <loc>/reference/luz_load_checkpoint.html</loc>
   </url>
   <url>
     <loc>/reference/luz_load_model_weights.html</loc>
