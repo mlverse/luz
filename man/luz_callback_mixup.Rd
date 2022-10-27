@@ -40,6 +40,7 @@ mixup_callback <- luz_callback_mixup()
 \code{\link[=nn_mixup_loss]{nn_mixup_loss()}}, \code{\link[=nnf_mixup]{nnf_mixup()}}
 
 Other luz_callbacks: 
+\code{\link{luz_callback_auto_resume}()},
 \code{\link{luz_callback_csv_logger}()},
 \code{\link{luz_callback_early_stopping}()},
 \code{\link{luz_callback_interrupt}()},
@@ -49,6 +50,7 @@ Other luz_callbacks:
 \code{\link{luz_callback_model_checkpoint}()},
 \code{\link{luz_callback_profile}()},
 \code{\link{luz_callback_progress}()},
+\code{\link{luz_callback_resume_from_checkpoint}()},
 \code{\link{luz_callback_train_valid}()},
 \code{\link{luz_callback}()}
 }

@@ -42,6 +42,9 @@ behavior.
 \code{mode} and \code{min_delta} are only used when \code{save_best_only=TRUE}.
 \code{save_best_only} will overwrite the saved models if the \code{path} parameter
 don't differentiate by epochs.
+
+Read the checkpointing article in the pkgdown website for more
+information.
 }
 \examples{
 luz_callback_model_checkpoint(path= "path/to/dir")
@@ -51,6 +54,7 @@ luz_callback_model_checkpoint(path= "path/to/dir/epoch-{epoch:02d}/model-{monito
 }
 \seealso{
 Other luz_callbacks: 
+\code{\link{luz_callback_auto_resume}()},
 \code{\link{luz_callback_csv_logger}()},
 \code{\link{luz_callback_early_stopping}()},
 \code{\link{luz_callback_interrupt}()},
@@ -60,6 +64,7 @@ Other luz_callbacks:
 \code{\link{luz_callback_mixup}()},
 \code{\link{luz_callback_profile}()},
 \code{\link{luz_callback_progress}()},
+\code{\link{luz_callback_resume_from_checkpoint}()},
 \code{\link{luz_callback_train_valid}()},
 \code{\link{luz_callback}()}
 }

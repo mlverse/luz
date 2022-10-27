@@ -48,6 +48,7 @@ cb <- luz_callback_early_stopping()
 }
 \seealso{
 Other luz_callbacks: 
+\code{\link{luz_callback_auto_resume}()},
 \code{\link{luz_callback_csv_logger}()},
 \code{\link{luz_callback_interrupt}()},
 \code{\link{luz_callback_keep_best_model}()},
@@ -57,6 +58,7 @@ Other luz_callbacks:
 \code{\link{luz_callback_model_checkpoint}()},
 \code{\link{luz_callback_profile}()},
 \code{\link{luz_callback_progress}()},
+\code{\link{luz_callback_resume_from_checkpoint}()},
 \code{\link{luz_callback_train_valid}()},
 \code{\link{luz_callback}()}
 }

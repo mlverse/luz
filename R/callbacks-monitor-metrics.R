@@ -152,6 +152,9 @@ luz_callback_early_stopping <- luz_callback(
 #' luz_callback_model_checkpoint(path= "path/to/dir/epoch-{epoch:02d}/model.pt")
 #' luz_callback_model_checkpoint(path= "path/to/dir/epoch-{epoch:02d}/model-{monitor:.2f}.pt")
 #'
+#' @note Read the checkpointing article in the pkgdown website for more
+#'  information.
+#'
 #' @family luz_callbacks
 #' @export
 luz_callback_model_checkpoint <- luz_callback(
@@ -186,12 +189,12 @@ luz_callback_model_checkpoint <- luz_callback(
         self$current_best <- qty
         fs::dir_create(fs::path_dir(path), recurse = TRUE)
         fs::file_create(path)
-        luz_save_model_weights(ctx, path)
+        luz_checkpoint(ctx, path)
       }
     } else {
       fs::dir_create(fs::path_dir(path), recurse = TRUE)
       fs::file_create(path)
-      luz_save_model_weights(ctx, path)
+      luz_checkpoint(ctx, path)
     }
   },
   fmt_path = function(path) {
@@ -225,8 +228,7 @@ luz_callback_keep_best_model <- luz_callback(
     )
   },
   on_fit_end = function() {
-    weights <- torch::torch_load(self$path)$state_dict()
-    ctx$model$load_state_dict(weights)
+    luz_load_checkpoint(ctx, self$path, restore_records = FALSE)
   },
   finalize = function() {
     unlink(self$path)

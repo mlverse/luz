@@ -17,6 +17,21 @@ LuzCallback <- R6::R6Class(
   )
 )
 
+assert_is_callback <- function(cb) {
+  if (!inherits(cb, "LuzCallback")) {
+    message <- c(
+      x = "Callbacks must have class {.cls LuzCallback} but got {.cls {class(cb)}}")
+    if (rlang::is_function(cb)) {
+      message <- c(
+        message,
+        i = "Perhaps you forgot to initialize the callback?"
+      )
+    }
+    cli::cli_abort(message)
+  }
+  invisible(TRUE)
+}
+
 call_all_callbacks <- function(callbacks, name) {
   torch::with_no_grad({
     lapply(callbacks, function(callback) {

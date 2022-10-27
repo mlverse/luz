@@ -53,6 +53,7 @@ Collate:
     'callbacks-mixup.R'
     'callbacks-monitor-metrics.R'
     'callbacks-profile.R'
+    'callbacks-resume.R'
     'context.R'
     'losses.R'
     'lr-finder.R'

@@ -19,6 +19,8 @@ navbar:
       - text: "Guides"
       - text: "Using the lr_finder"
         href: articles/lr-finder.html
+      - text: "Checkpoints models"
+        href: articles/checkpoints.html
   examples:
     text: Examples
     href: articles/examples/index.html

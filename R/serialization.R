@@ -105,6 +105,100 @@ luz_save_model_weights <- function(obj, path) {
   invisible(o)
 }
 
+luz_checkpoint <- function(ctx, path) {
+  state <- list()
+
+  #grab epoch
+  state[["epoch"]] <- ctx$epoch
+  state[["records"]] <- ctx$records
+
+  # grab model state
+  state[["model"]] <- ctx$model$state_dict()
+
+  # grab optimizer state
+  state[["optimizers"]] <- lapply(ctx$optimizers, function(x) x$state_dict())
+
+  # traverse callbacks looking for the `state_dict()` method.
+  state[["callbacks"]] <- lapply(ctx$callbacks, function(x) {
+    if (is.null(x$state_dict))
+      NULL
+    else
+      x$state_dict()
+  })
+
+  torch_save(state, path)
+}
+
+#' Loads a checkpoint
+#'
+#' Works with checkpoints created typically with [luz_callback_model_checkpoint()].
+#'
+#' @param obj Object to which we want to laod the checkpoint.
+#' @param path Path of the checkpoint on disk.
+#' @param ... unused. Is there to allow future extensions.
+#'
+#' @export
+luz_load_checkpoint <- function(obj, path, ...) {
+  UseMethod("luz_load_checkpoint")
+}
+
+#' @note This only modifies the model weights, not records, etc.
+#' @export
+luz_load_checkpoint.luz_module_fitted <- function(obj, path, ...) {
+  state <- torch_load(path)
+  # this modifies obj in place / records are not modified from the results
+  obj$model$load_state_dict(state$model)
+  invisible(NULL)
+}
+
+#' @inheritParams luz_callback_resume_from_checkpoint
+#' @export
+luz_load_checkpoint.luz_fit_context <- function(obj, path, ...,
+                                                restore_records = TRUE,
+                                                restore_optimizer_state = TRUE,
+                                                restore_callbacks_state = TRUE,
+                                                restore_model_state = TRUE
+                                                ) {
+  ctx <- obj # nicer name as we refer to fields in the ctx object.
+
+  # load state dicts if they are available
+  state <- to_device(torch_load(path), ctx$device)
+
+  # load objects to their place.
+  if (restore_model_state) {
+    ctx$model$load_state_dict(state$model)
+  }
+
+  if (restore_optimizer_state) {
+    map2(ctx$optimizers, state$optimizers, function(x, y) {
+      x$load_state_dict(y)
+    })
+  }
+
+  if (restore_records) {
+    ctx$unsafe_set_records(state$records)
+  }
+
+  if (restore_callbacks_state) {
+    map2(state$callbacks, ctx$callbacks, function(st, cb) {
+      if (is.null(st)) return()
+
+      if (is.null(cb$load_state_dict) && !is.null(st)) {
+        cli::cli_abort(c(
+          x = "Failed resuming the model.",
+          i = paste0(
+            "A callback with class {.cls {class(cb)} has state attached ",
+            "to it, but doesn't implement the {.fn load_state_dict} method."
+          )
+        ))
+      }
+
+      cb$load_state_dict(st)
+    })
+  }
+
+  invisible(NULL)
+}
 
 model_to_raw <- function(model) {
   con <- rawConnection(raw(), open = "wr")

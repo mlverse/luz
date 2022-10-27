@@ -27,6 +27,7 @@
 #'
 #' @family training
 #'
+#' @import torch
 #' @export
 setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL,
                   backward = NULL) {
@@ -188,15 +189,15 @@ get_opt_hparams <- function(module) {
 #' @importFrom generics fit
 #' @export
 fit.luz_module_generator <- function(
-  object,
-  data,
-  epochs = 10,
-  callbacks = NULL,
-  valid_data = NULL,
-  accelerator = NULL,
-  verbose = NULL,
-  ...,
-  dataloader_options = NULL
+    object,
+    data,
+    epochs = 10,
+    callbacks = NULL,
+    valid_data = NULL,
+    accelerator = NULL,
+    verbose = NULL,
+    ...,
+    dataloader_options = NULL
 ) {
 
   enable_mps_fallback()
@@ -231,32 +232,37 @@ fit.luz_module_generator <- function(
     !!! ctx$handlers,
     .expr = {
       for (epoch in seq_len(ctx$max_epochs)) {
-        ctx$epoch <- epoch
-        ctx$iter <- 0L
+        rlang::with_handlers(
+          !!! ctx$epoch_handlers,
+          .expr = {
 
-        ctx$data <- ctx$train_data
+            ctx$epoch <- epoch
+            ctx$iter <- 0L
 
-        ctx$call_callbacks("on_epoch_begin")
-        ctx$call_callbacks("on_train_begin")
+            ctx$data <- ctx$train_data
 
-        coro::loop(for (batch in ctx$data) {
+            ctx$call_callbacks("on_epoch_begin")
+            ctx$call_callbacks("on_train_begin")
 
-          ctx$batch <- batch
-          ctx$iter <- ctx$iter + 1L
+            coro::loop(for (batch in ctx$data) {
 
-          ctx$call_callbacks("on_train_batch_begin")
-          step()
-          ctx$call_callbacks("on_train_batch_end")
-        })
+              ctx$batch <- batch
+              ctx$iter <- ctx$iter + 1L
 
-        ctx$call_callbacks("on_train_end")
+              ctx$call_callbacks("on_train_batch_begin")
+              step()
+              ctx$call_callbacks("on_train_batch_end")
+            })
 
-        if (!is.null(ctx$valid_data)) {
-          ctx$data <- ctx$valid_data
-          valid_loop(ctx, step)
-        }
+            ctx$call_callbacks("on_train_end")
 
-        ctx$call_callbacks("on_epoch_end")
+            if (!is.null(ctx$valid_data)) {
+              ctx$data <- ctx$valid_data
+              valid_loop(ctx, step)
+            }
+
+            ctx$call_callbacks("on_epoch_end")
+          })
       }
     })
 
@@ -279,13 +285,13 @@ fit.luz_module_generator <- function(
 #' @family training
 #' @export
 evaluate <- function(
-  object,
-  data,
-  ...,
-  callbacks = list(),
-  accelerator = NULL,
-  verbose = NULL,
-  dataloader_options = NULL
+    object,
+    data,
+    ...,
+    callbacks = list(),
+    accelerator = NULL,
+    verbose = NULL,
+    dataloader_options = NULL
 ) {
 
   enable_mps_fallback()
@@ -448,6 +454,7 @@ valid_one_batch <- function(ctx) {
 
 initialize_callbacks <- function(callbacks, ctx) {
   cbs <- lapply(callbacks, function(cb) {
+    assert_is_callback(cb)
     cb$set_ctx(ctx)
     bind_context(cb, ctx)
     cb
