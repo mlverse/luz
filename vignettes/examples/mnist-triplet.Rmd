@@ -12,7 +12,7 @@ library(luz)
 
 # Datasets and loaders ----------------------------------------------------
 
-dir <- "~/Downloads/mnist" # caching directory
+dir <- "./mnist" # caching directory
 
 triplet_mnist_dataset <- dataset(
   inherit = mnist_dataset,
@@ -56,8 +56,8 @@ net <- nn_module(
   initialize = function(embedding_dim) {
     self$conv1 <- nn_conv2d(1, 32, 3, 1)
     self$conv2 <- nn_conv2d(32, 64, 3, 1)
-    self$dropout1 <- nn_dropout2d(0.25)
-    self$dropout2 <- nn_dropout2d(0.5)
+    self$dropout1 <- nn_dropout(0.25)
+    self$dropout2 <- nn_dropout(0.5)
     self$fc1 <- nn_linear(9216, 512)
     self$fc2 <- nn_linear(512, embedding_dim)
   },
@@ -100,6 +100,5 @@ fitted <- triplet_model %>%
 # Serializing
 
 luz_save(fitted, "triplet.pt")
-
 ```
 
