@@ -5,7 +5,6 @@ category: 'advanced'
 ---
 
 ```{r, eval = FALSE}
-
 # Packages ----------------------------------------------------------------
 library(torch)
 library(torchvision)
@@ -13,7 +12,7 @@ library(luz)
 
 # Datasets and loaders ----------------------------------------------------
 
-dir <- "~/Downloads/mnist" # caching directory
+dir <- "./mnist" # caching directory
 
 train_ds <- mnist_dataset(
   dir,
@@ -38,8 +37,8 @@ net <- nn_module(
   initialize = function(accumulate_batches = 2) {
     self$conv1 <- nn_conv2d(1, 32, 3, 1)
     self$conv2 <- nn_conv2d(32, 64, 3, 1)
-    self$dropout1 <- nn_dropout2d(0.25)
-    self$dropout2 <- nn_dropout2d(0.5)
+    self$dropout1 <- nn_dropout(0.25)
+    self$dropout2 <- nn_dropout(0.5)
     self$fc1 <- nn_linear(9216, 128)
     self$fc2 <- nn_linear(128, 10)
 
@@ -60,14 +59,25 @@ net <- nn_module(
     x
   },
   step = function() {
-    ctx$pred <- ctx$model(ctx$input)
-    loss <- ctx$model$loss(ctx$pred, ctx$target)
+    # we implement a custom step method that runs for every 
+    # batch in training and validation.
+    
+    # calculate predictions. we save them in `ctx$pred` so other parts of luz
+    # can use it.
+    ctx$pred <- ctx$model(ctx$input) 
+    
+    # we now calculate the loss. also save it in `ctx$loss` so, for example,
+    # it's correctly logged.
+    ctx$loss <- ctx$model$loss(ctx$pred, ctx$target)
 
+    # `ctx$training` is set automatically to `TRUE` during the training phase
     if (ctx$training) {
-      loss <- loss/self$accumulate_batches
-      loss$backward()
+      ctx$loss <- ctx$loss/self$accumulate_batches
+      ctx$loss$backward()
     }
 
+    # only after `accumulate_batches` that we do a optimizer step, so we use 
+    # the virtual batch_size.
     if (ctx$training && (ctx$iter %% self$accumulate_batches == 0)) {
       opt <- ctx$optimizers[[1]]
       opt$step()
@@ -87,7 +97,7 @@ fitted <- net %>%
       luz_metric_accuracy()
     )
   ) %>%
-  fit(train_dl, epochs = 10, valid_data = test_dl)
+  fit(train_dl, valid_data = test_dl, epochs = 10)
 
 
 # Serialization -----------------------------------------------------------
