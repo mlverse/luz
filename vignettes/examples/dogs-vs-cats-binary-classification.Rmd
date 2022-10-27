@@ -16,12 +16,11 @@ torch_manual_seed(1)
 
 # Datasets and loaders ----------------------------------------------------
 
-dir <- "~/Downloads/dogs-vs-cats" # caching directory
-kaggle_token <- "~/Downloads/kaggle.json"
+dir <- "./dogs-vs-cats" # caching directory
 
 ds <- torchdatasets::dogs_vs_cats_dataset(
   dir,
-  token = kaggle_token,
+  download = TRUE,
   transform = . %>%
     torchvision::transform_to_tensor() %>%
     torchvision::transform_resize(size = c(224, 224)) %>% 
@@ -65,7 +64,7 @@ net <- torch::nn_module(
 fitted <- net %>%
   setup(
     loss = nn_bce_with_logits_loss(),
-    optimizer = madgrad::optim_madgrad,
+    optimizer = optim_adam,
     metrics = list(
       luz_metric_binary_accuracy_with_logits()
     )
