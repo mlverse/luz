@@ -58,3 +58,4 @@ reference:
     - luz_load
     - luz_save_model_weights
     - luz_load_model_weights
+    - luz_load_checkpoint
