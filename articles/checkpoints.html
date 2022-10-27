@@ -124,7 +124,7 @@
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Let’s now start training adding the <code>luz_callback_autoresume()</code>:</p>
+<p>Let’s now start training adding the <code><a href="../reference/luz_callback_auto_resume.html">luz_callback_auto_resume()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">autoresume</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback_auto_resume.html">luz_callback_auto_resume</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"state.pt"</span><span class="op">)</span></span>
 <span><span class="va">inter</span> <span class="op">&lt;-</span> <span class="fu">interrupt</span><span class="op">(</span><span class="op">)</span></span>
@@ -147,12 +147,6 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></code></pre></div>
 <p><img src="checkpoints_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<div class="section level3">
-<h3 id="custom-callbacks-state">Custom callbacks state<a class="anchor" aria-label="anchor" href="#custom-callbacks-state"></a>
-</h3>
-<p>Sometimes callbacks also need to keep their internal state in order to allow continuing training exactly from where it stopped. In this case, callbacks can implement the <code>state_dict()</code> and the <code><a href="https://rdrr.io/pkg/torch/man/load_state_dict.html" class="external-link">load_state_dict()</a></code> methods that are automatically called when saving and reloading checkpoints.</p>
-<p>The <code>state_dict()</code> method must return a named list of objects that compose the state of the callback. <code><a href="https://rdrr.io/pkg/torch/man/load_state_dict.html" class="external-link">load_state_dict()</a></code> takes the same named list returned by <code>state_dict()</code> and restores the callback state.</p>
-</div>
 </div>
 <div class="section level2">
 <h2 id="checkpointing">Checkpointing<a class="anchor" aria-label="anchor" href="#checkpointing"></a>
@@ -208,6 +202,48 @@
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></code></pre></div>
 <p><img src="checkpoints_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<div class="section level3">
+<h3 id="custom-callbacks-state">Custom callbacks state<a class="anchor" aria-label="anchor" href="#custom-callbacks-state"></a>
+</h3>
+<p>Sometimes callbacks also need to keep their internal state in order to allow continuing training exactly from where it stopped. In this case, callbacks can implement the <code>state_dict()</code> and the <code><a href="https://rdrr.io/pkg/torch/man/load_state_dict.html" class="external-link">load_state_dict()</a></code> methods that are automatically called when saving and reloading checkpoints.</p>
+<p>For example, suppose that you have a callback that tracks gradients for weights at every epoch. You want to use the tracked weights to further analyse the training procedure. It could be implemented like:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cb_weight_grad</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback.html">luz_callback</a></span><span class="op">(</span></span>
+<span>  <span class="st">"weight_grad"</span>,</span>
+<span>  gradients <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">track_weights</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">track_weights</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  on_train_batch_before_step <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">gradients</span><span class="op">[[</span><span class="va">ctx</span><span class="op">$</span><span class="va">epoch</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">w</span> <span class="kw">in</span> <span class="va">self</span><span class="op">$</span><span class="va">track_weights</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">gradients</span><span class="op">[[</span><span class="va">ctx</span><span class="op">$</span><span class="va">epoch</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="va">w</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">parameters</span><span class="op">[[</span><span class="va">w</span><span class="op">]</span><span class="op">]</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>In the above example, the <code>gradients</code> field is a <strong>state</strong> in the callback. If training fails for some reason, <code>gradients</code> will be lost. If it’s important for you to also checkpoint the callback state, you can implement the <code>state_dict()</code> method must returning a named list of objects that compose the state of the callback and <code><a href="https://rdrr.io/pkg/torch/man/load_state_dict.html" class="external-link">load_state_dict()</a></code> taking the same named list returned by <code>state_dict()</code> and restoring the callback state.</p>
+<p>The callback above could be reimplemented with:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cb_weight_grad</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback.html">luz_callback</a></span><span class="op">(</span></span>
+<span>  <span class="st">"weight_grad"</span>,</span>
+<span>  gradients <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">track_weights</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">track_weights</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  on_train_batch_before_step <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">gradients</span><span class="op">[[</span><span class="va">ctx</span><span class="op">$</span><span class="va">epoch</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">w</span> <span class="kw">in</span> <span class="va">self</span><span class="op">$</span><span class="va">track_weights</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">gradients</span><span class="op">[[</span><span class="va">ctx</span><span class="op">$</span><span class="va">epoch</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="va">w</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">parameters</span><span class="op">[[</span><span class="va">w</span><span class="op">]</span><span class="op">]</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  state_dict <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>gradients <span class="op">=</span> <span class="va">self</span><span class="op">$</span><span class="va">gradients</span><span class="op">)</span></span>
+<span>  <span class="op">}</span>,</span>
+<span>  load_state_dict <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">gradients</span> <span class="op">&lt;-</span> <span class="va">d</span><span class="op">$</span><span class="va">gradients</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
