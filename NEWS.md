@@ -9,6 +9,7 @@ only training or only validation. See `luz_metric_set()` for more information. (
 * Improved how errors raised on user code, eg while calling metrics or callbacks
 are raised. This helps a lot when debuging errors in callbacks and metrics. (#112)
 * `loss_fn` is now a field of the context, thus callbacks can override it when needed. (#112)
+* `luz_callback_mixup` now supports the `run_valid` and `auto_loss` arguments. (#112)
 
 # luz 0.3.1
 
