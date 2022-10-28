@@ -147,6 +147,7 @@ context <- R6::R6Class(
         ".opt",
         ".opt_name",
         ".data",
+        ".loss_fn",
         ".loss",
         ".loss_grad",
         ".epoch"
@@ -347,6 +348,12 @@ context <- R6::R6Class(
         return(private$.data)
       private$.data <- new
     },
+    #' @field loss_fn Loss function used to train the model
+    loss_fn = function(new) {
+      if (missing(new))
+        return(private$.loss_fn)
+      private$.loss_fn <- new
+    },
     #' @field loss Last computed loss values. Detached from the graph.
     loss = function(new) {
       if (missing(new))
@@ -407,6 +414,7 @@ context <- R6::R6Class(
     .opt = NULL,
     .opt_name = NULL,
     .data = NULL,
+    .loss_fn = NULL,
     .loss = NULL,
     .loss_grad = NULL,
     .epoch = NULL
@@ -432,6 +440,7 @@ fit_context <- R6::R6Class(
 
       self$model <- do.call(module, self$hparams)
       self$optimizers <- do.call(self$model$set_optimizers, self$opt_hparams)
+      self$loss_fn <- self$model$loss
 
       if (rlang::is_scalar_double(valid_data)) {
         c(data, valid_data) %<-% create_valid_data(data, valid_data)
@@ -497,6 +506,9 @@ evaluate_context <- R6::R6Class(
       self$opt_hparams <- opt_hparams
       # we actually only use the optimizer names ...
       self$optimizers <- do.call(self$model$set_optimizers, self$opt_hparams)
+      # evaluate computes the loss function, and it's better to refer to it from
+      # the context.
+      self$loss_fn <- self$model$loss
     }
   )
 )

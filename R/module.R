@@ -430,7 +430,7 @@ fit_one_batch <-function(ctx) {
     ctx$opt <- ctx$optimizers[[nm]]
     ctx$opt_name <- nm
 
-    ctx$loss_grad <- ctx$model$loss(ctx$pred, ctx$target)
+    ctx$loss_grad <- ctx$loss_fn(ctx$pred, ctx$target)
     ctx$loss[[ctx$opt_name]] <- ctx$loss_grad$detach()
 
     ctx$call_callbacks("on_train_batch_after_loss")
@@ -452,7 +452,7 @@ valid_one_batch <- function(ctx) {
     ctx$pred <- do.call(ctx$model, list(ctx$input))
     ctx$call_callbacks("on_valid_batch_after_pred")
 
-    ctx$loss[[ctx$opt_name]] <- ctx$model$loss(ctx$pred, ctx$target)
+    ctx$loss[[ctx$opt_name]] <- ctx$loss_fn(ctx$pred, ctx$target)
     ctx$call_callbacks("on_valid_batch_after_loss")
   }
 }

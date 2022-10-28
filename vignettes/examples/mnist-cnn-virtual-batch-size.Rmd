@@ -68,7 +68,7 @@ net <- nn_module(
     
     # we now calculate the loss. also save it in `ctx$loss` so, for example,
     # it's correctly logged.
-    ctx$loss <- ctx$model$loss(ctx$pred, ctx$target)
+    ctx$loss <- ctx$loss_fn(ctx$pred, ctx$target)
 
     # `ctx$training` is set automatically to `TRUE` during the training phase
     if (ctx$training) {
