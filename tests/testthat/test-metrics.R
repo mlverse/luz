@@ -163,3 +163,33 @@ test_that("Get a nice error message if you pass the wrong metric type", {
 
   expect_true(inherits(luz_metric_mse(), "luz_metric_generator"))
 })
+
+test_that("get a nice error message when metric fails updating", {
+
+  metric_fail <- luz_metric(
+    name = "hello",
+    abbrev = "h",
+    initialize = function() {
+
+    },
+    update = function(pred, save) {
+      stop("error in metric!")
+    }
+  )
+
+  x <- torch_randn(1000, 10)
+  y <- torch_randn(1000, 1)
+
+  model <- nn_linear %>%
+    setup(optimizer = optim_sgd, loss = torch::nn_mse_loss(),
+          metrics = list(metric_fail())) %>%
+    set_hparams(in_features = 10, out_features = 1) %>%
+    set_opt_hparams(lr = 0.001)
+
+
+  expect_snapshot_error({
+    res <- model %>%
+      fit(list(x, y), epochs = 5, valid_data = list(x, y), verbose = FALSE)
+  })
+
+})

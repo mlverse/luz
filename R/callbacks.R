@@ -293,10 +293,7 @@ luz_callback_metrics <- luz_callback(
     )
   },
   on_train_batch_end = function() {
-    lapply(
-      ctx$metrics$train,
-      function(x) x$update(ctx$pred, ctx$target)
-    )
+    lapply(ctx$metrics$train, self$call_update_on_metric)
   },
   on_train_end = function() {
     self$log_all_metrics("train")
@@ -308,10 +305,7 @@ luz_callback_metrics <- luz_callback(
     )
   },
   on_valid_batch_end = function() {
-    lapply(
-      ctx$metrics$valid,
-      function(x) x$update(ctx$pred, ctx$target)
-    )
+    lapply(ctx$metrics$valid, self$call_update_on_metric)
   },
   on_valid_end = function() {
     self$log_all_metrics("valid")
@@ -328,6 +322,22 @@ luz_callback_metrics <- luz_callback(
         ctx$log_metric(tolower(x$abbrev), x$compute())
       }
     )
+  },
+  call_update_on_metric = function(metric) {
+    rlang::try_fetch({
+      metric$update(ctx$pred, ctx$target)
+    },
+    error = function(cnd) {
+      ctx <- ctx
+      cli::cli_abort(
+        c(
+          "Error when evaluating metric with abbrev {.val {metric$abbrev}} and class {.cls {class(metric)}}",
+          i = "The error happened at iter {.val {ctx$iter}} of epoch {.val {ctx$epoch}}.",
+          i = "The model was {.emph {ifelse(ctx$training, '', 'not ')}}in training mode."
+        ),
+        parent = cnd
+      )
+    })
   }
 )
 
