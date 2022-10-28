@@ -69,6 +69,8 @@ for more info.}
 
 \item{\code{data}}{Current dataloader in use.}
 
+\item{\code{loss_fn}}{Loss function used to train the model}
+
 \item{\code{loss}}{Last computed loss values. Detached from the graph.}
 
 \item{\code{loss_grad}}{Last computed loss value, not detached, so you can do additional

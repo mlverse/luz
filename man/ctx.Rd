@@ -35,12 +35,14 @@ could potentially modify these attributes or add new ones.\if{html}{\out{
    \code{input} \tab First element of the last batch obtained by the current dataloader. \cr
    \code{target} \tab Second element of the last batch obtained by the current dataloader. \cr
    \code{pred} \tab Last predictions obtained by \code{ctx$model$forward} . \strong{Note:} can be potentially modified by previously ran callbacks. Also note that this might not be available if you used a custom training step. \cr
+   \code{loss_fn} \tab The active loss function that will be minimized during training. \cr
    \code{loss} \tab Last computed loss from the model. \strong{Note:} this might not be available if you modified the training or validation step. \cr
    \code{opt} \tab Current optimizer, ie. the optimizer that will be used to do the next \code{step} to update parameters. \cr
    \code{opt_nm} \tab Current optimizer name. By default it’s \code{opt} , but can change if your model uses more than one optimizer depending on the set of parameters being optimized. \cr
    \code{metrics} \tab \code{list()} with current metric objects that are \code{update}d at every \code{on_train_batch_end()} or \code{on_valid_batch_end()}. See also \code{help("luz_callback_metrics")} \cr
    \code{records} \tab \code{list()} recording metric values for training and validation for each epoch. See also \code{help("luz_callback_metrics")} . Also records profiling metrics. See \code{help("luz_callback_profile")} for more information. \cr
    \code{handlers} \tab A named \code{list()} of handlers that is passed to \code{rlang::with_handlers()} during the training loop and can be used to handle errors or conditions that might be raised by other callbacks. \cr
+   \code{epoch_handlers} \tab A named list of handlers that is used with \code{rlang::with_handlers()}. Those handlers are used inside the epochs loop, thus you can handle epoch specific conditions, that won’t necessarily end training. \cr
 }
 
 
