@@ -135,7 +135,11 @@
 <span>  callbacks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">inter</span>, <span class="va">autoresume</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in self[[callback_nm]](): Error on epoch 5</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `FUN()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Error while calling callback with class <span style="color: #0000BB;">&lt;interrupt/LuzCallback/R6&gt;</span> at</span></span>
+<span><span class="co">#&gt;   <span style="color: #00BB00;">on_epoch_end</span>.</span></span>
+<span><span class="co">#&gt; <span style="font-weight: bold;">Caused by error in `self[[callback_nm]]()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Error on epoch 5</span></span></code></pre></div>
 <p>To resume model training exactly from where it stopped you just need to restart fitting, using the exact same model, callbacks, etc:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span></span>

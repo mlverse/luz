@@ -75,13 +75,28 @@ This callback is supposed to be used together with <code><a href="nn_mixup_loss.
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">luz_callback_mixup</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">luz_callback_mixup</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span>, <span class="va">...</span>, run_valid <span class="op">=</span> <span class="cn">FALSE</span>, auto_loss <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>alpha</dt>
 <dd><p>parameter for the beta distribution used to sample mixing coefficients</p></dd>
+
+
+<dt>...</dt>
+<dd><p>currently unused. Just to force named arguments.</p></dd>
+
+
+<dt>run_valid</dt>
+<dd><p>Should it run during validation</p></dd>
+
+
+<dt>auto_loss</dt>
+<dd><p>Should it automatically modify the loss function? This will wrap
+the loss function to create the mixup loss. If <code>TRUE</code> make sure that your loss
+function does not apply reductions. If <code>run_valid=FALSE</code>, then loss will be
+mean reduced during validation.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -152,7 +152,7 @@
 <span>    </span>
 <span>    <span class="co"># we now calculate the loss. also save it in `ctx$loss` so, for example,</span></span>
 <span>    <span class="co"># it's correctly logged.</span></span>
-<span>    <span class="va">ctx</span><span class="op">$</span><span class="va">loss</span> <span class="op">&lt;-</span> <span class="va">ctx</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="fu">loss</span><span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">pred</span>, <span class="va">ctx</span><span class="op">$</span><span class="va">target</span><span class="op">)</span></span>
+<span>    <span class="va">ctx</span><span class="op">$</span><span class="va">loss</span> <span class="op">&lt;-</span> <span class="va">ctx</span><span class="op">$</span><span class="fu">loss_fn</span><span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">pred</span>, <span class="va">ctx</span><span class="op">$</span><span class="va">target</span><span class="op">)</span></span>
 <span></span>
 <span>    <span class="co"># `ctx$training` is set automatically to `TRUE` during the training phase</span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="va">ctx</span><span class="op">$</span><span class="va">training</span><span class="op">)</span> <span class="op">{</span></span>
