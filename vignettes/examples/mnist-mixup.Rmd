@@ -65,13 +65,20 @@ net <- nn_module(
 
 fitted <- net %>%
   setup(
-    loss = nn_mixup_loss(nn_cross_entropy_loss()),
-    optimizer = optim_adam
+    # we must use a un-reduced loss to allow mixing up
+    loss = nn_cross_entropy_loss(reduction = "none"), 
+    optimizer = optim_adam,
+    metrics = luz_metric_set(
+      valid_metrics = luz_metric_accuracy()
+    )
   ) %>%
   fit(
     train_dl, epochs = 10, valid_data = test_dl, 
     callbacks = list(
-      luz_callback_mixup(alpha = 0.4)
+      luz_callback_mixup(
+        alpha = 0.4, 
+        auto_loss = TRUE # loss is automatically modified by the mixup callback
+      )
     )
   )
 

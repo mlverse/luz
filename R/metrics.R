@@ -28,6 +28,57 @@ LuzMetric <- R6::R6Class(
   )
 )
 
+#' Creates a metric set
+#'
+#' A metric set can be used to specify metrics that are only evaluated during
+#' training, validation or both.
+#'
+#' @param metrics A list of luz_metrics that are meant to be used in both training
+#'   and validation.
+#' @param train_metrics A list of luz_metrics that are only used during training.
+#' @param valid_metrics A list of luz_metrics that are only sued for validation.
+#'
+#' @export
+luz_metric_set <- function(metrics = NULL, train_metrics = NULL, valid_metrics = NULL) {
+  metrics <- c(luz_metric_loss_average(), metrics)
+  new_luz_metric_set(metrics, train_metrics, valid_metrics)
+}
+
+maybe_list_metric <- function(x) {
+  if (inherits(x, "luz_metric_generator"))
+    list(x)
+  else
+    x
+}
+
+new_luz_metric_set <- function(metrics, train_metrics, valid_metrics) {
+  metrics <- maybe_list_metric(metrics)
+  train_metrics <- maybe_list_metric(train_metrics)
+  valid_metrics <- maybe_list_metric(valid_metrics)
+
+  sapply(metrics, assert_is_metric)
+  sapply(train_metrics, assert_is_metric)
+  sapply(valid_metrics, assert_is_metric)
+  structure(list(
+    train = c(metrics, train_metrics),
+    valid = c(metrics, valid_metrics)
+  ), class = "luz_metric_set")
+}
+
+assert_is_metric <- function(x) {
+  if(!inherits(x, "luz_metric_generator")) {
+    cli::cli_abort(c(
+      "Expected an object with class {.cls luz_metric_generator}.",
+      i = "Got an object with class {.cls {class(x)}}."
+    ))
+  }
+  invisible(TRUE)
+}
+
+is_luz_metric_set <- function(obj) {
+  inherits(obj, "luz_metric_set")
+}
+
 #' Creates a new luz metric
 #'
 #' @param name string naming the new metric.
@@ -72,6 +123,12 @@ LuzMetric <- R6::R6Class(
 #' @family luz_metrics
 luz_metric <- function(name = NULL, ..., private = NULL, active = NULL,
                        parent_env = parent.frame(), inherit = NULL) {
+
+  out_class <- c("luz_metric_generator", "R6ClassGenerator")
+  if (!is.null(name)){
+    out_class <- c(paste0(name, "_generator"), out_class)
+  }
+
   make_class(
     name = name,
     ...,
@@ -79,7 +136,8 @@ luz_metric <- function(name = NULL, ..., private = NULL, active = NULL,
     active = active,
     parent_env = parent_env,
     inherit = attr(inherit, "r6_class") %||% LuzMetric,
-    .init_fun = FALSE
+    .init_fun = FALSE,
+    .out_class = out_class
   )
 }
 

@@ -80,7 +80,7 @@ get_metric <- function(object, name, set, epoch= NULL) {
 get_formatted_metrics <- function(object, set, epoch = NULL) {
   values <- get_all_metrics(object, set, epoch)
   for (i in seq_along(values)) {
-    values[[i]] <- object$model$metrics[[i]]$new()$format(values[[i]])
+    values[[i]] <- object$model$metrics[[set]][[i]]$new()$format(values[[i]])
   }
   values
 }

@@ -4,6 +4,12 @@
 * Refactor checkpointing in luz - we now also serialize optimizer state and callbacks state. (#107)
 * Added a `luz_callback_autoresume()` allowing to easily resume trainining runs that might have crashed. (#107)
 * Added th `luz_callback_resume_from_checkpoint()` allowing one to resume a training run from a checkpoint file. (#107)
+* Users can now chose if metrics should be called on both training and validation,
+only training or only validation. See `luz_metric_set()` for more information. (#112)
+* Improved how errors raised on user code, eg while calling metrics or callbacks
+are raised. This helps a lot when debuging errors in callbacks and metrics. (#112)
+* `loss_fn` is now a field of the context, thus callbacks can override it when needed. (#112)
+* `luz_callback_mixup` now supports the `run_valid` and `auto_loss` arguments. (#112)
 
 # luz 0.3.1
 
