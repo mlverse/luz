@@ -118,3 +118,36 @@ test_that("metrics works within models", {
   )
 
 })
+
+test_that("can specify metrics for training and validation", {
+
+  x <- torch_randn(1000, 10)
+  y <- torch_randn(1000, 1)
+
+  model <- nn_linear %>%
+    setup(optimizer = optim_sgd, loss = torch::nn_mse_loss(),
+          metrics = luz_metric_set(
+            metrics = c(luz_metric_mae()),
+            valid_metrics = c(luz_metric_rmse()),
+            train_metrics = c(luz_metric_mse())
+          )) %>%
+    set_hparams(in_features = 10, out_features = 1) %>%
+    set_opt_hparams(lr = 0.001)
+
+
+  res <- model %>%
+    fit(list(x, y), epochs = 5, valid_data = list(x, y), verbose = FALSE)
+
+  metrics <- get_metrics(res)
+  expect_equal(
+    unique(metrics[metrics$set== "valid", "metric"]),
+    c("loss", "mae", "rmse")
+  )
+  expect_equal(
+    unique(metrics[metrics$set== "train", "metric"]),
+    c("loss", "mae", "mse")
+  )
+  expect_error(regexp = NA, {
+    plot(res)
+  })
+})
