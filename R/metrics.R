@@ -44,7 +44,18 @@ luz_metric_set <- function(metrics = NULL, train_metrics = NULL, valid_metrics =
   new_luz_metric_set(metrics, train_metrics, valid_metrics)
 }
 
+maybe_list_metric <- function(x) {
+  if (inherits(x, "luz_metric_generator"))
+    list(x)
+  else
+    x
+}
+
 new_luz_metric_set <- function(metrics, train_metrics, valid_metrics) {
+  metrics <- maybe_list_metric(metrics)
+  train_metrics <- maybe_list_metric(train_metrics)
+  valid_metrics <- maybe_list_metric(valid_metrics)
+
   sapply(metrics, assert_is_metric)
   sapply(train_metrics, assert_is_metric)
   sapply(valid_metrics, assert_is_metric)

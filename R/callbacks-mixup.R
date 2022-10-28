@@ -16,6 +16,12 @@
 #' - We replace `weight` with `weight = max(weight, 1-weight)` to avoid duplicates.
 #'
 #' @param alpha parameter for the beta distribution used to sample mixing coefficients
+#' @param run_valid Should it run during validation
+#' @param auto_loss Should it automatically modify the loss function? This will wrap
+#'   the loss function to create the mixup loss. If `TRUE` make sure that your loss
+#'   function does not apply reductions. If `run_valid=FALSE`, then loss will be
+#'   mean reduced during validation.
+#' @param ... currently unused. Just to force named arguments.
 #'
 #' @examples
 #' if (torch::torch_is_installed()) {
@@ -31,14 +37,52 @@
 #' @export
 luz_callback_mixup <- luz_callback(
   "mixup_callback",
-  initialize = function(alpha = 0.4) {
+  initialize = function(alpha = 0.4, ..., run_valid = FALSE, auto_loss = FALSE) {
+    ellipsis::check_dots_empty()
     self$alpha <- alpha
+    self$run_valid <- run_valid
+    self$auto_loss <- auto_loss
+  },
+
+  on_train_begin = function() {
+    if (self$auto_loss) {
+      self$model_loss_fn <- ctx$loss_fn
+      ctx$loss_fn <- self$wrap_mixup_loss(self$model_loss_fn)
+    }
+  },
+  on_train_end = function() {
+    if (self$auto_loss) {
+      ctx$loss_fn <- self$model_loss_fn
+    }
+  },
+
+  on_valid_begin = function() {
+    self$model_loss_fn <- ctx$loss_fn
+    if (self$run_valid && self$auto_loss) {
+      ctx$loss_fn <- self$nn_mixup_loss(self$model_loss_fn)
+    } else if (self$auto_loss) {
+      ctx$loss_fn <- function(input, target) {
+        torch_mean(self$model_loss_fn(input, target))
+      }
+    }
+  },
+  on_valid_end = function() {
+    if (self$auto_loss) {
+      ctx$loss_fn <- self$model_loss_fn
+    }
   },
 
   on_train_batch_begin = function() {
+    self$apply_transform()
+  },
+  on_valid_batch_begin = function() {
+    if (self$run_valid)
+      self$apply_transform()
+  },
 
-    batch_len <- ctx$batch$y$size(1)
-    device <- ctx$batch$y$device
+  apply_transform = function() {
+    batch_len <- ctx$target$size(1)
+    device <- ctx$target$device
 
     # draw mixing weights from a beta distribution with identical parameters
     weight <- rbeta(batch_len, self$alpha, self$alpha) %>% torch::torch_tensor(device = device)
@@ -51,12 +95,26 @@ luz_callback_mixup <- luz_callback(
     #     - (b) a tensor holding the mixing weights,
     # (3) and replace the current batch with this
     c(mixed_x, stacked_y_with_weights) %<-% nnf_mixup(
-      ctx$batch$x,
-      ctx$batch$y,
+      ctx$input,
+      ctx$target,
       weight)
 
-    ctx$batch$x <- mixed_x
-    ctx$batch$y <- stacked_y_with_weights
+    ctx$input <- mixed_x
+    ctx$target <- stacked_y_with_weights
+  },
+
+  wrap_mixup_loss = function(loss_fn) {
+    force(loss_fn)
+    function(input, target) {
+      targets <- target[[1]]
+      weight <- target[[2]]
+
+      l1 <- loss_fn(input, targets[[1]])
+      l2 <- loss_fn(input, targets[[2]])
+      loss <- torch::torch_lerp(l1, l2, weight)
+
+      torch::torch_mean(loss)
+    }
   }
 )
 
@@ -118,7 +176,6 @@ nnf_mixup <- function(x, y, weight) {
   stacked_y_with_weights <- list(ys = list(y1 = y1, y2 = y2), weight = weight)
 
   list(x = mixed_x, y = stacked_y_with_weights)
-
 }
 
 

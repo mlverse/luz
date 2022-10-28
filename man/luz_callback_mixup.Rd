@@ -4,10 +4,19 @@
 \alias{luz_callback_mixup}
 \title{Mixup callback}
 \usage{
-luz_callback_mixup(alpha = 0.4)
+luz_callback_mixup(alpha = 0.4, ..., run_valid = FALSE, auto_loss = FALSE)
 }
 \arguments{
 \item{alpha}{parameter for the beta distribution used to sample mixing coefficients}
+
+\item{...}{currently unused. Just to force named arguments.}
+
+\item{run_valid}{Should it run during validation}
+
+\item{auto_loss}{Should it automatically modify the loss function? This will wrap
+the loss function to create the mixup loss. If \code{TRUE} make sure that your loss
+function does not apply reductions. If \code{run_valid=FALSE}, then loss will be
+mean reduced during validation.}
 }
 \value{
 A \code{luz_callback}

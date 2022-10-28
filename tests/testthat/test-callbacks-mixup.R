@@ -66,3 +66,36 @@ test_that("mixup works for 3d input", {
   })
 })
 
+test_that("can use mixup with accuracy", {
+  # tests if it's possible to use mixup and in the same time compute accuracy
+  # for the validation set.
+
+  x <- torch_randn(1000, 10)
+  y <- torch_randint(1, 2, size = 1000, dtype = torch_int64())
+
+  model <- nn_linear %>%
+    setup(
+      loss = nn_cross_entropy_loss(reduction = "none"),
+      optimizer = optim_sgd,
+      metrics = luz_metric_set(
+        valid_metrics = luz_metric_accuracy()
+      )
+    ) %>%
+    set_hparams(in_features = 10, out_features = 2) %>%
+    set_opt_hparams(lr = 0.001)
+
+  expect_error(
+    result <- model %>% fit(
+      list(x, y),
+      valid_data = 0.2,
+      callbacks = list(
+        luz_callback_mixup(auto_loss = TRUE)
+      ),
+      verbose = FALSE
+    ),
+    regexp = NA
+  )
+
+  expect_true("acc" %in% get_metrics(result)$metric)
+})
+
