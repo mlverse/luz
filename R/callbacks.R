@@ -319,7 +319,7 @@ luz_callback_metrics <- luz_callback(
     lapply(
       ctx$metrics[[set]],
       function(x) {
-        ctx$log_metric(tolower(x$abbrev), x$compute())
+        ctx$log_metric(tolower(x$abbrev), self$call_compute_on_metric(x))
       }
     )
   },
@@ -328,10 +328,24 @@ luz_callback_metrics <- luz_callback(
       metric$update(ctx$pred, ctx$target)
     },
     error = function(cnd) {
-      ctx <- ctx
       cli::cli_abort(
         c(
-          "Error when evaluating metric with abbrev {.val {metric$abbrev}} and class {.cls {class(metric)}}",
+          "Error when evaluating {.field update} for metric with abbrev {.val {metric$abbrev}} and class {.cls {class(metric)}}",
+          i = "The error happened at iter {.val {ctx$iter}} of epoch {.val {ctx$epoch}}.",
+          i = "The model was {.emph {ifelse(ctx$training, '', 'not ')}}in training mode."
+        ),
+        parent = cnd
+      )
+    })
+  },
+  call_compute_on_metric = function(metric) {
+    rlang::try_fetch({
+      metric$compute()
+    },
+    error = function(cnd) {
+      cli::cli_abort(
+        c(
+          "Error when evaluating {.field compute} for metric with abbrev {.val {metric$abbrev}} and class {.cls {class(metric)}}",
           i = "The error happened at iter {.val {ctx$iter}} of epoch {.val {ctx$epoch}}.",
           i = "The model was {.emph {ifelse(ctx$training, '', 'not ')}}in training mode."
         ),
