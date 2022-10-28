@@ -14,7 +14,9 @@
 #' `function(parameters, ...)` that is used to initialize an optimizer given
 #' the model parameters.
 #' @param metrics (`list`, optional) A list of metrics to be tracked during
-#' the training procedure.
+#' the training procedure. Sometimes, you want some metrics to be evaluated
+#' only during training or validation, in this case you can pass a [luz_metric_set()]
+#' object to specify mmetrics used in each stage.
 #' @param backward (`function`) A functions that takes the loss scalar values as
 #' it's parameter. It must call `$backward()` or [torch::autograd_backward()].
 #' In general you don't need to set this parameter unless you need to customize
@@ -65,8 +67,11 @@ setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL,
     }
   }
 
-  metrics <- c(luz_metric_loss_average(), metrics)
-  methods$metrics <- metrics
+  methods$metrics <- if (is_luz_metric_set(metrics)) {
+    metrics
+  } else {
+    luz_metric_set(metrics)
+  }
 
   if (!has_forward_method(module))
     methods$forward <- identity

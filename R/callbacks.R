@@ -288,7 +288,7 @@ luz_callback_metrics <- luz_callback(
   },
   on_train_begin = function() {
     ctx$metrics$train <- lapply(
-      ctx$model$metrics %||% list(),
+      ctx$model$metrics$train %||% list(),
       self$initialize_metric
     )
   },
@@ -303,7 +303,7 @@ luz_callback_metrics <- luz_callback(
   },
   on_valid_begin = function() {
     ctx$metrics$valid <- lapply(
-      ctx$model$metrics %||% list(),
+      ctx$model$metrics$valid %||% list(),
       self$initialize_metric
     )
   },

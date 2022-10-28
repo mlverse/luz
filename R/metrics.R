@@ -28,6 +28,33 @@ LuzMetric <- R6::R6Class(
   )
 )
 
+#' Creates a metric set
+#'
+#' A metric set can be used to specify metrics that are only evaluated during
+#' training, validation or both.
+#'
+#' @param metrics A list of luz_metrics that are meant to be used in both training
+#'   and validation.
+#' @param train_metrics A list of luz_metrics that are only used during training.
+#' @param valid_metrics A list of luz_metrics that are only sued for validation.
+#'
+#' @export
+luz_metric_set <- function(metrics = NULL, train_metrics = NULL, valid_metrics = NULL) {
+  metrics <- c(luz_metric_loss_average(), metrics)
+  new_luz_metric_set(metrics, train_metrics, valid_metrics)
+}
+
+new_luz_metric_set <- function(metrics, train_metrics, valid_metrics) {
+  structure(list(
+    train = c(metrics, train_metrics),
+    valid = c(metrics, valid_metrics)
+  ), class = "luz_metric_set")
+}
+
+is_luz_metric_set <- function(obj) {
+  inherits(obj, "luz_metric_set")
+}
+
 #' Creates a new luz metric
 #'
 #' @param name string naming the new metric.

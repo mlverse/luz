@@ -18,7 +18,9 @@ implement a method called \code{loss}.}
 the model parameters.}
 
 \item{metrics}{(\code{list}, optional) A list of metrics to be tracked during
-the training procedure.}
+the training procedure. Sometimes, you want some metrics to be evaluated
+only during training or validation, in this case you can pass a \code{\link[=luz_metric_set]{luz_metric_set()}}
+object to specify mmetrics used in each stage.}
 
 \item{backward}{(\code{function}) A functions that takes the loss scalar values as
 it's parameter. It must call \verb{$backward()} or \code{\link[torch:autograd_backward]{torch::autograd_backward()}}.
