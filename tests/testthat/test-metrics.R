@@ -151,3 +151,15 @@ test_that("can specify metrics for training and validation", {
     plot(res)
   })
 })
+
+test_that("Get a nice error message if you pass the wrong metric type", {
+  expect_error(
+    luz_metric_set(
+      metrics = c(luz_metric_mae),
+      valid_metrics = c(luz_metric_rmse()),
+      train_metrics = c(luz_metric_mse())),
+    regexp = "Expected an object with"
+  )
+
+  expect_true(inherits(luz_metric_mse(), "luz_metric_generator"))
+})

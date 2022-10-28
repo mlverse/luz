@@ -80,7 +80,8 @@ inform <- function(message) {
 
 utils::globalVariables(c("super"))
 
-make_class <- function(name, ..., private, active, inherit, parent_env, .init_fun) {
+make_class <- function(name, ..., private, active, inherit, parent_env, .init_fun,
+                       .out_class = NULL) {
   public <- rlang::list2(...)
 
   e <- new.env(parent = parent_env)
@@ -116,10 +117,13 @@ make_class <- function(name, ..., private, active, inherit, parent_env, .init_fu
         lock_objects = FALSE,
         parent_env = rlang::current_env()
       )
-      if (.init_fun)
+      if (.init_fun) {
         obj$new()
-      else
+      } else {
+        if (is.null(.out_class)) stop("Should have an out class.")
+        class(obj) <- .out_class
         obj
+      }
     })
   )
   attr(f, "r6_class") <- r6_class
