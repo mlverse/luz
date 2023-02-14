@@ -117,6 +117,14 @@ thus can be used by your custom <code><a href="https://rdrr.io/r/stats/step.html
     <p>It makes sure the module have all the necessary ingredients in order to be fitted.</p>
     </div>
     <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p>It also adds a <code>device</code> active field that can be used to query the current
+module <code>device</code> within methods, with eg <code>self$device</code>. This is useful when
+<code><a href="ctx.html">ctx()</a></code> is not available, eg, when calling methods from outside the <code>luz</code>
+wrappers. Users can override the default by implementing a <code>device</code> active
+method in the input <code>module</code>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other training: 
 <code><a href="evaluate.html">evaluate</a>()</code>,
