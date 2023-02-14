@@ -332,14 +332,30 @@ context <- R6::R6Class(
     },
     #' @field opt Current optimizer.
     opt = function(new) {
-      if (missing(new))
-        return(private$.opt)
+      if (missing(new)) {
+        if (!is.null(private$.opt)) {
+          return(private$.opt)
+        } else {
+          if (length(self$optimizers) == 1) {
+            return(self$optimizers[[1]])
+          }
+        }
+        cli::cli_abort("{.var ctx$opt} not set.")
+      }
       private$.opt <- new
     },
     #' @field opt_name Current optimizer name.
     opt_name = function(new) {
-      if (missing(new))
-        return(private$.opt_name)
+      if (missing(new)) {
+        if (!is.null(private$.opt_name)) {
+          return(private$.opt_name)
+        } else {
+          if (length(self$optimizers) == 1) {
+            return(names(self$optimizers))
+          }
+        }
+        cli::cli_abort("{.var ctx$opt_name} not set.")
+      }
       private$.opt_name <- new
     },
     #' @field data Current dataloader in use.
