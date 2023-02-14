@@ -153,15 +153,15 @@ as_device_dataloader <- function(x, device) {
 #' @export
 as_iterator.device_dataloader <- function(x) {
   g <- NextMethod()
-  gen <- coro::generator(function() {
-    for(batch in g) {
-      coro::yield(to_device(batch, device = x$.device))
-    }
-  })
-  gen()
+  device <- x$.device
+  function() {
+    batch <- g()
+    to_device(batch, device = device)
+  }
 }
 
 to_device <- function(batch, device) {
+  if (!is.list(batch)) return(batch)
   lapply(batch, function(x) {
     if (inherits(x, "torch_tensor"))
       x$to(device = device)
