@@ -15,7 +15,7 @@ License: MIT + file LICENSE
 URL: https://mlverse.github.io/luz/, https://github.com/mlverse/luz
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports: 
     torch (>= 0.9.0),
     magrittr,

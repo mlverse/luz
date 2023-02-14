@@ -328,3 +328,42 @@ test_that("cutom backward", {
   })
   expect_s3_class(output, "luz_module_fitted")
 })
+
+test_that("luz module has a device arg", {
+
+  mod <- get_model() %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam
+    )
+
+  modul <- mod(1,1)
+
+  expect_true(
+    modul$device == torch_device("cpu")
+  )
+
+  mod <- nn_module(
+    initialize = function() {
+      self$par <- torch::nn_parameter(torch_randn(10, 10))
+    },
+    forward = function(x) {
+      self$par
+    },
+    active = list(
+      device = function() {
+        "hello"
+      }
+    )
+  )
+
+  model <- mod %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam
+    )
+
+  modul <- mod()
+  expect_equal(modul$device, "hello")
+
+})

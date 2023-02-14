@@ -24,6 +24,13 @@
 #' arguments to the backward call. Note that this becomes a method of the `nn_module`
 #' thus can be used by your custom `step()` if you override it.
 #'
+#' @note
+#' It also adds a `device` active field that can be used to query the current
+#' module `device` within methods, with eg `self$device`. This is useful when
+#' [ctx()] is not available, eg, when calling methods from outside the `luz`
+#' wrappers. Users can override the default by implementing a `device` active
+#' method in the input `module`.
+#'
 #' @returns
 #' A luz module that can be trained with [fit()].
 #'
@@ -71,6 +78,18 @@ setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL,
     metrics
   } else {
     luz_metric_set(metrics)
+  }
+
+  # adds a device method, allowing users to quickly query the current
+  # model device. this returns the device of the first parameter. should
+  # be OK to do it, as users there's current no support for multi-gpu
+  # training. users can override by implementing their own device method.
+  if (is.null(get_method(module, "device"))) {
+    methods$active <- list(
+      device = function() {
+        self$parameters[[1]]$device
+      }
+    )
   }
 
   if (!has_forward_method(module))

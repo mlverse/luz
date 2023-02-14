@@ -39,6 +39,13 @@ to be used with luz.
 \details{
 It makes sure the module have all the necessary ingredients in order to be fitted.
 }
+\note{
+It also adds a \code{device} active field that can be used to query the current
+module \code{device} within methods, with eg \code{self$device}. This is useful when
+\code{\link[=ctx]{ctx()}} is not available, eg, when calling methods from outside the \code{luz}
+wrappers. Users can override the default by implementing a \code{device} active
+method in the input \code{module}.
+}
 \seealso{
 Other training: 
 \code{\link{evaluate}()},

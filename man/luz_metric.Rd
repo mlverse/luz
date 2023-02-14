@@ -44,13 +44,13 @@ In order to implement a new \code{luz_metric} we need to implement 3 methods:
 \item \code{initialize}: defines the metric initial state. This function is
 called for each epoch for both training and validation loops.
 \item \code{update}: updates the metric internal state. This function is called
-at every training and validation step with the predictions obtained
-by the model and the target values obtained from the dataloader.
+at every training and validation step with the predictions obtained by
+the model and the target values obtained from the dataloader.
 \item \code{compute}: uses the internal state to compute metric values. This
 function is called whenever we need to obtain the current metric
 value. Eg, it’s called every training step for metrics displayed in
-the progress bar, but only called once per epoch to record it’s
-value when the progress bar is not displayed.
+the progress bar, but only called once per epoch to record it’s value
+when the progress bar is not displayed.
 }
 
 Optionally, you can implement an \code{abbrev} field that gives the metric an
