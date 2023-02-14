@@ -34,7 +34,7 @@ get_method <- function(x, method) {
   if (!is.null(x$public_methods[[method]]))
     x$public_methods[[method]]
   else if (!is.null(x$get_inherit()))
-    get_method(x$get_inherit())
+    get_method(x$get_inherit(), method)
   else
     NULL
 }
