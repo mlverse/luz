@@ -73,6 +73,10 @@ setup <- function(module, loss = NULL, optimizer = NULL, metrics = NULL,
     luz_metric_set(metrics)
   }
 
+  methods$active <- list(device = function() {
+    self$parameters[[1]]$device
+  })
+
   if (!has_forward_method(module))
     methods$forward <- identity
 
