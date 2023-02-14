@@ -30,14 +30,21 @@ has_method <- function(x, name) {
     FALSE
 }
 
+get_method <- function(x, method) {
+  if (!is.null(x$public_methods[[method]]))
+    x$public_methods[[method]]
+  else if (!is.null(x$get_inherit()))
+    get_method(x$get_inherit())
+  else
+    NULL
+}
 
 get_forward <- function(x) {
-  if (!is.null(x$public_methods[["forward"]]))
-    x$public_methods[["forward"]]
-  else if (!is.null(x$get_inherit()))
-    get_forward(x$get_inherit())
-  else
-    rlang::abort("No `forward` method found.")
+  forward <- get_method(x, "forward")
+  if (is.null(forward)) {
+    cli::cli_abort("No method {.val forward} method found.")
+  }
+  forward
 }
 
 has_forward_method <- function(x) {

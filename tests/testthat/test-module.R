@@ -343,4 +343,27 @@ test_that("luz module has a device arg", {
     modul$device == torch_device("cpu")
   )
 
+  mod <- nn_module(
+    initialize = function() {
+      self$par <- torch::nn_parameter(torch_randn(10, 10))
+    },
+    forward = function(x) {
+      self$par
+    },
+    active = list(
+      device = function() {
+        "hello"
+      }
+    )
+  )
+
+  model <- mod %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam
+    )
+
+  modul <- mod()
+  expect_equal(modul$device, "hello")
+
 })
