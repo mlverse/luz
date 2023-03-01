@@ -41,7 +41,8 @@ Suggests:
     vdiffr,
     ggplot2,
     dplyr,
-    torchvision
+    torchvision,
+    tfevents
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
@@ -54,6 +55,7 @@ Collate:
     'callbacks-monitor-metrics.R'
     'callbacks-profile.R'
     'callbacks-resume.R'
+    'callbacks-tfevents.R'
     'context.R'
     'losses.R'
     'lr-finder.R'
