@@ -43,6 +43,8 @@ Suggests:
     dplyr,
     torchvision,
     tfevents
+Remotes:
+    mlverse/tfevents
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
