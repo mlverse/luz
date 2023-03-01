@@ -42,7 +42,8 @@ Suggests:
     ggplot2,
     dplyr,
     torchvision,
-    tfevents
+    tfevents,
+    tidyr
 Remotes:
     mlverse/tfevents
 VignetteBuilder: knitr
