@@ -181,16 +181,16 @@
 <p>You can see now that the <code>checkpoints</code> directory contains files with state dumps for each epoch. By default, <code>luz_callback_model_checkpoint</code> will save the state for each epochs and format the name including the resulting loss. This can be configured withing the path parameter, see <code><a href="../reference/luz_callback_model_checkpoint.html">?luz_callback_model_checkpoint</a></code> for details.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_ls.html" class="external-link">dir_ls</a></span><span class="op">(</span><span class="st">"checkpoints"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; checkpoints/epoch-01-train_loss-1.220.pt</span></span>
-<span><span class="co">#&gt; checkpoints/epoch-02-train_loss-1.068.pt</span></span>
-<span><span class="co">#&gt; checkpoints/epoch-03-train_loss-1.007.pt</span></span>
-<span><span class="co">#&gt; checkpoints/epoch-04-train_loss-1.017.pt</span></span>
-<span><span class="co">#&gt; checkpoints/epoch-05-train_loss-1.006.pt</span></span>
-<span><span class="co">#&gt; checkpoints/epoch-06-train_loss-0.993.pt</span></span>
-<span><span class="co">#&gt; checkpoints/epoch-07-train_loss-1.011.pt</span></span>
-<span><span class="co">#&gt; checkpoints/epoch-08-train_loss-1.012.pt</span></span>
-<span><span class="co">#&gt; checkpoints/epoch-09-train_loss-1.004.pt</span></span>
-<span><span class="co">#&gt; checkpoints/epoch-10-train_loss-1.001.pt</span></span></code></pre></div>
+<span><span class="co">#&gt; checkpoints/epoch-01-train_loss-1.237.pt</span></span>
+<span><span class="co">#&gt; checkpoints/epoch-02-train_loss-1.065.pt</span></span>
+<span><span class="co">#&gt; checkpoints/epoch-03-train_loss-1.026.pt</span></span>
+<span><span class="co">#&gt; checkpoints/epoch-04-train_loss-1.004.pt</span></span>
+<span><span class="co">#&gt; checkpoints/epoch-05-train_loss-1.004.pt</span></span>
+<span><span class="co">#&gt; checkpoints/epoch-06-train_loss-1.005.pt</span></span>
+<span><span class="co">#&gt; checkpoints/epoch-07-train_loss-0.999.pt</span></span>
+<span><span class="co">#&gt; checkpoints/epoch-08-train_loss-0.998.pt</span></span>
+<span><span class="co">#&gt; checkpoints/epoch-09-train_loss-1.001.pt</span></span>
+<span><span class="co">#&gt; checkpoints/epoch-10-train_loss-1.002.pt</span></span></code></pre></div>
 <p>Finally, you can load a specific checkpoint to the <code>fitted</code> result using <code>luz_load_checkpoint</code>. Note that loading the checkpoint into a a <code>luz_fitted_module</code> is going to modify the model weights in-place.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/luz_load_checkpoint.html">luz_load_checkpoint</a></span><span class="op">(</span><span class="va">results</span>, <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_ls.html" class="external-link">dir_ls</a></span><span class="op">(</span><span class="st">"checkpoints"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
