@@ -528,6 +528,11 @@ apply_dataloader_options <- function(data, valid_data, dataloader_options) {
     if (is.null(train_dl_options$shuffle))
       train_dl_options$shuffle <- TRUE
 
+    # It's usually better to drop the last batch if its not the same size as the
+    # other as it can have a large effect on results but based on very few obs.
+    if (is.null(train_dl_options$drop_last))
+      train_dl_options$drop_last <- TRUE
+
     data <- rlang::exec(as_dataloader, x = data, !!!train_dl_options)
   }
 
