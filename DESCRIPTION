@@ -44,8 +44,6 @@ Suggests:
     torchvision,
     tfevents,
     tidyr
-Remotes:
-    mlverse/tfevents
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Collate: 
