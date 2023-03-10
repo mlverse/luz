@@ -42,7 +42,7 @@ Suggests:
     ggplot2,
     dplyr,
     torchvision,
-    tfevents,
+    tfevents (>= 0.0.2),
     tidyr
 VignetteBuilder: knitr
 Config/testthat/edition: 3
