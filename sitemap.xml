@@ -133,6 +133,9 @@
     <loc>/reference/luz_callback_resume_from_checkpoint.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_callback_tfevents.html</loc>
+  </url>
+  <url>
     <loc>/reference/luz_callback_train_valid.html</loc>
   </url>
   <url>
