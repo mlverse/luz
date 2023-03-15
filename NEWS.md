@@ -13,6 +13,7 @@ are raised. This helps a lot when debuging errors in callbacks and metrics. (#11
 * `ctx` now aliases to the default `opt` and `opt_name` when a single optimizer is specified (ie. most cases) (#114)
 * `drop_last=TRUE` is now the default for training dataloaders created by luz (when eg. you pass a list or a torch dataset as data input) (#117)
 * Added `tfevents` callback for logging the loss and getting weights histograms. (#118)
+* Buf fix: `accelerator`s `cpu` argument is always respected. (#119)
 
 # luz 0.3.1
 
