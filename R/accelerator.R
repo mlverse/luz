@@ -89,7 +89,9 @@ LuzAcceleratorState <- R6::R6Class(
   ),
   private = list(
     get_device = function(cpu, index) {
-      if (torch::cuda_is_available() && !cpu)
+      if (cpu) return("cpu")
+
+      if (torch::cuda_is_available())
         paste0("cuda:", index)
       else if (torch::backends_mps_is_available())
         "mps"
