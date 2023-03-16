@@ -252,11 +252,11 @@ fit.luz_module_generator <- function(
   }, add = TRUE)
 
   ctx$call_callbacks("on_fit_begin")
-  rlang::with_handlers(
+  with_handlers(
     !!! ctx$handlers,
     .expr = {
       for (epoch in seq_len(ctx$max_epochs)) {
-        rlang::with_handlers(
+        with_handlers(
           !!! ctx$epoch_handlers,
           .expr = {
 
@@ -385,7 +385,7 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
 
   torch::with_no_grad({
     ctx$call_callbacks("on_predict_begin")
-    rlang::with_handlers(
+    with_handlers(
       !!! ctx$handlers,
       .expr = {
         coro::loop(for(batch in ctx$data) {

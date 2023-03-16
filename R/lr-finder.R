@@ -143,9 +143,9 @@ plot.lr_records <- function(x, ...) {
     x$smoothed_loss[i] <- loss_exp_avg / (1 - beta^i)
   }
 
-  ggplot2::ggplot(x, ggplot2::aes_string(x = "lr")) +
-    ggplot2::geom_line(ggplot2::aes_string(y = "loss"), linetype="dotted", size = 0.7) +
-    ggplot2::geom_line(ggplot2::aes_string(y = "smoothed_loss"), color="cyan", size = 1) +
+  ggplot2::ggplot(x, ggplot2::aes(x = lr)) +
+    ggplot2::geom_line(ggplot2::aes(y = loss), linetype="dotted", linewidth = 0.7) +
+    ggplot2::geom_line(ggplot2::aes(y = smoothed_loss), color="cyan", linewidth = 1) +
     ggplot2::scale_x_log10() +
     ggplot2::xlab("Learning Rate") +
     ggplot2::ylab("Loss")
