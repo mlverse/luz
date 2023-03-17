@@ -14,6 +14,7 @@ are raised. This helps a lot when debuging errors in callbacks and metrics. (#11
 * `drop_last=TRUE` is now the default for training dataloaders created by luz (when eg. you pass a list or a torch dataset as data input) (#117)
 * Added `tfevents` callback for logging the loss and getting weights histograms. (#118)
 * Buf fix: `accelerator`s `cpu` argument is always respected. (#119)
+* Handled `rlang` and `ggplot2` deprecations. (#120)
 
 # luz 0.3.1
 
