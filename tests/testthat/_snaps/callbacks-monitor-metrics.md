@@ -6,7 +6,7 @@
           verbose = TRUE, epochs = 25, callbacks = list(luz_callback_early_stopping(
             monitor = "train_loss", patience = 1, min_delta = 0.02)))
       })
-    Message <rlang_message>
+    Message
       Train metrics: Loss: 1.6053
       Epoch 2/25
       Train metrics: Loss: 1.5625
@@ -52,7 +52,7 @@
           verbose = TRUE, epochs = 25, callbacks = list(luz_callback_early_stopping(
             monitor = "train_loss", patience = 5, baseline = 0.001)))
       })
-    Message <rlang_message>
+    Message
       Train metrics: Loss: 1.279
       Epoch 2/25
       Train metrics: Loss: 1.2552
@@ -72,7 +72,7 @@
           verbose = TRUE, epochs = 25, callbacks = list(luz_callback_early_stopping(
             monitor = "train_mae", patience = 2, baseline = 0.91, min_delta = 0.01)))
       })
-    Message <rlang_message>
+    Message
       Train metrics: Loss: 1.2671 - MAE: 0.9163
       Epoch 2/25
       Train metrics: Loss: 1.2387 - MAE: 0.9058
