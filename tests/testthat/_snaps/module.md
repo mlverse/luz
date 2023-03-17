@@ -2,7 +2,7 @@
 
     Code
       pred <- predict(output, dl, verbose = TRUE)
-    Message <message>
+    Message
       
       1/50 [>----------------------------------------------------------------------]
       

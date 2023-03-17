@@ -169,3 +169,6 @@ map2 <- function(x, y, f) {
   out
 }
 
+with_handlers <- function(..., .expr) {
+  rlang::try_fetch(.expr, ...)
+}
