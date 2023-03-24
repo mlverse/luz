@@ -421,7 +421,7 @@ get_step <- function(ctx) {
 }
 
 valid_loop <- function(ctx, step) {
-  local_no_grad() # the whole validation loop has no grad enabled
+  torch::local_no_grad() # the whole validation loop has no grad enabled
   ctx$call_callbacks("on_valid_begin")
 
   ctx$iter <- 0L
