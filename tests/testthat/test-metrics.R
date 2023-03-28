@@ -127,9 +127,9 @@ test_that("can specify metrics for training and validation", {
   model <- nn_linear %>%
     setup(optimizer = optim_sgd, loss = torch::nn_mse_loss(),
           metrics = luz_metric_set(
-            metrics = c(luz_metric_mae()),
-            valid_metrics = c(luz_metric_rmse()),
-            train_metrics = c(luz_metric_mse())
+            metrics = list(luz_metric_mae()),
+            valid_metrics = list(luz_metric_rmse()),
+            train_metrics = list(luz_metric_mse())
           )) %>%
     set_hparams(in_features = 10, out_features = 1) %>%
     set_opt_hparams(lr = 0.001)
@@ -222,5 +222,33 @@ test_that("error gracefully on failed `compute`.", {
     res <- model %>%
       fit(list(x, y), epochs = 5, valid_data = list(x, y), verbose = FALSE)
   })
+
+})
+
+test_that("metrics run in the environments they are created", {
+
+  x <- 1
+  e <- new.env(parent = globalenv())
+  e$x <- 2
+
+  base::eval(expr = rlang::expr(
+    metric <- luz_metric(
+      name = "hello",
+      abbrev = "h",
+      initialize = function() {
+
+      },
+      update = function(pred, save) {
+      },
+      compute = function() {
+        x
+      }
+    )
+  ), envir = e)
+
+  instance <- e$metric()
+  internal <- instance$new()
+
+  expect_equal(internal$compute(), 2)
 
 })

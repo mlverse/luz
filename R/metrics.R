@@ -40,7 +40,10 @@ LuzMetric <- R6::R6Class(
 #'
 #' @export
 luz_metric_set <- function(metrics = NULL, train_metrics = NULL, valid_metrics = NULL) {
-  metrics <- c(luz_metric_loss_average(), metrics)
+  if (!is.null(metrics) && !(is.list(metrics) && !inherits(metrics, "luz_metric_generator")))
+    metrics <- list(metrics)
+
+  metrics <- append(list(luz_metric_loss_average()), metrics)
   new_luz_metric_set(metrics, train_metrics, valid_metrics)
 }
 

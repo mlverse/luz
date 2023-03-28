@@ -105,9 +105,7 @@ make_class <- function(name, ..., private, active, inherit, parent_env, .init_fu
     lock_objects = FALSE
   )
 
-  e$r6_class <- r6_class
   init <- get_init(r6_class)
-
 
   f <- rlang::new_function(
     args = rlang::fn_fmls(init),
@@ -125,11 +123,12 @@ make_class <- function(name, ..., private, active, inherit, parent_env, .init_fu
         parent_env = rlang::current_env()
       )
       if (.init_fun) {
-        obj$new()
+        r6_class$new(!!!rlang::fn_fmls_syms(init))
       } else {
         if (is.null(.out_class)) stop("Should have an out class.")
-        class(obj) <- .out_class
-        obj
+        structure(list(
+          new = function() r6_class$new(!!!rlang::fn_fmls_syms(init))
+        ), class = .out_class)
       }
     })
   )
