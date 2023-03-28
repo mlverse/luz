@@ -15,6 +15,8 @@ are raised. This helps a lot when debuging errors in callbacks and metrics. (#11
 * Added `tfevents` callback for logging the loss and getting weights histograms. (#118)
 * Buf fix: `accelerator`s `cpu` argument is always respected. (#119)
 * Handled `rlang` and `ggplot2` deprecations. (#120)
+* Better handling of metrics environments.
+* Faster garbage collection of dataloaders iterators, so we use less memory. (#122)
 
 # luz 0.3.1
 
