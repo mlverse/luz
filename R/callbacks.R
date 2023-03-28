@@ -33,17 +33,16 @@ assert_is_callback <- function(cb) {
 }
 
 call_all_callbacks <- function(callbacks, name) {
-  torch::with_no_grad({
-    lapply(callbacks, function(callback) {
-      rlang::try_fetch(
-        callback$call(name),
-        error = function(cnd) {
-          cli::cli_abort(c(
-            "Error while calling callback with class {.cls {class(callback)}} at {.field {name}}."
-          ), parent = cnd)
-        }
-      )
-    })
+  torch::local_no_grad()
+  lapply(callbacks, function(callback) {
+    rlang::try_fetch(
+      callback$call(name),
+      error = function(cnd) {
+        cli::cli_abort(c(
+          "Error while calling callback with class {.cls {class(callback)}} at {.field {name}}."
+        ), parent = cnd)
+      }
+    )
   })
 }
 

@@ -211,6 +211,9 @@ get_opt_hparams <- function(module) {
 #' @family training
 #'
 #' @importFrom generics fit
+#'
+#' @importFrom coro is_exhausted
+#'
 #' @export
 fit.luz_module_generator <- function(
     object,
@@ -268,14 +271,18 @@ fit.luz_module_generator <- function(
             ctx$call_callbacks("on_epoch_begin")
             ctx$call_callbacks("on_train_begin")
 
-            coro::loop(for (batch in ctx$data) {
+            # this helps making sure the dataloader workers can be cleaned up
+            # before the validation loop even starts.
+            local({
+              next_batch <- as_iterator(ctx$data)
+              while(!is_exhausted(batch <- next_batch())) {
+                ctx$batch<- batch
+                ctx$iter <- ctx$iter + 1L
 
-              ctx$batch <- batch
-              ctx$iter <- ctx$iter + 1L
-
-              ctx$call_callbacks("on_train_batch_begin")
-              step()
-              ctx$call_callbacks("on_train_batch_end")
+                ctx$call_callbacks("on_train_batch_begin")
+                step()
+                ctx$call_callbacks("on_train_batch_end")
+              }
             })
 
             ctx$call_callbacks("on_train_end")
@@ -414,20 +421,22 @@ get_step <- function(ctx) {
 }
 
 valid_loop <- function(ctx, step) {
-
+  torch::local_no_grad() # the whole validation loop has no grad enabled
   ctx$call_callbacks("on_valid_begin")
 
   ctx$iter <- 0L
-  torch::with_no_grad({
-    coro::loop(for (batch in ctx$data) {
-
+  # helps making sure the dataloader workers are quickly deleted after the
+  # evaluation loop
+  local({
+    next_batch <- as_iterator(ctx$data)
+    while(!is_exhausted(batch <- next_batch())) {
       ctx$batch <- batch
       ctx$iter <- ctx$iter + 1L
 
       ctx$call_callbacks("on_valid_batch_begin")
       step()
       ctx$call_callbacks("on_valid_batch_end")
-    })
+    }
   })
 
   ctx$call_callbacks("on_valid_end")

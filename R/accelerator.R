@@ -166,7 +166,7 @@ to_device <- function(batch, device) {
   if (!is.list(batch)) return(batch)
   lapply(batch, function(x) {
     if (inherits(x, "torch_tensor"))
-      x$to(device = device)
+      x$to(device = device, non_blocking = TRUE)
     else if (is.list(x))
       to_device(x, device)
     else
