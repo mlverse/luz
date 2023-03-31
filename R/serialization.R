@@ -20,6 +20,10 @@
 #' @export
 luz_save <- function(obj, path, ...) {
   ellipsis::check_dots_empty()
+  # dangling environments might be in the `obj` search path causing problems
+  # during saving. `gc()` is a good practice to make sure they are cleaned up
+  # before saving.
+  gc()
 
   if (!inherits(obj, "luz_module_fitted"))
     rlang::abort("luz_save only works with 'luz_module_fitted_objects' and got {class(obj)[1]}")
