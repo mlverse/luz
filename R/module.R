@@ -312,6 +312,7 @@ evaluate <- function(
     object,
     data,
     ...,
+    metrics = NULL,
     callbacks = list(),
     accelerator = NULL,
     verbose = NULL,
@@ -319,6 +320,21 @@ evaluate <- function(
 ) {
 
   enable_mps_fallback()
+
+  # replace metrics for evaluate. metrics are attributes of luz modules.
+  # after evaluation, metrics are replaced back for their original values.
+  if (!is.null(metrics)) {
+    model_metrics <- object$model$metrics
+    on.exit({
+      object$model$metrics <- model_metrics
+    }, add = TRUE)
+    object$model$metrics <- if (is_luz_metric_set(metrics)) {
+      metrics
+    } else {
+      luz_metric_set(metrics)
+    }
+  }
+
   ctx <- evaluate_context$new(
     model = object$model,
     newdata = data,

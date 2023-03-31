@@ -367,3 +367,37 @@ test_that("luz module has a device arg", {
   expect_equal(modul$device, "hello")
 
 })
+
+test_that("evaluate allows setting metrics for it", {
+
+  model <- get_model()
+  model <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam,
+      metrics = list(
+        luz_metric_mae(),
+        luz_metric_mse(),
+        luz_metric_rmse()
+      )
+    ) %>%
+    set_hparams(input_size = 10, output_size = 1) %>%
+    set_opt_hparams(lr = 0.001)
+
+  x <- list(torch::torch_randn(100,10), torch::torch_randn(100, 1))
+
+  fitted <- model %>% fit(
+    x,
+    epochs = 1,
+    verbose = FALSE,
+    dataloader_options = list(batch_size = 2, shuffle = FALSE)
+  )
+
+  e1 <- get_metrics(evaluate(fitted, x))
+  e2 <- get_metrics(evaluate(fitted, x, metrics = list(luz_metric_mae())))
+  e3 <- get_metrics(evaluate(fitted, x))
+
+  expect_equal(e1, e3)
+  expect_equal(e2, e1[e1$metric %in% c("loss", "mae"),])
+
+})
