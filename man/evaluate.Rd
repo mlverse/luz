@@ -8,6 +8,7 @@ evaluate(
   object,
   data,
   ...,
+  metrics = NULL,
   callbacks = list(),
   accelerator = NULL,
   verbose = NULL,
@@ -24,6 +25,9 @@ list with at most 2 items. The first item will be used as input for the
 module and the second will be used as a target for the loss function.}
 
 \item{...}{Currently unused.}
+
+\item{metrics}{A list of luz metrics to be tracked during evaluation. If \code{NULL}
+(default) then the same metrics that were used during training are tracked.}
 
 \item{callbacks}{(list, optional) A list of callbacks defined with
 \code{\link[=luz_callback]{luz_callback()}} that will be called during the training procedure. The
@@ -66,10 +70,10 @@ print(evaluation)
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{## A `luz_module_evaluation`
 ## -- Results ---------------------------------------------------------------------
-## loss: 1.8892
-## mae: 1.0522
-## mse: 1.645
-## rmse: 1.2826
+## loss: 1.5146
+## mae: 1.0251
+## mse: 1.5159
+## rmse: 1.2312
 }\if{html}{\out{</div>}}
 }
 \seealso{

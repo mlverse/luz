@@ -303,6 +303,8 @@ fit.luz_module_generator <- function(
 #'
 #' @param object A fitted model to evaluate.
 #' @inheritParams fit.luz_module_generator
+#' @param metrics A list of luz metrics to be tracked during evaluation. If `NULL`
+#'   (default) then the same metrics that were used during training are tracked.
 #'
 #' @includeRmd man/rmd/evaluate.Rmd details
 #'
