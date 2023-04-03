@@ -17,6 +17,7 @@ are raised. This helps a lot when debuging errors in callbacks and metrics. (#11
 * Handled `rlang` and `ggplot2` deprecations. (#120)
 * Better handling of metrics environments.
 * Faster garbage collection of dataloaders iterators, so we use less memory. (#122)
+* You can now specify metrics to be evaluated during `evaluate`. (#123)
 
 # luz 0.3.1
 
