@@ -19,6 +19,7 @@ are raised. This helps a lot when debuging errors in callbacks and metrics. (#11
 * Faster garbage collection of dataloaders iterators, so we use less memory. (#122)
 * You can now specify metrics to be evaluated during `evaluate`. (#123)
 * Much faster loss averaging at every step. Can have hight influence in training times for large number of iterations per epoch. (#124)
+* The default profile callback no longer tracks intra step timings as it adds a non ignorable overhead. (#125)
 
 # luz 0.3.1
 
