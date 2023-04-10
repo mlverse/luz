@@ -18,6 +18,7 @@ are raised. This helps a lot when debuging errors in callbacks and metrics. (#11
 * Better handling of metrics environments.
 * Faster garbage collection of dataloaders iterators, so we use less memory. (#122)
 * You can now specify metrics to be evaluated during `evaluate`. (#123)
+* Much faster loss averaging at every step. Can have hight influence in training times for large number of iterations per epoch. (#124)
 
 # luz 0.3.1
 
