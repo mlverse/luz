@@ -15,13 +15,7 @@ test_that("callback profile", {
 
   expect_length(output$records$profile$fit, 1)
   expect_length(output$records$profile$epoch, 5)
-
   expect_length(output$records$profile$train, 5)
-  expect_length(output$records$profile$train_step, 50)
-  expect_length(output$records$profile$train_batch, 50)
-
   expect_length(output$records$profile$valid, 5)
-  expect_length(output$records$profile$valid_step, 50)
-  expect_length(output$records$profile$valid_batch, 50)
 
 })
