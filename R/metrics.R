@@ -264,42 +264,33 @@ luz_metric_binary_accuracy_with_logits <- luz_metric(
 luz_metric_loss_average <- luz_metric(
   abbrev = "Loss",
   initialize = function() {
-    self$values <- list()
+    self$steps <- 0
   },
   update = function(preds, targets) {
-    if (length(ctx$loss) == 1 && is.list(ctx$loss))
-      loss <- ctx$loss[[1]]
+    if (!is.list(ctx$loss))
+      loss <- list(ctx$loss)
     else
       loss <- ctx$loss
 
-    self$values[[length(self$values) + 1]] <- loss
-  },
-  average_metric = function(x) {
-    if (is.numeric(x[[1]]) || inherits(x[[1]], "torch_tensor"))
-      x <- sapply(x, self$to_numeric)
+    if (self$steps == 0) {
+      self$values <- vector(mode = "list", length = length(loss))
+      if (rlang::is_named(loss) && length(loss) > 1) {
+        names(self$values) <- names(loss)
+      }
+    }
 
-    if (is.numeric(x)) {
-      mean(x)
-    } else if (is.list(x)) {
-      lapply(purrr::transpose(x), self$average_metric)
-    } else if (is.null(x)) {
-      NULL
-    } else {
-      rlang::abort(c(
-        "Average metric requires numeric tensor or values or list of them.")
-      )
+    steps <- self$steps <- self$steps + 1
+    for (i in seq_along(loss)) {
+      self$values[[i]] <- (steps - 1)/steps*(self$values[[i]] %||% 0) + loss[[i]]/steps
     }
   },
   compute = function() {
-    self$average_metric(self$values)
-  },
-  to_numeric = function(x) {
-    if (is.numeric(x))
-      x
-    else if (inherits(x, "torch_tensor"))
-      as.numeric(x$to(device = "cpu"))
-    else
-      rlang::abort("Expected a numeric value or a tensor.")
+    results <- lapply(self$values, function(x) x$item())
+    if (length(results) == 1) {
+      results[[1]]
+    } else {
+      results
+    }
   }
 )
 
