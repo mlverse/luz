@@ -14,11 +14,11 @@ print.luz_module_fitted <- function(x, ...) {
     "Total time: ", prettyunits::pretty_sec(get_total_time(x))
   )
   cli::cat_bullet(
-    "Avg time per training batch: ", prettyunits::pretty_sec(get_average_time(x, "train_batch"))
+    "Avg time per training epoch: ", prettyunits::pretty_sec(get_average_time(x, "train"))
   )
   if (has_valid) {
     cli::cat_bullet(
-      "Avg time per validation batch ", prettyunits::pretty_sec(get_average_time(x, "valid_batch"))
+      "Avg time per validation epoch ", prettyunits::pretty_sec(get_average_time(x, "valid"))
     )
   }
 

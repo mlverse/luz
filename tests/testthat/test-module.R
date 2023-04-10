@@ -212,6 +212,15 @@ test_that("valid_data works", {
 
 test_that("we can pass dataloader_options", {
 
+  iter_callback <- luz_callback(
+    initialize = function() {
+      self$iter <- 0
+    },
+    on_train_batch_end = function() {
+      self$iter <- self$iter + 1
+    }
+  )
+
   model <- get_model()
   model <- model %>%
     setup(
@@ -223,15 +232,17 @@ test_that("we can pass dataloader_options", {
 
   x <- list(torch::torch_randn(100,10), torch::torch_randn(100, 1))
 
+  iter <- iter_callback()
   fitted <- model %>% fit(
     x,
     epochs = 1,
     valid_data = 0.1,
     verbose = FALSE,
-    dataloader_options = list(batch_size = 2, shuffle = FALSE)
+    dataloader_options = list(batch_size = 2, shuffle = FALSE),
+    callbacks = iter
   )
 
-  expect_length(fitted$records$profile$train_step, 45)
+  expect_equal(iter$iter, 45)
 
   dl <- get_dl()
   expect_error(regexp = "already a dataloader", {

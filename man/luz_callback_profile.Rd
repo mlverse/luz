@@ -18,10 +18,6 @@ Data is stored in the following structure:
 \itemize{
 \item \strong{fit} time for the entire fit procedure.
 \item \strong{epoch} times per epoch
-\item \strong{(train/valid)_batch} time per batch of data processed, including data
-acquisition and step.
-\item \strong{(train/valid)_step} time per step (training or validation step) - only
-the model step. (not including data acquisition and preprocessing)
 }
 }
 \note{
