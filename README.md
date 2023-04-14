@@ -18,7 +18,7 @@ It is heavily inspired by other higher level frameworks for deep learning, to ci
 
 -   [Keras](https://keras.io/): We are also heavily inspired by Keras, especially callback names. The lightning module interface is similar to `compile`, too.
 
--   [PyTorch Lightning](https://www.pytorchlightning.ai/): The idea of the `luz_module` being a subclass of `nn_module` is inspired by the **`LightningModule`** object in lightning.
+-   [PyTorch Lightning](https://lightning.ai/pages/open-source/): The idea of the `luz_module` being a subclass of `nn_module` is inspired by the **`LightningModule`** object in lightning.
 
 -   [HuggingFace Accelerate](https://huggingface.co/docs/accelerate/): The internal device placement API is heavily inspired by Accelerate, but is much more modest in features. Currently only CPU and Single GPU are supported.
 
