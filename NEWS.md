@@ -1,5 +1,12 @@
 # luz (development version)
 
+## Breaking changes
+
+* `drop_last=TRUE` is now the default for training dataloaders created by luz (when eg. you pass a list or a torch dataset as data input) (#117)
+* The default profile callback no longer tracks intra step timings as it adds a non ignorable overhead. (#125)
+
+## New features
+
 * Added support for arm Mac's and the MPS device. (#104)
 * Refactor checkpointing in luz - we now also serialize optimizer state and callbacks state. (#107)
 * Added a `luz_callback_autoresume()` allowing to easily resume trainining runs that might have crashed. (#107)
@@ -11,15 +18,16 @@ are raised. This helps a lot when debuging errors in callbacks and metrics. (#11
 * `loss_fn` is now a field of the context, thus callbacks can override it when needed. (#112)
 * `luz_callback_mixup` now supports the `run_valid` and `auto_loss` arguments. (#112)
 * `ctx` now aliases to the default `opt` and `opt_name` when a single optimizer is specified (ie. most cases) (#114)
-* `drop_last=TRUE` is now the default for training dataloaders created by luz (when eg. you pass a list or a torch dataset as data input) (#117)
 * Added `tfevents` callback for logging the loss and getting weights histograms. (#118)
-* Buf fix: `accelerator`s `cpu` argument is always respected. (#119)
+* You can now specify metrics to be evaluated during `evaluate`. (#123)
+
+## Bug fixes
+
+* Bug fix: `accelerator`s `cpu` argument is always respected. (#119)
 * Handled `rlang` and `ggplot2` deprecations. (#120)
 * Better handling of metrics environments.
 * Faster garbage collection of dataloaders iterators, so we use less memory. (#122)
-* You can now specify metrics to be evaluated during `evaluate`. (#123)
 * Much faster loss averaging at every step. Can have hight influence in training times for large number of iterations per epoch. (#124)
-* The default profile callback no longer tracks intra step timings as it adds a non ignorable overhead. (#125)
 
 # luz 0.3.1
 
