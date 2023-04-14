@@ -129,6 +129,8 @@ print.lr_records <- function(x, ...) {
   NextMethod()
 }
 
+utils::globalVariables(c("lr", "loss", "smoothed_loss"))
+
 #' @export
 plot.lr_records <- function(x, ...) {
   rlang::check_installed("ggplot2")
