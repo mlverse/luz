@@ -1,4 +1,4 @@
-# luz (development version)
+# luz 0.4.0
 
 ## Breaking changes
 
