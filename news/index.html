@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">luz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,8 +59,17 @@
       <small>Source: <a href="https://github.com/mlverse/luz/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2"><h2 class="pkg-version" data-toc-text="development version" id="luz-development-version">luz (development version)<a class="anchor" aria-label="anchor" href="#luz-development-version"></a></h2></div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="luz-development-version">luz (development version)<a class="anchor" aria-label="anchor" href="#luz-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.4.0" id="luz-040">luz 0.4.0<a class="anchor" aria-label="anchor" href="#luz-040"></a></h2>
+<div class="section level3">
+<h3 id="breaking-changes-0-4-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-4-0"></a></h3>
+<ul><li>
+<code>drop_last=TRUE</code> is now the default for training dataloaders created by luz (when eg. you pass a list or a torch dataset as data input) (<a href="https://github.com/mlverse/luz/issues/117" class="external-link">#117</a>)</li>
+<li>The default profile callback no longer tracks intra step timings as it adds a non ignorable overhead. (<a href="https://github.com/mlverse/luz/issues/125" class="external-link">#125</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-4-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-4-0"></a></h3>
 <ul><li>Added support for arm Mac’s and the MPS device. (<a href="https://github.com/mlverse/luz/issues/104" class="external-link">#104</a>)</li>
 <li>Refactor checkpointing in luz - we now also serialize optimizer state and callbacks state. (<a href="https://github.com/mlverse/luz/issues/107" class="external-link">#107</a>)</li>
 <li>Added a <code>luz_callback_autoresume()</code> allowing to easily resume trainining runs that might have crashed. (<a href="https://github.com/mlverse/luz/issues/107" class="external-link">#107</a>)</li>
@@ -73,17 +82,18 @@
 <code>luz_callback_mixup</code> now supports the <code>run_valid</code> and <code>auto_loss</code> arguments. (<a href="https://github.com/mlverse/luz/issues/112" class="external-link">#112</a>)</li>
 <li>
 <code>ctx</code> now aliases to the default <code>opt</code> and <code>opt_name</code> when a single optimizer is specified (ie. most cases) (<a href="https://github.com/mlverse/luz/issues/114" class="external-link">#114</a>)</li>
-<li>
-<code>drop_last=TRUE</code> is now the default for training dataloaders created by luz (when eg. you pass a list or a torch dataset as data input) (<a href="https://github.com/mlverse/luz/issues/117" class="external-link">#117</a>)</li>
 <li>Added <code>tfevents</code> callback for logging the loss and getting weights histograms. (<a href="https://github.com/mlverse/luz/issues/118" class="external-link">#118</a>)</li>
-<li>Buf fix: <code>accelerator</code>s <code>cpu</code> argument is always respected. (<a href="https://github.com/mlverse/luz/issues/119" class="external-link">#119</a>)</li>
+<li>You can now specify metrics to be evaluated during <code>evaluate</code>. (<a href="https://github.com/mlverse/luz/issues/123" class="external-link">#123</a>)</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-4-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4-0"></a></h3>
+<ul><li>Bug fix: <code>accelerator</code>s <code>cpu</code> argument is always respected. (<a href="https://github.com/mlverse/luz/issues/119" class="external-link">#119</a>)</li>
 <li>Handled <code>rlang</code> and <code>ggplot2</code> deprecations. (<a href="https://github.com/mlverse/luz/issues/120" class="external-link">#120</a>)</li>
 <li>Better handling of metrics environments.</li>
 <li>Faster garbage collection of dataloaders iterators, so we use less memory. (<a href="https://github.com/mlverse/luz/issues/122" class="external-link">#122</a>)</li>
-<li>You can now specify metrics to be evaluated during <code>evaluate</code>. (<a href="https://github.com/mlverse/luz/issues/123" class="external-link">#123</a>)</li>
 <li>Much faster loss averaging at every step. Can have hight influence in training times for large number of iterations per epoch. (<a href="https://github.com/mlverse/luz/issues/124" class="external-link">#124</a>)</li>
-<li>The default profile callback no longer tracks intra step timings as it adds a non ignorable overhead. (<a href="https://github.com/mlverse/luz/issues/125" class="external-link">#125</a>)</li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.1" id="luz-031">luz 0.3.1<a class="anchor" aria-label="anchor" href="#luz-031"></a></h2><p class="text-muted">CRAN release: 2022-09-06</p>
 <ul><li>Re-submission to fix vignette rendering.</li></ul></div>
