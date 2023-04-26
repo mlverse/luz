@@ -51,6 +51,7 @@ Collate:
     'as_dataloader.R'
     'utils.R'
     'callbacks.R'
+    'callbacks-amp.R'
     'callbacks-interrupt.R'
     'callbacks-mixup.R'
     'callbacks-monitor-metrics.R'

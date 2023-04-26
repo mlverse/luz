@@ -79,6 +79,9 @@ tranformation.}
 \item{\code{epoch}}{Current epoch.}
 
 \item{\code{metrics}}{List of metrics that are tracked by the process.}
+
+\item{\code{step_opt}}{Defines how step is called for the optimizer. It must be a function
+taking an optimizer as argument.}
 }
 \if{html}{\out{</div>}}
 }
