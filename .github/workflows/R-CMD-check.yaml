@@ -63,7 +63,8 @@ jobs:
     name: 'gpu'
 
     container:
-      image: nvidia/cuda:11.6.0-cudnn8-devel-ubuntu18.04
+      image: nvidia/cuda:11.7.0-cudnn8-devel-ubuntu18.04
+      options: --runtime=nvidia --gpus all
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
