@@ -485,7 +485,7 @@ fit_one_batch <-function(ctx) {
     ctx$model$backward(ctx$loss_grad)
 
     ctx$call_callbacks("on_train_batch_before_step")
-    ctx$opt$step()
+    ctx$step_opt(ctx$opt)
     ctx$opt$zero_grad()
     ctx$call_callbacks("on_train_batch_after_step")
   }

@@ -394,6 +394,12 @@ context <- R6::R6Class(
       if (missing(new))
         return(private$.metrics)
       private$.metrics <- new
+    },
+    #' @field step_opt Defines how step is called for the optimizer. It must be a function
+    #' taking an optimizer as argument.
+    step_opt = function(new) {
+      if (missing(new)) return(private$.step_opt)
+      private$.step_opt <- new
     }
   ),
   private = list(
@@ -419,6 +425,7 @@ context <- R6::R6Class(
     .handlers = list(),
     .epoch_handlers = list(),
     .metrics = NULL,
+    .step_opt = NULL,
 
     # Fields that are overwritten during model training. They are more or
     # less transient, and their values don't make sense after the model
@@ -457,6 +464,7 @@ fit_context <- R6::R6Class(
       self$model <- do.call(module, self$hparams)
       self$optimizers <- do.call(self$model$set_optimizers, self$opt_hparams)
       self$loss_fn <- self$model$loss
+      self$step_opt <- default_step_opt
 
       if (rlang::is_scalar_double(valid_data)) {
         c(data, valid_data) %<-% create_valid_data(data, valid_data)
@@ -591,4 +599,8 @@ ctx_check_optimizers <- function(new) {
   }
 
   invisible(new)
+}
+
+default_step_opt <- function(opt) {
+  opt$step()
 }
