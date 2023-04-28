@@ -29,7 +29,7 @@ luz_callback_mixed_precision <- luz_callback(
     }
   },
   on_train_batch_begin = function() {
-    torch::local_autocast(device_type = ctx$device, .env = self$autocast_env)
+    torch::local_autocast(device_type = ctx$device$type, .env = self$autocast_env)
   },
   on_train_batch_after_loss = function() {
     withr::deferred_run(self$autocast_env)
