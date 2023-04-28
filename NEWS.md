@@ -1,5 +1,7 @@
 # luz (development version)
 
+* Added mixed precision callback. (#127)
+
 # luz 0.4.0
 
 ## Breaking changes
