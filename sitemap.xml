@@ -118,6 +118,9 @@
     <loc>/reference/luz_callback_metrics.html</loc>
   </url>
   <url>
+    <loc>/reference/luz_callback_mixed_precision.html</loc>
+  </url>
+  <url>
     <loc>/reference/luz_callback_mixup.html</loc>
   </url>
   <url>
