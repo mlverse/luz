@@ -1,6 +1,6 @@
 test_that("Can use mixed precision callback", {
 
-  x <- torch_randn(1000, 10)
+  x <- torch_randn(1000, 10, device=if(torch::cuda_is_available()) "cuda" else "cpu")
   y <- torch_randn(1000, 1)
 
   module <- nn_linear
@@ -16,8 +16,11 @@ test_that("Can use mixed precision callback", {
     },
     on_train_batch_begin = function() {
       if (ctx$iter == 1 && ctx$epoch == 1) {
-        y <- torch_matmul(x, x$t())
-        expect_equal(y$dtype$.type(), "BFloat16")
+	      y <- torch_matmul(x, x$t())
+      	if (torch::cuda_is_available())
+  	      expect_equal(y$dtype$.type(), "Half")
+     	  else
+  	      expect_equal(y$dtype$.type(), "BFloat16")
       }
     },
     on_train_batch_before_backward = function() {

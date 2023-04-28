@@ -36,6 +36,8 @@ luz_callback_mixed_precision <- luz_callback(
     withr::deferred_run(self$autocast_env)
   },
   on_train_batch_before_backward = function() {
-    ctx$loss_grad <- self$scaler$scale(ctx$loss_grad)
+    torch::with_enable_grad({
+      ctx$loss_grad <- self$scaler$scale(ctx$loss_grad)
+    })
   }
 )
