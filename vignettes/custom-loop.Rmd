@@ -155,7 +155,7 @@ net <- nn_module(
     ctx$loss <- list()
     for (opt_name in names(ctx$optimizers)) {
     
-      pred <- ctx$model(ctx$input)
+      ctx$pred <- ctx$model(ctx$input)
       opt <- ctx$optimizers[[opt_name]]
       loss <- nnf_cross_entropy(pred, target)
       
@@ -186,6 +186,9 @@ The important things to notice here are:
 -   You need to manually track the losses by saving saving them in a named list in `ctx$loss`. By convention, we use the same name as the optimizer it refers to. It is good practice to `detach()` them before saving to reduce memory usage.
 
 -   Callbacks that would be called inside the default `step()` method like `on_train_batch_after_pred`, `on_train_batch_after_loss`, etc, won't be automatically called. You can still cal them manually by adding `ctx$call_callbacks("<callback name>")` inside your training step. See the code for `fit_one_batch()` and `valid_one_batch` to find all the callbacks that won't be called.
+
+- If you want luz metrics to work with your custom `step()` method, you must assign `ctx$pred` with the model predictions
+as metrics will always be called with `metric$update(ctx$pred, ctx$target)`.
 
 ## Next steps
 
