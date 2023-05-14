@@ -1,13 +1,14 @@
 pandoc: 2.7.3
 pkgdown: 2.0.7.9000
-pkgdown_sha: c354aa7e5ea1f9936692494c28c89e5bdd31fc68
+pkgdown_sha: 39083f38bbb2de2e1126529392bddf3e6e262ab4
 articles:
   accelerator: accelerator.html
   checkpoints: checkpoints.html
-  lr-finder: lr-finder.html
   custom-loop: custom-loop.html
   dogs-vs-cats-binary-classification: examples/dogs-vs-cats-binary-classification.html
+  get-started: get-started.html
   index: examples/index.html
+  lr-finder: lr-finder.html
   mnist-autoencoder: examples/mnist-autoencoder.html
   mnist-cnn-virtual-batch-size: examples/mnist-cnn-virtual-batch-size.html
   mnist-cnn: examples/mnist-cnn.html
@@ -15,6 +16,5 @@ articles:
   mnist-mixup: examples/mnist-mixup.html
   mnist-triplet: examples/mnist-triplet.html
   pets-unet: examples/pets-unet.html
-  get-started: get-started.html
-last_built: 2023-04-28T10:13Z
+last_built: 2023-05-14T12:04Z
 
