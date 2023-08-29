@@ -53,6 +53,11 @@ as_dataloader.dataset <- function(x, ..., batch_size = 32) {
   torch::dataloader(dataset = x, batch_size = batch_size, ...)
 }
 
+#' @inheritParams as_dataloader.dataset
+#' @describeIn as_dataloader Converts a [torch::iterable_dataset()] into a [torch::dataloader()]
+#' @export
+as_dataloader.iterable_dataset <- as_dataloader.dataset
+
 #' @describeIn as_dataloader Converts a list of tensors or arrays with the same
 #'   size in the first dimension to a  [torch::dataloader()]
 #' @export

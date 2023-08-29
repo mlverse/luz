@@ -227,12 +227,22 @@ luz_callback_progress <- luz_callback(
     }
   },
   initialize_progress_bar = function(split) {
-    format <- ":current/:total [:bar]"
+    total <- length(ctx$data) # ctx$data is the current dataset - can be the validation or training.
+
+    if (!is.na(total)) {
+      format <- ":current/:total [:bar]"
+    } else {
+      format <- ":current/unk [:spin]"
+    }
 
     # Specially for testing purposes we don't want to have the
     # progress bar showing the ETA.
     if (getOption("luz.show_progress_bar_eta", TRUE)) {
-      format <- paste0(format,  " - ETA: :eta")
+      if (!is.na(format)) {
+        format <- paste0(format, " - ETA: :eta")
+      } else {
+        format <- paste0(format, " - Rate: :tick_rate iter/s")
+      }
     }
 
     metrics <- ctx$metrics[[split]]
@@ -246,7 +256,6 @@ luz_callback_progress <- luz_callback(
     show_after <- if (getOption("luz.force_progress_bar", FALSE)) 0 else 0.2
 
     format <- paste0(c(format, abbrevs), collapse = " - ")
-    total <- length(ctx$data) # ctx$data is the current dataset - can be the validation or training.
 
     self$pb <- progress::progress_bar$new(
       force = getOption("luz.force_progress_bar", FALSE),

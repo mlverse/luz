@@ -440,3 +440,47 @@
     x Callbacks must have class <LuzCallback> but got <function>
     i Perhaps you forgot to initialize the callback?
 
+# can get progress when using iterable datasets
+
+    Code
+      expect_message({
+        output <- mod %>% set_hparams(input_size = 10, output_size = 1) %>% fit(
+          get_iterable_ds(), verbose = TRUE, epochs = 2, valid_data = get_iterable_ds(),
+          )
+      })
+    Message
+      
+      1/unk [-] - Loss: 1.776 
+      
+      2/unk [\] - Loss: 1.6358 
+      
+      3/unk [|] - Loss: 1.6954 
+      
+      1/unk [-] - Loss: 1.664 
+      
+      2/unk [\] - Loss: 1.4837 
+      
+      3/unk [|] - Loss: 1.6957 
+      
+      4/unk [/] - Loss: 1.3467 
+      Train metrics: Loss: 1.6954
+      Valid metrics: Loss: 1.3467
+      Epoch 2/2
+      
+      1/unk [-] - Loss: 1.763 
+      
+      2/unk [\] - Loss: 1.6215 
+      
+      3/unk [|] - Loss: 1.6819 
+      
+      1/unk [-] - Loss: 1.659 
+      
+      2/unk [\] - Loss: 1.4758 
+      
+      3/unk [|] - Loss: 1.6868 
+                                                                                    
+      
+      4/unk [/] - Loss: 1.34 
+      Train metrics: Loss: 1.6819
+      Valid metrics: Loss: 1.34
+

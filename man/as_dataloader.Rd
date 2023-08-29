@@ -3,6 +3,7 @@
 \name{as_dataloader}
 \alias{as_dataloader}
 \alias{as_dataloader.dataset}
+\alias{as_dataloader.iterable_dataset}
 \alias{as_dataloader.list}
 \alias{as_dataloader.dataloader}
 \alias{as_dataloader.matrix}
@@ -14,6 +15,8 @@
 as_dataloader(x, ...)
 
 \method{as_dataloader}{dataset}(x, ..., batch_size = 32)
+
+\method{as_dataloader}{iterable_dataset}(x, ..., batch_size = 32)
 
 \method{as_dataloader}{list}(x, ...)
 
@@ -51,6 +54,8 @@ experiments.
 \section{Methods (by class)}{
 \itemize{
 \item \code{as_dataloader(dataset)}: Converts a \code{\link[torch:dataset]{torch::dataset()}} to a \code{\link[torch:dataloader]{torch::dataloader()}}.
+
+\item \code{as_dataloader(iterable_dataset)}: Converts a \code{\link[torch:iterable_dataset]{torch::iterable_dataset()}} into a \code{\link[torch:dataloader]{torch::dataloader()}}
 
 \item \code{as_dataloader(list)}: Converts a list of tensors or arrays with the same
 size in the first dimension to a  \code{\link[torch:dataloader]{torch::dataloader()}}
