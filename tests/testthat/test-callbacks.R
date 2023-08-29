@@ -133,3 +133,67 @@ test_that("improve error message when you provide a unitinitilized callback", {
   })
 
 })
+
+test_that("can get progress when using iterable datasets", {
+
+  torch::torch_manual_seed(1)
+  set.seed(1)
+
+  model <- get_model()
+
+  get_iterable_ds <- torch::iterable_dataset(
+    "iterable_ds",
+    initialize = function(len = 100, x_size = 10, y_size = 1, fixed_values = FALSE) {
+      self$len <- len
+      self$x <- torch::torch_randn(size = c(len, x_size))
+      self$y <- torch::torch_randn(size = c(len, y_size))
+    },
+    .iter = function() {
+      i <- 0
+      function() {
+        i <<- i + 1
+
+        if (i > self$len) {
+          return(coro::exhausted())
+        }
+
+        list(
+          x = self$x[i,..],
+          y = self$y[i,..]
+        )
+      }
+    }
+  )
+
+  ds <- get_iterable_ds()
+  dl <- torch::dataloader(ds, batch_size = 32)
+
+  mod <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam,
+    )
+
+
+  withr::with_options(list(
+    luz.force_progress_bar = TRUE,
+    luz.show_progress_bar_eta = FALSE,
+    width = 80), {
+
+      expect_snapshot({
+        expect_message({
+          output <- mod %>%
+            set_hparams(input_size = 10, output_size = 1) %>%
+            fit(
+              get_iterable_ds(),
+              verbose = TRUE,
+              epochs = 2,
+              valid_data = get_iterable_ds(),
+            )
+        })
+      })
+    })
+
+
+
+})
