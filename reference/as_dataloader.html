@@ -77,6 +77,9 @@ torch::dataloader"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/aja
 <span><span class="co"># S3 method for dataset</span></span>
 <span><span class="fu">as_dataloader</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, batch_size <span class="op">=</span> <span class="fl">32</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for iterable_dataset</span></span>
+<span><span class="fu">as_dataloader</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, batch_size <span class="op">=</span> <span class="fl">32</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># S3 method for list</span></span>
 <span><span class="fu">as_dataloader</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
@@ -123,6 +126,7 @@ experiments.</p>
     <h2 id="methods-by-class-">Methods (by class)<a class="anchor" aria-label="anchor" href="#methods-by-class-"></a></h2>
     
 <ul><li><p><code>as_dataloader(dataset)</code>: Converts a <code><a href="https://rdrr.io/pkg/torch/man/dataset.html" class="external-link">torch::dataset()</a></code> to a <code><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">torch::dataloader()</a></code>.</p></li>
+<li><p><code>as_dataloader(iterable_dataset)</code>: Converts a <code><a href="https://rdrr.io/pkg/torch/man/iterable_dataset.html" class="external-link">torch::iterable_dataset()</a></code> into a <code><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">torch::dataloader()</a></code></p></li>
 <li><p><code>as_dataloader(list)</code>: Converts a list of tensors or arrays with the same
 size in the first dimension to a  <code><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">torch::dataloader()</a></code></p></li>
 <li><p><code>as_dataloader(dataloader)</code>: Returns the same dataloader</p></li>
