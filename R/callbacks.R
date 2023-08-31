@@ -238,7 +238,7 @@ luz_callback_progress <- luz_callback(
     # Specially for testing purposes we don't want to have the
     # progress bar showing the ETA.
     if (getOption("luz.show_progress_bar_eta", TRUE)) {
-      if (!is.na(format)) {
+      if (!is.na(total)) {
         format <- paste0(format, " - ETA: :eta")
       } else {
         format <- paste0(format, " - Rate: :tick_rate iter/s")
