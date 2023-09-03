@@ -1,0 +1,192 @@
+---
+title: "Training a causal language model from scratch"
+desc: "Implements datasets and trains a causal language model from scratch using R source code."
+category: 'advanced'
+editor_options: 
+  chunk_output_type: console
+---
+
+This example is an adaptation of the 'Training a causal language model from scratch'
+class from the [Hugging Face NLP course](https://huggingface.co/learn/nlp-course/chapter7/6?fw=pt).
+
+```{r setup}
+library(torch)
+library(tok)
+library(luz)
+library(minhub) # remotes::install_github("mlverse/minhub")
+#library(tidyverse)
+options(arrow.skip_nul = TRUE)
+library(arrow)
+```
+
+## Data
+
+First step is to implement a torch dataset that gathers data and pre-process it
+into a format that is suitable for training the model.
+
+That means that we need to:
+
+1. Download data
+2. Train a tokenizer for this dataset
+3. Be able to produce sequences of tokens in the format expected by the model
+
+We are going to use 2 datasets available in Hugging Face Hub. The first contain
+all R packages source code available on CRAN. The second contains all R code that
+is available in GitHub data dumps. Both datasets are in the Parquet format.
+Following we implement a function that downloads and caches the data and then
+returns a single arrow table containing all data.
+
+```{r}
+dir.create("data")
+read_datasets <- function() {
+  sources <- "dfalbel/github-r-repos"#c("dfalbel/cran-packages")#, "dfalbel/github-r-repos")
+  sources |>
+    purrr::map_chr(
+      \(x) hfhub::hub_snapshot(x, repo_type = "dataset", allow_patterns = "parquet$")
+    ) |>
+    fs::path("data") |>
+    purrr::map(arrow::open_dataset) |>
+    purrr::map(\(x) dplyr::select(x, content)) |>
+    purrr::map(\(x) x |> dplyr::mutate(
+      content = arrow::cast(content, arrow::string())
+    )) |>
+    purrr::reduce(dplyr::union_all) |>
+    dplyr::filter(!is.na(content)) |> 
+    # arrow::map_batches(function(batch) {
+    #   content <- as.character(batch$content)
+    #   nm <- purrr::map_chr(content, rlang::hash) |> paste0(".txt")
+    #   paths <- file.path("data", nm)
+    #   purrr::walk2(content, paths, \(x, f) readr::write_file(x, file = f))
+    #   data.frame(paths = paths)
+    # }) |>
+    dplyr::collect()
+}
+```
+
+Next we implement a function that trains a tokenizer for our dataset.
+
+```{r}
+create_tokenizer <- function(text, vocab_size, special_tokens) {
+  tok <- tok::tokenizer$new(tok::model_bpe$new())
+  
+  tok$pre_tokenizer <- tok::pre_tokenizer_byte_level$new(add_prefix_space = FALSE)
+  tok$decoder <- tok::decoder_byte_level$new()
+  tok$post_processor <- tok::processor_byte_level$new(trim_offsets = FALSE)
+  
+  tok$train_from_memory(
+    text, 
+    tok::trainer_bpe$new(vocab_size = vocab_size, special_tokens = special_tokens)
+  )
+  tok
+}
+
+# test code to debug the tokenizer
+# data <- read_datasets()
+# tok <- create_tokenizer(data$content)
+```
+
+We can finally implement the torch dataset that we are going to use for training
+the model. We are going to use the `torch::iterable_dataset` instead of `torch::dataset`.
+The main motivation is that we can't really know the total number of samples in
+the dataset, so we can implement a `.getitem()` method to get any arbiratrary sample.
+Thus we implement the `.iter` method that returns a new sample every time it's called.
+
+```{r}
+r_sources_dataset <- torch::iterable_dataset(
+  "r_sources_dataset",
+  initialize = function(root = ".", vocab_size = 20000, context_length = 128) {
+    self$data <- read_datasets()
+    self$context_length <- context_length
+    
+    # we only create a tokenizer if it doesn't exist, otherwise we just load it
+    tok_path <- file.path(root, glue::glue("tokenizer-{vocab_size}.json"))
+    if (!file.exists(tok_path)) {
+      self$tok <- create_tokenizer(self$data$content, vocab_size, c("<fbegin>", "<fend>"))  
+      fs::dir_create(root)
+      self$tok$save(tok_path)
+    } else {
+      self$tok <- tok::tokenizer$from_file(tok_path)
+    }
+  },
+  .iter = function() {
+    i <- 1L
+    sequence <- c()
+    function() {
+      while (length(sequence) < (self$context_length + 1) && i <= nrow(self$data)) {
+        sequence <<- c(
+          sequence, 
+          self$tok$encode(paste("<fbegin>", self$data$content[i], "<fend>"))$ids
+        )
+        i <- i + 1L
+      }
+
+      if (length(sequence) < (self$context_length + 1)) {
+        return(coro::exhausted())
+      }
+
+      on.exit({
+        sequence <<- sequence[-seq_len(self$context_length)]
+      })
+      list(
+        input_ids = sequence[seq_len(self$context_length)] + 1L,
+        labels = sequence[2:(self$context_length + 1)] + 1L
+      )
+    }
+  }
+)
+
+# debug code for the dataset
+# ds <- r_sources_dataset("~/Downloads/")
+# it <- ds$.iter()
+# it()
+# ds$tok$get_vocab_size()
+```
+
+We finally define the model we are going to train. We'll use a small version of
+GPT2.
+
+```{r}
+net <- nn_module(
+  initialize = function() {
+    self$gpt <- minhub::gpt2(
+      vocab_size = 20000, 
+      pdrop = 0.1
+    )
+  },
+  forward = function(x) {
+    self$gpt(x$view(c(1, -1)))$transpose(2,3)
+  }
+)
+
+# debug code for the model
+# ds <- torch::dataloader(r_sources_dataset("~/Downloads/"), batch_size = 32)
+# batch <- coro::collect(ds, 1)[[1]]
+# str(batch)
+# m <- net()
+# str(m(batch$input_ids))
+```
+
+We can finally train the model:
+
+```{r, eval = FALSE}
+fitted <- net %>%
+  setup(
+    optimizer = optim_adam,
+    loss = nn_cross_entropy_loss()
+  ) %>%
+  fit(
+    r_sources_dataset(),
+    epochs = 1,
+    dataloader_options = list(batch_size = 32),
+    #accelerator = accelerator(cpu=TRUE)
+  )
+```
+
+We can finally obtain the metrics on the test dataset:
+
+```{r, eval = FALSE}
+fitted_model %>% evaluate(test_ds)
+```
+
+Remember that in order to predict for texts, we need make the same pre-processing
+as used in the dataset definition.
