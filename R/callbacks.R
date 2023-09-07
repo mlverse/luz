@@ -450,6 +450,12 @@ luz_callback_lr_scheduler <- luz_callback(
       rlang::abort(glue::glue("opt_name '{self$opt_name}' not found in ctx$optimizers."))
 
     self$scheduler <- self$lr_scheduler_fn(ctx$optimizers[[self$opt_name]])
+  },
+  state_dict = function() {
+    self$scheduler$state_dict()
+  },
+  load_state_dict = function(state_dict) {
+    self$scheduler$load_state_dict(state_dict)
   }
 )
 
