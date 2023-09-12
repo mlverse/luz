@@ -267,3 +267,58 @@ test_that("can use the resume_from callback", {
     tr2$weights[[1]]
   )
 })
+
+test_that("resuming a model with a lr scheduler callback is correct", {
+
+  x <- torch_randn(1000, 10)
+  y <- torch_randn(1000, 1)
+
+  model <- nn_linear %>%
+    setup(optimizer = optim_sgd, loss = nnf_mse_loss) %>%
+    set_hparams(in_features = 10, out_features = 1) %>%
+    set_opt_hparams(lr = 0.01)
+
+  luz_callback_lr_progress <- luz_callback(
+    on_epoch_begin = function() {
+      rlang::inform(glue::glue("lr={ctx$opt$param_groups[[1]]$lr}"))
+    }
+  )
+
+  luz_callback_simulate_failure <- luz_callback(
+    initialize = function(at_epoch) {
+      self$at_epoch = at_epoch
+    },
+    on_epoch_begin = function() {
+      if (ctx$epoch>=self$at_epoch) rlang::abort("simulated failure")
+    }
+  )
+
+  autoresume <- luz_callback_auto_resume(path = tempfile())
+
+  expect_error(regexp = "simulated failure", {
+    result <- model %>% fit(
+      list(x, y),
+      callbacks = list(
+        autoresume,
+        luz_callback_lr_scheduler(lr_step,step_size=1L),
+        luz_callback_simulate_failure(at_epoch=5L),
+        luz_callback_lr_progress()
+      ),
+      verbose = FALSE
+    )
+  })
+
+  expect_snapshot({
+    result <- model %>% fit(
+      list(x, y),
+      callbacks = list(
+        autoresume,
+        luz_callback_lr_scheduler(lr_step,step_size=1L),
+        luz_callback_simulate_failure(at_epoch=11L),
+        luz_callback_lr_progress()
+      ),
+      verbose = FALSE
+    )
+  })
+
+})
