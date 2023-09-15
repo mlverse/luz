@@ -3,6 +3,7 @@ pkgdown: 2.0.7.9000
 pkgdown_sha: c9206802f2888992de92aa41f517ba7812f05331
 articles:
   accelerator: accelerator.html
+  chargpt: examples/chargpt.html
   checkpoints: checkpoints.html
   custom-loop: custom-loop.html
   dogs-vs-cats-binary-classification: examples/dogs-vs-cats-binary-classification.html
@@ -17,5 +18,5 @@ articles:
   mnist-triplet: examples/mnist-triplet.html
   pets-unet: examples/pets-unet.html
   text-classification: examples/text-classification.html
-last_built: 2023-09-12T13:53Z
+last_built: 2023-09-15T17:29Z
 
