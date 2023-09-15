@@ -150,7 +150,8 @@ You can generate new samples with:
 
 ```{r, eval=FALSE}
 context <- "O God, O God!"
-text <- generate(ctx$model, dataset$vocab, context, iter = 100)
+text <- generate(fitted$model, dataset$vocab, context, iter = 100)
+cat(text)
 ```
 
 
