@@ -9,7 +9,7 @@ editor_options:
 This example is an adaptation of the 'Training a causal language model from scratch'
 class from the [Hugging Face NLP course](https://huggingface.co/learn/nlp-course/chapter7/6?fw=pt).
 
-```{r setup}
+```{r setup, eval = FALSE}
 library(torch)
 library(tok)
 library(luz)
@@ -36,7 +36,7 @@ is available in GitHub data dumps. Both datasets are in the Parquet format.
 Following we implement a function that downloads and caches the data and then
 returns a single arrow table containing all data.
 
-```{r}
+```{r, eval = FALSE}
 read_dataset <- function(source) {
   d <- source |>
     hfhub::hub_snapshot(repo_type = "dataset", allow_patterns = "parquet$") |>
@@ -62,7 +62,7 @@ read_datasets <- function() {
 
 Next we implement a function that trains a tokenizer for our dataset.
 
-```{r}
+```{r, eval = FALSE}
 create_tokenizer <- function(text, vocab_size, special_tokens) {
   tok <- tok::tokenizer$new(tok::model_bpe$new())
 
@@ -88,7 +88,7 @@ The main motivation is that we can't really know the total number of samples in
 the dataset, so we can implement a `.getitem()` method to get any arbiratrary sample.
 Thus we implement the `.iter` method that returns a new sample every time it's called.
 
-```{r}
+```{r, eval = FALSE}
 r_sources_dataset <- torch::iterable_dataset(
   "r_sources_dataset",
   initialize = function(root = ".", vocab_size = 20000, context_length = 128) {
@@ -151,7 +151,7 @@ for a fixed number of steps.
 This is not required, but makes using luz more pleasant, as we can easily define for how many
 tokens we want to train our model.
 
-```{r}
+```{r, eval = FALSE}
 fixed_steps_iterable_dataset <- iterable_dataset(
   "fixed_steps_dataset",
   initialize = function(dataset, steps) {
@@ -188,7 +188,7 @@ GPT2.
 We also define a `generate` method allowing us to sample from the model given an initial
 context.
 
-```{r}
+```{r, eval = FALSE}
 net <- nn_module(
   initialize = function() {
     self$gpt <- minhub::gpt2(
@@ -225,7 +225,7 @@ net <- nn_module(
 To make it easier to inspect training, we will also define a callback that prints a sample
 from the model every epoch.
 
-```{r}
+```{r, eval = FALSE}
 # samples from the model using the context.
 generate <- function(model, tok, context, ...) {
   local_no_grad() # disables gradient for sampling
@@ -293,7 +293,7 @@ luz::luz_save(fitted, "model.pt")
 
 We can then use the model to generate text given a prompt with:
 
-```{r}
+```{r, eval = FALSE}
 fitted <- luz::luz_load("model.pt")
 tok <- tok::tokenizer$from_file("tokenizer-20000.json")
 context <- "#' Creates a linear model
