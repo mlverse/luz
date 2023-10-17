@@ -77,7 +77,8 @@
 
 
 
-<script src="checkpoints_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Checkpointing your models</h1>
             
@@ -93,15 +94,29 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://torch.mlverse.org/docs" class="external-link">torch</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_manual_seed.html" class="external-link">torch_manual_seed</a></span><span class="op">(</span><span class="fl">1703</span><span class="op">)</span></span></code></pre></div>
-<p>When fitting models take too long you might want to save intermediate state to disk, if something goes wrong during training (eg. process is killed, network fails, etc) you can recover from where it stopped.</p>
-<p>You might also want to recover intermediate results to evaluate the model in different moments of the training, like comparing results after 10 epochs and after 30 epochs.</p>
-<p>This article describes luz features that are built to handle those cases. These features are optional and are enabled once you add specific callbacks to your <code>fit</code> call.</p>
+<p>When fitting models take too long you might want to save intermediate
+state to disk, if something goes wrong during training (eg. process is
+killed, network fails, etc) you can recover from where it stopped.</p>
+<p>You might also want to recover intermediate results to evaluate the
+model in different moments of the training, like comparing results after
+10 epochs and after 30 epochs.</p>
+<p>This article describes luz features that are built to handle those
+cases. These features are optional and are enabled once you add specific
+callbacks to your <code>fit</code> call.</p>
 <div class="section level2">
 <h2 id="resuming-training-runs-that-crashed">Resuming training runs that crashed<a class="anchor" aria-label="anchor" href="#resuming-training-runs-that-crashed"></a>
 </h2>
-<p>If you have a long training run that can crash for whatever reason (computer turned off, process kileed in cluster, etc), we recommend you to add <code>luz_callback_autoresume()</code> to your list of callbacks.</p>
-<p><code>luz_callback_autoresume()</code> will automatically checkpoint the whole state of your model at the end of each epoch. If something fails during training you can simply rerun the same script, whithout any code changes and the checkpoint will be reloaded and the training will start from where it stopped.</p>
-<p>For example, lets’s take a randomly generated training dataset and a linear model to show how autoresume works.</p>
+<p>If you have a long training run that can crash for whatever reason
+(computer turned off, process kileed in cluster, etc), we recommend you
+to add <code>luz_callback_autoresume()</code> to your list of
+callbacks.</p>
+<p><code>luz_callback_autoresume()</code> will automatically checkpoint
+the whole state of your model at the end of each epoch. If something
+fails during training you can simply rerun the same script, whithout any
+code changes and the checkpoint will be reloaded and the training will
+start from where it stopped.</p>
+<p>For example, lets’s take a randomly generated training dataset and a
+linear model to show how autoresume works.</p>
 <p>Here’s the training data:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_randn.html" class="external-link">torch_randn</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">10</span><span class="op">)</span></span>
@@ -112,7 +127,9 @@
 <span>  <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span>optimizer <span class="op">=</span> <span class="va">optim_sgd</span>, loss <span class="op">=</span> <span class="va">nnf_mse_loss</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/set_hparams.html">set_hparams</a></span><span class="op">(</span>in_features <span class="op">=</span> <span class="fl">10</span>, out_features <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/set_opt_hparams.html">set_opt_hparams</a></span><span class="op">(</span>lr <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
-<p>Let’s now create a callback that simulates a random failure that could happen. This callback will just raise an R error on the 5th epoch.</p>
+<p>Let’s now create a callback that simulates a random failure that
+could happen. This callback will just raise an R error on the 5th
+epoch.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">interrupt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback.html">luz_callback</a></span><span class="op">(</span></span>
 <span>  <span class="st">"interrupt"</span>,</span>
@@ -124,7 +141,8 @@
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Let’s now start training adding the <code><a href="../reference/luz_callback_auto_resume.html">luz_callback_auto_resume()</a></code>:</p>
+<p>Let’s now start training adding the
+<code><a href="../reference/luz_callback_auto_resume.html">luz_callback_auto_resume()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">autoresume</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback_auto_resume.html">luz_callback_auto_resume</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"state.pt"</span><span class="op">)</span></span>
 <span><span class="va">inter</span> <span class="op">&lt;-</span> <span class="fu">interrupt</span><span class="op">(</span><span class="op">)</span></span>
@@ -140,14 +158,17 @@
 <span><span class="co">#&gt;   <span style="color: #00BB00;">on_epoch_end</span>.</span></span>
 <span><span class="co">#&gt; <span style="font-weight: bold;">Caused by error in `self[[callback_nm]]()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Error on epoch 5</span></span></code></pre></div>
-<p>To resume model training exactly from where it stopped you just need to restart fitting, using the exact same model, callbacks, etc:</p>
+<p>To resume model training exactly from where it stopped you just need
+to restart fitting, using the exact same model, callbacks, etc:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>,</span>
 <span>  callbacks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">inter</span>, <span class="va">autoresume</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>With this, the model fitting process will be continued exactly from where it stopped. Records, optimizer and model state are recovered from the previous run so you can have the full results:</p>
+<p>With this, the model fitting process will be continued exactly from
+where it stopped. Records, optimizer and model state are recovered from
+the previous run so you can have the full results:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></code></pre></div>
 <p><img src="checkpoints_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
@@ -155,8 +176,12 @@
 <div class="section level2">
 <h2 id="checkpointing">Checkpointing<a class="anchor" aria-label="anchor" href="#checkpointing"></a>
 </h2>
-<p>Sometimes you want to have more control over how checkpoints are handled. In this case you can use <code><a href="../reference/luz_callback_model_checkpoint.html">luz_callback_model_checkpoint()</a></code> to save checkpoints to a specified file or directory.</p>
-<p>Let’s use the same example as in the resuming section: We first generate some data.</p>
+<p>Sometimes you want to have more control over how checkpoints are
+handled. In this case you can use
+<code><a href="../reference/luz_callback_model_checkpoint.html">luz_callback_model_checkpoint()</a></code> to save checkpoints to a
+specified file or directory.</p>
+<p>Let’s use the same example as in the resuming section: We first
+generate some data.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_randn.html" class="external-link">torch_randn</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_randn.html" class="external-link">torch_randn</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
@@ -166,7 +191,8 @@
 <span>  <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span>optimizer <span class="op">=</span> <span class="va">optim_sgd</span>, loss <span class="op">=</span> <span class="va">nnf_mse_loss</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/set_hparams.html">set_hparams</a></span><span class="op">(</span>in_features <span class="op">=</span> <span class="fl">10</span>, out_features <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/set_opt_hparams.html">set_opt_hparams</a></span><span class="op">(</span>lr <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre></div>
-<p>Let’s now fit the model using <code><a href="../reference/luz_callback_model_checkpoint.html">luz_callback_model_checkpoint()</a></code>.</p>
+<p>Let’s now fit the model using
+<code><a href="../reference/luz_callback_model_checkpoint.html">luz_callback_model_checkpoint()</a></code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">checkpoint</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback_model_checkpoint.html">luz_callback_model_checkpoint</a></span><span class="op">(</span></span>
 <span>  path <span class="op">=</span> <span class="st">"checkpoints/"</span>, </span>
@@ -178,7 +204,12 @@
 <span>  callbacks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">checkpoint</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>You can see now that the <code>checkpoints</code> directory contains files with state dumps for each epoch. By default, <code>luz_callback_model_checkpoint</code> will save the state for each epochs and format the name including the resulting loss. This can be configured withing the path parameter, see <code><a href="../reference/luz_callback_model_checkpoint.html">?luz_callback_model_checkpoint</a></code> for details.</p>
+<p>You can see now that the <code>checkpoints</code> directory contains
+files with state dumps for each epoch. By default,
+<code>luz_callback_model_checkpoint</code> will save the state for each
+epochs and format the name including the resulting loss. This can be
+configured withing the path parameter, see
+<code><a href="../reference/luz_callback_model_checkpoint.html">?luz_callback_model_checkpoint</a></code> for details.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_ls.html" class="external-link">dir_ls</a></span><span class="op">(</span><span class="st">"checkpoints"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; checkpoints/epoch-01-train_loss-1.237.pt</span></span>
@@ -191,11 +222,21 @@
 <span><span class="co">#&gt; checkpoints/epoch-08-train_loss-0.998.pt</span></span>
 <span><span class="co">#&gt; checkpoints/epoch-09-train_loss-1.001.pt</span></span>
 <span><span class="co">#&gt; checkpoints/epoch-10-train_loss-1.002.pt</span></span></code></pre></div>
-<p>Finally, you can load a specific checkpoint to the <code>fitted</code> result using <code>luz_load_checkpoint</code>. Note that loading the checkpoint into a a <code>luz_fitted_module</code> is going to modify the model weights in-place.</p>
+<p>Finally, you can load a specific checkpoint to the
+<code>fitted</code> result using <code>luz_load_checkpoint</code>. Note
+that loading the checkpoint into a a <code>luz_fitted_module</code> is
+going to modify the model weights in-place.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/luz_load_checkpoint.html">luz_load_checkpoint</a></span><span class="op">(</span><span class="va">results</span>, <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_ls.html" class="external-link">dir_ls</a></span><span class="op">(</span><span class="st">"checkpoints"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p>You can then start making predictions, or evaluate your model using the reloeded weights.</p>
-<p>You might also want to start a new training run from a checkpoint. For this, you can use the <code><a href="../reference/luz_callback_resume_from_checkpoint.html">luz_callback_resume_from_checkpoint()</a></code>. By default, it will only recover the model weights from the checkpoint file, but you can configure it to restore records, callback and optimizer state too. If a checkpoint directory is passed then training will resume from the last checkpoint file as returned by <code><a href="https://fs.r-lib.org/reference/dir_ls.html" class="external-link">fs::dir_ls</a></code>.</p>
+<p>You can then start making predictions, or evaluate your model using
+the reloeded weights.</p>
+<p>You might also want to start a new training run from a checkpoint.
+For this, you can use the
+<code><a href="../reference/luz_callback_resume_from_checkpoint.html">luz_callback_resume_from_checkpoint()</a></code>. By default, it will
+only recover the model weights from the checkpoint file, but you can
+configure it to restore records, callback and optimizer state too. If a
+checkpoint directory is passed then training will resume from the last
+checkpoint file as returned by <code><a href="https://fs.r-lib.org/reference/dir_ls.html" class="external-link">fs::dir_ls</a></code>.</p>
 <p>Here’s how you would use this callback:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resume</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback_resume_from_checkpoint.html">luz_callback_resume_from_checkpoint</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"checkpoints/"</span><span class="op">)</span></span>
@@ -209,8 +250,15 @@
 <div class="section level3">
 <h3 id="custom-callbacks-state">Custom callbacks state<a class="anchor" aria-label="anchor" href="#custom-callbacks-state"></a>
 </h3>
-<p>Sometimes callbacks also need to keep their internal state in order to allow continuing training exactly from where it stopped. In this case, callbacks can implement the <code>state_dict()</code> and the <code><a href="https://rdrr.io/pkg/torch/man/load_state_dict.html" class="external-link">load_state_dict()</a></code> methods that are automatically called when saving and reloading checkpoints.</p>
-<p>For example, suppose that you have a callback that tracks gradients for weights at every epoch. You want to use the tracked weights to further analyse the training procedure. It could be implemented like:</p>
+<p>Sometimes callbacks also need to keep their internal state in order
+to allow continuing training exactly from where it stopped. In this
+case, callbacks can implement the <code>state_dict()</code> and the
+<code><a href="https://rdrr.io/pkg/torch/man/load_state_dict.html" class="external-link">load_state_dict()</a></code> methods that are automatically called
+when saving and reloading checkpoints.</p>
+<p>For example, suppose that you have a callback that tracks gradients
+for weights at every epoch. You want to use the tracked weights to
+further analyse the training procedure. It could be implemented
+like:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cb_weight_grad</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback.html">luz_callback</a></span><span class="op">(</span></span>
 <span>  <span class="st">"weight_grad"</span>,</span>
@@ -225,7 +273,14 @@
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>In the above example, the <code>gradients</code> field is a <strong>state</strong> in the callback. If training fails for some reason, <code>gradients</code> will be lost. If it’s important for you to also checkpoint the callback state, you can implement the <code>state_dict()</code> method must returning a named list of objects that compose the state of the callback and <code><a href="https://rdrr.io/pkg/torch/man/load_state_dict.html" class="external-link">load_state_dict()</a></code> taking the same named list returned by <code>state_dict()</code> and restoring the callback state.</p>
+<p>In the above example, the <code>gradients</code> field is a
+<strong>state</strong> in the callback. If training fails for some
+reason, <code>gradients</code> will be lost. If it’s important for you
+to also checkpoint the callback state, you can implement the
+<code>state_dict()</code> method must returning a named list of objects
+that compose the state of the callback and
+<code><a href="https://rdrr.io/pkg/torch/man/load_state_dict.html" class="external-link">load_state_dict()</a></code> taking the same named list returned by
+<code>state_dict()</code> and restoring the callback state.</p>
 <p>The callback above could be reimplemented with:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cb_weight_grad</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback.html">luz_callback</a></span><span class="op">(</span></span>
@@ -262,7 +317,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer>

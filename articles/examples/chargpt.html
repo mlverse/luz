@@ -77,7 +77,8 @@
 
 
 
-<script src="chargpt_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>CharGPT</h1>
             
@@ -88,15 +89,24 @@
 
     
     
-<p>This example is inspired by the <a href="https://github.com/karpathy/minGPT/tree/master/projects/chargpt" class="external-link">chargpt</a> project by Andrey Karpathy. We are going to train character-level language model on Shakespeare texts.</p>
+<p>This example is inspired by the <a href="https://github.com/karpathy/minGPT/tree/master/projects/chargpt" class="external-link">chargpt</a>
+project by Andrey Karpathy. We are going to train character-level
+language model on Shakespeare texts.</p>
 <p>We first load the libraries that we plan to use:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://torch.mlverse.org/docs" class="external-link">torch</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/luz/" class="external-link">luz</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/nteetor/zeallot" class="external-link">zeallot</a></span><span class="op">)</span></span></code></pre></div>
-<p>Next we define the torch dataset that will pre-process data for the model. It splits the text into a character vector, each element containing exactly one character.</p>
-<p>Then lists all unique characters into the <code>vocab</code> attribute. The order of the characters in the vocabulary is used to encode each character to an integer value, that will be used in the embedding layer.</p>
-<p>The <code>.getitem()</code> method, can take chunks of <code>block_size</code> characters and encode them into their integer representation.</p>
+<p>Next we define the torch dataset that will pre-process data for the
+model. It splits the text into a character vector, each element
+containing exactly one character.</p>
+<p>Then lists all unique characters into the <code>vocab</code>
+attribute. The order of the characters in the vocabulary is used to
+encode each character to an integer value, that will be used in the
+embedding layer.</p>
+<p>The <code>.getitem()</code> method, can take chunks of
+<code>block_size</code> characters and encode them into their integer
+representation.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt"</span></span>
 <span></span>
@@ -124,8 +134,15 @@
 <span></span>
 <span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="fu">char_dataset</span><span class="op">(</span><span class="fu">readr</span><span class="fu">::</span><span class="fu">read_file</span><span class="op">(</span><span class="va">url</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">dataset</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="co"># this allows us to see an element of the dataset</span></span></code></pre></div>
-<p>We then define the neural net we are going to train. Defining a GPT-2 model is quite verbose, so we are going to use the minhub implementation directly. You can find the full model definition <a href="https://github.com/mlverse/minhub/blob/main/R/gpt2.R" class="external-link">here</a>, and this code is entirely self-contained, so you don’t need to install minhub, if you don’t want to.</p>
-<p>We also implemented the <code>generate</code> method for the model, that allows one to generate completions using the model. It applies the model in a loop, at each iteration prediction what’s the next character.</p>
+<p>We then define the neural net we are going to train. Defining a GPT-2
+model is quite verbose, so we are going to use the minhub implementation
+directly. You can find the full model definition <a href="https://github.com/mlverse/minhub/blob/main/R/gpt2.R" class="external-link">here</a>,
+and this code is entirely self-contained, so you don’t need to install
+minhub, if you don’t want to.</p>
+<p>We also implemented the <code>generate</code> method for the model,
+that allows one to generate completions using the model. It applies the
+model in a loop, at each iteration prediction what’s the next
+character.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span></span>
 <span>    initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">vocab_size</span><span class="op">)</span> <span class="op">{</span></span>
@@ -155,7 +172,8 @@
 <span>        <span class="va">x</span></span>
 <span>    <span class="op">}</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Next, we implemented a callback that is used for nicely displaying generated samples during the model training:</p>
+<p>Next, we implemented a callback that is used for nicely displaying
+generated samples during the model training:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># samples from the model using the context.</span></span>
 <span><span class="va">generate</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span>, <span class="va">vocab</span>, <span class="va">context</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
@@ -203,7 +221,8 @@
 <span>        <span class="fu"><a href="../../reference/luz_callback_gradient_clip.html">luz_callback_gradient_clip</a></span><span class="op">(</span>max_norm <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">)</span></span></code></pre></div>
-<p>One epoch, is reasonable for this dataset and takes ~1h on the M1 MBP. You can generate new samples with:</p>
+<p>One epoch, is reasonable for this dataset and takes ~1h on the M1
+MBP. You can generate new samples with:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">context</span> <span class="op">&lt;-</span> <span class="st">"O God, O God!"</span></span>
 <span><span class="va">text</span> <span class="op">&lt;-</span> <span class="fu">generate</span><span class="op">(</span><span class="va">fitted</span><span class="op">$</span><span class="va">model</span>, <span class="va">dataset</span><span class="op">$</span><span class="va">vocab</span>, <span class="va">context</span>, iter <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
@@ -220,7 +239,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer>

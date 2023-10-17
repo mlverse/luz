@@ -77,7 +77,8 @@
 
 
 
-<script src="get-started_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Get started with luz</h1>
             
@@ -91,18 +92,42 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/luz/" class="external-link">luz</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://torch.mlverse.org/docs" class="external-link">torch</a></span><span class="op">)</span></span></code></pre></div>
-<p>Luz is a high-level API for torch that aims to encapsulate the <strong>training loop</strong> into a set of reusable pieces of code. Luz reduces the boilerplate code required to train a model with torch and avoids the error prone <code>zero_grad()</code> - <code>backward()</code> - <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> sequence of calls, and also simplifies the process of moving data and models between CPUs and GPUs. Luz is designed to be highly flexible by providing a layered API that allows it to be useful no matter the level of control you need for your training loop.</p>
-<p>Luz is heavily inspired by other higher level frameworks for deep learning, to cite a few:</p>
+<p>Luz is a high-level API for torch that aims to encapsulate the
+<strong>training loop</strong> into a set of reusable pieces of code.
+Luz reduces the boilerplate code required to train a model with torch
+and avoids the error prone <code>zero_grad()</code> -
+<code>backward()</code> - <code><a href="https://rdrr.io/r/stats/step.html" class="external-link">step()</a></code> sequence of calls, and
+also simplifies the process of moving data and models between CPUs and
+GPUs. Luz is designed to be highly flexible by providing a layered API
+that allows it to be useful no matter the level of control you need for
+your training loop.</p>
+<p>Luz is heavily inspired by other higher level frameworks for deep
+learning, to cite a few:</p>
 <ul>
-<li><p><a href="https://docs.fast.ai/" class="external-link">FastAI</a>: we are heavily inspired by the FastAI library, especially the <code>Learner</code> object and the callbacks API.</p></li>
-<li><p><a href="https://keras.io/" class="external-link">Keras</a>: We are also heavily inspired by Keras, especially callback names. The lightning module interface is similar to <code>compile</code>, too.</p></li>
-<li><p><a href="https://lightning.ai/pages/open-source/" class="external-link">PyTorch Lightning</a>: The idea of the <code>luz_module</code> being a subclass of <code>nn_module</code> is inspired by the <strong><code>LightningModule</code></strong> object in lightning.</p></li>
-<li><p><a href="https://huggingface.co/docs/accelerate/" class="external-link">HuggingFace Accelerate</a>: The internal device placement API is heavily inspired by Accelerate, but is much more modest in features. Currently only CPU and Single GPU are supported.</p></li>
+<li><p><a href="https://docs.fast.ai/" class="external-link">FastAI</a>: we are heavily
+inspired by the FastAI library, especially the <code>Learner</code>
+object and the callbacks API.</p></li>
+<li><p><a href="https://keras.io/" class="external-link">Keras</a>: We are also heavily
+inspired by Keras, especially callback names. The lightning module
+interface is similar to <code>compile</code>, too.</p></li>
+<li><p><a href="https://lightning.ai/pages/open-source/" class="external-link">PyTorch
+Lightning</a>: The idea of the <code>luz_module</code> being a subclass
+of <code>nn_module</code> is inspired by the
+<strong><code>LightningModule</code></strong> object in
+lightning.</p></li>
+<li><p><a href="https://huggingface.co/docs/accelerate/" class="external-link">HuggingFace
+Accelerate</a>: The internal device placement API is heavily inspired by
+Accelerate, but is much more modest in features. Currently only CPU and
+Single GPU are supported.</p></li>
 </ul>
 <div class="section level2">
 <h2 id="training-a-nn_module">Training a <code>nn_module</code><a class="anchor" aria-label="anchor" href="#training-a-nn_module"></a>
 </h2>
-<p>As much as possible, luz tries to reuse the existing structures from torch. A model in luz is defined identically as you would define it if using raw torch. For a specific example, this is the definition of a feed-forward CNN that can be used to classify digits from the MNIST dataset:</p>
+<p>As much as possible, luz tries to reuse the existing structures from
+torch. A model in luz is defined identically as you would define it if
+using raw torch. For a specific example, this is the definition of a
+feed-forward CNN that can be used to classify digits from the MNIST
+dataset:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span></span>
 <span>  <span class="st">"Net"</span>,</span>
@@ -129,7 +154,9 @@
 <span>    <span class="va">x</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>We can now train this model in the <code>train_dl</code> and validate it in the <code>test_dl</code> <code>torch::dataloaders()</code> with:</p>
+<p>We can now train this model in the <code>train_dl</code> and validate
+it in the <code>test_dl</code> <code>torch::dataloaders()</code>
+with:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span></span>
@@ -144,21 +171,51 @@
 <span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">train_dl</span>, epochs <span class="op">=</span> <span class="fl">10</span>, valid_data <span class="op">=</span> <span class="va">test_dl</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s understand what happens in this chunk of code:</p>
 <ol style="list-style-type: decimal">
-<li>The <code>setup</code> function allows you to configure the loss (objective) function and the optimizer that you will use to train your model. Optionally you can pass a list of metrics that are tracked during the training procedure. <strong>Note:</strong> the loss function can be any function taking <code>input</code> and <code>target</code> tensors and returning a scalar tensor value, and the optimizer can be any core torch optimizer or custom ones created with the <code><a href="https://rdrr.io/pkg/torch/man/optimizer.html" class="external-link">torch::optimizer()</a></code> function.</li>
-<li>The <code><a href="../reference/set_hparams.html">set_hparams()</a></code> function allows you to set hyper-parameters that should be passed to the module <code>initialize()</code> method. For example in this case we pass <code>num_classes = 10</code>.</li>
-<li>The <code><a href="../reference/set_opt_hparams.html">set_opt_hparams()</a></code> function allows you to pass hyper-parameters that are used by the optimizer function. For example, <code><a href="https://rdrr.io/pkg/torch/man/optim_adam.html" class="external-link">optim_adam()</a></code> can take the <code>lr</code> parameter specifying the learning rate and we specify it with <code>lr = 0.003</code>.</li>
-<li>The <code>fit</code> method will take the model specification provided by <code><a href="../reference/setup.html">setup()</a></code> and run the training procedure using the specified training and validation <code>torch::dataloaders()</code> as well as the number of epochs. <strong>Note:</strong> we again reuse core torch data structures, instead of providing our own data loading functionality.</li>
-<li>The returned object <code>fitted</code> contains the trained model as well as the record of metrics and losses produced during training. It can also be used for producing predictions and for evaluating the trained model on other datasets.</li>
+<li>The <code>setup</code> function allows you to configure the loss
+(objective) function and the optimizer that you will use to train your
+model. Optionally you can pass a list of metrics that are tracked during
+the training procedure. <strong>Note:</strong> the loss function can be
+any function taking <code>input</code> and <code>target</code> tensors
+and returning a scalar tensor value, and the optimizer can be any core
+torch optimizer or custom ones created with the
+<code><a href="https://rdrr.io/pkg/torch/man/optimizer.html" class="external-link">torch::optimizer()</a></code> function.</li>
+<li>The <code><a href="../reference/set_hparams.html">set_hparams()</a></code> function allows you to set
+hyper-parameters that should be passed to the module
+<code>initialize()</code> method. For example in this case we pass
+<code>num_classes = 10</code>.</li>
+<li>The <code><a href="../reference/set_opt_hparams.html">set_opt_hparams()</a></code> function allows you to pass
+hyper-parameters that are used by the optimizer function. For example,
+<code><a href="https://rdrr.io/pkg/torch/man/optim_adam.html" class="external-link">optim_adam()</a></code> can take the <code>lr</code> parameter
+specifying the learning rate and we specify it with
+<code>lr = 0.003</code>.</li>
+<li>The <code>fit</code> method will take the model specification
+provided by <code><a href="../reference/setup.html">setup()</a></code> and run the training procedure using
+the specified training and validation <code>torch::dataloaders()</code>
+as well as the number of epochs. <strong>Note:</strong> we again reuse
+core torch data structures, instead of providing our own data loading
+functionality.</li>
+<li>The returned object <code>fitted</code> contains the trained model
+as well as the record of metrics and losses produced during training. It
+can also be used for producing predictions and for evaluating the
+trained model on other datasets.</li>
 </ol>
-<p>When fitting, luz will use the fastest possible accelerator; if a CUDA-capable GPU is available it will be used, otherwise we fall back to the CPU. It also automatically moves data, optimizers, and models to the selected device so you don’t need to handle it manually (which is in general very error prone).</p>
-<p>To create predictions from the trained model you can use the <code>predict</code> method:</p>
+<p>When fitting, luz will use the fastest possible accelerator; if a
+CUDA-capable GPU is available it will be used, otherwise we fall back to
+the CPU. It also automatically moves data, optimizers, and models to the
+selected device so you don’t need to handle it manually (which is in
+general very error prone).</p>
+<p>To create predictions from the trained model you can use the
+<code>predict</code> method:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fitted</span>, <span class="va">test_dl</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="the-training-loop">The training loop<a class="anchor" aria-label="anchor" href="#the-training-loop"></a>
 </h2>
-<p>You now have a general idea of how to use the <code>fit</code> function and now it’s important to have an overview of what’s happening inside it. In pseudocode, here’s what <code>fit</code> does. This is not fully detailed but should help you to build your intuition:</p>
+<p>You now have a general idea of how to use the <code>fit</code>
+function and now it’s important to have an overview of what’s happening
+inside it. In pseudocode, here’s what <code>fit</code> does. This is not
+fully detailed but should help you to build your intuition:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># -&gt; Initialize objects: model, optimizers.</span></span>
 <span><span class="co"># -&gt; Select fitting device.</span></span>
@@ -184,25 +241,45 @@
 <div class="section level2">
 <h2 id="metrics">Metrics<a class="anchor" aria-label="anchor" href="#metrics"></a>
 </h2>
-<p>One of the most important parts in machine learning projects is choosing the evaluation metric. Luz allows tracking many different metrics during training with minimal code changes.</p>
-<p>In order to track metrics, you only need to modify the <code>metrics</code> parameter in the <code>setup</code> function:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>fitted &lt;-<span class="st"> </span>net <span class="op">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">setup</span>(</span>
-<span id="cb6-3"><a href="#cb6-3"></a>    ...</span>
-<span id="cb6-4"><a href="#cb6-4"></a>    <span class="dt">metrics =</span> <span class="kw">list</span>(</span>
-<span id="cb6-5"><a href="#cb6-5"></a>      luz_metric_accuracy</span>
-<span id="cb6-6"><a href="#cb6-6"></a>    )</span>
-<span id="cb6-7"><a href="#cb6-7"></a>  ) <span class="op">%&gt;%</span></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="st">  </span><span class="kw">fit</span>(...)</span></code></pre></div>
-<p>Luz provides implementations of a few of the most used metrics. If a metric is not available you can always implement a new one using the <code>luz_metric</code> function.</p>
-<p>In order to implement a new <code>luz_metric</code> we need to implement 3 methods:</p>
+<p>One of the most important parts in machine learning projects is
+choosing the evaluation metric. Luz allows tracking many different
+metrics during training with minimal code changes.</p>
+<p>In order to track metrics, you only need to modify the
+<code>metrics</code> parameter in the <code>setup</code> function:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fitted <span class="ot">&lt;-</span> net <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setup</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    ...</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">metrics =</span> <span class="fu">list</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      luz_metric_accuracy</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(...)</span></code></pre></div>
+<p>Luz provides implementations of a few of the most used metrics. If a
+metric is not available you can always implement a new one using the
+<code>luz_metric</code> function.</p>
+<p>In order to implement a new <code>luz_metric</code> we need to
+implement 3 methods:</p>
 <ul>
-<li><p><code>initialize</code>: defines the metric initial state. This function is called for each epoch for both training and validation loops.</p></li>
-<li><p><code>update</code>: updates the metric internal state. This function is called at every training and validation step with the predictions obtained by the model and the target values obtained from the dataloader.</p></li>
-<li><p><code>compute</code>: uses the internal state to compute metric values. This function is called whenever we need to obtain the current metric value. Eg, it’s called every training step for metrics displayed in the progress bar, but only called once per epoch to record it’s value when the progress bar is not displayed.</p></li>
+<li><p><code>initialize</code>: defines the metric initial state. This
+function is called for each epoch for both training and validation
+loops.</p></li>
+<li><p><code>update</code>: updates the metric internal state. This
+function is called at every training and validation step with the
+predictions obtained by the model and the target values obtained from
+the dataloader.</p></li>
+<li><p><code>compute</code>: uses the internal state to compute metric
+values. This function is called whenever we need to obtain the current
+metric value. Eg, it’s called every training step for metrics displayed
+in the progress bar, but only called once per epoch to record it’s value
+when the progress bar is not displayed.</p></li>
 </ul>
-<p>Optionally, you can implement an <code>abbrev</code> field that gives the metric an abbreviation that will be used when displaying metric information in the console or tracking record. If no <code>abbrev</code> is passed, the class name will be used.</p>
-<p>Let’s take a look at the implementation of <code>luz_metric_accuracy</code> so you can see how to implement a new one:</p>
+<p>Optionally, you can implement an <code>abbrev</code> field that gives
+the metric an abbreviation that will be used when displaying metric
+information in the console or tracking record. If no <code>abbrev</code>
+is passed, the class name will be used.</p>
+<p>Let’s take a look at the implementation of
+<code>luz_metric_accuracy</code> so you can see how to implement a new
+one:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">luz_metric_accuracy</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_metric.html">luz_metric</a></span><span class="op">(</span></span>
 <span>  <span class="co"># An abbreviation to be shown in progress bars, or </span></span>
@@ -230,13 +307,20 @@
 <span>    <span class="va">self</span><span class="op">$</span><span class="va">correct</span><span class="op">/</span><span class="va">self</span><span class="op">$</span><span class="va">total</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><strong>Note</strong>: It’s good practice that the <code>compute</code> metric returns regular R values instead of torch tensors and other parts of luz will expect that.</p>
+<p><strong>Note</strong>: It’s good practice that the
+<code>compute</code> metric returns regular R values instead of torch
+tensors and other parts of luz will expect that.</p>
 </div>
 <div class="section level2">
 <h2 id="evaluate">Evaluate<a class="anchor" aria-label="anchor" href="#evaluate"></a>
 </h2>
-<p>Once a model has been trained you might want to evaluate its performance on a different dataset. For that reason, luz provides the <code><a href="../reference/evaluate.html">?evaluate</a></code> function that takes a fitted model and a dataset and computes the metrics attached to the model.</p>
-<p>Evaluate returns a <code>luz_module_evaluation</code> object that you can query for metrics using the <code>get_metrics</code> function or simply <code>print</code> to see the results.</p>
+<p>Once a model has been trained you might want to evaluate its
+performance on a different dataset. For that reason, luz provides the
+<code><a href="../reference/evaluate.html">?evaluate</a></code> function that takes a fitted model and a dataset
+and computes the metrics attached to the model.</p>
+<p>Evaluate returns a <code>luz_module_evaluation</code> object that you
+can query for metrics using the <code>get_metrics</code> function or
+simply <code>print</code> to see the results.</p>
 <p>For example:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">evaluation</span> <span class="op">&lt;-</span> <span class="va">fitted</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="../reference/evaluate.html">evaluate</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">valid_dl</span><span class="op">)</span></span>
@@ -252,16 +336,32 @@
 <div class="section level2">
 <h2 id="customizing-with-callbacks">Customizing with callbacks<a class="anchor" aria-label="anchor" href="#customizing-with-callbacks"></a>
 </h2>
-<p>Luz provides different ways to customize the training progress depending on the level of control you need in the training loop. The fastest way and the more ‘reusable’, in the sense that you can create training modifications that can be used in many different situations, is via <strong>callbacks</strong>.</p>
-<p>The training loop in luz has many <em>breakpoints</em> that can call arbitrary R functions. This functionality allows you to customize the training process without having to modify the general training logic.</p>
-<p>Luz implements 3 default callbacks that occur in every training procedure:</p>
+<p>Luz provides different ways to customize the training progress
+depending on the level of control you need in the training loop. The
+fastest way and the more ‘reusable’, in the sense that you can create
+training modifications that can be used in many different situations, is
+via <strong>callbacks</strong>.</p>
+<p>The training loop in luz has many <em>breakpoints</em> that can call
+arbitrary R functions. This functionality allows you to customize the
+training process without having to modify the general training
+logic.</p>
+<p>Luz implements 3 default callbacks that occur in every training
+procedure:</p>
 <ul>
-<li><p><strong>train-eval callback</strong>: Sets the model to <code>train()</code> or <code><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval()</a></code> depending on if the procedure is doing training or validation.</p></li>
-<li><p><strong>metrics callback</strong>: evaluate metrics during training and validation process.</p></li>
-<li><p><strong>progress callback</strong>: implements a progress bar and prints progress information during training.</p></li>
+<li><p><strong>train-eval callback</strong>: Sets the model to
+<code>train()</code> or <code><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval()</a></code> depending on if the
+procedure is doing training or validation.</p></li>
+<li><p><strong>metrics callback</strong>: evaluate metrics during
+training and validation process.</p></li>
+<li><p><strong>progress callback</strong>: implements a progress bar and
+prints progress information during training.</p></li>
 </ul>
-<p>You can also implement custom callbacks that modify or act specifically for your training procedure. For example:</p>
-<p>Let’s implement a callback that prints ‘Iteration <code>n</code>’ (where <code>n</code> is the iteration number) for every batch in the training set and ‘Done’ when an epoch is finished. For that task we use the <code>luz_callback</code> function:</p>
+<p>You can also implement custom callbacks that modify or act
+specifically for your training procedure. For example:</p>
+<p>Let’s implement a callback that prints ‘Iteration <code>n</code>’
+(where <code>n</code> is the iteration number) for every batch in the
+training set and ‘Done’ when an epoch is finished. For that task we use
+the <code>luz_callback</code> function:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">print_callback</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/luz_callback.html">luz_callback</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"print_callback"</span>,</span>
@@ -275,16 +375,30 @@
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="va">self</span><span class="op">$</span><span class="va">message</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><code><a href="../reference/luz_callback.html">luz_callback()</a></code> takes named functions as <code>...</code> arguments, where the name indicates the moment at which the callback should be called. For instance <code>on_train_batch_end()</code> is called for every batch at the end of the training procedure, and <code>on_epoch_end()</code> is called at the end of every epoch.</p>
-<p>The returned value of <code><a href="../reference/luz_callback.html">luz_callback()</a></code> is a function that initializes an instance of the callback. Callbacks can have initialization parameters, like the name of a file where you want to log the results. In that case, you can pass an <code>initialize</code> method when creating the callback definition, and save these parameters to the <code>self</code> object. In the above example, the callback has a <code>message</code> parameter that is printed at the end of each epoch.</p>
-<p>Once a callback is defined it can be passed to the <code>fit</code> function via the <code>callbacks</code> parameter:</p>
+<p><code><a href="../reference/luz_callback.html">luz_callback()</a></code> takes named functions as <code>...</code>
+arguments, where the name indicates the moment at which the callback
+should be called. For instance <code>on_train_batch_end()</code> is
+called for every batch at the end of the training procedure, and
+<code>on_epoch_end()</code> is called at the end of every epoch.</p>
+<p>The returned value of <code><a href="../reference/luz_callback.html">luz_callback()</a></code> is a function that
+initializes an instance of the callback. Callbacks can have
+initialization parameters, like the name of a file where you want to log
+the results. In that case, you can pass an <code>initialize</code>
+method when creating the callback definition, and save these parameters
+to the <code>self</code> object. In the above example, the callback has
+a <code>message</code> parameter that is printed at the end of each
+epoch.</p>
+<p>Once a callback is defined it can be passed to the <code>fit</code>
+function via the <code>callbacks</code> parameter:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fitted</span> <span class="op">&lt;-</span> <span class="va">net</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/setup.html">setup</a></span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">...</span>, callbacks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    <span class="fu">print_callback</span><span class="op">(</span>message <span class="op">=</span> <span class="st">"Done!"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Callbacks can be called in many different positions of the training loop, including combinations of them. Here’s an overview of possible callback <em>breakpoints</em>:</p>
+<p>Callbacks can be called in many different positions of the training
+loop, including combinations of them. Here’s an overview of possible
+callback <em>breakpoints</em>:</p>
 <pre><code>Start Fit
    - on_fit_begin
   Start Epoch Loop
@@ -320,10 +434,27 @@
   End Epoch Loop
    - on_fit_end
 End Fit</code></pre>
-<p>Every step market with <code>on_*</code> is a point in the training procedure that is available for callbacks to be called.</p>
-<p>The other important part of callbacks is the <code>ctx</code> (context) object. See <code><a href="../reference/ctx.html">help("ctx")</a></code> for details.</p>
-<p>By default, callbacks are called in the same order as they were passed to <code>fit</code> (or <code>predict</code> or <code>evaluate</code>), but you can provide a <code>weight</code> attribute that will control the order in which it will be called. For example, if one callback has <code>weight = 10</code> and another has <code>weight = 1</code>, then the first one is called after the second one. Callbacks that don’t specify a <code>weight</code> attribute are considered <code>weight = 0</code>. A few built-in callbacks in luz already provide a weight value. For example, the <code><a href="../reference/luz_callback_early_stopping.html">?luz_callback_early_stopping</a></code> has a weight of <code>Inf</code>, since in general we want to run it as the last thing in the loop.</p>
-<p>The <code>ctx</code> object is used in luz to share information between the training loop and callbacks, model methods, and metrics. The table below describes information available in the <code>ctx</code> by default. Other callbacks could potentially modify these attributes or add new ones.</p>
+<p>Every step market with <code>on_*</code> is a point in the training
+procedure that is available for callbacks to be called.</p>
+<p>The other important part of callbacks is the <code>ctx</code>
+(context) object. See <code><a href="../reference/ctx.html">help("ctx")</a></code> for details.</p>
+<p>By default, callbacks are called in the same order as they were
+passed to <code>fit</code> (or <code>predict</code> or
+<code>evaluate</code>), but you can provide a <code>weight</code>
+attribute that will control the order in which it will be called. For
+example, if one callback has <code>weight = 10</code> and another has
+<code>weight = 1</code>, then the first one is called after the second
+one. Callbacks that don’t specify a <code>weight</code> attribute are
+considered <code>weight = 0</code>. A few built-in callbacks in luz
+already provide a weight value. For example, the
+<code><a href="../reference/luz_callback_early_stopping.html">?luz_callback_early_stopping</a></code> has a weight of
+<code>Inf</code>, since in general we want to run it as the last thing
+in the loop.</p>
+<p>The <code>ctx</code> object is used in luz to share information
+between the training loop and callbacks, model methods, and metrics. The
+table below describes information available in the <code>ctx</code> by
+default. Other callbacks could potentially modify these attributes or
+add new ones.</p>
 <!-- It's recommended to use the RStudio Visual editor to edit this table. -->
 <table class="table">
 <caption>Context attributes</caption>
@@ -338,15 +469,19 @@ End Fit</code></pre>
 <tbody>
 <tr class="odd">
 <td><code>verbose</code></td>
-<td>The value (<code>TRUE</code> or <code>FALSE</code>) attributed to the <code>verbose</code> argument in <code>fit</code> .</td>
+<td>The value (<code>TRUE</code> or <code>FALSE</code>) attributed to
+the <code>verbose</code> argument in <code>fit</code> .</td>
 </tr>
 <tr class="even">
 <td><code>accelerator</code></td>
-<td>Accelerator object used to query the correct device to place models, data, etc. It assumes the value passed to the <code>accelerator</code> parameter in <code>fit</code>.</td>
+<td>Accelerator object used to query the correct device to place models,
+data, etc. It assumes the value passed to the <code>accelerator</code>
+parameter in <code>fit</code>.</td>
 </tr>
 <tr class="odd">
 <td><code>model</code></td>
-<td>Initialized <code>nn_module</code> object that will be trained during the <code>fit</code> procedure.</td>
+<td>Initialized <code>nn_module</code> object that will be trained
+during the <code>fit</code> procedure.</td>
 </tr>
 <tr class="even">
 <td><code>optimizers</code></td>
@@ -354,15 +489,20 @@ End Fit</code></pre>
 </tr>
 <tr class="odd">
 <td><code>data</code></td>
-<td>The currently in-use dataloader. When training it’s <code>ctx$train_data</code>, when doing validation its <code>ctx$valid_data</code>. It can also be the prediction dataset when in <code>predict</code>.</td>
+<td>The currently in-use dataloader. When training it’s
+<code>ctx$train_data</code>, when doing validation its
+<code>ctx$valid_data</code>. It can also be the prediction dataset when
+in <code>predict</code>.</td>
 </tr>
 <tr class="even">
 <td><code>train_data</code></td>
-<td>Dataloader passed to the <code>data</code> argument in <code>fit</code>. Modified to yield data in the selected device.</td>
+<td>Dataloader passed to the <code>data</code> argument in
+<code>fit</code>. Modified to yield data in the selected device.</td>
 </tr>
 <tr class="odd">
 <td><code>valid_data</code></td>
-<td>Dataloader passed to the <code>valid_data</code> argument in <code>fit</code>. Modified to yield data in the selected device.</td>
+<td>Dataloader passed to the <code>valid_data</code> argument in
+<code>fit</code>. Modified to yield data in the selected device.</td>
 </tr>
 <tr class="even">
 <td><code>min_epochs</code></td>
@@ -378,86 +518,128 @@ End Fit</code></pre>
 </tr>
 <tr class="odd">
 <td><code>iter</code></td>
-<td>Current training iteration. It’s reset every epoch and when going from training to validation.</td>
+<td>Current training iteration. It’s reset every epoch and when going
+from training to validation.</td>
 </tr>
 <tr class="even">
 <td><code>training</code></td>
-<td>Whether the model is in training or validation mode. See also <code><a href="../reference/luz_callback_train_valid.html">help("luz_callback_train_valid")</a></code>
+<td>Whether the model is in training or validation mode. See also
+<code><a href="../reference/luz_callback_train_valid.html">help("luz_callback_train_valid")</a></code>
 </td>
 </tr>
 <tr class="odd">
 <td><code>callbacks</code></td>
-<td>List of callbacks that will be called during the training procedure. It’s the union of the list passed to the <code>callbacks</code> parameter and the default <code>callbacks</code>.</td>
+<td>List of callbacks that will be called during the training procedure.
+It’s the union of the list passed to the <code>callbacks</code>
+parameter and the default <code>callbacks</code>.</td>
 </tr>
 <tr class="even">
 <td><code>step</code></td>
-<td>Closure that will be used to do one <code>step</code> of the model. It’s used for both training and validation. Takes no argument, but can access the <code>ctx</code> object.</td>
+<td>Closure that will be used to do one <code>step</code> of the model.
+It’s used for both training and validation. Takes no argument, but can
+access the <code>ctx</code> object.</td>
 </tr>
 <tr class="odd">
 <td><code>call_callbacks</code></td>
-<td>Call callbacks by name. For example <code>call_callbacks("on_train_begin")</code> will call all callbacks that provide methods for this point.</td>
+<td>Call callbacks by name. For example
+<code>call_callbacks("on_train_begin")</code> will call all callbacks
+that provide methods for this point.</td>
 </tr>
 <tr class="even">
 <td><code>batch</code></td>
-<td>Last batch obtained by the dataloader. A batch is a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with 2 elements, one that is used as <code>input</code> and the other as <code>target</code>.</td>
+<td>Last batch obtained by the dataloader. A batch is a
+<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with 2 elements, one that is used as
+<code>input</code> and the other as <code>target</code>.</td>
 </tr>
 <tr class="odd">
 <td><code>input</code></td>
-<td>First element of the last batch obtained by the current dataloader.</td>
+<td>First element of the last batch obtained by the current
+dataloader.</td>
 </tr>
 <tr class="even">
 <td><code>target</code></td>
-<td>Second element of the last batch obtained by the current dataloader.</td>
+<td>Second element of the last batch obtained by the current
+dataloader.</td>
 </tr>
 <tr class="odd">
 <td><code>pred</code></td>
-<td>Last predictions obtained by <code>ctx$model$forward</code> . <strong>Note:</strong> can be potentially modified by previously ran callbacks. Also note that this might not be available if you used a custom training step.</td>
+<td>Last predictions obtained by <code>ctx$model$forward</code> .
+<strong>Note:</strong> can be potentially modified by previously ran
+callbacks. Also note that this might not be available if you used a
+custom training step.</td>
 </tr>
 <tr class="even">
 <td><code>loss_fn</code></td>
-<td>The active loss function that will be minimized during training.</td>
+<td>The active loss function that will be minimized during
+training.</td>
 </tr>
 <tr class="odd">
 <td><code>loss</code></td>
-<td>Last computed loss from the model. <strong>Note:</strong> this might not be available if you modified the training or validation step.</td>
+<td>Last computed loss from the model. <strong>Note:</strong> this might
+not be available if you modified the training or validation step.</td>
 </tr>
 <tr class="even">
 <td><code>opt</code></td>
-<td>Current optimizer, ie. the optimizer that will be used to do the next <code>step</code> to update parameters.</td>
+<td>Current optimizer, ie. the optimizer that will be used to do the
+next <code>step</code> to update parameters.</td>
 </tr>
 <tr class="odd">
 <td><code>opt_nm</code></td>
-<td>Current optimizer name. By default it’s <code>opt</code> , but can change if your model uses more than one optimizer depending on the set of parameters being optimized.</td>
+<td>Current optimizer name. By default it’s <code>opt</code> , but can
+change if your model uses more than one optimizer depending on the set
+of parameters being optimized.</td>
 </tr>
 <tr class="even">
 <td><code>metrics</code></td>
 <td>
-<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with current metric objects that are <code>update</code>d at every <code>on_train_batch_end()</code> or <code>on_valid_batch_end()</code>. See also <code><a href="../reference/luz_callback_metrics.html">help("luz_callback_metrics")</a></code>
+<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> with current metric objects that are
+<code>update</code>d at every <code>on_train_batch_end()</code> or
+<code>on_valid_batch_end()</code>. See also
+<code><a href="../reference/luz_callback_metrics.html">help("luz_callback_metrics")</a></code>
 </td>
 </tr>
 <tr class="odd">
 <td><code>records</code></td>
 <td>
-<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> recording metric values for training and validation for each epoch. See also <code><a href="../reference/luz_callback_metrics.html">help("luz_callback_metrics")</a></code> . Also records profiling metrics. See <code><a href="../reference/luz_callback_profile.html">help("luz_callback_profile")</a></code> for more information.</td>
+<code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> recording metric values for training and
+validation for each epoch. See also
+<code><a href="../reference/luz_callback_metrics.html">help("luz_callback_metrics")</a></code> . Also records profiling
+metrics. See <code><a href="../reference/luz_callback_profile.html">help("luz_callback_profile")</a></code> for more
+information.</td>
 </tr>
 <tr class="even">
 <td><code>handlers</code></td>
-<td>A named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of handlers that is passed to <code><a href="https://rlang.r-lib.org/reference/with_handlers.html" class="external-link">rlang::with_handlers()</a></code> during the training loop and can be used to handle errors or conditions that might be raised by other callbacks.</td>
+<td>A named <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> of handlers that is passed to
+<code><a href="https://rlang.r-lib.org/reference/with_handlers.html" class="external-link">rlang::with_handlers()</a></code> during the training loop and can be
+used to handle errors or conditions that might be raised by other
+callbacks.</td>
 </tr>
 <tr class="odd">
 <td><code>epoch_handlers</code></td>
-<td>A named list of handlers that is used with <code><a href="https://rlang.r-lib.org/reference/with_handlers.html" class="external-link">rlang::with_handlers()</a></code>. Those handlers are used inside the epochs loop, thus you can handle epoch specific conditions, that won’t necessarily end training.</td>
+<td>A named list of handlers that is used with
+<code><a href="https://rlang.r-lib.org/reference/with_handlers.html" class="external-link">rlang::with_handlers()</a></code>. Those handlers are used inside the
+epochs loop, thus you can handle epoch specific conditions, that won’t
+necessarily end training.</td>
 </tr>
 </tbody>
 </table>
-<p>Attributes in <code>ctx</code> can be used to produce the desired behavior of callbacks. You can find information about the context object using <code><a href="../reference/ctx.html">help("ctx")</a></code>. In our example, we use the <code>ctx$iter</code> attribute to print the iteration number for each training batch.</p>
+<p>Attributes in <code>ctx</code> can be used to produce the desired
+behavior of callbacks. You can find information about the context object
+using <code><a href="../reference/ctx.html">help("ctx")</a></code>. In our example, we use the
+<code>ctx$iter</code> attribute to print the iteration number for each
+training batch.</p>
 </div>
 <div class="section level2">
 <h2 id="next-steps">Next steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
 </h2>
-<p>In this article you learned how to train your first model using luz and the basics of customization using both custom metrics and callbacks.</p>
-<p>Luz also allows more flexible modifications of the training loop described in <code><a href="../articles/custom-loop.html">vignette("custom-loop")</a></code>.</p>
-<p>You should now be able to follow the examples marked with the ‘basic’ category in the <a href="https://mlverse.github.io/luz/articles/examples/index.html" class="external-link">examples gallery</a>.</p>
+<p>In this article you learned how to train your first model using luz
+and the basics of customization using both custom metrics and
+callbacks.</p>
+<p>Luz also allows more flexible modifications of the training loop
+described in <code><a href="../articles/custom-loop.html">vignette("custom-loop")</a></code>.</p>
+<p>You should now be able to follow the examples marked with the ‘basic’
+category in the <a href="https://mlverse.github.io/luz/articles/examples/index.html" class="external-link">examples
+gallery</a>.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -472,7 +654,7 @@ End Fit</code></pre>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer>

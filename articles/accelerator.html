@@ -77,7 +77,8 @@
 
 
 
-<script src="accelerator_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Accelerator API</h1>
             
@@ -90,46 +91,58 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/luz/" class="external-link">luz</a></span><span class="op">)</span></span></code></pre></div>
-<p>The Accelerator API is a simplified port of the Hugging Face <a href="https://github.com/huggingface/accelerate" class="external-link">Accelerate library</a>. It allows users to avoid the boilerplate code necessary to write training loops that work correctly on both devices. Currently it only handles CPU and single-GPU usage.</p>
-<p>This API is meant to be the most flexible way you can use the luz package. With the Accelerator API, you write the raw torch training loop and, with a few code changes, you automatically handle device placement of the model, optimizers and dataloaders, so you don’t need to add many <code>$to(device="cuda")</code> calls in your code or think about the order in which to create the model and optimizers.</p>
+<p>The Accelerator API is a simplified port of the Hugging Face <a href="https://github.com/huggingface/accelerate" class="external-link">Accelerate library</a>.
+It allows users to avoid the boilerplate code necessary to write
+training loops that work correctly on both devices. Currently it only
+handles CPU and single-GPU usage.</p>
+<p>This API is meant to be the most flexible way you can use the luz
+package. With the Accelerator API, you write the raw torch training loop
+and, with a few code changes, you automatically handle device placement
+of the model, optimizers and dataloaders, so you don’t need to add many
+<code>$to(device="cuda")</code> calls in your code or think about the
+order in which to create the model and optimizers.</p>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>The Accelerator API is best explained by showing an example diff in a raw torch training loop.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1"></a>library(torch)</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="va">+ library(luz)</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="va">+ acc &lt;- accelerator()</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="st">- device &lt;- "cpu"</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a></span>
-<span id="cb2-7"><a href="#cb2-7"></a>data &lt;- tensor_dataset(</span>
-<span id="cb2-8"><a href="#cb2-8"></a>  x = torch_randn(100, 10),</span>
-<span id="cb2-9"><a href="#cb2-9"></a>  y = torch_rand(100, 1)</span>
-<span id="cb2-10"><a href="#cb2-10"></a>)</span>
-<span id="cb2-11"><a href="#cb2-11"></a></span>
-<span id="cb2-12"><a href="#cb2-12"></a>dl &lt;- dataloader(data, batch_size = 10)</span>
-<span id="cb2-13"><a href="#cb2-13"></a></span>
-<span id="cb2-14"><a href="#cb2-14"></a>model &lt;- nn_linear(10, 1)</span>
-<span id="cb2-15"><a href="#cb2-15"></a><span class="st">- model$to(device = device)</span></span>
-<span id="cb2-16"><a href="#cb2-16"></a>opt &lt;- optim_adam(model$parameters)</span>
-<span id="cb2-17"><a href="#cb2-17"></a></span>
-<span id="cb2-18"><a href="#cb2-18"></a><span class="va">+ c(model, opt, dl) %&lt;-% acc$prepare(model, opt, dl)</span></span>
-<span id="cb2-19"><a href="#cb2-19"></a></span>
-<span id="cb2-20"><a href="#cb2-20"></a>model$train()</span>
-<span id="cb2-21"><a href="#cb2-21"></a>coro::loop(for (batch in dl) {</span>
-<span id="cb2-22"><a href="#cb2-22"></a></span>
-<span id="cb2-23"><a href="#cb2-23"></a>  opt$zero_grad()</span>
-<span id="cb2-24"><a href="#cb2-24"></a></span>
-<span id="cb2-25"><a href="#cb2-25"></a><span class="st">-  preds &lt;- model(batch$x$to(device = device))</span></span>
-<span id="cb2-26"><a href="#cb2-26"></a><span class="va">+  preds &lt;- model(batch$x)</span></span>
-<span id="cb2-27"><a href="#cb2-27"></a><span class="st">-  loss &lt;- nnf_mse_loss(preds, batch$y$to(device = device))</span></span>
-<span id="cb2-28"><a href="#cb2-28"></a><span class="va">+  loss &lt;- nnf_mse_loss(preds, batch$y)</span></span>
-<span id="cb2-29"><a href="#cb2-29"></a></span>
-<span id="cb2-30"><a href="#cb2-30"></a>  loss$backward()</span>
-<span id="cb2-31"><a href="#cb2-31"></a>  opt$step()</span>
-<span id="cb2-32"><a href="#cb2-32"></a>})</span></code></pre></div>
-<p>With the code changes shown, you no longer need to manually move data and parameters between devices, which makes your code easier to read and less error prone.</p>
-<p>You can find additional documentation using <code><a href="../reference/accelerator.html">help(accelerator)</a></code>.</p>
+<p>The Accelerator API is best explained by showing an example diff in a
+raw torch training loop.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>library(torch)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="va">+ library(luz)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">+ acc &lt;- accelerator()</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">- device &lt;- "cpu"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>data &lt;- tensor_dataset(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  x = torch_randn(100, 10),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  y = torch_rand(100, 1)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>dl &lt;- dataloader(data, batch_size = 10)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>model &lt;- nn_linear(10, 1)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="st">- model$to(device = device)</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>opt &lt;- optim_adam(model$parameters)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="va">+ c(model, opt, dl) %&lt;-% acc$prepare(model, opt, dl)</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>model$train()</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>coro::loop(for (batch in dl) {</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  opt$zero_grad()</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="st">-  preds &lt;- model(batch$x$to(device = device))</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="va">+  preds &lt;- model(batch$x)</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="st">-  loss &lt;- nnf_mse_loss(preds, batch$y$to(device = device))</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="va">+  loss &lt;- nnf_mse_loss(preds, batch$y)</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  loss$backward()</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  opt$step()</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<p>With the code changes shown, you no longer need to manually move data
+and parameters between devices, which makes your code easier to read and
+less error prone.</p>
+<p>You can find additional documentation using
+<code><a href="../reference/accelerator.html">help(accelerator)</a></code>.</p>
 </div>
   </main>
 </div>
@@ -143,7 +156,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer>

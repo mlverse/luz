@@ -1,15 +1,14 @@
-pandoc: 2.7.3
-pkgdown: 2.0.7.9000
-pkgdown_sha: c9206802f2888992de92aa41f517ba7812f05331
+pandoc: 2.19.2
+pkgdown: 2.0.7
+pkgdown_sha: ~
 articles:
   accelerator: accelerator.html
-  chargpt: examples/chargpt.html
   checkpoints: checkpoints.html
-  custom-loop: custom-loop.html
-  dogs-vs-cats-binary-classification: examples/dogs-vs-cats-binary-classification.html
-  get-started: get-started.html
-  index: examples/index.html
   lr-finder: lr-finder.html
+  custom-loop: custom-loop.html
+  chargpt: examples/chargpt.html
+  dogs-vs-cats-binary-classification: examples/dogs-vs-cats-binary-classification.html
+  index: examples/index.html
   mnist-autoencoder: examples/mnist-autoencoder.html
   mnist-cnn-virtual-batch-size: examples/mnist-cnn-virtual-batch-size.html
   mnist-cnn: examples/mnist-cnn.html
@@ -18,5 +17,7 @@ articles:
   mnist-triplet: examples/mnist-triplet.html
   pets-unet: examples/pets-unet.html
   text-classification: examples/text-classification.html
-last_built: 2023-09-15T17:29Z
+  text-generation: examples/text-generation.html
+  get-started: get-started.html
+last_built: 2023-10-17T16:26Z
 
