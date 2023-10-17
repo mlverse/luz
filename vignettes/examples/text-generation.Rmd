@@ -252,7 +252,7 @@ display_cb <- luz_callback(
 We can finally train the model. We define that we want to train the model for half a billion tokens
 in a total of 100 epochs.
 
-```{r}
+```{r, eval = FALSE}
 n_tokens <- 500e6
 batch_size <- 16
 epochs <- 100
