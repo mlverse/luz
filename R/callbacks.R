@@ -436,9 +436,9 @@ luz_callback_lr_scheduler <- luz_callback(
     }
     self[[call_on]] <- function() {
       if ("metrics" %in% names(formals(scheduler$step))) {
-        scheduler$step(current_loss)
+        self$scheduler$step(current_loss)
       } else {
-        scheduler$step()
+        self$scheduler$step()
       }
     }
     self$opt_name <- opt_name
