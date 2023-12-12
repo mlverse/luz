@@ -3,6 +3,7 @@
 * Added mixed precision callback. (#127)
 * Added support for torch iterable datasets. (#135)
 * Fixed a bug when trying to resume models trained with learning rate schedulers. (#137)
+* Added support for learning rate schedulers that take the current loss as arguments. (#140)
 
 # luz 0.4.0
 
