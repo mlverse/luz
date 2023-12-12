@@ -25,6 +25,21 @@ test_that("callback lr scheduler", {
     })
   })
 
+  expect_snapshot({
+    expect_message({
+      output <- mod %>%
+        set_hparams(input_size = 10, output_size = 1) %>%
+        fit(dl, verbose = FALSE, epochs = 20, callbacks = list(
+          luz_callback_lr_scheduler(
+            torch::lr_reduce_on_plateau,
+            verbose = TRUE,
+            patience = 2,
+            threshold = 1e-1
+          )
+        ))
+    })
+  })
+
 })
 
 test_that("csv callback", {
