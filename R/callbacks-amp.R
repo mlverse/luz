@@ -19,7 +19,7 @@ NULL
 luz_callback_mixed_precision <- luz_callback(
   "mixed_precision_callback",
   initialize = function(...) {
-    self$autocast_env <- rlang::new_environment()
+    self$autocast_context <- NULL
     self$scaler <- torch::cuda_amp_grad_scaler(...)
   },
   on_fit_begin = function() {
@@ -30,10 +30,11 @@ luz_callback_mixed_precision <- luz_callback(
   },
   on_train_batch_begin = function() {
     device_type <- if (grepl("cuda", ctx$device)) "cuda" else ctx$device
-    torch::local_autocast(device_type = device_type, .env = self$autocast_env)
+    self$autocast_context <- torch::set_autocast(device_type = device_type)
   },
   on_train_batch_after_loss = function() {
-    withr::deferred_run(self$autocast_env)
+    torch::unset_autocast(self$autocast_context)
+    self$autocast_context <- NULL
   },
   on_train_batch_before_backward = function() {
     torch::with_enable_grad({
