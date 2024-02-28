@@ -603,8 +603,13 @@ get_metrics.luz_module_evaluation <- function(object, ...) {
   res[, c("metric", "value")]
 }
 
+can_use_mps <- function() {
+  arch <- Sys.info()["machine"]
+  "arm64" %in% arch && torch::backends_mps_is_available()
+}
+
 enable_mps_fallback <- function() {
-  if (!torch::backends_mps_is_available())
+  if (!can_use_mps())
     return(invisible(NULL))
 
   fallback <- Sys.getenv("PYTORCH_ENABLE_MPS_FALLBACK", unset = "")
