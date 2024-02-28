@@ -61,10 +61,7 @@ jobs:
   GPU:
     runs-on: ['self-hosted', 'gpu-local']
     name: 'gpu'
-
-    container:
-      image: nvidia/cuda:11.7.1-cudnn8-devel-ubuntu18.04
-      options: --runtime=nvidia --gpus all
+    container: {image: 'nvidia/cuda:11.8.0-cudnn8-devel-ubuntu20.04', options: '--gpus all --runtime=nvidia'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
