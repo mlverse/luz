@@ -53,6 +53,11 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - run: |
+          print(torch::torch_is_installed())
+          print(torch::backends_mps_is_available())
+        shell: Rscript {0}
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           error-on: '"error"'
