@@ -68,5 +68,3 @@ Collate:
     'module.R'
     'reexports.R'
     'serialization.R'
-Remotes:
-    mlverse/torch
