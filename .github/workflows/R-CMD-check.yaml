@@ -53,18 +53,20 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - run: |
+          print(torch::torch_is_installed())
+          print(torch::backends_mps_is_available())
+        shell: Rscript {0}
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           error-on: '"error"'
           args: 'c("--no-multiarch", "--no-manual", "--as-cran")'
 
   GPU:
-    runs-on: ['self-hosted', 'gce', 'gpu']
+    runs-on: ['self-hosted', 'gpu-local']
     name: 'gpu'
-
-    container:
-      image: nvidia/cuda:11.7.1-cudnn8-devel-ubuntu18.04
-      options: --runtime=nvidia --gpus all
+    container: {image: 'nvidia/cuda:11.8.0-cudnn8-devel-ubuntu20.04', options: '--gpus all --runtime=nvidia'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true

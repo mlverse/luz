@@ -93,7 +93,7 @@ LuzAcceleratorState <- R6::R6Class(
 
       if (torch::cuda_is_available())
         paste0("cuda:", index)
-      else if (torch::backends_mps_is_available())
+      else if (can_use_mps())
         "mps"
       else
         "cpu"

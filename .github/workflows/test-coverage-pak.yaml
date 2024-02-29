@@ -13,10 +13,10 @@ name: test-coverage
 jobs:
   test-coverage:
 
-    runs-on: ['self-hosted', 'gce', 'gpu']
+    runs-on: ['self-hosted', 'gpu-local']
 
     container:
-      image: nvidia/cuda:11.7.1-cudnn8-devel-ubuntu18.04
+      image: nvidia/cuda:11.8.0-cudnn8-devel-ubuntu20.04
       options: --gpus all
 
     env:
