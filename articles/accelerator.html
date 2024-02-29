@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">luz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.9002</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,38 +106,38 @@ order in which to create the model and optimizers.</p>
 </h2>
 <p>The Accelerator API is best explained by showing an example diff in a
 raw torch training loop.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>library(torch)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="va">+ library(luz)</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">+ acc &lt;- accelerator()</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">- device &lt;- "cpu"</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>data &lt;- tensor_dataset(</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  x = torch_randn(100, 10),</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  y = torch_rand(100, 1)</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>dl &lt;- dataloader(data, batch_size = 10)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>model &lt;- nn_linear(10, 1)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="st">- model$to(device = device)</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>opt &lt;- optim_adam(model$parameters)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="va">+ c(model, opt, dl) %&lt;-% acc$prepare(model, opt, dl)</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>model$train()</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>coro::loop(for (batch in dl) {</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  opt$zero_grad()</span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="st">-  preds &lt;- model(batch$x$to(device = device))</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="va">+  preds &lt;- model(batch$x)</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="st">-  loss &lt;- nnf_mse_loss(preds, batch$y$to(device = device))</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="va">+  loss &lt;- nnf_mse_loss(preds, batch$y)</span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  loss$backward()</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  opt$step()</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode diff"><code class="sourceCode diff"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>library(torch)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="va">+ library(luz)</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="va">+ acc &lt;- accelerator()</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="st">- device &lt;- "cpu"</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>data &lt;- tensor_dataset(</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  x = torch_randn(100, 10),</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  y = torch_rand(100, 1)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>)</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>dl &lt;- dataloader(data, batch_size = 10)</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>model &lt;- nn_linear(10, 1)</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="st">- model$to(device = device)</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>opt &lt;- optim_adam(model$parameters)</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="va">+ c(model, opt, dl) %&lt;-% acc$prepare(model, opt, dl)</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>model$train()</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>coro::loop(for (batch in dl) {</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>  opt$zero_grad()</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="st">-  preds &lt;- model(batch$x$to(device = device))</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="va">+  preds &lt;- model(batch$x)</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="st">-  loss &lt;- nnf_mse_loss(preds, batch$y$to(device = device))</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="va">+  loss &lt;- nnf_mse_loss(preds, batch$y)</span></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>  loss$backward()</span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a>  opt$step()</span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a>})</span></code></pre></div>
 <p>With the code changes shown, you no longer need to manually move data
 and parameters between devices, which makes your code easier to read and
 less error prone.</p>

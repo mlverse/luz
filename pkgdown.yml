@@ -1,4 +1,4 @@
-pandoc: 2.19.2
+pandoc: 3.1.11
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
@@ -19,5 +19,5 @@ articles:
   text-classification: examples/text-classification.html
   text-generation: examples/text-generation.html
   get-started: get-started.html
-last_built: 2023-12-12T16:12Z
+last_built: 2024-02-29T17:38Z
 
