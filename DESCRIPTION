@@ -27,7 +27,6 @@ Imports:
     R6,
     generics,
     purrr,
-    ellipsis,
     fs,
     prettyunits,
     cli

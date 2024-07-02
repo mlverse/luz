@@ -229,7 +229,7 @@ fit.luz_module_generator <- function(
 
   enable_mps_fallback()
   module <- object
-  ellipsis::check_dots_empty()
+  rlang::check_dots_empty()
 
   # Initialize context:
   ctx <- fit_context$new(
