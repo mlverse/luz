@@ -143,7 +143,7 @@ Allows logging arbitrary information in the \code{ctx}.
 \item{\code{what}}{(string) What you are logging.}
 
 \item{\code{set}}{(string) Usually 'train' or 'valid' indicating the set you want
-to lot to. But can be arbitrary info.}
+to log to. But can be arbitrary info.}
 
 \item{\code{value}}{value to log}
 
@@ -196,7 +196,7 @@ Get a specific value from the log.
 \item{\code{what}}{(string) What you are logging.}
 
 \item{\code{set}}{(string) Usually 'train' or 'valid' indicating the set you want
-to lot to. But can be arbitrary info.}
+to log to. But can be arbitrary info.}
 
 \item{\code{index}}{Index that this value should be logged. If \code{NULL} the value
 is added to the end of list, otherwise the index is used.}
@@ -217,7 +217,7 @@ Get all metric given an epoch and set.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{set}}{(string) Usually 'train' or 'valid' indicating the set you want
-to lot to. But can be arbitrary info.}
+to log to. But can be arbitrary info.}
 
 \item{\code{epoch}}{The epoch you want to extract metrics from.}
 }
@@ -239,7 +239,7 @@ Get the value of a metric given its name, epoch and set.
 \item{\code{name}}{name of the metric}
 
 \item{\code{set}}{(string) Usually 'train' or 'valid' indicating the set you want
-to lot to. But can be arbitrary info.}
+to log to. But can be arbitrary info.}
 
 \item{\code{epoch}}{The epoch you want to extract metrics from.}
 }
@@ -259,7 +259,7 @@ Get formatted metrics values
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{set}}{(string) Usually 'train' or 'valid' indicating the set you want
-to lot to. But can be arbitrary info.}
+to log to. But can be arbitrary info.}
 
 \item{\code{epoch}}{The epoch you want to extract metrics from.}
 }

@@ -20,7 +20,7 @@ NULL
 #' @param value value to log
 #' @param what (string) What you are logging.
 #' @param set (string) Usually 'train' or 'valid' indicating the set you want
-#'  to lot to. But can be arbitrary info.
+#'  to log to. But can be arbitrary info.
 #' @param value Arbitrary value to log.
 #' @param index Index that this value should be logged. If `NULL` the value
 #'  is added to the end of list, otherwise the index is used.
