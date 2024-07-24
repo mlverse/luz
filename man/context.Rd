@@ -145,8 +145,6 @@ Allows logging arbitrary information in the \code{ctx}.
 \item{\code{set}}{(string) Usually 'train' or 'valid' indicating the set you want
 to log to. But can be arbitrary info.}
 
-\item{\code{value}}{value to log}
-
 \item{\code{value}}{Arbitrary value to log.}
 
 \item{\code{index}}{Index that this value should be logged. If \code{NULL} the value
@@ -173,8 +171,6 @@ Metric values are indexed by epoch.
 \if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{name}}{name of the metric}
-
-\item{\code{value}}{value to log}
 
 \item{\code{value}}{Arbitrary value to log.}
 }

@@ -17,7 +17,6 @@ NULL
 #' See also [ctx].
 #'
 #' @param name name of the metric
-#' @param value value to log
 #' @param what (string) What you are logging.
 #' @param set (string) Usually 'train' or 'valid' indicating the set you want
 #'  to log to. But can be arbitrary info.
