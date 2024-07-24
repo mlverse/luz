@@ -161,7 +161,7 @@ is overwritten in favor of the new value.}
 \if{html}{\out{<a id="method-luz_context-log_metric"></a>}}
 \if{latex}{\out{\hypertarget{method-luz_context-log_metric}{}}}
 \subsection{Method \code{log_metric()}}{
-Log a metric gen its name and value.
+Log a metric by its name and value.
 Metric values are indexed by epoch.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{context$log_metric(name, value)}\if{html}{\out{</div>}}

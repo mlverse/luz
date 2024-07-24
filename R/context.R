@@ -79,7 +79,7 @@ context <- R6::R6Class(
       invisible(self)
     },
     #' @description
-    #' Log a metric gen its name and value.
+    #' Log a metric by its name and value.
     #' Metric values are indexed by epoch.
     log_metric = function(name, value) {
       set <- if (self$training) "train" else "valid"
