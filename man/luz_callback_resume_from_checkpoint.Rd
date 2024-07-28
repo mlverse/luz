@@ -18,7 +18,7 @@ luz_callback_resume_from_checkpoint(
 
 \item{...}{currently unused.}
 
-\item{restore_model_state}{Wether to restore the model state from the callback.}
+\item{restore_model_state}{Wether to restore the model state from the checkpoint.}
 
 \item{restore_records}{Wether to restore records from the checkpoint.}
 
@@ -39,6 +39,7 @@ information.
 \code{\link[=luz_callback_model_checkpoint]{luz_callback_model_checkpoint()}}
 
 Other luz_callbacks: 
+\code{\link{luz_callback}()},
 \code{\link{luz_callback_auto_resume}()},
 \code{\link{luz_callback_csv_logger}()},
 \code{\link{luz_callback_early_stopping}()},
@@ -51,7 +52,6 @@ Other luz_callbacks:
 \code{\link{luz_callback_model_checkpoint}()},
 \code{\link{luz_callback_profile}()},
 \code{\link{luz_callback_progress}()},
-\code{\link{luz_callback_train_valid}()},
-\code{\link{luz_callback}()}
+\code{\link{luz_callback_train_valid}()}
 }
 \concept{luz_callbacks}
