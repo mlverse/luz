@@ -466,7 +466,7 @@ luz_callback_lr_scheduler <- luz_callback(
 
 #' CSV logger callback
 #'
-#' Logs metrics obtained during training a fiel on disk.
+#' Logs metrics obtained during training a file on disk.
 #' The file will have 1 line for each epoch/validation.
 #'
 #' @param path path to a file on disk.
