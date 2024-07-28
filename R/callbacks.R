@@ -382,7 +382,7 @@ luz_callback_metrics <- luz_callback(
 #' - `ctx$loss`: Resets the `loss` attribute to `list()` when finished training/ or
 #'   validating.
 #'
-#' @note In general you won't need to explicitly use the metrics callback as it's
+#' @note In general you won't need to explicitly use the train_valid callback as it's
 #' used by default in [fit.luz_module_generator()].
 #'
 #' @returns

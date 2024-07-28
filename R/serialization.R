@@ -137,7 +137,7 @@ luz_checkpoint <- function(ctx, path) {
 #'
 #' Works with checkpoints created typically with [luz_callback_model_checkpoint()].
 #'
-#' @param obj Object to which we want to laod the checkpoint.
+#' @param obj Object to which we want to load the checkpoint.
 #' @param path Path of the checkpoint on disk.
 #' @param ... unused. Is there to allow future extensions.
 #'
