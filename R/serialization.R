@@ -13,7 +13,7 @@
 #'
 #' @param obj an object of class 'luz_module_fitted' as returned by
 #' [fit.luz_module_generator()].
-#' @param path path in file system so save the object.
+#' @param path path in file system to the object.
 #' @param ... currently unused.
 #'
 #' @family luz_save

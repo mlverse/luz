@@ -7,7 +7,7 @@
 luz_load(path)
 }
 \arguments{
-\item{path}{path in file system so save the object.}
+\item{path}{path in file system to the object.}
 }
 \description{
 Loads a fitted model. See documentation in \code{\link[=luz_save]{luz_save()}}.
