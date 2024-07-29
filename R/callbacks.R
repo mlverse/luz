@@ -84,7 +84,7 @@ default_evaluate_callbacks <- function() {
 #' @section Prediction callbacks:
 #'
 #' You can also use callbacks when using [predict()]. In this case the supported
-#' callback methods are detailed above.
+#' callback methods are detailed below:
 #'
 #' ```
 #' Start predict
