@@ -3,6 +3,7 @@ Title: Higher Level 'API' for 'torch'
 Version: 0.4.0.9002
 Authors@R: c(
     person("Daniel", "Falbel", email = "daniel@rstudio.com", role = c("aut", "cre", "cph")),
+    person("Christophe", "Regouby", email = "christophe.regouby@free.fr", role = c("ctb")),
     person(family = "RStudio", role = c("cph"))
     )
 Description: A high level interface for 'torch' providing utilities to reduce the

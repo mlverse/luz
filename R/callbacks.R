@@ -84,7 +84,7 @@ default_evaluate_callbacks <- function() {
 #' @section Prediction callbacks:
 #'
 #' You can also use callbacks when using [predict()]. In this case the supported
-#' callback methods are detailed above.
+#' callback methods are detailed below:
 #'
 #' ```
 #' Start predict
@@ -382,7 +382,7 @@ luz_callback_metrics <- luz_callback(
 #' - `ctx$loss`: Resets the `loss` attribute to `list()` when finished training/ or
 #'   validating.
 #'
-#' @note In general you won't need to explicitly use the metrics callback as it's
+#' @note In general you won't need to explicitly use the train_valid callback as it's
 #' used by default in [fit.luz_module_generator()].
 #'
 #' @returns
@@ -466,7 +466,7 @@ luz_callback_lr_scheduler <- luz_callback(
 
 #' CSV logger callback
 #'
-#' Logs metrics obtained during training a fiel on disk.
+#' Logs metrics obtained during training a file on disk.
 #' The file will have 1 line for each epoch/validation.
 #'
 #' @param path path to a file on disk.

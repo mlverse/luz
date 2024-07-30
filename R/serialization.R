@@ -13,7 +13,7 @@
 #'
 #' @param obj an object of class 'luz_module_fitted' as returned by
 #' [fit.luz_module_generator()].
-#' @param path path in file system so save the object.
+#' @param path path in file system to the object.
 #' @param ... currently unused.
 #'
 #' @family luz_save
@@ -137,7 +137,7 @@ luz_checkpoint <- function(ctx, path) {
 #'
 #' Works with checkpoints created typically with [luz_callback_model_checkpoint()].
 #'
-#' @param obj Object to which we want to laod the checkpoint.
+#' @param obj Object to which we want to load the checkpoint.
 #' @param path Path of the checkpoint on disk.
 #' @param ... unused. Is there to allow future extensions.
 #'
