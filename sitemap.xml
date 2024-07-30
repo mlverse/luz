@@ -1,219 +1,75 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>/articles/accelerator.html</loc>
-  </url>
-  <url>
-    <loc>/articles/checkpoints.html</loc>
-  </url>
-  <url>
-    <loc>/articles/custom-loop.html</loc>
-  </url>
-  <url>
-    <loc>/articles/examples/chargpt.html</loc>
-  </url>
-  <url>
-    <loc>/articles/examples/dogs-vs-cats-binary-classification.html</loc>
-  </url>
-  <url>
-    <loc>/articles/examples/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/examples/mnist-autoencoder.html</loc>
-  </url>
-  <url>
-    <loc>/articles/examples/mnist-cnn-virtual-batch-size.html</loc>
-  </url>
-  <url>
-    <loc>/articles/examples/mnist-cnn.html</loc>
-  </url>
-  <url>
-    <loc>/articles/examples/mnist-dcgan.html</loc>
-  </url>
-  <url>
-    <loc>/articles/examples/mnist-mixup.html</loc>
-  </url>
-  <url>
-    <loc>/articles/examples/mnist-triplet.html</loc>
-  </url>
-  <url>
-    <loc>/articles/examples/pets-unet.html</loc>
-  </url>
-  <url>
-    <loc>/articles/examples/text-classification.html</loc>
-  </url>
-  <url>
-    <loc>/articles/examples/text-generation.html</loc>
-  </url>
-  <url>
-    <loc>/articles/get-started.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/lr-finder.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/accelerator.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as_dataloader.html</loc>
-  </url>
-  <url>
-    <loc>/reference/context.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ctx.html</loc>
-  </url>
-  <url>
-    <loc>/reference/evaluate.html</loc>
-  </url>
-  <url>
-    <loc>/reference/fit.luz_module_generator.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_metrics.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lr_finder.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_auto_resume.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_csv_logger.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_early_stopping.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_gradient_clip.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_interrupt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_keep_best_model.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_lr_scheduler.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_metrics.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_mixed_precision.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_mixup.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_model_checkpoint.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_profile.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_progress.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_resume_from_checkpoint.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_tfevents.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_callback_train_valid.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_load.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_load_checkpoint.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_load_model_weights.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_metric.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_metric_accuracy.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_metric_binary_accuracy.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_metric_binary_accuracy_with_logits.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_metric_binary_auroc.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_metric_mae.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_metric_mse.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_metric_multiclass_auroc.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_metric_rmse.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_metric_set.html</loc>
-  </url>
-  <url>
-    <loc>/reference/luz_save.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nn_mixup_loss.html</loc>
-  </url>
-  <url>
-    <loc>/reference/nnf_mixup.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>/reference/predict.luz_module_fitted.html</loc>
-  </url>
-  <url>
-    <loc>/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>/reference/set_hparams.html</loc>
-  </url>
-  <url>
-    <loc>/reference/set_opt_hparams.html</loc>
-  </url>
-  <url>
-    <loc>/reference/setup.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/accelerator.html</loc></url>
+<url><loc>/articles/checkpoints.html</loc></url>
+<url><loc>/articles/custom-loop.html</loc></url>
+<url><loc>/articles/examples/chargpt.html</loc></url>
+<url><loc>/articles/examples/dogs-vs-cats-binary-classification.html</loc></url>
+<url><loc>/articles/examples/index.html</loc></url>
+<url><loc>/articles/examples/mnist-autoencoder.html</loc></url>
+<url><loc>/articles/examples/mnist-cnn-virtual-batch-size.html</loc></url>
+<url><loc>/articles/examples/mnist-cnn.html</loc></url>
+<url><loc>/articles/examples/mnist-dcgan.html</loc></url>
+<url><loc>/articles/examples/mnist-mixup.html</loc></url>
+<url><loc>/articles/examples/mnist-triplet.html</loc></url>
+<url><loc>/articles/examples/pets-unet.html</loc></url>
+<url><loc>/articles/examples/text-classification.html</loc></url>
+<url><loc>/articles/examples/text-generation.html</loc></url>
+<url><loc>/articles/get-started.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/lr-finder.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/accelerator.html</loc></url>
+<url><loc>/reference/as_dataloader.html</loc></url>
+<url><loc>/reference/context.html</loc></url>
+<url><loc>/reference/ctx.html</loc></url>
+<url><loc>/reference/evaluate.html</loc></url>
+<url><loc>/reference/fit.luz_module_generator.html</loc></url>
+<url><loc>/reference/get_metrics.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/lr_finder.html</loc></url>
+<url><loc>/reference/luz_callback.html</loc></url>
+<url><loc>/reference/luz_callback_auto_resume.html</loc></url>
+<url><loc>/reference/luz_callback_csv_logger.html</loc></url>
+<url><loc>/reference/luz_callback_early_stopping.html</loc></url>
+<url><loc>/reference/luz_callback_gradient_clip.html</loc></url>
+<url><loc>/reference/luz_callback_interrupt.html</loc></url>
+<url><loc>/reference/luz_callback_keep_best_model.html</loc></url>
+<url><loc>/reference/luz_callback_lr_scheduler.html</loc></url>
+<url><loc>/reference/luz_callback_metrics.html</loc></url>
+<url><loc>/reference/luz_callback_mixed_precision.html</loc></url>
+<url><loc>/reference/luz_callback_mixup.html</loc></url>
+<url><loc>/reference/luz_callback_model_checkpoint.html</loc></url>
+<url><loc>/reference/luz_callback_profile.html</loc></url>
+<url><loc>/reference/luz_callback_progress.html</loc></url>
+<url><loc>/reference/luz_callback_resume_from_checkpoint.html</loc></url>
+<url><loc>/reference/luz_callback_tfevents.html</loc></url>
+<url><loc>/reference/luz_callback_train_valid.html</loc></url>
+<url><loc>/reference/luz_load.html</loc></url>
+<url><loc>/reference/luz_load_checkpoint.html</loc></url>
+<url><loc>/reference/luz_load_model_weights.html</loc></url>
+<url><loc>/reference/luz_metric.html</loc></url>
+<url><loc>/reference/luz_metric_accuracy.html</loc></url>
+<url><loc>/reference/luz_metric_binary_accuracy.html</loc></url>
+<url><loc>/reference/luz_metric_binary_accuracy_with_logits.html</loc></url>
+<url><loc>/reference/luz_metric_binary_auroc.html</loc></url>
+<url><loc>/reference/luz_metric_mae.html</loc></url>
+<url><loc>/reference/luz_metric_mse.html</loc></url>
+<url><loc>/reference/luz_metric_multiclass_auroc.html</loc></url>
+<url><loc>/reference/luz_metric_rmse.html</loc></url>
+<url><loc>/reference/luz_metric_set.html</loc></url>
+<url><loc>/reference/luz_save.html</loc></url>
+<url><loc>/reference/nn_mixup_loss.html</loc></url>
+<url><loc>/reference/nnf_mixup.html</loc></url>
+<url><loc>/reference/pipe.html</loc></url>
+<url><loc>/reference/predict.luz_module_fitted.html</loc></url>
+<url><loc>/reference/reexports.html</loc></url>
+<url><loc>/reference/set_hparams.html</loc></url>
+<url><loc>/reference/set_opt_hparams.html</loc></url>
+<url><loc>/reference/setup.html</loc></url>
 </urlset>
+

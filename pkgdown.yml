@@ -1,23 +1,22 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   accelerator: accelerator.html
-  checkpoints: checkpoints.html
-  lr-finder: lr-finder.html
+  examples/chargpt: examples/chargpt.html
+  articles/checkpoints: checkpoints.html
   custom-loop: custom-loop.html
-  chargpt: examples/chargpt.html
-  dogs-vs-cats-binary-classification: examples/dogs-vs-cats-binary-classification.html
-  index: examples/index.html
-  mnist-autoencoder: examples/mnist-autoencoder.html
-  mnist-cnn-virtual-batch-size: examples/mnist-cnn-virtual-batch-size.html
-  mnist-cnn: examples/mnist-cnn.html
-  mnist-dcgan: examples/mnist-dcgan.html
-  mnist-mixup: examples/mnist-mixup.html
-  mnist-triplet: examples/mnist-triplet.html
-  pets-unet: examples/pets-unet.html
-  text-classification: examples/text-classification.html
-  text-generation: examples/text-generation.html
+  examples/dogs-vs-cats-binary-classification: examples/dogs-vs-cats-binary-classification.html
   get-started: get-started.html
-last_built: 2024-02-29T17:38Z
-
+  examples/index: examples/index.html
+  articles/lr-finder: lr-finder.html
+  examples/mnist-autoencoder: examples/mnist-autoencoder.html
+  examples/mnist-cnn-virtual-batch-size: examples/mnist-cnn-virtual-batch-size.html
+  examples/mnist-cnn: examples/mnist-cnn.html
+  examples/mnist-dcgan: examples/mnist-dcgan.html
+  examples/mnist-mixup: examples/mnist-mixup.html
+  examples/mnist-triplet: examples/mnist-triplet.html
+  examples/pets-unet: examples/pets-unet.html
+  examples/text-classification: examples/text-classification.html
+  examples/text-generation: examples/text-generation.html
+last_built: 2024-07-30T13:33Z
