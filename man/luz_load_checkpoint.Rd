@@ -7,7 +7,7 @@
 luz_load_checkpoint(obj, path, ...)
 }
 \arguments{
-\item{obj}{Object to which we want to laod the checkpoint.}
+\item{obj}{Object to which we want to load the checkpoint.}
 
 \item{path}{Path of the checkpoint on disk.}
 

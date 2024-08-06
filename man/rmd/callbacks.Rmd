@@ -73,7 +73,7 @@ Here's an overview of possible callback *breakpoints*:
        - on_fit_end
     End Fit
 
-Every step market with `on_*` is a point in the training procedure that is available for callbacks to be called.
+Every step marked with `on_*` is a point in the training procedure that is available for callbacks to be called.
 
 The other important part of callbacks is the `ctx` (context) object. 
 See `help("ctx")` for details.

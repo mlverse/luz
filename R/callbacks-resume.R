@@ -131,7 +131,7 @@ luz_callback_auto_resume <- luz_callback(
 #' Allow resume model training from a specific checkpoint
 #'
 #' @param path Path to the checkpoint that you want to resume.
-#' @param restore_model_state Wether to restore the model state from the callback.
+#' @param restore_model_state Wether to restore the model state from the checkpoint.
 #' @param restore_records Wether to restore records from the checkpoint.
 #' @param restore_optimizer_state Wether to restore the optimizer state from the
 #'   checkpoint.

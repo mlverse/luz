@@ -10,7 +10,7 @@ luz_save(obj, path, ...)
 \item{obj}{an object of class 'luz_module_fitted' as returned by
 \code{\link[=fit.luz_module_generator]{fit.luz_module_generator()}}.}
 
-\item{path}{path in file system so save the object.}
+\item{path}{path in file system to the object.}
 
 \item{...}{currently unused.}
 }

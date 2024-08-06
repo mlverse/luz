@@ -17,10 +17,9 @@ NULL
 #' See also [ctx].
 #'
 #' @param name name of the metric
-#' @param value value to log
 #' @param what (string) What you are logging.
 #' @param set (string) Usually 'train' or 'valid' indicating the set you want
-#'  to lot to. But can be arbitrary info.
+#'  to log to. But can be arbitrary info.
 #' @param value Arbitrary value to log.
 #' @param index Index that this value should be logged. If `NULL` the value
 #'  is added to the end of list, otherwise the index is used.
@@ -80,7 +79,7 @@ context <- R6::R6Class(
       invisible(self)
     },
     #' @description
-    #' Log a metric gen its name and value.
+    #' Log a metric by its name and value.
     #' Metric values are indexed by epoch.
     log_metric = function(name, value) {
       set <- if (self$training) "train" else "valid"
