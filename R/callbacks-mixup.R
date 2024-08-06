@@ -38,7 +38,7 @@
 luz_callback_mixup <- luz_callback(
   "mixup_callback",
   initialize = function(alpha = 0.4, ..., run_valid = FALSE, auto_loss = FALSE) {
-    ellipsis::check_dots_empty()
+    rlang::check_dots_empty()
     self$alpha <- alpha
     self$run_valid <- run_valid
     self$auto_loss <- auto_loss

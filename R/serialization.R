@@ -19,7 +19,7 @@
 #' @family luz_save
 #' @export
 luz_save <- function(obj, path, ...) {
-  ellipsis::check_dots_empty()
+  rlang::check_dots_empty()
   # dangling environments might be in the `obj` search path causing problems
   # during saving. `gc()` is a good practice to make sure they are cleaned up
   # before saving.
