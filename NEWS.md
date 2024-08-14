@@ -18,7 +18,7 @@
 
 * Added support for arm Mac's and the MPS device. (#104)
 * Refactor checkpointing in luz - we now also serialize optimizer state and callbacks state. (#107)
-* Added a `luz_callback_autoresume()` allowing to easily resume trainining runs that might have crashed. (#107)
+* Added a `luz_callback_autoresume()` allowing to easily resume training runs that might have crashed. (#107)
 * Added the `luz_callback_resume_from_checkpoint()` allowing one to resume a training run from a checkpoint file. (#107)
 * Users can now chose if metrics should be called on both training and validation,
 only training or only validation. See `luz_metric_set()` for more information. (#112)
