@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: luz 0.4.0.9002\n"
-"POT-Creation-Date: 2024-08-14 15:22+0200\n"
+"POT-Creation-Date: 2024-08-14 19:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -255,7 +255,7 @@ msgid "to it, but doesn't implement the {.fn load_state_dict} method."
 msgstr ""
 
 #: utils.R:45
-msgid "No method {.val forward} found."
+msgid "No {.val forward} method found."
 msgstr ""
 
 #: utils.R:128

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: luz 0.4.0.9002\n"
-"POT-Creation-Date: 2024-08-14 15:22+0200\n"
-"PO-Revision-Date: 2024-08-14 15:23+0200\n"
+"POT-Creation-Date: 2024-08-14 19:43+0200\n"
+"PO-Revision-Date: 2024-08-14 19:44+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -44,7 +44,7 @@ msgstr "value_error"
 #: as_dataloader.R:99
 msgid "Can't convert object with class '%s' to a torch dataset."
 msgstr ""
-"Impossible de convertir les objet de classe '%s' en jeu de donnée `torch::"
+"Impossible de convertir les objets de classe '%s' en jeu de donnée `torch::"
 "dataset`."
 
 #: callbacks-monitor-metrics.R:24
@@ -293,7 +293,7 @@ msgid "to it, but doesn't implement the {.fn load_state_dict} method."
 msgstr "mais il lui manque la méthode {.fn load_state_dict}."
 
 #: utils.R:45
-msgid "No method {.val forward} found."
+msgid "No {.val forward} method found."
 msgstr "La méthode {.val forward} est manquante."
 
 #: utils.R:128

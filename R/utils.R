@@ -42,7 +42,7 @@ get_method <- function(x, method) {
 get_forward <- function(x) {
   forward <- get_method(x, "forward")
   if (is.null(forward)) {
-    cli::cli_abort("No method {.val forward} found.")
+    cli::cli_abort("No {.val forward} method found.")
   }
   forward
 }
