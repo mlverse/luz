@@ -191,7 +191,7 @@ luz_load_checkpoint.luz_fit_context <- function(obj, path, ...,
         cli::cli_abort(c(
           x = "Failed resuming the model.",
           i = paste0(
-            "A callback with class {.cls {class(cb)} has state attached ",
+            "A callback with class {.cls {class(cb)} has been attached ",
             "to it, but doesn't implement the {.fn load_state_dict} method."
           )
         ))

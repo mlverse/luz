@@ -1,0 +1,325 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luz 0.4.0.9002\n"
+"POT-Creation-Date: 2024-08-14 19:43+0200\n"
+"PO-Revision-Date: 2024-08-14 19:44+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.3\n"
+
+#: accelerator.R:33
+msgid "Wrong number of parameters in the prepared model."
+msgstr "Nombre incorrect de paramètres dans le modèle après préparation."
+
+#: accelerator.R:34
+msgid "Please report an issue in the GitHub repository."
+msgstr "Merci d'ouvrir une issue dans le dépot Github."
+
+#: accelerator.R:58
+msgid "Unhandled object with class {class(obj)}"
+msgstr "Les objets de classe {class(obj)} ne sont pas traités."
+
+#: accelerator.R:59
+msgid "Only nn_modules, optimizers and dataloaders are supported."
+msgstr ""
+"Seuls les `nn_modules`, les optimiseurs et les `dataloaders` sont pris en "
+"charge."
+
+#: as_dataloader.R:42
+msgid "Unsupported object with class '"
+msgstr "Les objets de classe `"
+
+#: as_dataloader.R:44
+msgid "'."
+msgstr "` ne sont pas pris en charge."
+
+#: as_dataloader.R:45 module.R:522 module.R:526
+msgid "value_error"
+msgstr "value_error"
+
+#: as_dataloader.R:99
+msgid "Can't convert object with class '%s' to a torch dataset."
+msgstr ""
+"Impossible de convertir les objets de classe '%s' en jeu de donnée `torch::"
+"dataset`."
+
+#: callbacks-monitor-metrics.R:24
+msgid "Expected monitored metric to be length 1, got {length(out)}"
+msgstr ""
+"La métrique sous surveillance doit être de longueur 1. Elle est en fait de "
+"{length(out)}."
+
+#: callbacks.R:42
+msgid ""
+"Error while calling callback with class {.cls {class(callback)}} at {.field "
+"{name}}."
+msgstr ""
+"Erreur pendant l'appel de `callback` de classe {.cls {class(callback)}} sur "
+"{.field {name}}."
+
+#: callbacks.R:348
+msgid ""
+"Error when evaluating {.field update} for metric with abbrev {.val {metric"
+"$abbrev}} and class {.cls {class(metric)}}"
+msgstr ""
+"Erreur pendant l'évaluation de {.field update} pour la métrique abrégée {."
+"val {metric$abbrev}} de classe {.cls {class(metric)}}."
+
+#: callbacks.R:349 callbacks.R:364
+msgid ""
+"The error happened at iter {.val {ctx$iter}} of epoch {.val {ctx$epoch}}."
+msgstr ""
+"L'erreur a eu lieu à l'itération {.val {ctx$iter}} de l'époque {.val {ctx"
+"$epoch}}."
+
+#: callbacks.R:350 callbacks.R:365
+msgid ""
+"The model was {.emph {ifelse(ctx$training, '', 'not ')}}in training mode."
+msgstr ""
+"Le modèle {.emph {ifelse(ctx$training, 'était ', 'n'était pas ')}} en mode "
+"apprentissage."
+
+#: callbacks.R:363
+msgid ""
+"Error when evaluating {.field compute} for metric with abbrev {.val {metric"
+"$abbrev}} and class {.cls {class(metric)}}"
+msgstr ""
+"Erreur pendant l'évaluation de {.field compute} pour la métrique abrégée {."
+"val {metric$abbrev}} de classe {.cls {class(metric)}}."
+
+#: callbacks.R:452
+msgid ""
+"An optimizer name was not supplied and your model has multiple optimizers"
+msgstr ""
+"Le nom d'un optimiseur n'a pas été fourni et votre modèle comporte plusieurs "
+"optimiseurs"
+
+#: callbacks.R:455
+msgid "opt_name '{self$opt_name}' not found in ctx$optimizers."
+msgstr ""
+"l'optimiseur nommé '{self$opt_name}' n'existe pas dans `ctx$optimizers`."
+
+#: callbacks.R:532
+msgid "{.var max_norm} should be a numeric scalar value."
+msgstr "{.var max_norm} doit être une valeur numérique."
+
+#: callbacks.R:533 callbacks.R:539
+msgid "x"
+msgstr "x"
+
+#: callbacks.R:533
+msgid "Got {.cls {class(max_norm)}} with length {length(max_norm)}"
+msgstr "Ici, {.cls {class(max_norm)}} est de longueur {length(max_norm)}."
+
+#: callbacks.R:538
+msgid "{.var norm_type} should be a numeric scalar value."
+msgstr "{.var norm_type} doit être une valeur numérique."
+
+#: callbacks.R:539
+msgid "Got {.cls {class(norm_type)}} with length {length(norm_type)}"
+msgstr "Ici, {.cls {class(norm_type)}} est de longueur {length(norm_type)}."
+
+#: context.R:183
+msgid "You are unsafe setting records and it's overriding current data."
+msgstr ""
+"Il est très risqué d'affecter des valeurs aux `records`. De plus, cela "
+"écrase toutes les données existantes."
+
+#: context.R:192
+msgid ""
+"Not allowed to modify records manually. Use ctx$log() or ctx$log_metric()"
+msgstr ""
+"Il n'est pas permis de modifier les journaux directement. Ils sont "
+"modifiables via `ctx$log()` ou `ctx$log_metric()`."
+
+#: context.R:200
+msgid "Not allowed to modify the device manually. Modify the ctx$accelerator"
+msgstr ""
+"Il n'est pas permis de modifier le périphérique `device` directement. Il est "
+"modifiable via `ctx$accelerator`."
+
+#: context.R:203
+msgid "Context doesn't have an accelerator attached."
+msgstr "Le contexte n'a pas d'accélérateur associé."
+
+#: context.R:342
+msgid "{.var ctx$opt} not set."
+msgstr "{.var ctx$opt} n'est pas configuré."
+
+#: context.R:356
+msgid "{.var ctx$opt_name} not set."
+msgstr "{.var ctx$opt_name} n'est pas configuré."
+
+#: context.R:574
+msgid "Expected `min_epochs` to be a scalar integer, got {str(min)}."
+msgstr "`min_epochs` doit être un entier, mais c'est {str(min)}."
+
+#: context.R:577
+msgid "Expected `max_epochs` to be a scalar integer, got {str(max)}."
+msgstr "`max_epochs` doit être un entier, mais c'est {str(max)}."
+
+#: context.R:580
+msgid "`min_epochs` is higher than `max_epochs` and that's not allowed."
+msgstr "`min_epochs` est supérieur à `max_epochs` et ce n'est pas autorisé."
+
+#: context.R:591
+msgid "List of optimizers is not named."
+msgstr "Les optimiseurs doivent être définis dans une liste nommée."
+
+#: context.R:592
+msgid "When returning a list of optimizers, the list must be named."
+msgstr "Lorsqu'une liste d'optimiseurs est renvoyée, elle doit être nommée."
+
+#: context.R:597
+msgid ""
+"Expected a torch optimizer but got an object with class '{class(i)[1]}'."
+msgstr ""
+"Un optimiseur torch est attendu, mais ici c'est un objet de classe '{class(i)"
+"[1]}'."
+
+#: losses.R:22
+msgid "Loss must be a `nn_module`."
+msgstr "La fonction de coût doit être un `nn_module`."
+
+#: losses.R:25
+msgid "The `reduction` attribute must be supported by the `nn_module`."
+msgstr "L'attribut `reduction` doit être supporté par le `nn_module`."
+
+#: metrics-auc.R:13
+msgid "num_thresholds must be > 1"
+msgstr "`num_thresholds` doit être > 1."
+
+#: metrics-auc.R:32
+msgid "not implemented"
+msgstr "non implémenté"
+
+#: metrics.R:74
+msgid "Expected an object with class {.cls luz_metric_generator}."
+msgstr "La classe de l'objet doit être {.cls luz_metric_generator}."
+
+#: metrics.R:75
+msgid "Got an object with class {.cls {class(x)}}."
+msgstr "Mais ici l'objet a une classe {.cls {class(x)}}."
+
+#: module.R:51
+msgid "No loss function has been provided."
+msgstr "La fonction de coût est manquante."
+
+#: module.R:52
+msgid "Use the `loss` argument or,"
+msgstr "Vous devez fournir l'argument `loss`, ou"
+
+#: module.R:53
+msgid "Implement the `loss` method in the `nn_module` or,"
+msgstr "implémenter une méthode `loss` dans le `nn_module`, ou"
+
+#: module.R:54
+msgid ""
+"Implement a custom `step` method that manually optimized the parameters."
+msgstr ""
+"implémenter une méthode `step` spécifique qui inclue l'optimisation des "
+"paramètres."
+
+#: module.R:61
+msgid "No optimizer definition has been provided."
+msgstr "La définition de l'optimiseur est manquante."
+
+#: module.R:62
+msgid "Use the optimizer argument or,"
+msgstr "Vous devez utiliser l'argument `optimizer`, ou"
+
+#: module.R:63
+msgid "Implement the `set_optimizers` method in the `nn_module`."
+msgstr "implémenter la méthode `set_optimizers` dans le `nn_module`."
+
+#: module.R:68
+msgid "backward should be a function with a single argument"
+msgstr "`backward` doit être une fonction à un seul argument."
+
+#: module.R:521
+msgid "valid_data must be a value between 0 and 1, got %f"
+msgstr "`valid_data` doit être entre 0 et 1. Ici, c'est %f"
+
+#: module.R:525
+msgid "Can't create a validation set from the training dataloader."
+msgstr ""
+"Impossible de créer un jeu de données de validation à partir du dataloader "
+"d'apprentissage."
+
+#: module.R:526
+msgid "Supply a torch dataset instead."
+msgstr "Il faut fournir un jeu de donnée torch `dataset` à la place."
+
+#: module.R:542
+msgid ""
+"`dataloader_options` won't be used because `data` is already a dataloader."
+msgstr ""
+"`dataloader_options` sera ignoré pour `data` puisqu'il s'agit déjà d'un "
+"dataloader."
+
+#: module.R:545
+msgid ""
+"`dataloader_options` will be ignored for `valid_data` since it's already a "
+"dataloader"
+msgstr ""
+"`dataloader_options` sera ignoré pour `valid_data` puisqu'il s'agit déjà "
+"d'un dataloader"
+
+#: module.R:571
+msgid "`shuffle=TRUE` will be ignored for predictions."
+msgstr "`shuffle=TRUE` sera ignoré pour les prédictions."
+
+#: serialization.R:29
+msgid ""
+"luz_save only works with 'luz_module_fitted_objects' and got {class(obj)[1]}"
+msgstr ""
+"`luz_save` ne prend en compte que les objets `luz_module_fitted_objects`. "
+"Ici, c'est un {class(obj)[1]}."
+
+#: serialization.R:192
+msgid "Failed resuming the model."
+msgstr "Échec de reprise sur le modèle."
+
+#: serialization.R:194
+msgid "A callback with class {.cls {class(cb)} has been attached"
+msgstr "Un `callback` de classe {.cls {class(cb)} lui est attaché"
+
+#: serialization.R:195
+msgid "to it, but doesn't implement the {.fn load_state_dict} method."
+msgstr "mais il lui manque la méthode {.fn load_state_dict}."
+
+#: utils.R:45
+msgid "No {.val forward} method found."
+msgstr "La méthode {.val forward} est manquante."
+
+#: utils.R:128
+msgid "Should have an out class."
+msgstr "Doit inclure une classe `out`."
+
+#: utils.R:156
+msgid "The"
+msgstr "Le"
+
+#: utils.R:156
+msgid "package must be installed in order to use `"
+msgstr "paquet doit être installé pour pouvoir utiliser `"
+
+#: utils.R:157
+msgid "`"
+msgstr "`"
+
+#: utils.R:157
+msgid "Do you need to run `install.packages('"
+msgstr "Vous pouvez essayer `install.packages('"
+
+#: utils.R:158
+msgid "')`?"
+msgstr "')`"
+
+#: utils.R:162
+msgid "Objects must have the same length."
+msgstr "Les objets doivent avoir la même taille."
