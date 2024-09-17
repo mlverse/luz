@@ -154,7 +154,7 @@ luz_callback_resume_from_checkpoint <- luz_callback(
                         restore_optimizer_state = FALSE,
                         restore_callbacks_state = FALSE) {
 
-    ellipsis::check_dots_empty()
+    rlang::check_dots_empty()
 
     # if path is a directory, grab the last file returned by dir_ls
     if (fs::is_dir(path)) {
