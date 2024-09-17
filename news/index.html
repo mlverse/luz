@@ -47,6 +47,7 @@
 <li>Added support for torch iterable datasets. (<a href="https://github.com/mlverse/luz/issues/135" class="external-link">#135</a>)</li>
 <li>Fixed a bug when trying to resume models trained with learning rate schedulers. (<a href="https://github.com/mlverse/luz/issues/137" class="external-link">#137</a>)</li>
 <li>Added support for learning rate schedulers that take the current loss as arguments. (<a href="https://github.com/mlverse/luz/issues/140" class="external-link">#140</a>)</li>
+<li>Added French translation of luz messages. (<a href="https://github.com/cregouby" class="external-link">@cregouby</a> <a href="https://github.com/mlverse/luz/issues/148" class="external-link">#148</a>)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="luz-040">luz 0.4.0<a class="anchor" aria-label="anchor" href="#luz-040"></a></h2><p class="text-muted">CRAN release: 2023-04-17</p>
@@ -60,8 +61,8 @@
 <h3 id="new-features-0-4-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-4-0"></a></h3>
 <ul><li>Added support for arm Mac’s and the MPS device. (<a href="https://github.com/mlverse/luz/issues/104" class="external-link">#104</a>)</li>
 <li>Refactor checkpointing in luz - we now also serialize optimizer state and callbacks state. (<a href="https://github.com/mlverse/luz/issues/107" class="external-link">#107</a>)</li>
-<li>Added a <code>luz_callback_autoresume()</code> allowing to easily resume trainining runs that might have crashed. (<a href="https://github.com/mlverse/luz/issues/107" class="external-link">#107</a>)</li>
-<li>Added th <code><a href="../reference/luz_callback_resume_from_checkpoint.html">luz_callback_resume_from_checkpoint()</a></code> allowing one to resume a training run from a checkpoint file. (<a href="https://github.com/mlverse/luz/issues/107" class="external-link">#107</a>)</li>
+<li>Added a <code>luz_callback_autoresume()</code> allowing to easily resume training runs that might have crashed. (<a href="https://github.com/mlverse/luz/issues/107" class="external-link">#107</a>)</li>
+<li>Added the <code><a href="../reference/luz_callback_resume_from_checkpoint.html">luz_callback_resume_from_checkpoint()</a></code> allowing one to resume a training run from a checkpoint file. (<a href="https://github.com/mlverse/luz/issues/107" class="external-link">#107</a>)</li>
 <li>Users can now chose if metrics should be called on both training and validation, only training or only validation. See <code><a href="../reference/luz_metric_set.html">luz_metric_set()</a></code> for more information. (<a href="https://github.com/mlverse/luz/issues/112" class="external-link">#112</a>)</li>
 <li>Improved how errors raised on user code, eg while calling metrics or callbacks are raised. This helps a lot when debuging errors in callbacks and metrics. (<a href="https://github.com/mlverse/luz/issues/112" class="external-link">#112</a>)</li>
 <li>
