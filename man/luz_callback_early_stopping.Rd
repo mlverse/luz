@@ -26,7 +26,7 @@ that you are tracking during training. The metric name is case insensitive.}
 (closer to zero is better).}
 
 \item{baseline}{An initial value that will be used as the best seen value
-in the begining. Model will stopm training if no better than baseline value
+in the begining. Model will stop training if no better than baseline value
 is found in the first \code{patience} epochs.}
 }
 \value{
