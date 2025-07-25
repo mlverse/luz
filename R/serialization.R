@@ -89,7 +89,7 @@ legacy_luz_load <- function(path) {
 #'
 #' @param obj luz object to which you want to copy the new weights.
 #' @param path path to saved model in disk.
-#' @param ... other arguments passed to [torch_load()].
+#' @param ... other arguments passed to [torch::torch_load()].
 #'
 #' @export
 luz_load_model_weights <- function(obj, path, ...) {

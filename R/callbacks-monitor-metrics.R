@@ -230,7 +230,9 @@ luz_callback_keep_best_model <- luz_callback(
   on_fit_end = function() {
     luz_load_checkpoint(ctx, self$path, restore_records = FALSE)
   },
-  finalize = function() {
-    unlink(self$path)
-  }
+  private = list(
+    finalize = function() {
+      unlink(self$path)
+    }
+   )
 )

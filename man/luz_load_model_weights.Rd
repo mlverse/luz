@@ -14,7 +14,7 @@ luz_save_model_weights(obj, path)
 
 \item{path}{path to saved model in disk.}
 
-\item{...}{other arguments passed to \code{\link[=torch_load]{torch_load()}}.}
+\item{...}{other arguments passed to \code{\link[torch:torch_load]{torch::torch_load()}}.}
 }
 \value{
 Returns \code{NULL} invisibly.
