@@ -23,8 +23,8 @@ jobs:
       matrix:
         config:
           - {os: windows-latest, r: 'release'}
-          - {os: macOS-latest, r: 'release'}
-          - {os: ['self-hosted', 'm1'], r: 'release', disable_mps: 'TRUE'}
+          - {os: macOS-latest, r: 'release', disable_mps: 'TRUE'}
+          - {os: ['self-hosted', 'm1'], r: 'release'}
           - {os: ubuntu-20.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
           - {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
 
@@ -65,7 +65,7 @@ jobs:
           args: 'c("--no-multiarch", "--no-manual", "--as-cran")'
 
   GPU:
-    runs-on: ['self-hosted', 'gpu-local']
+    runs-on: ['self-hosted', 'gpu']
     name: 'gpu'
     container: {image: 'nvidia/cuda:12.4.1-cudnn-devel-ubuntu20.04', options: '--gpus all --runtime=nvidia'}
 
