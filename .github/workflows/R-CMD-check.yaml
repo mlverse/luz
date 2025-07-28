@@ -71,7 +71,6 @@ jobs:
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      TORCH_INSTALL: 1
       TORCH_TEST: 1
       DEBIAN_FRONTEND: 'noninteractive'
 
@@ -95,6 +94,8 @@ jobs:
       - run: |
           print(torch::torch_is_installed())
         shell: Rscript {0}
+        env:
+          TORCH_INSTALL: 1
 
       - uses: r-lib/actions/check-r-package@v2
         with:
