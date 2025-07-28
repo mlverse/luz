@@ -66,11 +66,12 @@ jobs:
   GPU:
     runs-on: ['self-hosted', 'gpu']
     name: 'gpu'
-    container: {image: 'nvidia/cuda:12.4.1-cudnn-devel-ubuntu20.04', options: '--gpus all --runtime=nvidia'}
+    container: {image: 'nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04', options: '--gpus all --runtime=nvidia'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      TORCH_INSTALL: 1
       TORCH_TEST: 1
       DEBIAN_FRONTEND: 'noninteractive'
 
@@ -94,9 +95,7 @@ jobs:
       - run: |
           print(torch::torch_is_installed())
         shell: Rscript {0}
-        env:
-          TORCH_INSTALL: 1
-
+      
       - uses: r-lib/actions/check-r-package@v2
         with:
           error-on: '"error"'
