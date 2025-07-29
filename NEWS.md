@@ -1,4 +1,4 @@
-# luz (development version)
+# luz 0.5.0
 
 * Added mixed precision callback. (#127)
 * Added support for torch iterable datasets. (#135)
