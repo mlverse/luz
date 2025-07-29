@@ -1,2 +1,2 @@
-Fixed vignette rendering bug. It's probably related to an older version of 
-rmarkdown. Checking with newer rmarkdown on fedora clang didn't raise any errors.
+Fixed Rd cross-references to Rd \link{} targets not in the package 
+itself nor in the base packages to use package anchors.
