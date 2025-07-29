@@ -20,6 +20,7 @@ Printing can be disabled by passing \code{verbose=FALSE} to \code{\link[=fit.luz
 }
 \seealso{
 Other luz_callbacks: 
+\code{\link{luz_callback}()},
 \code{\link{luz_callback_auto_resume}()},
 \code{\link{luz_callback_csv_logger}()},
 \code{\link{luz_callback_early_stopping}()},
@@ -32,7 +33,6 @@ Other luz_callbacks:
 \code{\link{luz_callback_model_checkpoint}()},
 \code{\link{luz_callback_profile}()},
 \code{\link{luz_callback_resume_from_checkpoint}()},
-\code{\link{luz_callback_train_valid}()},
-\code{\link{luz_callback}()}
+\code{\link{luz_callback_train_valid}()}
 }
 \concept{luz_callbacks}

@@ -187,7 +187,7 @@ get_opt_hparams <- function(module) {
 #'   `data` will be used for validation.
 #'
 #' @param accelerator (accelerator, optional) An optional [accelerator()] object
-#'   used to configure device placement of the components like [nn_module]s,
+#'   used to configure device placement of the components like [torch::nn_module]s,
 #'   optimizers and batches of data.
 #'
 #' @param verbose (logical, optional) An optional boolean value indicating if
@@ -605,7 +605,7 @@ get_metrics.luz_module_evaluation <- function(object, ...) {
 
 can_use_mps <- function() {
   arch <- Sys.info()["machine"]
-  "arm64" %in% arch && torch::backends_mps_is_available()
+  identical(Sys.getenv("LUZ_DISABLE_MPS", "FALSE"), "FALSE") && "arm64" %in% arch && torch::backends_mps_is_available()
 }
 
 enable_mps_fallback <- function() {

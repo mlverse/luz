@@ -46,7 +46,7 @@ this case a random sample with size corresponding to that proportion from
 \code{data} will be used for validation.}
 
 \item{accelerator}{(accelerator, optional) An optional \code{\link[=accelerator]{accelerator()}} object
-used to configure device placement of the components like \link{nn_module}s,
+used to configure device placement of the components like \link[torch:nn_module]{torch::nn_module}s,
 optimizers and batches of data.}
 
 \item{verbose}{(logical, optional) An optional boolean value indicating if

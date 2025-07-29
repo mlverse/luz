@@ -28,7 +28,7 @@ callbacks \code{\link[=luz_callback_metrics]{luz_callback_metrics()}}, \code{\li
 \code{\link[=luz_callback_train_valid]{luz_callback_train_valid()}} are always added by default.}
 
 \item{accelerator}{(accelerator, optional) An optional \code{\link[=accelerator]{accelerator()}} object
-used to configure device placement of the components like \link{nn_module}s,
+used to configure device placement of the components like \link[torch:nn_module]{torch::nn_module}s,
 optimizers and batches of data.}
 
 \item{verbose}{(logical, optional) An optional boolean value indicating if

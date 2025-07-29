@@ -35,7 +35,7 @@ callbacks \code{\link[=luz_callback_metrics]{luz_callback_metrics()}}, \code{\li
 \code{\link[=luz_callback_train_valid]{luz_callback_train_valid()}} are always added by default.}
 
 \item{accelerator}{(accelerator, optional) An optional \code{\link[=accelerator]{accelerator()}} object
-used to configure device placement of the components like \link{nn_module}s,
+used to configure device placement of the components like \link[torch:nn_module]{torch::nn_module}s,
 optimizers and batches of data.}
 
 \item{verbose}{(logical, optional) An optional boolean value indicating if
@@ -66,14 +66,6 @@ For example:
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{evaluation <- fitted \%>\% evaluate(data = valid_dl)
 metrics <- get_metrics(evaluation)
 print(evaluation)
-}\if{html}{\out{</div>}}
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{## A `luz_module_evaluation`
-## -- Results ---------------------------------------------------------------------
-## loss: 1.5146
-## mae: 1.0251
-## mse: 1.5159
-## rmse: 1.2312
 }\if{html}{\out{</div>}}
 }
 \seealso{

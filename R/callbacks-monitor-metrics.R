@@ -51,7 +51,7 @@ monitor_metrics <- luz_callback(
 #'  'min' is used. Can also be 'max' (higher is better) and 'zero'
 #'  (closer to zero is better).
 #' @param baseline An initial value that will be used as the best seen value
-#'  in the begining. Model will stopm training if no better than baseline value
+#'  in the begining. Model will stop training if no better than baseline value
 #'  is found in the first `patience` epochs.
 #'
 #' @note
@@ -230,7 +230,9 @@ luz_callback_keep_best_model <- luz_callback(
   on_fit_end = function() {
     luz_load_checkpoint(ctx, self$path, restore_records = FALSE)
   },
-  finalize = function() {
-    unlink(self$path)
-  }
+  private = list(
+    finalize = function() {
+      unlink(self$path)
+    }
+   )
 )

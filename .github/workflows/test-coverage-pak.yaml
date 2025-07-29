@@ -16,11 +16,10 @@ jobs:
     runs-on: ['self-hosted', 'gpu-local']
 
     container:
-      image: nvidia/cuda:11.8.0-cudnn8-devel-ubuntu20.04
+      image: nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
       options: --gpus all
 
     env:
-      RSPM: https://packagemanager.rstudio.com/cran/__linux__/bionic/latest
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       TORCH_INSTALL: 1
       TORCH_TEST: 1
@@ -31,7 +30,7 @@ jobs:
 
       - run: |
           apt-get update -y
-          apt-get install -y sudo software-properties-common dialog apt-utils tzdata
+          apt-get install -y sudo software-properties-common dialog apt-utils tzdata protobuf-compiler libprotobuf-dev
 
       - uses: r-lib/actions/setup-r@v2
 

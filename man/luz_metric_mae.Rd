@@ -23,13 +23,13 @@ metric$compute()
 }
 \seealso{
 Other luz_metrics: 
+\code{\link{luz_metric}()},
 \code{\link{luz_metric_accuracy}()},
-\code{\link{luz_metric_binary_accuracy_with_logits}()},
 \code{\link{luz_metric_binary_accuracy}()},
+\code{\link{luz_metric_binary_accuracy_with_logits}()},
 \code{\link{luz_metric_binary_auroc}()},
 \code{\link{luz_metric_mse}()},
 \code{\link{luz_metric_multiclass_auroc}()},
-\code{\link{luz_metric_rmse}()},
-\code{\link{luz_metric}()}
+\code{\link{luz_metric_rmse}()}
 }
 \concept{luz_metrics}
