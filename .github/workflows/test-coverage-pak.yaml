@@ -30,7 +30,7 @@ jobs:
 
       - run: |
           apt-get update -y
-          apt-get install -y sudo software-properties-common dialog apt-utils tzdata libprotobuf17
+          apt-get install -y sudo software-properties-common dialog apt-utils tzdata protobuf
 
       - uses: r-lib/actions/setup-r@v2
 

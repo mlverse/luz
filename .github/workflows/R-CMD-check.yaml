@@ -80,7 +80,7 @@ jobs:
 
       - run: |
           apt-get update -y
-          apt-get install -y sudo software-properties-common dialog apt-utils tzdata libpng-dev libprotobuf17
+          apt-get install -y sudo software-properties-common dialog apt-utils tzdata libpng-dev protobuf
 
       - uses: r-lib/actions/setup-r@v2
 
