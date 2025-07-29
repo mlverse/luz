@@ -6,7 +6,6 @@
 * Added support for learning rate schedulers that take the current loss as arguments. (#140)
 * Added French translation of luz messages. (@cregouby #148)
 
-
 # luz 0.4.0
 
 ## Breaking changes

@@ -10,7 +10,7 @@ Description: A high level interface for 'torch' providing utilities to reduce th
     the amount of code needed for common tasks, abstract away torch details and 
     make the same code work on both the 'CPU' and 'GPU'. It's flexible enough to
     support expressing a large range of models. It's heavily inspired by 'fastai' by 
-    Howard et al. (2020) <arXiv:2002.04688>, 'Keras' by Chollet et al. (2015) and 
+    Howard et al. (2020) <doi:10.48550/arXiv.2002.04688>, 'Keras' by Chollet et al. (2015) and 
     'PyTorch Lightning' by Falcon et al. (2019) <doi:10.5281/zenodo.3828935>.
 License: MIT + file LICENSE
 URL: https://mlverse.github.io/luz/, https://github.com/mlverse/luz
