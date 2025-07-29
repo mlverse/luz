@@ -11,4 +11,5 @@
 ^cran-comments\.md$
 ^CRAN-RELEASE$
 ^vignettes/articles$
+^vignettes/examples$
 ^CRAN-SUBMISSION$
