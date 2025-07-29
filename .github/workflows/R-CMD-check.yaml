@@ -94,6 +94,7 @@ jobs:
 
       - run: |
           print(torch::torch_is_installed())
+          install.packages('tfevents')
           library(tfevents)
         shell: Rscript {0}
       
