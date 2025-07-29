@@ -68,3 +68,4 @@ Collate:
     'module.R'
     'reexports.R'
     'serialization.R'
+BugReports: https://github.com/mlverse/luz/issues
