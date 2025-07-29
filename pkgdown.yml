@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.0
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   accelerator: accelerator.html
@@ -19,4 +19,7 @@ articles:
   examples/pets-unet: examples/pets-unet.html
   examples/text-classification: examples/text-classification.html
   examples/text-generation: examples/text-generation.html
-last_built: 2024-09-17T14:33Z
+last_built: 2025-07-29T11:47Z
+urls:
+  reference: https://mlverse.github.io/luz/reference
+  article: https://mlverse.github.io/luz/articles

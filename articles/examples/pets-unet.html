@@ -8,8 +8,8 @@
 <title>UNET implementation • luz</title>
 <script src="../../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../../deps/headroom-0.11.0/headroom.min.js"></script><script src="../../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../../deps/search-1.0.0/fuse.min.js"></script><script src="../../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../../pkgdown.js"></script><meta property="og:title" content="UNET implementation">
 </head>
 <body>
@@ -74,7 +74,7 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://torch.mlverse.org/docs" class="external-link">torch</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://torchvision.mlverse.org" class="external-link">torchvision</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/torchdatasets/" class="external-link">torchdatasets</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/luz/" class="external-link">luz</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/luz/">luz</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Datasets and loaders ----------------------------------------------------</span></span>
 <span></span>
@@ -84,7 +84,7 @@
 <span><span class="co"># input images and masks to the specified `size` and introduces the `augmentation`</span></span>
 <span><span class="co"># argument, allowing us to specify transformations that must be synced between </span></span>
 <span><span class="co"># images and masks, eg. flipping, cropping, etc.</span></span>
-<span><span class="va">pet_dataset</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataset.html" class="external-link">dataset</a></span><span class="op">(</span></span>
+<span><span class="va">pet_dataset</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/dataset.html" class="external-link">dataset</a></span><span class="op">(</span></span>
 <span>  inherit <span class="op">=</span> <span class="va">oxford_pet_dataset</span>,</span>
 <span>  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">...</span>, <span class="va">augmentation</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">size</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">224</span>, <span class="fl">224</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    </span>
@@ -95,7 +95,7 @@
 <span>    <span class="op">}</span></span>
 <span>    </span>
 <span>    <span class="va">target_transform</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_tensor.html" class="external-link">torch_tensor</a></span><span class="op">(</span><span class="va">x</span>, dtype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_dtype.html" class="external-link">torch_long</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_tensor.html" class="external-link">torch_tensor</a></span><span class="op">(</span><span class="va">x</span>, dtype <span class="op">=</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_dtype.html" class="external-link">torch_long</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span>      <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">[</span><span class="va">newaxis</span>,<span class="va">..</span><span class="op">]</span></span>
 <span>      <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torchvision.mlverse.org/reference/transform_resize.html" class="external-link">transform_resize</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">size</span>, interpolation <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span>      <span class="va">x</span><span class="op">[</span><span class="fl">1</span>,<span class="va">..</span><span class="op">]</span></span>
@@ -133,18 +133,18 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span></span>
-<span><span class="va">train_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="va">train_ds</span>, batch_size <span class="op">=</span> <span class="fl">32</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">valid_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="va">valid_ds</span>, batch_size <span class="op">=</span> <span class="fl">32</span><span class="op">)</span></span>
+<span><span class="va">train_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="va">train_ds</span>, batch_size <span class="op">=</span> <span class="fl">32</span>, shuffle <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">valid_dl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="va">valid_ds</span>, batch_size <span class="op">=</span> <span class="fl">32</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Define the network ------------------------------------------------------</span></span>
 <span></span>
 <span><span class="co"># We use a pre-trained mobile net encoder. We take intermediate layers to use</span></span>
 <span><span class="co"># in the skip connections.</span></span>
-<span><span class="va">encoder</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span></span>
+<span><span class="va">encoder</span> <span class="op">&lt;-</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span></span>
 <span>  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torchvision.mlverse.org/reference/model_mobilenet_v2.html" class="external-link">model_mobilenet_v2</a></span><span class="op">(</span>pretrained <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span>    <span class="va">self</span><span class="op">$</span><span class="va">stages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module_list.html" class="external-link">nn_module_list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_identity.html" class="external-link">nn_identity</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">stages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_module_list.html" class="external-link">nn_module_list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_identity.html" class="external-link">nn_identity</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>      <span class="va">model</span><span class="op">$</span><span class="va">features</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>,</span>
 <span>      <span class="va">model</span><span class="op">$</span><span class="va">features</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>,</span>
 <span>      <span class="va">model</span><span class="op">$</span><span class="va">features</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span>,</span>
@@ -169,16 +169,16 @@
 <span></span>
 <span><span class="co"># The decoder blocks are composed of a upsample layer + a convolution</span></span>
 <span><span class="co"># with same padding.</span></span>
-<span><span class="va">decoder_block</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span></span>
+<span><span class="va">decoder_block</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span></span>
 <span>  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">in_channels</span>, <span class="va">skip_channels</span>, <span class="va">out_channels</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">self</span><span class="op">$</span><span class="va">upsample</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_conv_transpose2d.html" class="external-link">nn_conv_transpose2d</a></span><span class="op">(</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">upsample</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_conv_transpose2d.html" class="external-link">nn_conv_transpose2d</a></span><span class="op">(</span></span>
 <span>      in_channels <span class="op">=</span> <span class="va">in_channels</span>, </span>
 <span>      out_channels <span class="op">=</span> <span class="va">out_channels</span>,</span>
 <span>      kernel_size <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>      stride <span class="op">=</span> <span class="fl">2</span></span>
 <span>    <span class="op">)</span></span>
-<span>    <span class="va">self</span><span class="op">$</span><span class="va">activation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_relu.html" class="external-link">nn_relu</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>    <span class="va">self</span><span class="op">$</span><span class="va">conv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">activation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_relu.html" class="external-link">nn_relu</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">conv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span></span>
 <span>      in_channels <span class="op">=</span> <span class="va">out_channels</span> <span class="op">+</span> <span class="va">skip_channels</span>, </span>
 <span>      out_channels <span class="op">=</span> <span class="va">out_channels</span>,</span>
 <span>      kernel_size <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -190,7 +190,7 @@
 <span>      <span class="va">self</span><span class="op">$</span><span class="fu">upsample</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span> </span>
 <span>      <span class="va">self</span><span class="op">$</span><span class="fu">activation</span><span class="op">(</span><span class="op">)</span></span>
 <span>    </span>
-<span>    <span class="va">input</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_cat.html" class="external-link">torch_cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">skip</span><span class="op">)</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>    <span class="va">input</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_cat.html" class="external-link">torch_cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">skip</span><span class="op">)</span>, dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span>    </span>
 <span>    <span class="va">input</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span> </span>
 <span>      <span class="va">self</span><span class="op">$</span><span class="fu">conv</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span> </span>
@@ -200,7 +200,7 @@
 <span></span>
 <span><span class="co"># We build the decoder by making a sequence of `decoder_blocks` matching</span></span>
 <span><span class="co"># the sizes to be compatible with the encoder sizes.</span></span>
-<span><span class="va">decoder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span></span>
+<span><span class="va">decoder</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span></span>
 <span>  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span></span>
 <span>    <span class="va">decoder_channels</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">256</span>, <span class="fl">128</span>, <span class="fl">64</span>, <span class="fl">32</span>, <span class="fl">16</span><span class="op">)</span>,</span>
 <span>    <span class="va">encoder_channels</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16</span>, <span class="fl">24</span>, <span class="fl">32</span>, <span class="fl">96</span>, <span class="fl">320</span><span class="op">)</span></span>
@@ -212,7 +212,7 @@
 <span>    </span>
 <span>    <span class="va">depth</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">encoder_channels</span><span class="op">)</span></span>
 <span>    </span>
-<span>    <span class="va">self</span><span class="op">$</span><span class="va">blocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module_list.html" class="external-link">nn_module_list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">blocks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_module_list.html" class="external-link">nn_module_list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">depth</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">self</span><span class="op">$</span><span class="va">blocks</span><span class="op">$</span><span class="fu">append</span><span class="op">(</span><span class="fu">decoder_block</span><span class="op">(</span></span>
 <span>        in_channels <span class="op">=</span> <span class="va">in_channels</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
@@ -235,12 +235,12 @@
 <span><span class="co"># FInally the model is the composition of encoder and decoder + an output </span></span>
 <span><span class="co"># layer that will produce the distribution for each one of the possible </span></span>
 <span><span class="co"># classes.</span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">nn_module</a></span><span class="op">(</span></span>
 <span>  initialize <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">self</span><span class="op">$</span><span class="va">encoder</span> <span class="op">&lt;-</span> <span class="fu">encoder</span><span class="op">(</span><span class="op">)</span></span>
 <span>    <span class="va">self</span><span class="op">$</span><span class="va">decoder</span> <span class="op">&lt;-</span> <span class="fu">decoder</span><span class="op">(</span><span class="op">)</span></span>
-<span>    <span class="va">self</span><span class="op">$</span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_sequential.html" class="external-link">nn_sequential</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">16</span>, <span class="fl">3</span>, <span class="fl">3</span>, padding <span class="op">=</span> <span class="st">"same"</span><span class="op">)</span></span>
+<span>    <span class="va">self</span><span class="op">$</span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_sequential.html" class="external-link">nn_sequential</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_conv2d.html" class="external-link">nn_conv2d</a></span><span class="op">(</span><span class="fl">16</span>, <span class="fl">3</span>, <span class="fl">3</span>, padding <span class="op">=</span> <span class="st">"same"</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span>,</span>
 <span>  forward <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
@@ -256,7 +256,7 @@
 <span><span class="co"># We train using the cross entropy loss. We could have used the dice loss</span></span>
 <span><span class="co"># too, but it's harder to optimize.</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="../../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../../reference/setup.html">setup</a></span><span class="op">(</span>optimizer <span class="op">=</span> <span class="va">optim_adam</span>, loss <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/nn_cross_entropy_loss.html" class="external-link">nn_cross_entropy_loss</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../../reference/setup.html">setup</a></span><span class="op">(</span>optimizer <span class="op">=</span> <span class="va">optim_adam</span>, loss <span class="op">=</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nn_cross_entropy_loss.html" class="external-link">nn_cross_entropy_loss</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/lr_finder.html">lr_finder</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">train_dl</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span>
@@ -270,9 +270,9 @@
 <span><span class="co"># Plot validation image ---------------------</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/raster" class="external-link">raster</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fitted</span>, <span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/dataset_subset.html" class="external-link">dataset_subset</a></span><span class="op">(</span><span class="va">valid_ds</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fitted</span>, <span class="fu"><a href="https://torch.mlverse.org/docs/reference/dataloader.html" class="external-link">dataloader</a></span><span class="op">(</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/dataset_subset.html" class="external-link">dataset_subset</a></span><span class="op">(</span><span class="va">valid_ds</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">as.array</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_argmax.html" class="external-link">torch_argmax</a></span><span class="op">(</span><span class="va">preds</span><span class="op">[</span><span class="fl">1</span>,<span class="va">..</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="fu">to</span><span class="op">(</span>device <span class="op">=</span> <span class="st">"cpu"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mask</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">as.array</a></span><span class="op">(</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_argmax.html" class="external-link">torch_argmax</a></span><span class="op">(</span><span class="va">preds</span><span class="op">[</span><span class="fl">1</span>,<span class="va">..</span><span class="op">]</span>, <span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="fu">to</span><span class="op">(</span>device <span class="op">=</span> <span class="st">"cpu"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">mask</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu">ratify</span><span class="op">(</span><span class="fu">raster</span><span class="fu">::</span><span class="fu">raster</span><span class="op">(</span><span class="va">mask</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">img</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="fu">::</span><span class="fu">brick</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">as.array</a></span><span class="op">(</span><span class="va">valid_ds</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="fu">permute</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -288,7 +288,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>

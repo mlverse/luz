@@ -8,8 +8,8 @@
 <title>Checkpointing your models • luz</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Checkpointing your models">
 </head>
 <body>
@@ -70,10 +70,10 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/luz/" class="external-link">luz</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/luz/">luz</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://torch.mlverse.org/docs" class="external-link">torch</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_manual_seed.html" class="external-link">torch_manual_seed</a></span><span class="op">(</span><span class="fl">1703</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_manual_seed.html" class="external-link">torch_manual_seed</a></span><span class="op">(</span><span class="fl">1703</span><span class="op">)</span></span></code></pre></div>
 <p>When fitting models take too long you might want to save intermediate
 state to disk, if something goes wrong during training (eg. process is
 killed, network fails, etc) you can recover from where it stopped.</p>
@@ -99,8 +99,8 @@ start from where it stopped.</p>
 linear model to show how autoresume works.</p>
 <p>Here’s the training data:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_randn.html" class="external-link">torch_randn</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_randn.html" class="external-link">torch_randn</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_randn.html" class="external-link">torch_randn</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_randn.html" class="external-link">torch_randn</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p>And the model definition:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="va">nn_linear</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -163,8 +163,8 @@ specified file or directory.</p>
 <p>Let’s use the same example as in the resuming section: We first
 generate some data.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_randn.html" class="external-link">torch_randn</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/torch/man/torch_randn.html" class="external-link">torch_randn</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_randn.html" class="external-link">torch_randn</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_randn.html" class="external-link">torch_randn</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p>Then define our model:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="va">nn_linear</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
@@ -233,7 +233,7 @@ checkpoint file as returned by <code><a href="https://fs.r-lib.org/reference/dir
 <p>Sometimes callbacks also need to keep their internal state in order
 to allow continuing training exactly from where it stopped. In this
 case, callbacks can implement the <code>state_dict()</code> and the
-<code><a href="https://rdrr.io/pkg/torch/man/load_state_dict.html" class="external-link">load_state_dict()</a></code> methods that are automatically called
+<code><a href="https://torch.mlverse.org/docs/reference/load_state_dict.html" class="external-link">load_state_dict()</a></code> methods that are automatically called
 when saving and reloading checkpoints.</p>
 <p>For example, suppose that you have a callback that tracks gradients
 for weights at every epoch. You want to use the tracked weights to
@@ -259,7 +259,7 @@ reason, <code>gradients</code> will be lost. If it’s important for you
 to also checkpoint the callback state, you can implement the
 <code>state_dict()</code> method must returning a named list of objects
 that compose the state of the callback and
-<code><a href="https://rdrr.io/pkg/torch/man/load_state_dict.html" class="external-link">load_state_dict()</a></code> taking the same named list returned by
+<code><a href="https://torch.mlverse.org/docs/reference/load_state_dict.html" class="external-link">load_state_dict()</a></code> taking the same named list returned by
 <code>state_dict()</code> and restoring the callback state.</p>
 <p>The callback above could be reimplemented with:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -295,7 +295,7 @@ that compose the state of the callback and
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
