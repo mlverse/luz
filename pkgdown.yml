@@ -19,7 +19,7 @@ articles:
   examples/pets-unet: examples/pets-unet.html
   examples/text-classification: examples/text-classification.html
   examples/text-generation: examples/text-generation.html
-last_built: 2025-07-29T13:59Z
+last_built: 2025-07-29T14:27Z
 urls:
   reference: https://mlverse.github.io/luz/reference
   article: https://mlverse.github.io/luz/articles
