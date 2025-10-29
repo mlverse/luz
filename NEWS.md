@@ -1,5 +1,7 @@
 # luz (development version)
 
+* fixed a bug preventing additional arguments passed to `predict` to be forwarded to `model$predict` (#157)
+
 # luz 0.5.0
 
 * Added mixed precision callback. (#127)
