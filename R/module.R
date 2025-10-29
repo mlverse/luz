@@ -396,10 +396,12 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
   )
 
   pars <- rlang::list2(...)
-  if (is.null(pars$stack))
+  if (is.null(pars$stack)) {
     stack <- TRUE
-  else
+  } else {
     stack <- pars$stack
+    pars$stack <- NULL # pop from this list
+  }
 
   predict_fn <- if (is.null(ctx$model$predict)) ctx$model else ctx$model$predict
 
@@ -416,7 +418,7 @@ predict.luz_module_fitted <- function(object, newdata, ..., callbacks = list(),
         coro::loop(for(batch in ctx$data) {
           ctx$batch <- batch
           ctx$call_callbacks("on_predict_batch_begin")
-          ctx$pred[[length(ctx$pred) + 1]] <- do.call(predict_fn, list(ctx$input))
+          ctx$pred[[length(ctx$pred) + 1]] <- do.call(predict_fn, rlang::list2(ctx$input, !!!pars))
           ctx$call_callbacks("on_predict_batch_end")
         })
       }
