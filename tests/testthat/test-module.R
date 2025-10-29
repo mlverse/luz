@@ -127,6 +127,34 @@ test_that("predict works for modules", {
 
 })
 
+test_that("predict passes additional arguments", {
+
+  base_model <- get_model()
+  model <- torch::nn_module(
+    inherit = base_model,
+    predict = function(x, scale = 1) {
+      self$forward(x) * scale
+    }
+  )
+  dl <- get_dl()
+
+  fitted <- model %>%
+    setup(
+      loss = torch::nn_mse_loss(),
+      optimizer = torch::optim_adam
+    ) %>%
+    set_hparams(input_size = 10, output_size = 1) %>%
+    fit(dl, verbose = FALSE)
+
+  pred <- predict(fitted, dl)
+  pred_scaled <- predict(fitted, dl, scale = 2)
+
+  expect_equal(
+    as.array(pred_scaled$to(device = "cpu")),
+    2 * as.array(pred$to(device = "cpu"))
+  )
+})
+
 test_that("predict can use a progress bar", {
 
   model <- get_model()
