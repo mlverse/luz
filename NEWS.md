@@ -1,4 +1,4 @@
-# luz (development version)
+# luz 0.5.1
 
 * fixed a bug preventing additional arguments passed to `predict` to be forwarded to `model$predict` (#157)
 
