@@ -21,8 +21,12 @@ mnist_dataset2 <- torch::dataset(
     output <- super$.getitem(i)
     output$y <- output$x
     output
-  }
-)
+  },
+  .getbatch = function(i) {
+    output <- super$.getbatch(i)
+    output$y <- output$x
+    output
+  })
 
 train_ds <- mnist_dataset2(
   dir,
