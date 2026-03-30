@@ -16,6 +16,11 @@ dir <- "./mnist" # caching directory
 
 triplet_mnist_dataset <- dataset(
   inherit = mnist_dataset,
+  initialize = function(...) {
+    super$initialize(...)
+    self$targets_vec <- as.integer(self$targets)
+  },
+  
   .getitem = function(index) {
     anchor <- self$data[index, ,]
     label <- self$targets[index]
@@ -28,6 +33,25 @@ triplet_mnist_dataset <- dataset(
         anchor = self$transform(anchor),
         negative = self$transform(negative),
         positive = self$transform(positive)
+      ),
+      list() # no 'target'
+    )
+  },
+
+  .getbatch = function(indices) {
+    safe_sample <- function(x) {
+      if (length(x) <= 1) return(x)
+      sample(x, 1)
+    }
+    labels <- self$targets_vec[indices]
+    pos_idx <- vapply(labels, function(l) safe_sample(which(self$targets_vec == l)), 1L)
+    neg_idx <- vapply(labels, function(l) safe_sample(which(self$targets_vec != l)), 1L)
+
+    list(
+      list( # input is a list with 3 images.
+        anchor = self$transform(self$data[indices, , ])$unsqueeze(2),
+        negative = self$transform(self$data[neg_idx, , ])$unsqueeze(2),
+        positive = self$transform(self$data[pos_idx, , ])$unsqueeze(2)
       ),
       list() # no 'target'
     )
