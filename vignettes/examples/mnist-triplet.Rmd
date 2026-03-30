@@ -49,9 +49,9 @@ triplet_mnist_dataset <- dataset(
 
     list(
       list( # input is a list with 3 images.
-        anchor = self$transform(self$data[indices, , ])$unsqueeze(2),
-        negative = self$transform(self$data[neg_idx, , ])$unsqueeze(2),
-        positive = self$transform(self$data[pos_idx, , ])$unsqueeze(2)
+        anchor = self$transform(self$data[indices, , ])$permute(c(2,1,3))$unsqueeze(2),
+        negative = self$transform(self$data[neg_idx, , ])$permute(c(2,1,3))$unsqueeze(2),
+        positive = self$transform(self$data[pos_idx, , ])$permute(c(2,1,3))$unsqueeze(2)
       ),
       list() # no 'target'
     )
