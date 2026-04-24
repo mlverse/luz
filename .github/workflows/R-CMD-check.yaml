@@ -34,10 +34,10 @@ jobs:
       TORCH_INSTALL: 1
       TORCH_TEST: 1
       PYTORCH_ENABLE_MPS_FALLBACK: 1
-      LUZ_DISABLE_MPS: ${{ matrix.config.disable_mps|| 'FALSE' }}
+      LUZ_DISABLE_MPS: ${{ matrix.config.disable_mps || 'FALSE' }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-r@v2
         if: ${{ !contains(matrix.config.os, 'm1') }}
@@ -76,7 +76,7 @@ jobs:
       DEBIAN_FRONTEND: 'noninteractive'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - run: |
           apt-get update -y

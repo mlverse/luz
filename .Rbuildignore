@@ -13,3 +13,4 @@
 ^vignettes/articles$
 ^vignettes/examples$
 ^CRAN-SUBMISSION$
+^\.context$
