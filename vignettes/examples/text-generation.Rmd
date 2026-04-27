@@ -13,6 +13,7 @@ class from the [Hugging Face NLP course](https://huggingface.co/learn/nlp-course
 library(torch)
 library(tok)
 library(luz)
+library(dotty)
 library(minhub) # remotes::install_github("mlverse/minhub")
 #library(tidyverse)
 options(arrow.skip_nul = TRUE)
@@ -204,7 +205,7 @@ net <- nn_module(
     for (i in seq_len(iter)) {
       logits <- self$forward(x)[,,-1]
       logits <- logits/temperature
-      c(prob, ind) %<-% logits$topk(top_k)
+      .[prob, ind] <- logits$topk(top_k)
       logits <- torch_full_like(logits, -Inf)$scatter_(-1, ind, prob)
       logits <- nnf_softmax(logits, dim = -1)
       id_next <- torch_multinomial(logits, num_samples = 1)
