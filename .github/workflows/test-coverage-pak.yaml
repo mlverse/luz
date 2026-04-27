@@ -13,7 +13,10 @@ name: test-coverage
 jobs:
   test-coverage:
 
-    runs-on: ['self-hosted', 'gpu-local']
+    concurrency:
+      group: gpu-tests
+    runs-on:
+      - "runs-on=${{ github.run_id }}/family=g4dn.xlarge/image=ubuntu24-gpu-x64/spot=true"
 
     container:
       image: nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04

@@ -64,7 +64,10 @@ jobs:
           args: 'c("--no-multiarch", "--no-manual", "--as-cran")'
 
   GPU:
-    runs-on: ['self-hosted', 'gpu']
+    concurrency:
+      group: gpu-tests
+    runs-on:
+      - "runs-on=${{ github.run_id }}/family=g4dn.xlarge/image=ubuntu24-gpu-x64/spot=true"
     name: 'gpu'
     container: {image: 'nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04', options: '--gpus all --runtime=nvidia'}
 
