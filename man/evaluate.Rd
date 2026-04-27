@@ -67,6 +67,14 @@ For example:
 metrics <- get_metrics(evaluation)
 print(evaluation)
 }\if{html}{\out{</div>}}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{## A `luz_module_evaluation`
+## -- Results ---------------------------------------------------------------------
+## loss: 1.8892
+## mae: 1.0522
+## mse: 1.645
+## rmse: 1.2826
+}\if{html}{\out{</div>}}
 }
 \seealso{
 Other training: 
