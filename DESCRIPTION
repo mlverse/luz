@@ -3,7 +3,7 @@ Title: Higher Level 'API' for 'torch'
 Version: 0.5.1.9000
 Authors@R: c(
     person("Tomasz", "Kalinowski", role = c("ctb", "cre"), email = "tomasz@posit.co"),
-    person("Daniel", "Falbel", email = "daniel@rstudio.com", role = c("aut", "cph")),
+    person("Daniel", "Falbel", email = "dfalbel@gmail.com", role = c("aut", "cph")),
     person("Christophe", "Regouby", email = "christophe.regouby@free.fr", role = c("ctb")),
     person(family = "RStudio", role = c("cph"))
     )
