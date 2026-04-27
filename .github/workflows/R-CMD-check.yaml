@@ -69,7 +69,7 @@ jobs:
     runs-on:
       - "runs-on=${{ github.run_id }}/family=g4dn.xlarge/image=ubuntu24-gpu-x64/spot=true"
     name: 'gpu'
-    container: {image: 'nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04', options: '--gpus all --runtime=nvidia'}
+    container: {image: 'nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04', options: '--gpus all --runtime=nvidia'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
