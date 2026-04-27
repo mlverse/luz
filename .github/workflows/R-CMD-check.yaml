@@ -67,6 +67,7 @@ jobs:
   GPU:
     concurrency:
       group: gpu-tests
+      cancel-in-progress: false
     runs-on:
       - "runs-on=${{ github.run_id }}/family=g4dn.xlarge/image=ubuntu24-gpu-x64/spot=true"
     name: 'gpu'
