@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../../index.html">luz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,6 +76,7 @@ Face NLP course</a>.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://torch.mlverse.org/docs" class="external-link">torch</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mlverse/tok" class="external-link">tok</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mlverse.github.io/luz/">luz</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://kevinushey.github.io/dotty/" class="external-link">dotty</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">minhub</span><span class="op">)</span> <span class="co"># remotes::install_github("mlverse/minhub")</span></span>
 <span><span class="co">#library(tidyverse)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>arrow.skip_nul <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -258,7 +259,7 @@ us to sample from the model given an initial context.</p>
 <span>    <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="va">iter</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="va">logits</span> <span class="op">&lt;-</span> <span class="va">self</span><span class="op">$</span><span class="fu">forward</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">[</span>,,<span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
 <span>      <span class="va">logits</span> <span class="op">&lt;-</span> <span class="va">logits</span><span class="op">/</span><span class="va">temperature</span></span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">prob</span>, <span class="va">ind</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/zeallot/man/operator.html" class="external-link">%&lt;-%</a></span> <span class="va">logits</span><span class="op">$</span><span class="fu">topk</span><span class="op">(</span><span class="va">top_k</span><span class="op">)</span></span>
+<span>      <span class="va">.</span><span class="op">[</span><span class="va">prob</span>, <span class="va">ind</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">logits</span><span class="op">$</span><span class="fu">topk</span><span class="op">(</span><span class="va">top_k</span><span class="op">)</span></span>
 <span>      <span class="va">logits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_full_like.html" class="external-link">torch_full_like</a></span><span class="op">(</span><span class="va">logits</span>, <span class="op">-</span><span class="cn">Inf</span><span class="op">)</span><span class="op">$</span><span class="fu">scatter_</span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="va">ind</span>, <span class="va">prob</span><span class="op">)</span></span>
 <span>      <span class="va">logits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/nnf_softmax.html" class="external-link">nnf_softmax</a></span><span class="op">(</span><span class="va">logits</span>, dim <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
 <span>      <span class="va">id_next</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_multinomial.html" class="external-link">torch_multinomial</a></span><span class="op">(</span><span class="va">logits</span>, num_samples <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -353,11 +354,11 @@ model for half a billion tokens in a total of 100 epochs.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Daniel Falbel.</p>
+  <p>Developed by Tomasz Kalinowski, Daniel Falbel.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
