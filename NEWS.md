@@ -1,4 +1,9 @@
-# luz (development version)
+# luz 0.5.2
+
+* New maintainer: Tomasz Kalinowski.
+* Switched CI GPU runners to ephemeral runs-on instances.
+* Bumped CI CUDA container to 12.8.1.
+* Fixed bugs in example vignettes (`mnist-vae`, `text-generation`).
 
 # luz 0.5.1
 

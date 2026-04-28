@@ -13,3 +13,5 @@
 ^vignettes/articles$
 ^vignettes/examples$
 ^CRAN-SUBMISSION$
+^\.context$
+^Rplots\.pdf$

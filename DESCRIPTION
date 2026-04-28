@@ -1,8 +1,9 @@
 Package: luz
 Title: Higher Level 'API' for 'torch'
-Version: 0.5.1.9000
+Version: 0.5.2
 Authors@R: c(
-    person("Daniel", "Falbel", email = "daniel@rstudio.com", role = c("aut", "cre", "cph")),
+    person("Tomasz", "Kalinowski", role = c("ctb", "cre"), email = "tomasz@posit.co"),
+    person("Daniel", "Falbel", email = "dfalbel@gmail.com", role = c("aut", "cph")),
     person("Christophe", "Regouby", email = "christophe.regouby@free.fr", role = c("ctb")),
     person(family = "RStudio", role = c("cph"))
     )
@@ -16,7 +17,7 @@ License: MIT + file LICENSE
 URL: https://mlverse.github.io/luz/, https://github.com/mlverse/luz
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Imports: 
     torch (>= 0.11.9000),
     magrittr,

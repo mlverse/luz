@@ -13,10 +13,14 @@ name: test-coverage
 jobs:
   test-coverage:
 
-    runs-on: ['self-hosted', 'gpu-local']
+    concurrency:
+      group: gpu-tests
+      cancel-in-progress: false
+    runs-on:
+      - "runs-on=${{ github.run_id }}/family=g4dn.xlarge/image=ubuntu24-gpu-x64/spot=true"
 
     container:
-      image: nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
+      image: nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04
       options: --gpus all
 
     env:
@@ -26,19 +30,25 @@ jobs:
       DEBIAN_FRONTEND: 'noninteractive'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - run: |
           apt-get update -y
           apt-get install -y sudo software-properties-common dialog apt-utils tzdata protobuf-compiler libprotobuf-dev
 
       - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           cache: false
           extra-packages: any::rcmdcheck
           needs: check
+
+      - name: Run tests
+        run: testthat::test_local()
+        shell: Rscript {0}
 
       - name: Test coverage
         run: covr::codecov()

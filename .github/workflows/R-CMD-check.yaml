@@ -34,15 +34,16 @@ jobs:
       TORCH_INSTALL: 1
       TORCH_TEST: 1
       PYTORCH_ENABLE_MPS_FALLBACK: 1
-      LUZ_DISABLE_MPS: ${{ matrix.config.disable_mps|| 'FALSE' }}
+      LUZ_DISABLE_MPS: ${{ matrix.config.disable_mps || 'FALSE' }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-r@v2
         if: ${{ !contains(matrix.config.os, 'm1') }}
         with:
           r-version: ${{ matrix.config.r }}
+          use-public-rspm: true
 
       - uses: r-lib/actions/setup-pandoc@v2
         if: ${{ !contains(matrix.config.os, 'm1') }}
@@ -58,46 +59,6 @@ jobs:
           print(torch::backends_mps_is_available())
         shell: Rscript {0}
 
-      - uses: r-lib/actions/check-r-package@v2
-        with:
-          error-on: '"error"'
-          args: 'c("--no-multiarch", "--no-manual", "--as-cran")'
-
-  GPU:
-    runs-on: ['self-hosted', 'gpu']
-    name: 'gpu'
-    container: {image: 'nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04', options: '--gpus all --runtime=nvidia'}
-
-    env:
-      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      TORCH_INSTALL: 1
-      TORCH_TEST: 1
-      DEBIAN_FRONTEND: 'noninteractive'
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - run: |
-          apt-get update -y
-          apt-get install -y sudo software-properties-common dialog apt-utils tzdata libpng-dev protobuf-compiler libprotobuf-dev
-
-      - uses: r-lib/actions/setup-r@v2
-
-      - uses: r-lib/actions/setup-pandoc@v2
-
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          cache: false
-          extra-packages: any::rcmdcheck
-          needs: check
-
-      - run: |
-          print(torch::torch_is_installed())
-          install.packages('tfevents')
-          library(tfevents)
-        shell: Rscript {0}
-      
       - uses: r-lib/actions/check-r-package@v2
         with:
           error-on: '"error"'

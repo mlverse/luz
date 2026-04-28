@@ -92,7 +92,7 @@ model <- autoencoder |>
 preds <- predict(model, data)
 
 df <- as.data.frame(as.matrix(preds))
-df$labels <- sapply(seq_len(length(mnist)), \(i) mnist[i]$y)
+df$labels <- sapply(seq_len(length(data)), \(i) data[i]$y)
 
 # Visualization ------------------------------------------------------------
 
