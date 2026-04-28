@@ -117,15 +117,15 @@ get_metrics(results)
 #> on_epoch_end.
 #> Caused by error in `self[[callback_nm]]()`:
 #> ! Error on epoch 5
-#>      set metric epoch     value
-#> 1  train   loss     1 1.1204630
-#> 2  train   loss     2 0.9699391
-#> 3  train   loss     3 0.9195096
-#> 4  train   loss     4 0.9188682
-#> 5  train   loss     5 0.9208487
-#> 6  train   loss     6 0.9116878
-#> 7  train   loss     7 0.9137349
-#> 8  train   loss     8 0.9079372
-#> 9  train   loss     9 0.9070297
-#> 10 train   loss    10 0.9146817
+#>      set metric epoch    value
+#> 1  train   loss     1 1.243438
+#> 2  train   loss     2 1.079375
+#> 3  train   loss     3 1.030074
+#> 4  train   loss     4 1.015318
+#> 5  train   loss     5 1.016665
+#> 6  train   loss     6 1.014279
+#> 7  train   loss     7 1.012111
+#> 8  train   loss     8 1.003616
+#> 9  train   loss     9 1.003095
+#> 10 train   loss    10 1.009394
 ```

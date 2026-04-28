@@ -1,5 +1,7 @@
 # Changelog
 
+## luz (development version)
+
 ## luz 0.5.2
 
 CRAN release: 2026-04-28

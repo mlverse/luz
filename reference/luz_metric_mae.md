@@ -34,5 +34,5 @@ metric <- metric$new()
 metric$update(torch_randn(100), torch_randn(100))
 metric$compute()
 }
-#> [1] 1.016295
+#> [1] 1.13861
 ```

@@ -51,14 +51,14 @@ model %>% fit(list(x, y), valid_data = 0.2, callbacks = list(
 }
 #> A `luz_module_fitted`
 #> ── Time ────────────────────────────────────────────────────────────────────────
-#> • Total time: 1.4s
-#> • Avg time per training epoch: 104ms
+#> • Total time: 1.5s
+#> • Avg time per training epoch: 115ms
 #> 
 #> ── Results ─────────────────────────────────────────────────────────────────────
 #> Metrics observed in the last epoch.
 #> 
 #> ℹ Training:
-#> loss: 1.4915
+#> loss: 1.6208
 #> 
 #> ── Model ───────────────────────────────────────────────────────────────────────
 #> An `nn_module` containing 11 parameters.

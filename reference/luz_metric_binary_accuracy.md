@@ -42,5 +42,5 @@ metric <- metric$new()
 metric$update(torch_rand(100), torch::torch_randint(0, 1, size = 100))
 metric$compute()
 }
-#> [1] 0.44
+#> [1] 0.49
 ```
