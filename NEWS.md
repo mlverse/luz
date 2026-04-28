@@ -1,3 +1,5 @@
+# luz (development version)
+
 # luz 0.5.2
 
 * New maintainer: Tomasz Kalinowski.
